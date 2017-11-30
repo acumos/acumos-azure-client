@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>org.acumos.azure.client</groupId>
+	<artifactId>acumos-azure-client</artifactId>
+	<version>1.1.0-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>acumos-azure-client</name>
+	<description>deploy image to acr</description>
+
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>1.5.6.RELEASE</version>
+		<relativePath /> <!-- lookup parent from repository -->
+	</parent>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<encoding>UTF-8</encoding>
+		<!-- Stand-alone RESTFul application -->
+		<start-class>org.acumos.azure.client.AzureClientServiceApplication</start-class>
+		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
+		<build.number>0</build.number>
+		<eelf.version>1.0.0</eelf.version>
+		<!-- Docker daemon -->
+		<docker.host.url>unix:/var/run/docker.sock</docker.host.url>
+		<!-- Docker image registry -->
+		<docker.registry.url>Set by Jenkins</docker.registry.url>
+		<docker.registry.login>Registry userId - supplied by jenkins</docker.registry.login>
+		<docker.registry.password>Registry password - supplied by jenkins</docker.registry.password>
+		<acumos.nexus.url>Set by Jenkins</acumos.nexus.url>
+		<acumos.nexus.snapshot.path>Set by Jenkins</acumos.nexus.snapshot.path>
+		<acumos.nexus.release.path>Set by Jenkins</acumos.nexus.release.path>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<!-- Spring chooses <version>${slf4j.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<!-- Spring chooses <version>${logback.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-core</artifactId>
+			<!-- Spring chooses <version>${logback.version}</version> -->
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.microsoft.azure</groupId>
+			<artifactId>azure</artifactId>
+			<version>1.2.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-simple</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.cverges.expect4j</groupId>
+			<artifactId>expect4j</artifactId>
+			<version>1.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.github.docker-java</groupId>
+			<artifactId>docker-java</artifactId>
+			<version>3.0.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.fabric8</groupId>
+			<artifactId>kubernetes-client</artifactId>
+			<version>2.2.14</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger2</artifactId>
+			<version>2.6.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-swagger-ui</artifactId>
+			<version>2.6.1</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-configuration-processor</artifactId>
+			<optional>true</optional>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-api</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<!-- <version>1.1.1</version> -->
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>license-maven-plugin</artifactId>
+				<version>1.14</version>
+				<configuration>
+					<licenseName>acumos</licenseName>
+					<licenseResolver>${project.baseUri}/src/license</licenseResolver>
+					<addJavaLicenseAfterPackage>false</addJavaLicenseAfterPackage>
+					<processStartTag>===============LICENSE_START=======================================================</processStartTag>
+					<processEndTag>===============LICENSE_END=========================================================</processEndTag>
+					<sectionDelimiter>===================================================================================</sectionDelimiter>
+					<inceptionYear>2017</inceptionYear>
+					<organizationName><![CDATA[AT&T Intellectual Property & Tech Mahindra. All rights reserved.]]></organizationName>
+					<projectName>Acumos</projectName>
+					<canUpdateCopyright>true</canUpdateCopyright>
+					<canUpdateDescription>true</canUpdateDescription>
+					<canUpdateLicense>true</canUpdateLicense>
+					<emptyLineAfterHeader>true</emptyLineAfterHeader>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>exec-maven-plugin</artifactId>
+				<!-- <version>1.4.0</version> -->
+			</plugin>
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<!-- <version>3.0</version> -->
+				<configuration>
+					<source>1.8</source>
+					<target>1.8</target>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>attached</goal>
+						</goals>
+						<configuration>
+							<descriptorRefs>
+								<descriptorRef>jar-with-dependencies</descriptorRef>
+							</descriptorRefs>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.7.6.201602180812</version>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>io.fabric8</groupId>
+				<artifactId>docker-maven-plugin</artifactId>
+				<version>0.21.0</version>
+				<configuration>
+					<verbose>true</verbose>
+					<dockerHost>${docker.host.url}</dockerHost>
+					<registry>${docker.registry.url}</registry>
+					<authConfig>
+						<username>${docker.registry.login}</username>
+						<password>${docker.registry.password}</password>
+					</authConfig>
+					<images>
+						<image>
+							<name>acumos-azure-client:${project.version}</name>
+							<build>
+								<!-- This is the same FROM used in a Dockerfile -->
+								<from>frolvlad/alpine-oraclejdk8:slim</from>
+								<assembly>
+									<inline>
+										<files>
+											<file>
+												<source>application.properties</source>
+												<outputDirectory />
+												<destName>application.properties</destName>
+											</file>
+											<file>
+												<source>target/${project.artifactId}-${project.version}.${project.packaging}</source>
+												<outputDirectory />
+											</file>
+										</files>
+									</inline>
+								</assembly>
+								<!-- This is the same CMD used in a Dockerfile -->
+								<cmd>
+									<shell>cd /maven; java -Djava.security.egd=file:/dev/./urandom
+										-jar
+										${project.artifactId}-${project.version}.${project.packaging}</shell>
+								</cmd>
+							</build>
+						</image>
+					</images>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+	<distributionManagement>
+		<snapshotRepository>
+			<!-- must match ID in Jenkins settings -->
+			<id>acumos-nexus</id>
+			<name>acumos-repository-snapshots</name>
+			<url>${acumos.nexus.url}/${acumos.nexus.snapshot.path}</url>
+		</snapshotRepository>
+		<repository>
+			<!-- must match ID in Jenkins settings -->
+			<id>acumos-nexus</id>
+			<name>acumos-repository-releases</name>
+			<url>${acumos.nexus.url}/${acumos.nexus.release.path}</url>
+		</repository>
+	</distributionManagement>
+</project>
