@@ -1,0 +1,47 @@
+{
+  "name": "name of the composite solution",
+  "version": "version of the composite solution",
+  "orchestrator": {
+    "name": "Orchestrator Name",
+    "version": "version",
+    "image": "url of the docker image of the pre built runtime orchestrator"
+  },
+  "input_operation_signatures": [
+    {
+      "operation_signature": "JSON representation of the input operation signature"
+    },
+    {
+      "operation_signature": "JSON representation of the input operation signature"
+    }
+  ],
+  "nodes": [
+    {
+      "container_name": "Predictor-1",
+      "image": "cognita-nexus01:8001/h2omodel_1110:1",
+      "depends_on": [
+        {
+          "name": "Classifier-1",
+          "operation_signature": "JSON representation of classify (Prediction) returns (Classification)"
+        },
+        {
+          "name": "Classifier-2",
+          "operation_signature": "JSON representation of operation signatures in Protbuf.json file"
+        }
+      ]
+    },
+    {
+      "container_name": "Classifier-1",
+      "image": "cognita-nexus01:8001/h2omodel_1110:2",
+      "depends_on": [
+        {
+          "name": "Alarm Generator-1",
+          "operation_signature": "JSON representation of operation signatures in Protbuf.json file"
+        },
+        {
+          "name": "Alarm Generator-2",
+          "operation_signature": "JSON representation of operation signatures in Protbuf.json file"
+        }
+      ]
+    }
+  ]
+}
