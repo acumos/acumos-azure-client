@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "ddec2a37_5c30a462",
+        "filename": "LICENSE.txt",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "This is the wrong license - it does not state TECH MAHINDRA",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a97cf907_3fa5c9fa",
+        "filename": "application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Please remove all username and password details",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0edafe76_778c5d05",
+        "filename": "application.properties",
+        "patchSetId": 1
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Please remove att.com proxy config",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "699681ec_61e07323",
+        "filename": "docs/acumos-azure-client.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Please delete this bogus MD example content and provide a valid RST file with some content.",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "100256f5_eeb6c9b0",
+        "filename": "docs/release-notes.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Please supply at the very least a note \"First release 1.0.0 December 2017\" or something like that",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "163d1f85_99c1a5c7",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Please add the jacoco plugin for code coverage",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a99a164d_b8a50902",
+        "filename": "src/main/java/org/acumos/azure/client/AzureClientServiceApplication.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Missing license header",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f5475c7_dd032868",
+        "filename": "src/main/java/org/acumos/azure/client/SwaggerConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Should state Apache 2.0",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "61d1ce73_db9f69df",
+        "filename": "src/main/java/org/acumos/azure/client/api/APINames.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "please remove author name",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "70226c78_8e576e65",
+        "filename": "src/main/resources/logback.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Please rename from Cognita to Acumos",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d3a8dfa4_94e9a551",
+        "filename": "src/test/java/org/acumos/azure/client/test/DeployImageToAcrApplicationTests.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2017-12-01T15:44:58Z",
+      "side": 1,
+      "message": "Missing license header",
+      "revId": "a3316ff96ec6734e645c74928e73988d40e5d41b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
