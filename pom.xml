@@ -266,11 +266,9 @@
 										</files>
 									</inline>
 								</assembly>
-								<!-- This is the same CMD used in a Dockerfile -->
 								<cmd>
-									<shell>cd /maven; java -Djava.security.egd=file:/dev/./urandom
-										-jar
-										${project.artifactId}-${project.version}.${project.packaging}</shell>
+									<!-- CDATA prevents Eclipse from breaking/reformatting the line -->
+									<shell><![CDATA[java -Djava.security.egd=file:/dev/./urandom -jar /maven/${project.artifactId}-${project.version}.${project.packaging}]]></shell>
 								</cmd>
 							</build>
 						</image>
