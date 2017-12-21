@@ -30,7 +30,8 @@ public class AzureDeployDataObject {
 	private String acrName;
 	private String solutionId;
 	private String storageAccount;
-	private String imagetag;
+	private String solutionVersion;
+	/*private String imagetag;*/
 
 	/**
 	 * @return the client
@@ -144,23 +145,33 @@ public class AzureDeployDataObject {
 	public void setStorageAccount(String storageAccount) {
 		this.storageAccount = storageAccount;
 	}
+    
+	
+	
+	public String getSolutionVersion() {
+		return solutionVersion;
+	}
 
-	public String getImagetag() {
+	public void setSolutionVersion(String solutionVersion) {
+		this.solutionVersion = solutionVersion;
+	}
+
+	/*public String getImagetag() {
 		return imagetag;
 	}
 
-	/**
+	*//**
 	 * @param imagetag
-	 */
+	 *//*
 	public void setImagetag(String imagetag) {
 		this.imagetag = imagetag;
-	}
+	}*/
 
 	@Override
 	public String toString() {
 		return "AzureDeployDataObject [client=" + client + ", tenant=" + tenant + ", key=" + key + ", subscriptionKey="
-				+ subscriptionKey + ", rgName=" + rgName + ", acrName=" + acrName + ", solutionId=" + solutionId
-				+ ", storageAccount=" + storageAccount + ", imagetag=" + imagetag + "]";
+				+ subscriptionKey + ", rgName=" + rgName + ", acrName=" + acrName + ", solutionId=" + solutionId + ", storageAccount=" + storageAccount
+				+ ", solutionVersion=" + solutionVersion + "]";
 	}
 
 }

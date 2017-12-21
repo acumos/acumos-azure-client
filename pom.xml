@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.azure.client</groupId>
 	<artifactId>acumos-azure-client</artifactId>
-	<version>1.1.0-SNAPSHOT</version>
+	<version>1.7.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>acumos-azure-client</name>
@@ -28,6 +28,8 @@
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
 		<eelf.version>1.0.0</eelf.version>
+		<!-- tests require database to be running -->
+		<skipTests>true</skipTests>
 		<!-- Docker daemon -->
 		<docker.host.url>unix:/var/run/docker.sock</docker.host.url>
 		<!-- Docker image registry -->
@@ -40,11 +42,13 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
+	    <dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<!-- Spring chooses <version>${slf4j.version}</version> -->
 		</dependency>
+		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context-support</artifactId> 
+			</dependency> -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -59,10 +63,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -74,6 +80,7 @@
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure</artifactId>
 			<version>1.2.1</version>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -83,34 +90,38 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-simple</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions> 
 		</dependency>
 		<dependency>
 			<groupId>com.github.cverges.expect4j</groupId>
 			<artifactId>expect4j</artifactId>
 			<version>1.6</version>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions> 
+			 
 		</dependency>
 		<dependency>
 			<groupId>com.github.docker-java</groupId>
 			<artifactId>docker-java</artifactId>
 			<version>3.0.6</version>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions> 
 		</dependency>
 		<dependency>
 			<groupId>io.fabric8</groupId>
 			<artifactId>kubernetes-client</artifactId>
 			<version>2.2.14</version>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -122,6 +133,7 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger2</artifactId>
 			<version>2.6.1</version>
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -133,28 +145,40 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.6.1</version>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions> 
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
+			
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions>
+			</exclusions> 
 		</dependency>
 		<dependency>
-			<groupId>com.googlecode.json-simple</groupId>
-			<artifactId>json-simple</artifactId>
-			<!-- <version>1.1.1</version> -->
+		    <groupId>com.googlecode.json-simple</groupId>
+		    <artifactId>json-simple</artifactId>
+		    <version>1.1.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.acumos.common-dataservice</groupId>
+			<artifactId>cmn-data-svc-client</artifactId>
+			<version>1.10.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.acumos</groupId>
+			<artifactId>acumos-nexus-client</artifactId>
+			<version>1.0.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 

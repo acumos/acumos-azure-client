@@ -613,7 +613,7 @@ public class DockerUtils {
 	 * Docker daemon config file allowing connections from any Docker client.
 	 */
 	public static final String DEFAULT_DOCKERD_CONFIG_TLS_DISABLED = "" + "[Service]\n" + "ExecStart=\n"
-			+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry cognita-nexus01.eastus.cloudapp.azure.com:8001 \n";
+			+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry cognita-nexus01:8001 \n";
 
 	/**
 	 * Bash script that creates a default unsecured Docker configuration file; must
