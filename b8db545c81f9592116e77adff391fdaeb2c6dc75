@@ -1,0 +1,418 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0b6f26fd_16d19d80",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Don\u0027t skip the test, this will fail the LF Quality",
+      "range": {
+        "startLine": 32,
+        "startChar": 28,
+        "endLine": 32,
+        "endChar": 29
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0118fb4b_8211ed37",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Remove commented lines",
+      "range": {
+        "startLine": 51,
+        "startChar": 17,
+        "endLine": 51,
+        "endChar": 20
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "45704325_85a440d8",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 77,
+        "startChar": 56,
+        "endLine": 77,
+        "endChar": 78
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f5c10c5d_4de0ed1c",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Remove System.out.println",
+      "range": {
+        "startLine": 98,
+        "startChar": 69,
+        "endLine": 98,
+        "endChar": 71
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4eb7bfc4_69dfda39",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Try to avoid multiple returns",
+      "range": {
+        "startLine": 100,
+        "startChar": 22,
+        "endLine": 100,
+        "endChar": 30
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2346f78_0749ff26",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 105,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Remove commented block of code",
+      "range": {
+        "startLine": 105,
+        "startChar": 3,
+        "endLine": 105,
+        "endChar": 5
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4719e84c_ad5d1d08",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 111,
+        "startChar": 3,
+        "endLine": 111,
+        "endChar": 9
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "24004f16_16ae0987",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 112,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 112,
+        "startChar": 3,
+        "endLine": 112,
+        "endChar": 9
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "198a8be8_f5a97677",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 123,
+        "startChar": 9,
+        "endLine": 123,
+        "endChar": 10
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6f204b83_8ab059f8",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "local variable hmap defined int he if is not used furhter, if not required then try removing if block.",
+      "range": {
+        "startLine": 140,
+        "startChar": 34,
+        "endLine": 140,
+        "endChar": 37
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bb176050_49a346a0",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 150,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 150,
+        "startChar": 12,
+        "endLine": 150,
+        "endChar": 16
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3b945ba4_c0f26d18",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 151,
+        "startChar": 12,
+        "endLine": 151,
+        "endChar": 16
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23bf6485_fdf55067",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 155,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 155,
+        "startChar": 11,
+        "endLine": 155,
+        "endChar": 15
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d154f71c_f8bd7896",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Remove System.out.println",
+      "range": {
+        "startLine": 165,
+        "startChar": 14,
+        "endLine": 165,
+        "endChar": 21
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0768bc2d_9b3c8c01",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Remove e.printStackTrace();",
+      "range": {
+        "startLine": 170,
+        "startChar": 20,
+        "endLine": 170,
+        "endChar": 23
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1f8ebc6f_b61b5834",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 187,
+        "startChar": 9,
+        "endLine": 187,
+        "endChar": 13
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c79ae5d_e108b0bf",
+        "filename": "src/main/java/org/acumos/azure/client/service/AzureService.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "Remove commented code",
+      "range": {
+        "startLine": 49,
+        "startChar": 52,
+        "endLine": 49,
+        "endChar": 53
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8f92243a_f883d939",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureServiceImpl.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 129,
+      "author": {
+        "id": 11
+      },
+      "writtenOn": "2017-12-21T11:24:03Z",
+      "side": 1,
+      "message": "instead of logger.info use logger.debug to log the debug information",
+      "range": {
+        "startLine": 129,
+        "startChar": 8,
+        "endLine": 129,
+        "endChar": 9
+      },
+      "revId": "b8db545c81f9592116e77adff391fdaeb2c6dc75",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
