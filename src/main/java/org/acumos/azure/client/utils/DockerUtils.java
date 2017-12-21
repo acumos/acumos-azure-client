@@ -170,11 +170,11 @@ public class DockerUtils {
 
 			dockerClient = DockerClientBuilder.getInstance(dockerClientConfig).build();
 			System.out.println("List Docker host info");
-			System.out.println("\tFound Docker version: " + dockerClient.versionCmd().exec().toString());
+			/*System.out.println("\tFound Docker version: " + dockerClient.versionCmd().exec().toString());
 			System.out.println("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
 			log.info("List Docker host info");
 			log.info("\tFound Docker version: " + dockerClient.versionCmd().exec().toString());
-			log.info("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
+			log.info("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());*/
 		}
 
 		return dockerClient;
@@ -351,12 +351,12 @@ public class DockerUtils {
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,
 				password);
-		System.out.println("List Docker host info");
+		/*System.out.println("List Docker host info");
 		System.out.println("\tFound Docker version: " + dockerClient.versionCmd().exec().toString());
 		System.out.println("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
 		log.info("List Docker host info");
 		log.info("\tFound Docker version: " + dockerClient.versionCmd().exec().toString());
-		log.info("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
+		log.info("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());*/
 		log.info("dockerHostIP=====" + dockerHostIP);
 
 		return dockerClient;
@@ -478,17 +478,18 @@ public class DockerUtils {
 		 * (Exception exception) { System.out.println(exception.getMessage()); } finally
 		 * { if (sshShell != null) { sshShell.close(); } }
 		 */
-
+		String dockerHostPort = "80";
 		try {
 			System.out.println("Trying to setup Docker config: " + dockerHostIP);
 			log.info("Trying to setup Docker config: " + dockerHostIP);
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-
+			log.info("====sshShell==========Enter==================================: ");
 			// // Setup Docker daemon to allow connection from any Docker clients
 			String output = sshShell
 					.executeCommand("bash -c ~/.azuredocker/CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", true, true);
 			System.out.println(output);
-			String dockerHostPort = "80";
+			log.info("====output==========1==================================: "+output);
+			
 			dockerHostTlsEnabled = false;
 
 			// Setup Docker daemon to allow connection from authorized Docker clients only
@@ -499,7 +500,8 @@ public class DockerUtils {
 			// connection is enabled
 			// dockerHostTlsEnabled = true;
 
-			dockerHostUrl = "tcp://" + dockerHostIP + ":" + dockerHostPort;
+			
+			log.info("====dockerHostUrl============================================: "+dockerHostUrl);
 		} catch (JSchException jSchException) {
 			System.out.println(jSchException.getMessage());
 		} catch (IOException ioException) {
@@ -511,15 +513,19 @@ public class DockerUtils {
 				sshShell.close();
 			}
 		}
-
+		dockerHostUrl = "tcp://" + dockerHostIP + ":" + dockerHostPort;
+		dockerHostTlsEnabled = false;
+		log.info(dockerHostUrl+"====dockerHostTlsEnabled============================================: "+dockerHostTlsEnabled);
 		DockerClientConfig dockerClientConfig;
 		if (dockerHostTlsEnabled) {
+			log.info("====dockerHostTlsEnabled============2================================: "+dockerHostTlsEnabled);
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password,
 					caPemContent, keyPemContent, certPemContent);
 		} else {
+			log.info("====dockerHostTlsEnabled============3================================: "+dockerHostTlsEnabled);
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
 		}
-
+		log.info("====dockerClientConfig============3================================: "+dockerClientConfig);
 		return DockerClientBuilder.getInstance(dockerClientConfig).build();
 	}
 
