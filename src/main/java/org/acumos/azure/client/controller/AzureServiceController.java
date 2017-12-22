@@ -92,8 +92,8 @@ public class AzureServiceController extends AbstractController {
 			String nexusUrl=env.getProperty("nexus.url");
 			String nexusUserName=env.getProperty("nexus.username");
 			String nexusPassword=env.getProperty("nexus.password");
-			
-			
+			String dockerRegistryname=env.getProperty("docker.registry.name");
+			logger.info("<------dockerRegistryname---------->"+dockerRegistryname);
 			if (authObject == null) {
 				System.out.println("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);
@@ -133,7 +133,7 @@ public class AzureServiceController extends AbstractController {
 			  if(azure!=null) {
 				  azBean=azureImpl.pushImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
 						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
-						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList);
+						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList,dockerRegistryname);
 				  
 				  if(azBean!=null && azBean.getBluePrintMap()!=null){
 					  HashMap<String,String> hmap=new HashMap<String,String>();

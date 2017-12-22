@@ -131,7 +131,7 @@ public class DockerUtils {
 	 */
 	public static DockerClient createDockerClient(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, String localEnvDockerHost, String localEnvDockerCertPath,
-			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort) throws Exception {
+			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort,String dockerRegistryName) throws Exception {
 		// final String envDockerHost = System.getenv("DOCKER_HOST");
 		final String envDockerHost = localEnvDockerHost;
 		final String envDockerCertPath = System.getenv("DOCKER_CERT_PATH");
@@ -146,7 +146,7 @@ public class DockerUtils {
 			// attempt to configure a Docker engine running inside a new Azure virtual
 			// machine
 			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, password, azureBean,
-					networkSecurityGroup, dockerRegistryPort);
+					networkSecurityGroup, dockerRegistryPort,dockerRegistryName);
 		} else {
 			dockerHostUrl = envDockerHost;
 			System.out.println("Using local settings to connect to a Docker service: " + dockerHostUrl);
@@ -252,7 +252,7 @@ public class DockerUtils {
 	 */
 	public static DockerClient fromNewDockerVM(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, AzureBean azureBean, String networkSecurityGroup,
-			String dockerRegistryPort) throws Exception {
+			String dockerRegistryPort,String dockerRegistryName) throws Exception {
 		final String dockerVMName = SdkContext.randomResourceName("dockervm", 15);
 		final String publicIPDnsLabel = SdkContext.randomResourceName("pip", 10);
 		final String vnetName = SdkContext.randomResourceName("vnet", 24);
@@ -350,7 +350,7 @@ public class DockerUtils {
 		}
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,
-				password);
+				password,dockerRegistryName);
 		/*System.out.println("List Docker host info");
 		System.out.println("\tFound Docker version: " + dockerClient.versionCmd().exec().toString());
 		System.out.println("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
@@ -380,13 +380,15 @@ public class DockerUtils {
 	 * @return an instance of DockerClient
 	 */
 	public static DockerClient installDocker(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password) {
+			String registryServerUrl, String username, String password,String dockerRegistryNameVal) {
 		String keyPemContent = ""; // it stores the content of the key.pem certificate file
 		String certPemContent = ""; // it stores the content of the cert.pem certificate file
 		String caPemContent = ""; // it stores the content of the ca.pem certificate file
 		boolean dockerHostTlsEnabled = false;
 		String dockerHostUrl = "tcp://" + dockerHostIP + ":80";
 		SSHShell sshShell = null;
+		String dockerConfig_diabled="";
+		String dockerRegistryName=dockerRegistryNameVal;
 
 		try {
 			System.out.println("Copy Docker setup scripts to remote host: " + dockerHostIP);
@@ -409,8 +411,12 @@ public class DockerUtils {
 			 * "dockerd_tls.config", ".azuredocker", true, "4095"); sshShell.upload(new
 			 * ByteArrayInputStream(CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED.getBytes()),
 			 * "CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED.sh", ".azuredocker", true, "4095");
+			 * 
 			 */
-			sshShell.upload(new ByteArrayInputStream(DEFAULT_DOCKERD_CONFIG_TLS_DISABLED.getBytes()),
+			dockerConfig_diabled = "" + "[Service]\n" + "ExecStart=\n"
+					+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry "+dockerRegistryName+" \n";
+			
+			sshShell.upload(new ByteArrayInputStream(dockerConfig_diabled.getBytes()),
 					"dockerd_notls.config", ".azuredocker", true, "4095");
 			sshShell.upload(new ByteArrayInputStream(CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.getBytes()),
 					"CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", ".azuredocker", true, "4095");
@@ -618,8 +624,8 @@ public class DockerUtils {
 	/**
 	 * Docker daemon config file allowing connections from any Docker client.
 	 */
-	public static final String DEFAULT_DOCKERD_CONFIG_TLS_DISABLED = "" + "[Service]\n" + "ExecStart=\n"
-			+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry cognita-nexus01:8001 \n";
+	public   String DEFAULT_DOCKERD_CONFIG_TLS_DISABLED = "" + "[Service]\n" + "ExecStart=\n"
+			+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry cognita_model_rw:not4you@cognita-nexus01:8001 \n";
 
 	/**
 	 * Bash script that creates a default unsecured Docker configuration file; must

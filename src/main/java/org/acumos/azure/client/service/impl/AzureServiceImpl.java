@@ -102,7 +102,7 @@ import org.acumos.nexus.client.RepositoryLocation;
 
 public class AzureServiceImpl implements AzureService {
 	
-	Logger logger =LoggerFactory.getLogger(AzureServiceController.class);
+	Logger logger =LoggerFactory.getLogger(AzureServiceImpl.class);
 	
    private Environment env;
 	
@@ -144,7 +144,7 @@ public class AzureServiceImpl implements AzureService {
 	@Override
 	public AzureBean pushImage(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-			String networkSecurityGroup,String dockerRegistryPort,HashMap<String,String> imageMap,LinkedList<String> sequenceList) throws IOException, Exception {
+			String networkSecurityGroup,String dockerRegistryPort,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName) throws IOException, Exception {
 			logger.info("<------start----pushImage in AzureServiceImpl------------>"); 
 			AzureBean azureBean=new AzureBean();
 			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
@@ -158,6 +158,8 @@ public class AzureServiceImpl implements AzureService {
 	        HashMap<String,String> containerMap=new HashMap<String,String>();
 	        String containerInstanceBluePrint="";
 	        String bluePrintContainerId="";
+	        
+	        logger.info("<--------------dockerRegistryName--------------------------->"+dockerRegistryName);
 	        logger.info("<--------------list--------------------------->"+list);
 	        logger.info("<--------------sequenceList--------------------------->"+sequenceList);
 	        logger.info("<---------bluePrintName------------->"+bluePrintName);
@@ -222,7 +224,7 @@ public class AzureServiceImpl implements AzureService {
 		            logger.info("azureRegistry.loginServerUrl="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
 		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
-		                    networkSecurityGroup,dockerRegistryPort);
+		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
 		            
 		            AuthConfig authConfig = new AuthConfig()
 		                    .withUsername(dockerUserName)
@@ -331,7 +333,7 @@ public class AzureServiceImpl implements AzureService {
 		            logger.info("<----Before Docker remoteDockerClient--------------------------->");
 		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
-		                    ,networkSecurityGroup,dockerRegistryPort);
+		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
 		            logger.info("<----After Docker remoteDockerClient--------------------------->");
 		            //=============================================================
 		            // Push the new Docker image to the Azure Container Registry
