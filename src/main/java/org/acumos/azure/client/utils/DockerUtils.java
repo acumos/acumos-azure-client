@@ -416,10 +416,13 @@ public class DockerUtils {
 			dockerConfig_diabled = "" + "[Service]\n" + "ExecStart=\n"
 					+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry "+dockerRegistryName+" \n";
 			
+			
 			sshShell.upload(new ByteArrayInputStream(dockerConfig_diabled.getBytes()),
 					"dockerd_notls.config", ".azuredocker", true, "4095");
+			log.info("====dockerConfig_diabled=======: " + dockerConfig_diabled);
 			sshShell.upload(new ByteArrayInputStream(CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.getBytes()),
 					"CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", ".azuredocker", true, "4095");
+			log.info("====dockerConfig_diabled====2===: " + dockerConfig_diabled);
 		} catch (JSchException jSchException) {
 			System.out.println(jSchException.getMessage());
 			log.error(jSchException.getMessage());

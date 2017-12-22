@@ -255,6 +255,7 @@ public class AzureServiceImpl implements AzureService {
 	                    .exec(new PullImageResultCallback())
 	                    .awaitSuccess();
 		            	}
+		            	Thread.sleep(50000);
 		            }
 		            
 		            
@@ -290,6 +291,7 @@ public class AzureServiceImpl implements AzureService {
 		            	hmap.put(dockerContainerName+"_"+dockerCount, dockerContainerInstance);
 		            	containerTagMap.put(dockerContainerName+"_"+dockerCount, imageTagVal);
 		            	containerImageMap.put(dockerContainerName+"_"+dockerCount, imageName);
+		            	Thread.sleep(30000);
 		            	dockerCount++;
 		            }
 		            System.out.println("=======containerImageMap====="+containerImageMap);
@@ -328,6 +330,7 @@ public class AzureServiceImpl implements AzureService {
 			            dockerClient.removeContainerCmd(dockerContainerInstance.getId())
 			                    .withForce(true)
 			                    .exec();
+			            Thread.sleep(5000);
 		            }
 		            //#####################################################################################
 		            logger.info("<----Before Docker remoteDockerClient--------------------------->");
@@ -346,6 +349,7 @@ public class AzureServiceImpl implements AzureService {
 		            	dockerClient.pushImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PushImageResultCallback()).awaitSuccess();
+		            	Thread.sleep(50000);
 		            }
 		            
 		            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
@@ -372,21 +376,22 @@ public class AzureServiceImpl implements AzureService {
 		            	dockerClient.pullImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PullImageResultCallback()).awaitSuccess();
+		            	Thread.sleep(50000);
 		            }
 		            
 		            logger.info("List local Docker images after pulling sample image from the Azure Container Registry:");
 		            images = dockerClient.listImagesCmd()
 		                    .withShowAll(true)
 		                    .exec();
-		            for (Image image : images) {
+		            /*for (Image image : images) {
 		            	//logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
-		            }
+		            }*/
 		            
 		            
 		            //++++++++++++++++++++ Verify if docker image can be pulled in to remote ACS
 		            logger.info("<----remoteDockerClient with privateRepoUrl--------->");
 		            
-		            repoContainer=repoUrlMap.entrySet().iterator();
+		            /*repoContainer=repoUrlMap.entrySet().iterator();
 		            while(repoContainer.hasNext()){
 		            	Map.Entry pair = (Map.Entry)repoContainer.next();
 		            	String containerName=(String)pair.getKey();
@@ -402,7 +407,7 @@ public class AzureServiceImpl implements AzureService {
 		                    .exec();
 		            for (Image image : remoteImages) {
 		            	//logger.info("<==================Remote Docker image %s (%s)======> \n"+ image.getRepoTags()[0]+"<-----ImageId------>"+image.getId());
-		            }
+		            }*/
 		            
 		            logger.info("<----remoteDockerContainerInstance--------->");
 		            
