@@ -113,11 +113,11 @@ public class AzureServiceController extends AbstractController {
 			//azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionVersion(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
 			
 			
-			ParseJSON parseJson=new ParseJSON();
-			Blueprint bluePrint=parseJson.jsonFileToObject();
+			/*ParseJSON parseJson=new ParseJSON();
+			Blueprint bluePrint=parseJson.jsonFileToObject();*/
 			
-			HashMap<String,String> imageMap=parseJson.parseJsonFile();
-			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
+			HashMap<String,String> imageMap=new HashMap<String,String>();//parseJson.parseJsonFile();
+			ArrayList<String> list=new ArrayList<String>();//azureImpl.iterateImageMap(imageMap);
 //			Blueprint bluePrint=parseJson.jsonFileToObject();
 			
 			logger.info("<------bluePrintImage---------->"+bluePrintImage);
@@ -126,9 +126,13 @@ public class AzureServiceController extends AbstractController {
 			DockerInfoList dockerInfoList=new DockerInfoList();
 			if(bluePrintImage!=null && !"".equals(bluePrintImage)){
 				list.add(bluePrintImage);
+				list.add("cognita-nexus01:8001/adder:2");
 				imageMap.put(bluePrintImage, "BluePrintContainer");
+				imageMap.put("cognita-nexus01:8001/adder:2", "Adder_Container");
 			}
-			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();//parseJson.getSequenceFromJSON();
+			LinkedList<String> sequenceList=new LinkedList<String>();//parseJson.getSequenceFromJSON();//parseJson.getSequenceFromJSON();
+			sequenceList.add("BluePrintContainer");
+			sequenceList.add("Adder_Container");
 			 //Authorization done, now try to push the image
 			  if(azure!=null) {
 				  azBean=azureImpl.pushImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
@@ -147,7 +151,7 @@ public class AzureServiceController extends AbstractController {
 			}
 			  Thread.sleep(30000);
 			  //new call 
-			  logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
+			  /*logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
 			  logger.info("bluePrint==================="+mapper.writeValueAsString(bluePrint));
 			 
 			    String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
@@ -158,7 +162,7 @@ public class AzureServiceController extends AbstractController {
 				}
 				if(bluePrint!=null){
 					azureImpl.putBluePrintDetails(bluePrint,urlBluePrint);
-				}
+				}*/
 			response.setStatus(200);	
 			
 		} catch (com.microsoft.aad.adal4j.AuthenticationException e) {
