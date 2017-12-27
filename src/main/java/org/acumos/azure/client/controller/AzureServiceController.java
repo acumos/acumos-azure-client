@@ -110,7 +110,7 @@ public class AzureServiceController extends AbstractController {
 	        }*/
 			logger.info("<------SolutionId---------->"+authObject.getSolutionId());
 			logger.info("<------SolutionVersion---------->"+authObject.getSolutionVersion());
-			azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionVersion(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
+			//azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionVersion(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
 			
 			
 			ParseJSON parseJson=new ParseJSON();
