@@ -372,7 +372,7 @@ public class AzureServiceImpl implements AzureService {
 		            	Map.Entry pair = (Map.Entry)repoContainer.next();
 		            	String containerName=(String)pair.getKey();
 		            	String privateRepoUrl=(String)pair.getValue();
-		            	
+		            	 logger.info("<----pull images from Azure registry to locally-----privateRepoUrl---->"+privateRepoUrl);
 		            	dockerClient.pullImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PullImageResultCallback()).awaitSuccess();
@@ -396,10 +396,16 @@ public class AzureServiceImpl implements AzureService {
 		            	Map.Entry pair = (Map.Entry)repoContainer.next();
 		            	String containerName=(String)pair.getKey();
 		            	String privateRepoUrl=(String)pair.getValue();
-		            	
-		            	 remoteDockerClient.pullImageCmd(privateRepoUrl)
+		            	String tagImage="latest";
+		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
+		            		tagImage=containerTagMap.get(containerName);
+		            	}
+		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->"+tagImage);
+		            	 remoteDockerClient.pullImageCmd(privateRepoUrl+":"+tagImage)
 		                 .withAuthConfig(dockerClient.authConfig())
 		                 .exec(new PullImageResultCallback()).awaitSuccess();
+		            	 
+		            	 Thread.sleep(50000);
 		            }
 		            logger.info("#######List Docker images after pulling in the Azure Container Registry:");
 		            List<Image> remoteImages = remoteDockerClient.listImagesCmd()
