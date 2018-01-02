@@ -383,15 +383,15 @@ public class AzureServiceImpl implements AzureService {
 		            images = dockerClient.listImagesCmd()
 		                    .withShowAll(true)
 		                    .exec();
-		            /*for (Image image : images) {
-		            	//logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
-		            }*/
+		            for (Image image : images) {
+		            	logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
+		            }
 		            
 		            
 		            //++++++++++++++++++++ Verify if docker image can be pulled in to remote ACS
 		            logger.info("<----remoteDockerClient with privateRepoUrl--------->");
 		            
-		            /*repoContainer=repoUrlMap.entrySet().iterator();
+		            repoContainer=repoUrlMap.entrySet().iterator();
 		            while(repoContainer.hasNext()){
 		            	Map.Entry pair = (Map.Entry)repoContainer.next();
 		            	String containerName=(String)pair.getKey();
@@ -406,8 +406,8 @@ public class AzureServiceImpl implements AzureService {
 		                    .withShowAll(true)
 		                    .exec();
 		            for (Image image : remoteImages) {
-		            	//logger.info("<==================Remote Docker image %s (%s)======> \n"+ image.getRepoTags()[0]+"<-----ImageId------>"+image.getId());
-		            }*/
+		            	logger.info("<==================Remote Docker image %s (%s)======> \n"+ image.getRepoTags()[0]+"<-----ImageId------>"+image.getId());
+		            }
 		            
 		            logger.info("<----remoteDockerContainerInstance--------->");
 		            
@@ -456,7 +456,7 @@ public class AzureServiceImpl implements AzureService {
 		    		            		ExposedPort tcp8555 = ExposedPort.tcp(8555);
 		    		                    Ports portBindings = new Ports();
 		    		                    portBindings.bind(tcp8555, new Ports.Binding("0.0.0.0", "8555"));
-		    		                    remoteDockerContainerInstance=remoteDockerClient.createContainerCmd(privateRepoUrl)
+		    		                    remoteDockerContainerInstance=remoteDockerClient.createContainerCmd(privateRepoUrl+":"+tagImage)
 		    		                    .withName(finalContainerName).withExposedPorts(tcp8555).withPortBindings(portBindings).exec();
 		    		                    logger.info("<--if Part-complete-containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 		    		            	}else{
@@ -466,7 +466,7 @@ public class AzureServiceImpl implements AzureService {
 		    		            			logger.info("<--if portCount--------->"+portCount+"=====portNumber==="+portNumber);
 		    			                    Ports portBindings = new Ports();
 		    			                    portBindings.bind(tcp, new Ports.Binding("0.0.0.0", portNumber));
-		    			                    remoteDockerContainerInstance=remoteDockerClient.createContainerCmd(privateRepoUrl)
+		    			                    remoteDockerContainerInstance=remoteDockerClient.createContainerCmd(privateRepoUrl+":"+tagImage)
 		    			                    .withName(finalContainerName).withExposedPorts(tcp).withPortBindings(portBindings).exec();
 		    			                    logger.info("<--if Part-complete-containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 		    			                    portCount=portCount+1;
@@ -476,7 +476,7 @@ public class AzureServiceImpl implements AzureService {
 		    		            		    ExposedPort exportPort=new ExposedPort(8080);
 		    		            		    Ports portBindings = new Ports();
 		    		            		    portBindings.bind(exportPort, new Ports.Binding("0.0.0.0", null));
-		    			                    remoteDockerContainerInstance=remoteDockerClient.createContainerCmd(privateRepoUrl)
+		    			                    remoteDockerContainerInstance=remoteDockerClient.createContainerCmd(privateRepoUrl+":"+tagImage)
 		    			                    .withName(finalContainerName).withPortBindings(portBindings).withPublishAllPorts(true).exec();
 		    			                    logger.info("<--else part-Complete-otherImages--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 		    		            		}
