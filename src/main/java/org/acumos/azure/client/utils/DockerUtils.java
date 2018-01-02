@@ -535,7 +535,13 @@ public class DockerUtils {
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
 		}
 		log.info("====dockerClientConfig============3================================: "+dockerClientConfig);
-		return DockerClientBuilder.getInstance(dockerClientConfig).build();
+		DockerClient dockerClient=DockerClientBuilder.getInstance(dockerClientConfig).build();
+		try{
+		Thread.sleep(30000);
+		}catch(Exception e){
+			log.info("Exception in sleep=========================");
+		}
+		return dockerClient;
 	}
 
 	/**

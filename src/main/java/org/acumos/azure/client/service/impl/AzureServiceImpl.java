@@ -400,9 +400,10 @@ public class AzureServiceImpl implements AzureService {
 		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
 		            		tagImage=containerTagMap.get(containerName);
 		            	}
-		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->"+tagImage);
+		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->"+tagImage+"==privateRepoUrl==="+privateRepoUrl);
+		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->");
 		            	 remoteDockerClient.pullImageCmd(privateRepoUrl+":"+tagImage)
-		                 .withAuthConfig(dockerClient.authConfig())
+		                 .withAuthConfig(remoteDockerClient.authConfig())
 		                 .exec(new PullImageResultCallback()).awaitSuccess();
 		            	 
 		            	 Thread.sleep(50000);
