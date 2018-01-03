@@ -61,7 +61,9 @@ import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Image;
-
+import com.github.dockerjava.core.DefaultDockerClientConfig;
+import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.microsoft.azure.AzureEnvironment;
@@ -401,10 +403,23 @@ public class AzureServiceImpl implements AzureService {
 		            		tagImage=containerTagMap.get(containerName);
 		            	}
 		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->"+tagImage+"==privateRepoUrl==="+privateRepoUrl);
-		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->");
+		            	logger.info("<----remoteDockerClient with privateRepoUrl------azureBean.getAzureVMIP--->"+azureBean.getAzureVMIP());
+		            	
+		            	logger.info("azureRegistry.loginServerUrl111111="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
+		            	AuthConfig authConfigVal = new AuthConfig().withUsername(acrCredentials.username()).withPassword(acrCredentials.passwords().get(0).value())
+		            			.withRegistryAddress(azureRegistry.loginServerUrl());
+		            	
+		            	
+		            	  /*String dockerHostUrl = "tcp://" + azureBean.getAzureVMIP() + ":80";
+		            	  DockerClientConfig dockerClientConfig=DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(dockerHostUrl).withDockerTlsVerify(false)
+						.build();
+		            	
+		            	remoteDockerClient=DockerClientBuilder.getInstance(dockerClientConfig).build();*/
 		            	 remoteDockerClient.pullImageCmd(privateRepoUrl)
-		                 .withAuthConfig(remoteDockerClient.authConfig())
-		                 .exec(new PullImageResultCallback()).awaitSuccess();
+		                 .withAuthConfig(authConfigVal)
+		                 .exec(new PullImageResultCallback()).awaitCompletion();
+		            	 
+		            	 logger.info("###########################################################");
 		            	 
 		            	 Thread.sleep(50000);
 		            }
