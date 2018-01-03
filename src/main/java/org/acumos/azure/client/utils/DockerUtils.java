@@ -533,9 +533,29 @@ public class DockerUtils {
 
 			  String output2 = sshShell
 						.executeCommand("bash -c ~/.azuredocker/UPDATE_DOCKER.sh", true, true);
+			  
+			  
+			     try{
+					Thread.sleep(40000);
+					}catch(Exception e){
+						log.info("Exception in sleep======233333==================");
+					}
+			  
+			  sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+				 String run_image = ""
+						+ "docker run -d -p 0.0.0.0:8557:8557  cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n";
+				 log.info("====output==========Start============4======================: ");	
 
+				 sshShell.upload(new ByteArrayInputStream(run_image.getBytes()),
+							"RUN_DOCKER_IMAGE.sh", ".azuredocker", true, "4095");
+				 log.info("====output==========Start============5======================: ");
+				 
+				 sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+
+				  String output3 = sshShell
+							.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);
 			
-			log.info("====dockerHostUrl============================================: "+output2);
+			log.info("====dockerHostUrl============================================: "+output3);
 		} catch (JSchException jSchException) {
 			System.out.println(jSchException.getMessage());
 		} catch (IOException ioException) {
