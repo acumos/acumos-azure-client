@@ -518,9 +518,24 @@ public class DockerUtils {
 			// String dockerHostPort = "2376"; // Default Docker port when secured
 			// connection is enabled
 			// dockerHostTlsEnabled = true;
+			log.info("====output==========Start============1======================: ");
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			 String Add_all_image = ""
+					+ "echo Running: docker login --username=CognitaE6Reg --password=\"1/uNV9wt=huAtW+yKMrycBHYLrigH=Mz\" cognitae6reg.azurecr.io \n"
+					+ "echo docker pull cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n";
+			 
+			 log.info("====output==========Start============2======================: ");
+			 sshShell.upload(new ByteArrayInputStream(Add_all_image.getBytes()),
+						"UPDATE_DOCKER.sh", ".azuredocker", true, "4095");
+			 log.info("====output==========Start============3======================: ");
+			 
+			 sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+
+			  String output2 = sshShell
+						.executeCommand("bash -c ~/.azuredocker/UPDATE_DOCKER.sh", true, true);
 
 			
-			log.info("====dockerHostUrl============================================: "+dockerHostUrl);
+			log.info("====dockerHostUrl============================================: "+output2);
 		} catch (JSchException jSchException) {
 			System.out.println(jSchException.getMessage());
 		} catch (IOException ioException) {
