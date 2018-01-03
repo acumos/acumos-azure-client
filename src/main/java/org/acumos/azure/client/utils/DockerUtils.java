@@ -445,6 +445,11 @@ public class DockerUtils {
 
 			String output = sshShell
 					.executeCommand("bash -c ~/.azuredocker/INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", true, true);
+			try{
+				Thread.sleep(30000);
+				}catch(Exception e){
+					log.info("Exception in sleep======1===================");
+				}
 			System.out.println(output);
 			log.info("====output=======: " + output);
 		} catch (JSchException jSchException) {
@@ -496,6 +501,11 @@ public class DockerUtils {
 			// // Setup Docker daemon to allow connection from any Docker clients
 			String output = sshShell
 					.executeCommand("bash -c ~/.azuredocker/CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", true, true);
+			try{
+				Thread.sleep(30000);
+				}catch(Exception e){
+					log.info("Exception in sleep======2===================");
+				}
 			System.out.println(output);
 			log.info("====output==========1==================================: "+output);
 			
@@ -532,6 +542,10 @@ public class DockerUtils {
 					caPemContent, keyPemContent, certPemContent);
 		} else {
 			log.info("====dockerHostTlsEnabled============3================================: "+dockerHostTlsEnabled);
+			log.info("=================username==========: "+username);
+			log.info("=================password==========: "+password);
+			log.info("=================dockerHostUrl==========: "+dockerHostUrl);
+			log.info("=================registryServerUrl==========: "+registryServerUrl);
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
 		}
 		log.info("====dockerClientConfig============3================================: "+dockerClientConfig);

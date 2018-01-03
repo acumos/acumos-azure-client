@@ -402,7 +402,7 @@ public class AzureServiceImpl implements AzureService {
 		            	}
 		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->"+tagImage+"==privateRepoUrl==="+privateRepoUrl);
 		            	logger.info("<----remoteDockerClient with privateRepoUrl------privateRepoUrl--->");
-		            	 remoteDockerClient.pullImageCmd(privateRepoUrl+":"+tagImage)
+		            	 remoteDockerClient.pullImageCmd(privateRepoUrl)
 		                 .withAuthConfig(remoteDockerClient.authConfig())
 		                 .exec(new PullImageResultCallback()).awaitSuccess();
 		            	 
