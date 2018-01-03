@@ -521,8 +521,8 @@ public class DockerUtils {
 			log.info("====output==========Start============1======================: ");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			 String Add_all_image = ""
-					+ "echo Running: docker login --username=CognitaE6Reg --password=\"1/uNV9wt=huAtW+yKMrycBHYLrigH=Mz\" cognitae6reg.azurecr.io \n"
-					+ "echo docker pull cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n";
+					+ "docker login --username=CognitaE6Reg --password=\"1/uNV9wt=huAtW+yKMrycBHYLrigH=Mz\" cognitae6reg.azurecr.io \n"
+					+ "docker pull cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n";
 			 
 			 log.info("====output==========Start============2======================: ");
 			 sshShell.upload(new ByteArrayInputStream(Add_all_image.getBytes()),
