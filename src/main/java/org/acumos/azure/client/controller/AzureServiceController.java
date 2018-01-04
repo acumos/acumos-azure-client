@@ -32,6 +32,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.acumos.azure.client.AzureClientServiceApplication;
 import org.acumos.azure.client.api.APINames;
 import org.acumos.azure.client.service.impl.AzureServiceImpl;
+import org.acumos.azure.client.transport.AzureDeployBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.utils.*;
 import org.json.JSONObject;
@@ -189,6 +190,85 @@ public class AzureServiceController extends AbstractController {
 			
 		}
 		logger.info("<------End----authorizeAndPushImage in AzureServiceController------------>");
+		return jsonOutput.toString();
+	}
+	
+	@RequestMapping(value = {org.acumos.azure.client.api.APINames.AZURE_AUTH_PUSH_SINGLE_IMAGE}, method = RequestMethod.POST, produces = APPLICATION_JSON)
+	@ResponseBody
+	public String singleImageAzureDeployment(HttpServletRequest request, @RequestBody AzureDeployBean auth, HttpServletResponse response) throws Exception {
+		logger.info("<------start----singleImageAzureDeployment------------>");
+		JSONObject  jsonOutput = new JSONObject();
+		
+		AzureBean azBean=new AzureBean();
+		AzureServiceImpl azureImpl=new AzureServiceImpl();
+		try {
+			azureImpl.setEnvironment(env);
+			
+			String bluePrintName=env.getProperty("blueprint.name");
+			String bluePrintUser=env.getProperty("docker.registry.bluePrint.username");
+			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
+			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
+			String dockerRegistryPort=env.getProperty("docker.registry.port");
+			/*String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
+			String userName=env.getProperty("cmndatasvc.cmndatasvcuser");
+			String password=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			String nexusUrl=env.getProperty("nexus.url");
+			String nexusUserName=env.getProperty("nexus.username");
+			String nexusPassword=env.getProperty("nexus.password");*/
+			String dockerRegistryname=env.getProperty("docker.registry.name");
+			logger.info("<------dockerRegistryname---------->"+dockerRegistryname);
+            ObjectMapper mapper = new ObjectMapper();
+            logger.info("<-------AcrName----->"+auth.getAcrName());
+    		logger.info("<--------Key---->"+auth.getKey());
+    		logger.info("<-------Imagetag----->"+auth.getImagetag());
+    		logger.info("<-------RgName----->"+auth.getRgName());
+    		logger.info("<--------Client---->"+auth.getClient());
+    		logger.info("<--------SubscriptionKey---->"+auth.getSubscriptionKey());
+    		logger.info("<---------StorageAccount--->"+auth.getStorageAccount());
+    		logger.info("<---------Tenant--->"+auth.getTenant());
+            AzureDeployDataObject authObject=new AzureDeployDataObject();
+            ArrayList<String> list=new ArrayList<String>();
+            list.add(auth.getImagetag());
+            if(auth.getAcrName()!=null){
+            	authObject.setAcrName(auth.getAcrName());
+            }
+            if(auth.getKey()!=null){
+            	authObject.setKey(auth.getKey());
+            }
+            /*if(auth.getImagetag()!=null){
+            	authObject.set(auth.getAcrName());
+            }*/
+            if(auth.getRgName()!=null){
+            	authObject.setRgName(auth.getRgName());
+            }
+            if(auth.getClient()!=null){
+            	authObject.setClient(auth.getClient());
+            }
+            if(auth.getSubscriptionKey()!=null){
+            	authObject.setSubscriptionKey(auth.getSubscriptionKey());
+            }
+            if(auth.getStorageAccount()!=null){
+            	authObject.setStorageAccount(auth.getStorageAccount());
+            }
+            if(auth.getTenant()!=null){
+            	authObject.setTenant(auth.getTenant());
+            }
+            Azure azure = azureImpl.authorize(authObject);
+            if(azure!=null) {
+            	azBean=azureImpl.pushSingleImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
+						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
+						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,dockerRegistryname);
+            }
+            jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+            response.setStatus(200);
+		}catch(Exception e){
+			logger.error("<-----Exception in singleImageAzureDeployment------------>"+e.getMessage());
+			response.setStatus(401);
+			jsonOutput.put("status", APINames.FAILED);
+			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
+			return jsonOutput.toString();
+		}
+		logger.info("<------End----singleImageAzureDeployment------------>");
 		return jsonOutput.toString();
 	}
 

@@ -33,5 +33,6 @@ public class APINames {
 
 	// Service APIs
 	public static final String AZURE_AUTH_PUSH_IMAGE = "/azure/authAndpushimage";
+	public static final String AZURE_AUTH_PUSH_SINGLE_IMAGE = "/azure/singleImageAzureDeployment";
 
 }
