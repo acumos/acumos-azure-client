@@ -584,7 +584,7 @@ public class DockerUtils {
 			// String dockerHostPort = "2376"; // Default Docker port when secured
 			// connection is enabled
 			// dockerHostTlsEnabled = true;
-			log.info("====output==========Start============1======================: ");
+			/*log.info("====output==========Start============1======================: ");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			 String Add_all_image = ""
 					+ "docker login --username=CognitaE6Reg --password=\"1/uNV9wt=huAtW+yKMrycBHYLrigH=Mz\" cognitae6reg.azurecr.io \n"
@@ -619,9 +619,9 @@ public class DockerUtils {
 				 sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 
 				  String output3 = sshShell
-							.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);
+							.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);*/
 			
-			log.info("====dockerHostUrl============================================: "+output3);
+			log.info("====dockerHostUrl============================================: ");
 		} catch (JSchException jSchException) {
 			System.out.println(jSchException.getMessage());
 		} catch (IOException ioException) {

@@ -629,7 +629,8 @@ public class AzureServiceImpl implements AzureService {
 		            	AuthConfig authConfigVal = new AuthConfig().withUsername(acrCredentials.username()).withPassword(acrCredentials.passwords().get(0).value())
 		            			.withRegistryAddress(azureRegistry.loginServerUrl());
 		            	
-		            	
+		            	logger.info("azureRegistry.loginServerUrl22222222222222="+authConfigVal.getRegistryAddress()+ ", acrCredentials.username "+ authConfigVal.getUsername()+ ","
+		            			+ " acrCredentials.passwords" +authConfigVal.getPassword());
 		            	  /*String dockerHostUrl = "tcp://" + azureBean.getAzureVMIP() + ":80";
 		            	  DockerClientConfig dockerClientConfig=DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(dockerHostUrl).withDockerTlsVerify(false)
 						.build();
