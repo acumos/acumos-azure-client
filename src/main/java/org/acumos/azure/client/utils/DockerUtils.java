@@ -430,7 +430,7 @@ public class DockerUtils {
 
 			  String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE_"+imageCount+".sh", true, true);
 			  log.info("====output==========Start============5==================output3====: "+output3);
-			
+			 Thread.sleep(30000);
 			} catch (JSchException jSchException) {
 				
 				log.error("JSchException======"+jSchException.getMessage());
