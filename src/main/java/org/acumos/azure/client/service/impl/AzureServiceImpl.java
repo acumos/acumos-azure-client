@@ -674,6 +674,7 @@ public class AzureServiceImpl implements AzureService {
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
 		            		            dockerInfoList.add(dockerinfo);
+		            		            logger.info("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
 			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumber);
 			    		        		
@@ -681,8 +682,11 @@ public class AzureServiceImpl implements AzureService {
 			                    	
 			                    }
 			                }
-	                  }   
-		            
+	                  }  
+	                  logger.info("====dockerInfoList======: " + dockerInfoList);
+	                  if(dockerInfoList!=null && dockerInfoList.size() > 0){
+			            	dockerList.setDockerList(dockerInfoList);
+			            }
 	                  logger.info("containeDetailMap==========>"+containeDetailMap+"=====dockerList====="+dockerList);
 	  	              azureBean.setDockerinfolist(dockerList);	
 		            
