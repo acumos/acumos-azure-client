@@ -605,9 +605,9 @@ public class AzureServiceImpl implements AzureService {
 		            images = dockerClient.listImagesCmd()
 		                    .withShowAll(true)
 		                    .exec();
-		            for (Image image : images) {
+		            /*for (Image image : images) {
 		            	logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
-		            }
+		            }*/
 		            
 	                  logger.info("<----remoteDockerClient with privateRepoUrl--------->");
 	                  int imageCount=1;
@@ -633,6 +633,7 @@ public class AzureServiceImpl implements AzureService {
 			    		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
 			    		            		tagImage=containerTagMap.get(containerName);
 			    		            	}
+			    		            	logger.info("<----tagImage------------------>"+tagImage);
 			    		            	if(containerImageMap!=null && containerImageMap.get(containerName)!=null){
 			    		            		imageName=containerImageMap.get(containerName);
 			    		            		logger.info("<----imageName--------->"+imageName+"====imageMap=="+imageMap);
