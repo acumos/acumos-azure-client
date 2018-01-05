@@ -362,6 +362,335 @@ public class AzureServiceImpl implements AzureService {
 			
 			return azureBean;
 	}
+	
+	@Override
+	public AzureBean pushCompositeImages(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
+			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
+			String networkSecurityGroup,String dockerRegistryPort,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName) throws  Exception {
+		    logger.info("<-------------start pushCompositeImage------------------------------>");
+		    AzureBean azureBean=new AzureBean();
+			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
+			DockerInfoList  dockerList=new DockerInfoList();
+			final String saName = SdkContext.randomResourceName("sa", 20);	   
+	        final Region region = Region.US_EAST;
+	        final String dockerContainerName = dockerContainerPrefix + System.currentTimeMillis();//"acrsample";
+	      
+	        String servicePrincipalClientId = deployDataObject.getClient(); // replace with a real service principal client id
+	        String servicePrincipalSecret = deployDataObject.getKey(); // and corresponding secret
+	        HashMap<String,String> containerMap=new HashMap<String,String>();
+	        String containerInstanceBluePrint="";
+	        String bluePrintContainerId="";
+	        
+	        logger.info("<--------------dockerRegistryName--------------------------->"+dockerRegistryName);
+	        logger.info("<--------------list--------------------------->"+list);
+	        logger.info("<--------------sequenceList--------------------------->"+sequenceList);
+	        logger.info("<---------bluePrintName------------->"+bluePrintName);
+	        String portArr[]={"8556","8557","8558","8559","8560","8561","8562","8563","8564","8565"};
+            if(list!=null && list.size() > 0){
+            	
+     	            //=============================================================
+		            // If service principal client id and secret are not set via the local variables, attempt to read the service
+		            //   principal client id and secret from a secondary ".azureauth" file set through an environment variable.
+		            //
+		            //   If the environment variable was not set then reuse the main service principal set for running this sample.
+	
+		            if (servicePrincipalClientId.isEmpty() || servicePrincipalSecret.isEmpty()) {
+		                String envSecondaryServicePrincipal = System.getenv("AZURE_AUTH_LOCATION_2");
+	
+		                if (envSecondaryServicePrincipal == null || !envSecondaryServicePrincipal.isEmpty() || !Files.exists(Paths.get(envSecondaryServicePrincipal))) {
+		                    envSecondaryServicePrincipal = System.getenv("AZURE_AUTH_LOCATION");
+		                }
+	
+		                servicePrincipalClientId = Utils.getSecondaryServicePrincipalClientID(envSecondaryServicePrincipal);
+		                servicePrincipalSecret = Utils.getSecondaryServicePrincipalSecret(envSecondaryServicePrincipal);
+		            }
+	
+	
+		            //=============================================================
+		            // Create an SSH private/public key pair to be used when creating the container service
+	
+		            logger.info("Creating an SSH private and public key pair");
+	
+		            SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", "ACS");
+		            logger.info("SSH private key value: \n" + sshKeys.getSshPrivateKey());
+		            logger.info("SSH public key value: \n" + sshKeys.getSshPublicKey());
+	
+	
+		            //=============================================================
+		            // Create an Azure Container Service with Kubernetes orchestration
+	
+		            logger.info("Creating an Azure Container Service with Kubernetes ochestration and one agent (virtual machine)");
+	
+		            Date t1 = new Date();        
+	
+	
+		            //=============================================================
+		            // Create an Azure Container Registry to store and manage private Docker container images
+	
+		            logger.info("Creating an Azure Container Registry");
+		            Date t2 = new Date();
+		            t1 = new Date();
+	                
+		            //Get the existing Azure registry using resourceGroupName and Acr Name
+		            Registry azureRegistry = azure.containerRegistries().getByResourceGroup(deployDataObject.getRgName(), deployDataObject.getAcrName());
+		            
+		            t2 = new Date();
+		            logger.info("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000) + " seconds) " + azureRegistry.id());
+		            Utils.print(azureRegistry);
+	
+	
+		            //=============================================================
+		            // Create a Docker client that will be used to push/pull images to/from the Azure Container Registry
+	
+		            RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
+		            logger.info("azureRegistry.loginServerUrl="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
+		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
+		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
+		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
+		            
+		            AuthConfig authConfig = new AuthConfig()
+		                    .withUsername(dockerUserName)
+		                    .withPassword(dockerPwd);
+		            
+		            AuthConfig authConfig2 = new AuthConfig()
+		                    .withUsername(bluePrintUser)
+		                    .withPassword(bluePrintPass);
+	
+		            //=============================================================
+		            // Pull a temp image from public Docker repo and create a temporary container from that image
+		            // These steps can be replaced and instead build a custom image using a Dockerfile and the app's JAR
+		            logger.info("Start pulling images from nexus::::::::");
+		            Iterator itr=list.iterator();
+		            while(itr.hasNext()){
+		            	 
+		            	String imageName=(String)itr.next();
+		            	//logger.info("Nexus Image Name------------------->"+imageName);
+		            	if(imageName!=null && imageName.contains(bluePrintName)){
+		            		dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig2)
+		                    //.withTag(dockerImageTag)
+		                    .exec(new PullImageResultCallback())
+		                    .awaitSuccess();
+		            		
+		            	}else{
+		            	dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
+	                    //.withTag(dockerImageTag)
+	                    .exec(new PullImageResultCallback())
+	                    .awaitSuccess();
+		            	}
+		            	Thread.sleep(50000);
+		            }
+		            
+		            
+		            logger.info("List local Docker images:");
+		            List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
+		            for (Image image : images) {
+		            	//logger.info("Docker Images \n"+ image.getRepoTags()[0]+"<----image.getId()--->"+ image.getId());
+		            }
+		            int dockerCount=1;
+		            HashMap<String,CreateContainerResponse> hmap=new HashMap<String,CreateContainerResponse>();
+		            HashMap<String,String> containerTagMap=new HashMap<String,String>();
+		            HashMap<String,String> containerImageMap=new HashMap<String,String>();
+		            HashMap<String,String> containerInstanceImageMap=new HashMap<String,String>();
+		            Iterator itr1=list.iterator();
+		            while(itr1.hasNext()){
+		            	String imageTagVal="";
+		            	String imageName=(String)itr1.next();
+		            	CreateContainerResponse dockerContainerInstance = dockerClient.createContainerCmd(imageName)
+			                    .withName(dockerContainerName+"_"+dockerCount)
+			                    //.withCmd("/hello")
+			                    .exec();
+		            	
+		            	if(imageName!=null && !"".equals(imageName)){
+		            		String tag=getTagFromImage(imageName);
+		            		if(tag!=null){
+		            			imageTagVal=tag;
+		            		}
+		            	}
+		            	logger.info("===imageName======="+imageName+"========imageTagVal===="+imageTagVal);
+		            	if(imageName!=null && imageName.contains(bluePrintName)){
+		            		containerInstanceBluePrint=dockerContainerName+"_"+dockerCount;
+		            	}
+		            	hmap.put(dockerContainerName+"_"+dockerCount, dockerContainerInstance);
+		            	containerTagMap.put(dockerContainerName+"_"+dockerCount, imageTagVal);
+		            	containerImageMap.put(dockerContainerName+"_"+dockerCount, imageName);
+		            	Thread.sleep(30000);
+		            	dockerCount++;
+		            }
+		            System.out.println("=======containerImageMap====="+containerImageMap);
+		            logger.info("List All Docker containers:");
+		            List<Container> dockerContainers = dockerClient.listContainersCmd()
+		                    .withShowAll(true)
+		                    .exec();
+		            for (Container container : dockerContainers) {
+		            	logger.info("All Docker container with images and Name %s (%s)\n"+container.getImage()+"<-----container.getId()----->"+container.getId());
+		            }
+	
+		            //=============================================================
+		            // Commit the new container
+	               //String privateRepoUrl = azureRegistry.loginServerUrl() + "/samples/" + dockerContainerName;
+		          //logger.info("privateRepoUrl::::::::::::::::::"+privateRepoUrl);
+		            HashMap<String,String> repoUrlMap=new HashMap<String,String>();  
+		            Iterator itrContainer=hmap.entrySet().iterator();
+		            while(itrContainer.hasNext()){
+		            	String imageTagLatest="latest";
+		            	Map.Entry pair = (Map.Entry)itrContainer.next();
+		            	String containerName=(String)pair.getKey();
+		            	CreateContainerResponse dockerContainerInstance=(CreateContainerResponse)pair.getValue();
+		            	
+		            	String privateRepoUrl = azureRegistry.loginServerUrl() + "/samples/" + containerName;
+		            	logger.info("dockerContainerInstance.getId():::::::::::::::::"+dockerContainerInstance.getId()+"===privateRepoUrl===="+privateRepoUrl);
+		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
+		            		imageTagLatest=containerTagMap.get(containerName);
+		            	}
+		            	logger.info("containerName======"+containerName+"==imageTagLatest======"+imageTagLatest);
+			            String dockerImageId = dockerClient.commitCmd(dockerContainerInstance.getId())
+			                    .withRepository(privateRepoUrl)
+			                    .withTag(imageTagLatest).exec();
+			            logger.info("dockerImageId::::::::::::::::::"+dockerImageId);
+			            repoUrlMap.put(containerName, privateRepoUrl);
+			            // We can now remove the temporary container instance
+			            dockerClient.removeContainerCmd(dockerContainerInstance.getId())
+			                    .withForce(true)
+			                    .exec();
+			            Thread.sleep(5000);
+		            }
+		            //#####################################################################################
+		            logger.info("<----Before Docker remoteDockerClient--------------------------->");
+		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
+		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
+		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
+		            logger.info("<----After Docker remoteDockerClient--------------------------->");
+		            //=============================================================
+		            // Push the new Docker image to the Azure Container Registry
+		            Iterator repoContainer=repoUrlMap.entrySet().iterator();
+		            while(repoContainer.hasNext()){
+		            	Map.Entry pair = (Map.Entry)repoContainer.next();
+		            	String containerName=(String)pair.getKey();
+		            	String privateRepoUrl=(String)pair.getValue();
+		            	
+		            	dockerClient.pushImageCmd(privateRepoUrl)
+	                    .withAuthConfig(dockerClient.authConfig())
+	                    .exec(new PushImageResultCallback()).awaitSuccess();
+		            	Thread.sleep(50000);
+		            }
+		            
+		            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
+		            // Remove the temp image from the local Docker host
+		            /*try {
+		            	Iterator itr5=list.iterator();
+			            while(itr5.hasNext()){
+			            	String imageName=(String)itr5.next();
+		                    dockerClient.removeImageCmd(imageName).withForce(true).exec();
+			            }
+		            } catch (NotFoundException e) {
+		            	logger.error("Error in removing images "+e.getMessage());
+		            }*/
+	
+		            //=============================================================
+		            // Verify that the image we saved in the Azure Container registry can be pulled and instantiated locally
+		            logger.info("<----pull images from Azure registry to locally--------->");
+		             repoContainer=repoUrlMap.entrySet().iterator();
+		            while(repoContainer.hasNext()){
+		            	Map.Entry pair = (Map.Entry)repoContainer.next();
+		            	String containerName=(String)pair.getKey();
+		            	String privateRepoUrl=(String)pair.getValue();
+		            	 logger.info("<----pull images from Azure registry to locally-----privateRepoUrl---->"+privateRepoUrl);
+		            	dockerClient.pullImageCmd(privateRepoUrl)
+	                    .withAuthConfig(dockerClient.authConfig())
+	                    .exec(new PullImageResultCallback()).awaitSuccess();
+		            	Thread.sleep(50000);
+		            }
+		            
+		            logger.info("List local Docker images after pulling sample image from the Azure Container Registry:");
+		            images = dockerClient.listImagesCmd()
+		                    .withShowAll(true)
+		                    .exec();
+		            for (Image image : images) {
+		            	logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
+		            }
+		            
+	                  logger.info("<----remoteDockerClient with privateRepoUrl--------->");
+	                  int imageCount=1;
+	                  int remoteCount=1;
+	                  int count=0;
+	                  List<DockerInfo> dockerInfoList=new ArrayList<DockerInfo>();
+	                  if(sequenceList!=null && sequenceList.size() > 0){
+			            	Iterator seqItr = sequenceList.iterator();
+			                while (seqItr.hasNext()) {
+			                    String jsonContainerName=(String)seqItr.next(); 
+			                    logger.info("<----jsonContainerName--------->"+jsonContainerName);
+			                    if(jsonContainerName!=null && !"".equals(jsonContainerName)){
+			                    	
+			                    	repoContainer=repoUrlMap.entrySet().iterator();
+			    		            while(repoContainer.hasNext()){
+			    		            	Map.Entry pair = (Map.Entry)repoContainer.next();
+			    		            	String containerName=(String)pair.getKey();
+			    		            	String privateRepoUrl=(String)pair.getValue();
+			    		            	String tagImage="latest";
+			    		            	String imageName="";
+			    		            	DockerInfo dockerinfo=new DockerInfo();
+			    		            	String finalContainerName=dockerContainerName + "-private_"+remoteCount;
+			    		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
+			    		            		tagImage=containerTagMap.get(containerName);
+			    		            	}
+			    		            	if(containerImageMap!=null && containerImageMap.get(containerName)!=null){
+			    		            		imageName=containerImageMap.get(containerName);
+			    		            		logger.info("<----imageName--------->"+imageName+"====imageMap=="+imageMap);
+			    		            		if(imageName!=null && imageMap!=null && imageMap.get(imageName)!=null){
+			    		            			finalContainerName=imageMap.get(imageName);
+			    		            		}
+			    		            	}
+			    		            	logger.info("<--Before--jsonContainerName--------->"+jsonContainerName+"===jsonContainerName==="+jsonContainerName);
+			    		            	if(finalContainerName!=null && !finalContainerName.equalsIgnoreCase(jsonContainerName)){
+			    		            		 logger.info("Continue.............................................");
+			    		            		continue;
+			    		            	}
+			    		            	
+			    		            	String azureVMIP=azureBean.getAzureVMIP();
+			    		            	final String vmUserName = "dockerUser";
+			    		        		final String vmPassword = "12NewPA$$w0rd!";
+			    		        		String repositoryName="";
+			    		        		repositoryName=privateRepoUrl+":"+tagImage;
+			    		        		String portNumber="";
+			    		        		logger.info("====azureVMIP======: " + azureVMIP);
+			    		        		logger.info("====vmUserName======: " + vmUserName);
+			    		        		logger.info("====registryServerUrl======: " + azureRegistry.loginServerUrl());
+			    		        		logger.info("====username======: " + acrCredentials.username());
+			    		        		logger.info("====password======: " + acrCredentials.passwords().get(0).value());
+			    		        		logger.info("====repositoryName======: " + repositoryName);
+			    		        		logger.info("====finalContainerName======: " + finalContainerName);
+			    		        		logger.info("====imageCount======: " + imageCount);
+			    		        		if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
+			    		        			logger.info("<--if Part--containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
+			    		        			portNumber="8555";
+			    		        			azureBean.setBluePrintIp(azureVMIP);
+			            			        azureBean.setBluePrintPort(portNumber);
+			    		        		}else{
+			    		        			portNumber=portArr[count];
+			    		        			imageCount++;
+			    		        		}
+			    		        		dockerinfo.setIpAddress(azureVMIP);
+		            		            dockerinfo.setPort(portNumber);
+		            		            dockerinfo.setContainer(finalContainerName);
+		            		            dockerInfoList.add(dockerinfo);
+			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
+			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumber);
+			    		        		
+			    		            }
+			                    	
+			                    }
+			                }
+	                  }   
+		            
+	                  logger.info("containeDetailMap==========>"+containeDetailMap+"=====dockerList====="+dockerList);
+	  	              azureBean.setDockerinfolist(dockerList);	
+		            
+			} 
+		   
+          logger.info("<-------------End pushCompositeImage------------------------------>");  
+		  return azureBean;
+		
+	}
 
 	@Override
 	public AzureBean pushImage(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
@@ -944,13 +1273,14 @@ public class AzureServiceImpl implements AzureService {
 		logger.info("<--End-------iterateImageMap-------list---->"+list);
 		return list;
 	}
-	public void getBluePrintNexus(String solutionId, String version,String datasource,String userName,String password,
+	public String getBluePrintNexus(String solutionId, String version,String datasource,String userName,String password,
 			String nexusUrl,String nexusUserName,String nexusPassword) throws  Exception{
 		  List<MLPSolutionRevision> mlpSolutionRevisionList;
 		  String solutionRevisionId = null;
 		  List<MLPArtifact> mlpArtifactList;
 		  String nexusURI = "";
 		  String artifactType="BP";
+		  String bluePrintStr="";
 		  ByteArrayOutputStream byteArrayOutputStream = null;
 		  CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,password);
 		  mlpSolutionRevisionList = getSolutionRevisionsList(solutionId,datasource,userName,password);
@@ -979,7 +1309,7 @@ public class AzureServiceImpl implements AzureService {
 						logger.info("------- byteArrayOutputStream ---blueprint.json-------"+byteArrayOutputStream.toString());
 						OutputStream outputStream = new FileOutputStream("blueprint.json"); 
 						byteArrayOutputStream.writeTo(outputStream);
-						
+						bluePrintStr=byteArrayOutputStream.toString();
 					}
 				}
 			}	
@@ -988,6 +1318,7 @@ public class AzureServiceImpl implements AzureService {
 				 throw  new Exception("blueprint.json file is not exist");
 			}
 			
+		return bluePrintStr;	
 	  }
 	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String password)throws  Exception{
 			logger.debug("------- getSolutionRevisions() : Start ----------");

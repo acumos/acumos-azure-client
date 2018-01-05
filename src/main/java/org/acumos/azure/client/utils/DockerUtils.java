@@ -379,6 +379,78 @@ public class DockerUtils {
 	 *            - password to connect with to the private container registry
 	 * @return an instance of DockerClient
 	 */
+	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPassword,
+			String registryServerUrl, String username, String password,String repositoryName,String finalContainerName,int imageCount,String portNumber){
+		log.info("====================start deploymentCompositeImageVM==================");
+		log.info("====dockerHostIP======: " + dockerHostIP);
+		log.info("====vmUserName======: " + vmUserName);
+		log.info("====registryServerUrl======: " + registryServerUrl);
+		log.info("====username======: " + username);
+		log.info("====password======: " + password);
+		log.info("====repositoryName======: " + repositoryName);
+		log.info("====finalContainerName======: " + finalContainerName);
+		log.info("====imageCount======: " + imageCount);
+		log.info("====portNumber======: " + portNumber);
+		String portNumberString=portNumber+":"+portNumber;
+		log.info("====portNumberString======: " + portNumberString);
+		SSHShell sshShell = null;
+		try{
+			
+			String PULL_IMAGE = ""
+					+ "docker login --username="+username+" --password="+password+" "+registryServerUrl+" \n"
+					+ "docker pull "+repositoryName+" \n";
+			log.info("====start deploymentImageVM===========2===================PULL_IMAGE===: "+PULL_IMAGE);
+			
+			 sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			 sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()),"PULL_IMAGE_"+imageCount+".sh", ".azuredocker", true, "4095");
+			 log.info("====start deploymentImageVM===========3======================: ");
+			 
+			 
+			 
+			 sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+	         String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE_"+imageCount+".sh", true, true);
+			 log.info("====start deploymentImageVM===========3===========output2===========: "+output2);
+			try{
+				Thread.sleep(30000);
+				}catch(Exception e){
+					log.error("Exception in sleep======1===================");
+				}
+			
+			
+			
+			log.info("====================start deploymentImageVM============1======");
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			String RUN_IMAGE = ""
+					+ "docker run --name "+finalContainerName+" -d -p 0.0.0.0:"+portNumberString+"  "+repositoryName+" \n";
+			 log.info("====output==========Start============4======================: RUN_IMAGE"+RUN_IMAGE);	
+
+			 sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()),
+						"RUN_DOCKER_IMAGE_"+imageCount+".sh", ".azuredocker", true, "4095");
+			 sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+
+			  String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE_"+imageCount+".sh", true, true);
+			  log.info("====output==========Start============5==================output3====: "+output3);
+			
+			} catch (JSchException jSchException) {
+				
+				log.error("JSchException======"+jSchException.getMessage());
+			} catch (IOException ioException) {
+				
+				log.error("IOException======"+ioException.getMessage());
+			} catch (Exception exception) {
+				
+				log.error("Exception======"+exception.getMessage());
+			} finally {
+				if (sshShell != null) {
+					sshShell.close();
+					sshShell = null;
+				}
+			}
+			
+		
+		log.info("====================End deploymentCompositeImageVM==================");
+	 return "success";	
+	}
 	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPassword,
 			String registryServerUrl, String username, String password,String repositoryName){
 		log.info("====dockerHostIP======: " + dockerHostIP);

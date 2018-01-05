@@ -118,9 +118,11 @@ public class ParseJSON {
 		ArrayList<String> list=new ArrayList<String>();	
 		Blueprint blueprint=new Blueprint();
 		ObjectMapper mapper = new ObjectMapper();
+		String bluePrintString="";
 		try
 		{
 		Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+		
         JSONObject jo = (JSONObject) obj;
         String prettyJSONString = jo.toString();
         //testDumpWriterFromJSON(prettyJSONString);

@@ -271,6 +271,103 @@ public class AzureServiceController extends AbstractController {
 		logger.info("<------End----singleImageAzureDeployment------------>");
 		return jsonOutput.toString();
 	}
+	
+	@RequestMapping(value = {org.acumos.azure.client.api.APINames.AZURE_AUTH_PUSH_COMPOSITE_IMAGE}, method = RequestMethod.POST, produces = APPLICATION_JSON)
+	@ResponseBody
+	public String compositeSolutionAzureDeployment(HttpServletRequest request, @RequestBody AzureDeployDataObject authObject, HttpServletResponse response) throws Exception {
+		logger.info("<------start----singleImageAzureDeployment------------>");
+		JSONObject  jsonOutput = new JSONObject();
+		DockerInfoList  dockerList=new DockerInfoList();
+		AzureBean azBean=new AzureBean();
+		AzureServiceImpl azureImpl=new AzureServiceImpl();
+		try {
+			azureImpl.setEnvironment(env);
+			String bluePrintImage=env.getProperty("blueprint.ImageName");
+			String bluePrintName=env.getProperty("blueprint.name");
+			String bluePrintUser=env.getProperty("docker.registry.bluePrint.username");
+			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
+			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
+			String dockerRegistryPort=env.getProperty("docker.registry.port");
+			String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
+			String userName=env.getProperty("cmndatasvc.cmndatasvcuser");
+			String password=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			String nexusUrl=env.getProperty("nexus.url");
+			String nexusUserName=env.getProperty("nexus.username");
+			String nexusPassword=env.getProperty("nexus.password");
+			String dockerRegistryname=env.getProperty("docker.registry.name");
+			DockerInfoList dockerInfoList=new DockerInfoList();
+			String vmIP="";
+			String bluePrintPort="";
+			logger.info("<------dockerRegistryname---------->"+dockerRegistryname);
+			if (authObject == null) {
+				logger.info("Insufficient data to authneticate with Azure AD");
+				jsonOutput.put("status", APINames.AUTH_FAILED);
+				return jsonOutput.toString();
+			}
+			ObjectMapper mapper = new ObjectMapper();
+            Azure azure = azureImpl.authorize(authObject);
+            logger.info("<------SolutionId---------->"+authObject.getSolutionId());
+			logger.info("<------SolutionVersion---------->"+authObject.getSolutionVersion());
+			String bluePrintStr=azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionVersion(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
+			logger.info("<------bluePrintStr---------->"+bluePrintStr);
+			ParseJSON parseJson=new ParseJSON();
+			Blueprint bluePrint=parseJson.jsonFileToObject();
+			
+			
+			
+			HashMap<String,String> imageMap=parseJson.parseJsonFile();
+			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
+			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();
+			
+			if(bluePrintImage!=null && !"".equals(bluePrintImage)){
+				list.add(bluePrintImage);
+				imageMap.put(bluePrintImage, "BluePrintContainer");
+			}
+			logger.info("<------list---------->"+list);
+			logger.info("<------imageMap---------->"+imageMap);
+			if(azure!=null) {
+				  azBean=azureImpl.pushCompositeImages(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
+						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
+						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList,dockerRegistryname);
+				  
+				  /*if(azBean!=null && azBean.getBluePrintMap()!=null){
+					  HashMap<String,String> hmap=new HashMap<String,String>();
+					  hmap=azBean.getBluePrintMap();
+				  }
+				  if(azBean!=null && azBean.getBluePrintMap()!=null){
+					  HashMap<String,String> hmap=new HashMap<String,String>();
+					  hmap=azBean.getBluePrintMap();
+				  }*/
+				  dockerInfoList=azBean.getDockerinfolist();
+				  vmIP=azBean.getAzureVMIP().trim();
+				  bluePrintPort=azBean.getBluePrintPort().trim();
+				  
+				  jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+				  
+			}
+			
+			  logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
+			  logger.info("bluePrint==================="+mapper.writeValueAsString(bluePrint));
+			 
+			    String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
+				String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
+				logger.info("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
+			  if(azBean.getDockerinfolist()!=null){
+					azureImpl.putContainerDetails(azBean.getDockerinfolist(),urlDockerInfo);
+				}
+				if(bluePrint!=null){
+					azureImpl.putBluePrintDetails(bluePrint,urlBluePrint);
+				}
+				response.setStatus(200);	
+		}catch(Exception e){
+			logger.error("<-----Exception in compositeSolutionAzureDeployment------------>"+e.getMessage());
+			response.setStatus(401);
+			jsonOutput.put("status", APINames.FAILED);
+			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
+			return jsonOutput.toString();
+		}
+		return jsonOutput.toString();
+	}
 
 	private String dockerHosttoUrl(String host, String port, boolean socket) {
 		return ((socket) ? "unix" : "tcp") + "://" + host + ":" + port;
