@@ -23,7 +23,10 @@ package org.acumos.azure.client.controller;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 import javax.servlet.http.HttpServletRequest;
@@ -42,8 +45,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.async.DeferredResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.management.Azure;
@@ -66,6 +71,262 @@ public class AzureServiceController extends AbstractController {
 	private Environment env;
 
 	Logger logger = LoggerFactory.getLogger(AzureServiceController.class);
+	
+	@RequestMapping(value ={org.acumos.azure.client.api.APINames.AZURE_AUTH_ASYNC_SINGLE_IMAGE},  method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public DeferredResult<String> singleImageAsyncDeployment(@RequestParam("acrName") String acrName,@RequestParam("client") String client,@RequestParam("imagetag") String imagetag,
+			                                                @RequestParam("key") String key,@RequestParam("rgName") String rgName,@RequestParam("storageAccount") String storageAccount,
+			                                                @RequestParam("subscriptionKey") String subscriptionKey,@RequestParam("tenant") String tenant) throws Exception {
+	  final DeferredResult<String> deferredResult = new DeferredResult<>();
+	  JSONObject  jsonOutput = new JSONObject();
+	  AzureBean azBean=new AzureBean();
+	  String responseString="";
+	  logger.info("<------Start----singleImageAsyncDeployment------------>");
+	  AzureServiceImpl azureImpl=new AzureServiceImpl();
+	  logger.info("<-------acrName----->"+acrName);
+	  logger.info("<-------client----->"+client);
+	  logger.info("<-------imagetag----->"+imagetag);
+	  logger.info("<-------key----->"+key);
+	  logger.info("<-------rgName----->"+rgName);
+	  logger.info("<-------storageAccount----->"+storageAccount);
+	  logger.info("<-------subscriptionKey----->"+subscriptionKey);
+	  logger.info("<-------tenant----->"+tenant);
+	  String vmIp="";
+	  String appPort="8557";
+	  String appDetail="";
+	  try {
+			azureImpl.setEnvironment(env);
+			
+			String bluePrintName=env.getProperty("blueprint.name");
+			String bluePrintUser=env.getProperty("docker.registry.bluePrint.username");
+			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
+			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
+			String dockerRegistryPort=env.getProperty("docker.registry.port");
+			/*String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
+			String userName=env.getProperty("cmndatasvc.cmndatasvcuser");
+			String password=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			String nexusUrl=env.getProperty("nexus.url");
+			String nexusUserName=env.getProperty("nexus.username");
+			String nexusPassword=env.getProperty("nexus.password");*/
+			String dockerRegistryname=env.getProperty("docker.registry.name");
+			logger.info("<------dockerRegistryname---------->"+dockerRegistryname);
+	          ObjectMapper mapper = new ObjectMapper();
+	          
+	          AzureDeployDataObject authObject=new AzureDeployDataObject();
+	          ArrayList<String> list=new ArrayList<String>();
+	          list.add(imagetag);
+	          if(acrName!=null){
+	          	authObject.setAcrName(acrName);
+	          }
+	          if(key!=null){
+	          	authObject.setKey(key);
+	          }
+	          /*if(auth.getImagetag()!=null){
+	          	authObject.set(auth.getAcrName());
+	          }*/
+	          if(rgName!=null){
+	          	authObject.setRgName(rgName);
+	          }
+	          if(client!=null){
+	          	authObject.setClient(client);
+	          }
+	          if(subscriptionKey!=null){
+	          	authObject.setSubscriptionKey(subscriptionKey);
+	          }
+	          if(storageAccount!=null){
+	          	authObject.setStorageAccount(storageAccount);
+	          }
+	          if(tenant!=null){
+	          	authObject.setTenant(tenant);
+	          }
+	          Azure azure = azureImpl.authorize(authObject);
+	          if(azure!=null) {
+	          	azBean=azureImpl.pushSingleImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
+							  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
+							  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,dockerRegistryname);
+	          }
+	          vmIp=azBean.getAzureVMIP();
+	          appDetail=vmIp+"#"+appPort;
+	          logger.info("<------appDetail---------->"+appDetail);
+	          jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+	          //response.setStatus(200);
+			}catch(Exception e){
+				logger.error("<-----Exception in singleImageAzureDeployment------------>"+e.getMessage());
+				//response.setStatus(401);
+				jsonOutput.put("status", APINames.FAILED);
+				logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
+				responseString=jsonOutput.toString();
+			}
+		logger.info("<------End----singleImageAsyncDeployment------------>");
+	  	
+	  jsonOutput.put("APPDetails",appDetail);
+	  responseString=jsonOutput.toString();
+	  deferredResult.setResult(responseString);
+	  return deferredResult;
+	}
+	
+	@RequestMapping(value ={org.acumos.azure.client.api.APINames.AZURE_AUTH_ASYNC_COMPOSITE_SOLUTION},  method = RequestMethod.GET, produces = APPLICATION_JSON)
+	@ResponseBody
+	public DeferredResult<String> compositeSolutionAsyncAzure(@RequestParam("acrName") String acrName,@RequestParam("client") String client,@RequestParam("solutionId") String solutionId,
+			                                          @RequestParam("key") String key,@RequestParam("rgName") String rgName,@RequestParam("storageAccount") String storageAccount,
+			                                          @RequestParam("subscriptionKey") String subscriptionKey,@RequestParam("tenant") String tenant,@RequestParam("solutionVersion") String solutionVersion) throws Exception {
+		logger.info("<------Start----compositeSolutionAsyncAzure------------>");
+		logger.info("<-------acrName----->"+acrName);
+	    logger.info("<-------client----->"+client);
+	    logger.info("<-------solutionId----->"+solutionId);
+	    logger.info("<-------key----->"+key);
+	    logger.info("<-------rgName----->"+rgName);
+	    logger.info("<-------storageAccount----->"+storageAccount);
+	    logger.info("<-------subscriptionKey----->"+subscriptionKey);
+	    logger.info("<-------tenant----->"+tenant);
+	    logger.info("<-------solutionVersion----->"+solutionVersion);
+		final DeferredResult<String> deferredResult = new DeferredResult<>();
+		JSONObject  jsonOutput = new JSONObject();
+		DockerInfoList  dockerList=new DockerInfoList();
+		AzureBean azBean=new AzureBean();
+		AzureServiceImpl azureImpl=new AzureServiceImpl();
+		String responseString="";
+		
+		try {
+			  AzureDeployDataObject authObject=new AzureDeployDataObject();
+	          
+	          if(acrName!=null){
+	          	authObject.setAcrName(acrName);
+	          }
+	          if(key!=null){
+	          	authObject.setKey(key);
+	          }
+	          /*if(auth.getImagetag()!=null){
+	          	authObject.set(auth.getAcrName());
+	          }*/
+	          if(rgName!=null){
+	          	authObject.setRgName(rgName);
+	          }
+	          if(client!=null){
+	          	authObject.setClient(client);
+	          }
+	          if(subscriptionKey!=null){
+	          	authObject.setSubscriptionKey(subscriptionKey);
+	          }
+	          if(storageAccount!=null){
+	          	authObject.setStorageAccount(storageAccount);
+	          }
+	          if(tenant!=null){
+	          	authObject.setTenant(tenant);
+	          }
+	          if(solutionId!=null ){
+	        	  authObject.setSolutionId(solutionId); 
+	          }
+	          if(solutionVersion!=null){
+	        	  authObject.setSolutionVersion(solutionVersion); 
+	          }
+			azureImpl.setEnvironment(env);
+			String bluePrintImage=env.getProperty("blueprint.ImageName");
+			String bluePrintName=env.getProperty("blueprint.name");
+			String bluePrintUser=env.getProperty("docker.registry.bluePrint.username");
+			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
+			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
+			String dockerRegistryPort=env.getProperty("docker.registry.port");
+			String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
+			String userName=env.getProperty("cmndatasvc.cmndatasvcuser");
+			String password=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			String nexusUrl=env.getProperty("nexus.url");
+			String nexusUserName=env.getProperty("nexus.username");
+			String nexusPassword=env.getProperty("nexus.password");
+			String dockerRegistryname=env.getProperty("docker.registry.name");
+			DockerInfoList dockerInfoList=new DockerInfoList();
+			String vmIP="";
+			String bluePrintPort="";
+			logger.info("<------dockerRegistryname---------->"+dockerRegistryname);
+			/*if (authObject == null) {
+				logger.info("Insufficient data to authneticate with Azure AD");
+				jsonOutput.put("status", APINames.AUTH_FAILED);
+				return jsonOutput.toString();
+			}*/
+			ObjectMapper mapper = new ObjectMapper();
+            Azure azure = azureImpl.authorize(authObject);
+            logger.info("<------SolutionId---------->"+authObject.getSolutionId());
+			logger.info("<------SolutionVersion---------->"+authObject.getSolutionVersion());
+			String bluePrintStr=azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionVersion(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
+			logger.info("<------bluePrintStr---------->"+bluePrintStr);
+			ParseJSON parseJson=new ParseJSON();
+			Blueprint bluePrint=parseJson.jsonFileToObject();
+			
+			
+			
+			HashMap<String,String> imageMap=parseJson.parseJsonFile();
+			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
+			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();
+			
+			if(bluePrintImage!=null && !"".equals(bluePrintImage)){
+				list.add(bluePrintImage);
+				imageMap.put(bluePrintImage, "BluePrintContainer");
+			}
+			logger.info("<------list---------->"+list);
+			logger.info("<------imageMap---------->"+imageMap);
+			if(azure!=null) {
+				  azBean=azureImpl.pushCompositeImages(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
+						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
+						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList,dockerRegistryname);
+				  
+				  /*if(azBean!=null && azBean.getBluePrintMap()!=null){
+					  HashMap<String,String> hmap=new HashMap<String,String>();
+					  hmap=azBean.getBluePrintMap();
+				  }
+				  if(azBean!=null && azBean.getBluePrintMap()!=null){
+					  HashMap<String,String> hmap=new HashMap<String,String>();
+					  hmap=azBean.getBluePrintMap();
+				  }*/
+				  dockerInfoList=azBean.getDockerinfolist();
+				  vmIP=azBean.getAzureVMIP().trim();
+				  bluePrintPort=azBean.getBluePrintPort().trim();
+				  
+				  jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+				  
+			}
+			  
+			  logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
+			  logger.info("bluePrint==================="+mapper.writeValueAsString(bluePrint));
+			  
+			  if(dockerInfoList!=null){
+				  List<DockerInfo> dockerListVal =dockerInfoList.getDockerList();
+				  if(dockerListVal!=null){
+					  
+					 for(DockerInfo dockerInfo: dockerListVal){
+						if(dockerInfo!=null){
+							String containerName=dockerInfo.getContainer();
+							String containerIp=dockerInfo.getIpAddress();
+							String containerPort=dockerInfo.getPort();
+							jsonOutput.put(containerName, containerIp+"#"+containerPort);
+						}
+					 }
+				  }
+			  }
+			  logger.info("<-----jsonOutput---------->"+jsonOutput);
+			    String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
+				String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
+				logger.info("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
+			  if(azBean.getDockerinfolist()!=null){
+					azureImpl.putContainerDetails(azBean.getDockerinfolist(),urlDockerInfo);
+				}
+				if(bluePrint!=null){
+					azureImpl.putBluePrintDetails(bluePrint,urlBluePrint);
+				}
+				//response.setStatus(200);	
+		}catch(Exception e){
+			logger.error("<-----Exception in compositeSolutionAzureDeployment------------>"+e.getMessage());
+			//response.setStatus(401);
+			jsonOutput.put("status", APINames.FAILED);
+			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
+			responseString= jsonOutput.toString();
+		}
+		
+		//jsonOutput.put("APPDetails",appDetail);
+		responseString=jsonOutput.toString();
+		deferredResult.setResult(responseString);
+		logger.info("<------End----compositeSolutionAsyncAzure------------>");
+	    return deferredResult;
+	}
 
 	@CrossOrigin
 	//@ApiOperation(value = "Gets a page of solutions matching the specified tag.", response = String.class, responseContainer = "Page")

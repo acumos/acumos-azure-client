@@ -668,8 +668,10 @@ public class AzureServiceImpl implements AzureService {
 			            			        azureBean.setBluePrintPort(portNumber);
 			    		        		}else{
 			    		        			portNumber=portArr[count];
-			    		        			imageCount++;
+			    		        			count++;
+			    		        			
 			    		        		}
+			    		        		imageCount++;
 			    		        		dockerinfo.setIpAddress(azureVMIP);
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
