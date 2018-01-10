@@ -218,7 +218,7 @@ public class AzureServiceImpl implements AzureService {
                     //.withTag(dockerImageTag)
                     .exec(new PullImageResultCallback())
                     .awaitSuccess();
-	            	Thread.sleep(30000);
+	            	Thread.sleep(10000);
 	            }
 	            
 	            int dockerCount=1;
@@ -248,7 +248,7 @@ public class AzureServiceImpl implements AzureService {
 	            	hmap.put(dockerContainerName+"_"+dockerCount, dockerContainerInstance);
 	            	containerTagMap.put(dockerContainerName+"_"+dockerCount, imageTagVal);
 	            	containerImageMap.put(dockerContainerName+"_"+dockerCount, imageName);
-	            	Thread.sleep(30000);
+	            	Thread.sleep(10000);
 	            	dockerCount++;
 	            }
 	            logger.info("List All Docker containers:");
@@ -306,7 +306,7 @@ public class AzureServiceImpl implements AzureService {
 	            	dockerClient.pushImageCmd(privateRepoUrl)
                     .withAuthConfig(dockerClient.authConfig())
                     .exec(new PushImageResultCallback()).awaitSuccess();
-	            	Thread.sleep(50000);
+	            	Thread.sleep(10000);
 	            }
 	            
 	            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
@@ -333,7 +333,7 @@ public class AzureServiceImpl implements AzureService {
 	            	dockerClient.pullImageCmd(privateRepoUrl)
                     .withAuthConfig(dockerClient.authConfig())
                     .exec(new PullImageResultCallback()).awaitSuccess();
-	            	Thread.sleep(50000);
+	            	Thread.sleep(5000);
 	            }
 	            
 	            logger.info("<----remoteDockerClient with privateRepoUrl--------->");
@@ -477,7 +477,7 @@ public class AzureServiceImpl implements AzureService {
 	                    .exec(new PullImageResultCallback())
 	                    .awaitSuccess();
 		            	}
-		            	Thread.sleep(50000);
+		            	Thread.sleep(10000);
 		            }
 		            
 		            
@@ -513,7 +513,7 @@ public class AzureServiceImpl implements AzureService {
 		            	hmap.put(dockerContainerName+"_"+dockerCount, dockerContainerInstance);
 		            	containerTagMap.put(dockerContainerName+"_"+dockerCount, imageTagVal);
 		            	containerImageMap.put(dockerContainerName+"_"+dockerCount, imageName);
-		            	Thread.sleep(30000);
+		            	Thread.sleep(10000);
 		            	dockerCount++;
 		            }
 		            System.out.println("=======containerImageMap====="+containerImageMap);
@@ -571,7 +571,7 @@ public class AzureServiceImpl implements AzureService {
 		            	dockerClient.pushImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PushImageResultCallback()).awaitSuccess();
-		            	Thread.sleep(50000);
+		            	Thread.sleep(10000);
 		            }
 		            
 		            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
@@ -598,7 +598,7 @@ public class AzureServiceImpl implements AzureService {
 		            	dockerClient.pullImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PullImageResultCallback()).awaitSuccess();
-		            	Thread.sleep(50000);
+		            	Thread.sleep(5000);
 		            }
 		            
 		            logger.info("List local Docker images after pulling sample image from the Azure Container Registry:");
