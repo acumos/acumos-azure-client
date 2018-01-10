@@ -20,19 +20,21 @@
 
 package org.acumos.azure.client.service.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
-import java.util.ArrayList;
 
-import org.acumos.azure.client.controller.AzureServiceController;
 import org.acumos.azure.client.service.AzureService;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.utils.AzureBean;
@@ -40,30 +42,29 @@ import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.DockerUtils;
-import org.acumos.azure.client.utils.ParseJSON;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
+import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPSolutionRevision;
+import org.acumos.nexus.client.NexusArtifactClient;
+import org.acumos.nexus.client.RepositoryLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.exception.NotFoundException;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.ExposedPort;
 import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
-import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.api.model.Ports;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.microsoft.azure.AzureEnvironment;
@@ -74,33 +75,6 @@ import com.microsoft.azure.management.containerregistry.implementation.RegistryL
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
 import com.microsoft.rest.LogLevel;
-
-import com.github.dockerjava.api.model.Network;
-import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.api.model.Ports.Binding;
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
-import org.acumos.cds.domain.MLPArtifact;
-import org.acumos.cds.domain.MLPSolutionRevision;
-import org.acumos.nexus.client.NexusArtifactClient;
-import org.acumos.nexus.client.RepositoryLocation;
-
-
-
-
 
 public class AzureServiceImpl implements AzureService {
 	
