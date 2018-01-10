@@ -159,10 +159,6 @@ public class AzureDeployDataObject {
 	/*public String getImagetag() {
 		return imagetag;
 	}
-
-	*//**
-	 * @param imagetag
-	 *//*
 	public void setImagetag(String imagetag) {
 		this.imagetag = imagetag;
 	}*/

@@ -22,23 +22,17 @@ package org.acumos.azure.client.utils;
 
 
 import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringWriter;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.acumos.azure.client.controller.AzureServiceController;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.*;
+import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -51,7 +45,6 @@ public class ParseJSON {
 	Logger log =LoggerFactory.getLogger(ParseJSON.class);
 	public  HashMap<String,String> parseJsonFile()throws  Exception{
 		log.debug("<----------Start parseJsonFile in ParseJSON--------------------------->");
-		String contentString="";
 		HashMap<String,String> imageMap=new HashMap<String,String>();
 		ArrayList<String> list=new ArrayList<String>();	
 		try
@@ -114,11 +107,9 @@ public class ParseJSON {
 	
 	public  Blueprint jsonFileToObject()throws  Exception{
 		//log.debug("<----------Start jsonFileToObject in --------------------------->");
-		String contentString="";
 		ArrayList<String> list=new ArrayList<String>();	
 		Blueprint blueprint=new Blueprint();
 		ObjectMapper mapper = new ObjectMapper();
-		String bluePrintString="";
 		try
 		{
 		Object obj = new JSONParser().parse(new FileReader("blueprint.json"));

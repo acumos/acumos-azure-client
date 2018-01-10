@@ -167,16 +167,15 @@ import java.util.Set;
 
 public final class Utils {
 
+	private static final Logger log = LoggerFactory.getLogger(Utils.class);
+	
 	/**
 	 * Print virtual machine info.
 	 *
 	 * @param resource
 	 *            a virtual machine
 	 */
-	static Logger log = LoggerFactory.getLogger(Utils.class);
-
 	public static void print(VirtualMachine resource) {
-
 		StringBuilder storageProfile = new StringBuilder().append("\n\tStorageProfile: ");
 		if (resource.storageProfile().imageReference() != null) {
 			storageProfile.append("\n\t\tImageReference:");
