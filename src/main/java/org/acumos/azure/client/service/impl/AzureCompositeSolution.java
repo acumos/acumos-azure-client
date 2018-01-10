@@ -113,15 +113,15 @@ public class AzureCompositeSolution implements Runnable {
 		    
 			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
 			DockerInfoList  dockerList=new DockerInfoList();
-			final String saName = SdkContext.randomResourceName("sa", 20);	   
+			//final String saName = SdkContext.randomResourceName("sa", 20);	   
 	        final Region region = Region.US_EAST;
 	        final String dockerContainerName = dockerContainerPrefix + System.currentTimeMillis();//"acrsample";
 	      
 	        String servicePrincipalClientId = deployDataObject.getClient(); // replace with a real service principal client id
 	        String servicePrincipalSecret = deployDataObject.getKey(); // and corresponding secret
-	        HashMap<String,String> containerMap=new HashMap<String,String>();
+	        //HashMap<String,String> containerMap=new HashMap<String,String>();
 	        String containerInstanceBluePrint="";
-	        String bluePrintContainerId="";
+	        //String bluePrintContainerId="";
 	        
 	        logger.info("<--------------dockerRegistryName--------------------------->"+dockerRegistryName);
 	        logger.info("<--------------list--------------------------->"+list);
@@ -225,14 +225,14 @@ public class AzureCompositeSolution implements Runnable {
 		            
 		            logger.info("List local Docker images:");
 		            List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
-		            for (Image image : images) {
+		            //for (Image image : images) {
 		            	//logger.info("Docker Images \n"+ image.getRepoTags()[0]+"<----image.getId()--->"+ image.getId());
-		            }
+		            //}
 		            int dockerCount=1;
 		            HashMap<String,CreateContainerResponse> hmap=new HashMap<String,CreateContainerResponse>();
 		            HashMap<String,String> containerTagMap=new HashMap<String,String>();
 		            HashMap<String,String> containerImageMap=new HashMap<String,String>();
-		            HashMap<String,String> containerInstanceImageMap=new HashMap<String,String>();
+		            //HashMap<String,String> containerInstanceImageMap=new HashMap<String,String>();
 		            Iterator itr1=list.iterator();
 		            while(itr1.hasNext()){
 		            	String imageTagVal="";

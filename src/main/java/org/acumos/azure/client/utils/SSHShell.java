@@ -64,7 +64,6 @@ public final class SSHShell {
 	 *            the ssh user name
 	 * @param password
 	 *            the ssh password
-	 * @return the shell
 	 * @throws JSchException
 	 * @throws IOException
 	 */
@@ -101,7 +100,6 @@ public final class SSHShell {
 	 *            the ssh user name
 	 * @param sshPrivateKey
 	 *            the ssh password
-	 * @return the shell
 	 * @throws JSchException
 	 * @throws IOException
 	 */
