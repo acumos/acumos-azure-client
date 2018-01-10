@@ -23,6 +23,7 @@ package org.acumos.azure.client.controller;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,7 +35,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.acumos.azure.client.AzureClientServiceApplication;
 import org.acumos.azure.client.api.APINames;
+import org.acumos.azure.client.service.impl.AzureCompositeSolution;
 import org.acumos.azure.client.service.impl.AzureServiceImpl;
+import org.acumos.azure.client.service.impl.AzureSimpleSolution;
 import org.acumos.azure.client.transport.AzureDeployBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.utils.*;
@@ -462,9 +465,11 @@ public class AzureServiceController extends AbstractController {
 		
 		AzureBean azBean=new AzureBean();
 		AzureServiceImpl azureImpl=new AzureServiceImpl();
+		String uidNumStr="";
 		try {
 			azureImpl.setEnvironment(env);
-			
+			UUID uidNumber = UUID.randomUUID();
+			uidNumStr=uidNumber.toString();
 			String bluePrintName=env.getProperty("blueprint.name");
 			String bluePrintUser=env.getProperty("docker.registry.bluePrint.username");
 			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
@@ -515,11 +520,17 @@ public class AzureServiceController extends AbstractController {
             	authObject.setTenant(auth.getTenant());
             }
             Azure azure = azureImpl.authorize(authObject);
-            if(azure!=null) {
+            /*if(azure!=null) {
             	azBean=azureImpl.pushSingleImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
 						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
 						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,dockerRegistryname);
-            }
+            }*/
+            AzureSimpleSolution myRunnable = new AzureSimpleSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
+            		env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"),false),
+            				null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryname,uidNumStr);
+            
+            Thread t = new Thread(myRunnable);
+            t.start();
             jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
             response.setStatus(200);
 		}catch(Exception e){
@@ -529,7 +540,8 @@ public class AzureServiceController extends AbstractController {
 			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
 			return jsonOutput.toString();
 		}
-		logger.info("<------End----singleImageAzureDeployment------------>");
+		jsonOutput.put("UIDNumber", uidNumStr);
+		logger.info("<------End----singleImageAzureDeployment------------>"+jsonOutput.toString());
 		return jsonOutput.toString();
 	}
 	
@@ -541,7 +553,10 @@ public class AzureServiceController extends AbstractController {
 		DockerInfoList  dockerList=new DockerInfoList();
 		AzureBean azBean=new AzureBean();
 		AzureServiceImpl azureImpl=new AzureServiceImpl();
+		String uidNumStr="";
 		try {
+			UUID uidNumber = UUID.randomUUID();
+			uidNumStr=uidNumber.toString();
 			azureImpl.setEnvironment(env);
 			String bluePrintImage=env.getProperty("blueprint.ImageName");
 			String bluePrintName=env.getProperty("blueprint.name");
@@ -587,9 +602,17 @@ public class AzureServiceController extends AbstractController {
 			logger.info("<------list---------->"+list);
 			logger.info("<------imageMap---------->"+imageMap);
 			if(azure!=null) {
-				  azBean=azureImpl.pushCompositeImages(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
+				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
+                        env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
+                        env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,
+                        networkSecurityGroup,imageMap,sequenceList,dockerRegistryname,bluePrint,uidNumStr);
+
+
+                  Thread t = new Thread(compositeRunner);
+                   t.start();
+				/*  azBean=azureImpl.pushCompositeImages(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
 						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
-						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList,dockerRegistryname);
+						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList,dockerRegistryname);*/
 				  
 				  /*if(azBean!=null && azBean.getBluePrintMap()!=null){
 					  HashMap<String,String> hmap=new HashMap<String,String>();
@@ -599,15 +622,15 @@ public class AzureServiceController extends AbstractController {
 					  HashMap<String,String> hmap=new HashMap<String,String>();
 					  hmap=azBean.getBluePrintMap();
 				  }*/
-				  dockerInfoList=azBean.getDockerinfolist();
+				  /*dockerInfoList=azBean.getDockerinfolist();
 				  vmIP=azBean.getAzureVMIP().trim();
-				  bluePrintPort=azBean.getBluePrintPort().trim();
+				  bluePrintPort=azBean.getBluePrintPort().trim();*/
 				  
 				  jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
 				  
 			}
 			
-			  logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
+			  /*logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
 			  logger.info("bluePrint==================="+mapper.writeValueAsString(bluePrint));
 			 
 			    String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
@@ -618,7 +641,7 @@ public class AzureServiceController extends AbstractController {
 				}
 				if(bluePrint!=null){
 					azureImpl.putBluePrintDetails(bluePrint,urlBluePrint);
-				}
+				}*/
 				response.setStatus(200);	
 		}catch(Exception e){
 			logger.error("<-----Exception in compositeSolutionAzureDeployment------------>"+e.getMessage());
@@ -627,6 +650,8 @@ public class AzureServiceController extends AbstractController {
 			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
 			return jsonOutput.toString();
 		}
+		jsonOutput.put("UIDNumber", uidNumStr);
+		logger.info("<------jsonOutput.toString()---------->"+jsonOutput.toString());
 		return jsonOutput.toString();
 	}
 
