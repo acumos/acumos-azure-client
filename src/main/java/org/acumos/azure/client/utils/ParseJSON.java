@@ -26,16 +26,22 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.acumos.azure.client.controller.AzureServiceController;
+import org.acumos.azure.client.transport.AzureContainerBean;
+import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.*;
@@ -43,6 +49,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.acumos.cds.client.ICommonDataServiceRestClient;
+
+import org.acumos.cds.domain.*;
 
 //import org.yaml.snakeyaml.Yaml;
 
@@ -396,10 +406,60 @@ public static NodeTree<String> findDataInTree(NodeTree node, String searchQuery)
 	  node.getChildren().forEach(each ->  printTree(each, (appender + appender),linkedList));
 	  
  }	
-	/*public static void main(String args[]){
+/* public static CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+		ICommonDataServiceRestClient client1 = CommonDataServiceRestClientImpl.getInstance(datasource, userName, password);
+		return client;
+	}
+public static void main(String args[]){
 		try{
+			CommonDataServiceRestClientImpl client = getClient("http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8000/ccds","ccds_client","ccds_client");
+			UUID uidNumber = UUID.randomUUID();
+			AzureContainerBean containerBean=new AzureContainerBean();
+			containerBean.setContainerIp("11.11.10.90");
+			containerBean.setContainerPort("8080");
+			ObjectMapper mapper = new ObjectMapper();
+			String azureDetails=mapper.writeValueAsString(containerBean);
+			System.out.println("=========azureDetails========"+azureDetails);
+			//ObjectMapper mapper = new ObjectMapper();
+			//uidNumStr=uidNumber.toString();
+			String deploymentStatusCode=uidNumber.toString();
+			System.out.println("=================="+deploymentStatusCode);
+			//List<MLPSolutionRevision> testList=client.getSolutionRevisions("02eab846-2bd0-4cfe-8470-9fc69fa0d877");
+			//System.out.println(testList.get(0));
+			//getSolutionRevisions(String solutionId)
+			MLPSolutionDeployment mlp=new MLPSolutionDeployment("1bb7424a-69d8-493d-8e5a-dbb87561f08c", "fa7038b2-1c3d-4f17-b439-cd59a7c0a38b", "7cd47ca4-1c5d-4cdc-909c-f7c17367b4d4",
+					"DP");
+			mlp.setDeploymentId(deploymentStatusCode);
+			mlp.setDetail(azureDetails);
+			String oldstring = "2018-01-10T16:50:39.402Z";
+			mlp.setTarget("pp");
+			//sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
+			//Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(oldstring);
+			mlp.setCreated(date);
+			mlp.setModified(date);pn
+			mlp.setTarget("test");
+			mlp.setDetail("test2");
+			
+			
+			 {
+			 -- "created": "2018-01-10T16:50:39.402Z",
+			  "deploymentId": "3956dec8-1028-4116-9669-ca5f43628f86",
+			  "deploymentStatusCode": "DP",
+			--  "detail": "1",
+			 -- "modified": "2018-01-10T16:50:39.402Z",
+			  "revisionId": "a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6",
+			  "solutionId": "02eab846-2bd0-4cfe-8470-9fc69fa0d877",
+			 -- "target": "111",
+			  "userId": "0505e537-ce79-4b1f-bf43-68d88933c369"
+			}
+			
+			//mlp.setDeploymentStatusCode("DP");
+			//client.createSolutionDeployment(arg0)
+			
+			client.createSolutionDeployment(mlp);
 		ParseJSON p=new ParseJSON();
-		System.out.println("=================="+p.parseJsonFile());
+		System.out.println("===========vvvv=======");
 		}catch(Exception e){
 			e.printStackTrace();
 		}

@@ -27,10 +27,32 @@ public class AzureDeployBean {
 	private String subscriptionKey;
 	private String rgName;
 	private String acrName;
-	//private String solutionId;
 	private String storageAccount;
-	//private String solutionVersion;
 	private String imagetag;
+	private String solutionId;
+	private String solutionRevisionId;
+	private String userId;
+	
+	
+	
+	public String getSolutionId() {
+		return solutionId;
+	}
+	public void setSolutionId(String solutionId) {
+		this.solutionId = solutionId;
+	}
+	public String getSolutionRevisionId() {
+		return solutionRevisionId;
+	}
+	public void setSolutionRevisionId(String solutionRevisionId) {
+		this.solutionRevisionId = solutionRevisionId;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 	public String getClient() {
 		return client;
 	}
@@ -80,6 +102,11 @@ public class AzureDeployBean {
 		this.imagetag = imagetag;
 	}
 	
-	
+	@Override
+	public String toString() {
+		return "AzureDeployDataObject [client=" + client + ", tenant=" + tenant + ", key=" + key + ", subscriptionKey="
+				+ subscriptionKey + ", rgName=" + rgName + ", acrName=" + acrName + ", solutionId=" + solutionId + ", storageAccount=" + storageAccount
+				+ ", solutionRevisionId=" + solutionRevisionId +", userId=" + userId + ", imagetag;=" + imagetag +"]";
+	}
 
 }

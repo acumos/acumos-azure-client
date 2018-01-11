@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
@@ -19,6 +20,8 @@ import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
+import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
@@ -62,11 +65,17 @@ public class AzureCompositeSolution implements Runnable {
 	private LinkedList<String> sequenceList;
 	private Blueprint bluePrint;
 	private String uidNumStr;
+	private String dataSource;
+	private String dataUserName;
+	private String dataPassword;
+	private String dockerVMUserName;
+	private String dockerVMPassword;
 
 
 	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-			String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr) {
+			String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
+			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -85,6 +94,12 @@ public class AzureCompositeSolution implements Runnable {
 	    this.sequenceList=sequenceList;
 	    this.bluePrint=bluePrint;
 	    this.uidNumStr=uidNumStr;
+	    
+	    this.dataSource=dataSource;
+	    this.dataUserName=dataUserName;
+	    this.dataPassword=dataPassword;
+	    this.dockerVMUserName=dockerVMUserName;
+	    this.dockerVMPassword=dockerVMPassword;
 	    
 	   }
 	public void run() {
@@ -106,8 +121,16 @@ public class AzureCompositeSolution implements Runnable {
 		logger.info("<-------sequenceList-------->"+sequenceList);
 		logger.info("<-------imageMap-------->"+imageMap);
 		
+		logger.info("<-------dataSource-------->"+dataSource);
+		logger.info("<-------dataUserName-------->"+dataUserName);
+		logger.info("<-------dataPassword-------->"+dataPassword);
+		logger.info("<-------dockerVMUserName-------->"+dockerVMUserName);
+		logger.info("<-------dockerVMPassword-------->"+dockerVMPassword);
+		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
+		List<AzureContainerBean> azureContainerBeanList=new ArrayList<AzureContainerBean>();
+		
 		try{
 			logger.info("<-------------start pushCompositeImage------------------------------>");
 		    
@@ -421,7 +444,11 @@ public class AzureCompositeSolution implements Runnable {
 		            		            logger.info("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
 			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumber);
-			    		        		
+			    		        		AzureContainerBean containerBean=new AzureContainerBean();
+			    		        		containerBean.setContainerName(finalContainerName);
+			    		        		containerBean.setContainerIp(azureVMIP);
+			    		        		containerBean.setContainerPort(portNumber);
+			    		        		azureContainerBeanList.add(containerBean);
 			    		            }
 			                    	
 			                    }
@@ -434,7 +461,8 @@ public class AzureCompositeSolution implements Runnable {
 	                  logger.info("containeDetailMap==========>"+containeDetailMap+"=====dockerList====="+dockerList);
 	  	              azureBean.setDockerinfolist(dockerList);	
 		            
-			} 
+			}
+          
           String azureDetails=mapper.writeValueAsString(azureBean.getDockerinfolist());  
           setuidHashmapComposite(uidNumStr,azureDetails);
           logger.info("azureDetails=============="+azureDetails);
@@ -449,9 +477,20 @@ public class AzureCompositeSolution implements Runnable {
 		  if(azureBean.getDockerinfolist()!=null){
 				putContainerDetails(azureBean.getDockerinfolist(),urlDockerInfo);
 			}
-			if(bluePrint!=null){
+		 if(bluePrint!=null){
 				putBluePrintDetails(bluePrint,urlBluePrint);
-			}
+		  }
+		 if(azureContainerBeanList!=null){
+       	  for(AzureContainerBean containerBean:azureContainerBeanList){
+       		  if(containerBean!=null){
+       			  logger.info("====containerBean====Ip==: " + containerBean.getContainerIp()+"==Port=="+containerBean.getContainerPort()
+       			  +"==ContainerName=="+containerBean.getContainerName()); 
+       			  createDeploymentData(dataSource,dataUserName,dataPassword,containerBean,deployDataObject.getSolutionId(),
+       					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"DP");
+       		  }
+       		  
+       	  }
+         }
 		}catch(Exception e){
 			logger.error("Error in AzureCompositeSolution===========" +e.getMessage());
 			e.printStackTrace();
@@ -515,5 +554,39 @@ public class AzureCompositeSolution implements Runnable {
 		singlatonMap.put(uidNumStr, azureDetails);
 		logger.info("<---------------setuidHashmap-------Run End-------------------------->"+singlatonMap);
 	}	
+	
+	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+		return client;
+	}
+
+	public void createDeploymentData(String dataSource,String dataUserName,String dataPassword,AzureContainerBean containerBean,
+			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
+		logger.info("<---------Start createDeploymentData ------------------------->");
+		logger.info("<---------dataSource-------->"+dataSource);
+		logger.info("<-------dataUserName-------------->"+dataUserName);
+		logger.info("<--------dataPassword------------->"+dataPassword);
+		logger.info("<---------solutionId------------------->"+solutionId);
+		logger.info("<--------solutionRevisionId-------------------->"+solutionRevisionId);
+		logger.info("<------userId--------------->"+userId);
+		logger.info("<------uidNumber--------------->"+uidNumber);
+		logger.info("<------deploymentStatusCode--------------->"+deploymentStatusCode);
+		ObjectMapper mapper = new ObjectMapper();
+		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
+			MLPSolutionDeployment mlp=new MLPSolutionDeployment();
+			mlp.setSolutionId(solutionId);
+			mlp.setUserId(userId);
+			mlp.setRevisionId(solutionRevisionId);
+			mlp.setDeploymentId(uidNumber);
+			mlp.setDeploymentStatusCode(deploymentStatusCode);
+			String azureDetails=mapper.writeValueAsString(containerBean);
+			mlp.setDetail(azureDetails);
+			logger.info("<---------azureDetails------------------------->"+azureDetails);
+			MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
+			logger.info("<---------mlpDeployment------------------------->"+mlpDeployment);
+		}
+		logger.info("<---------End createDeploymentData ------------------------->");
+	}
 
 }

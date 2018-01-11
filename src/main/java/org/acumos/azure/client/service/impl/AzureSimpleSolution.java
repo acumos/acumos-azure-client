@@ -14,6 +14,7 @@ import java.util.ArrayList;
 
 import org.acumos.azure.client.controller.AzureServiceController;
 import org.acumos.azure.client.service.AzureService;
+import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
@@ -75,6 +76,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPArtifact;
+import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
@@ -99,10 +101,18 @@ private String networkSecurityGroup;
 private String dockerRegistryPort;
 private String uidNumStr;
 
+private String dataSource;
+private String dataUserName;
+private String dataPassword;
+private String dockerVMUserName;
+private String dockerVMPassword;
+
+
 
 public AzureSimpleSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
 		String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-		String networkSecurityGroup,String dockerRegistryName,String uidNumStr) {
+		String networkSecurityGroup,String dockerRegistryName,String uidNumStr,String dataSource,String dataUserName,String dataPassword,
+		String dockerVMUserName,String dockerVMPassword) {
     this.azure = azure;
     this.deployDataObject = deployDataObject;
     this.dockerContainerPrefix = dockerContainerPrefix;
@@ -118,6 +128,13 @@ public AzureSimpleSolution(Azure azure,AzureDeployDataObject deployDataObject,St
     this.networkSecurityGroup = networkSecurityGroup;
     this.dockerRegistryName = dockerRegistryName;
     this.uidNumStr = uidNumStr;
+    this.dataSource = dataSource;
+    this.dataUserName = dataUserName;
+    this.dataPassword = dataPassword;
+    this.dockerVMUserName = dockerVMUserName;
+    this.dockerVMPassword = dockerVMPassword;
+    
+    
     
    }
 
@@ -137,8 +154,18 @@ public void run() {
 	logger.info("<-------networkSecurityGroup-------->"+networkSecurityGroup);
 	logger.info("<-------dockerRegistryName-------->"+dockerRegistryName);
 	logger.info("<-------uidNumStr-------->"+uidNumStr);
+	logger.info("<-------dataSource-------->"+dataSource);
+	logger.info("<-------dataUserName-------->"+dataUserName);
+	logger.info("<-------dataPassword-------->"+dataPassword);
+	logger.info("<-------dockerVMUserName-------->"+dockerVMUserName);
+	logger.info("<-------dockerVMPassword-------->"+dockerVMPassword);
+	
+	logger.info("<-------solutionId-------->"+deployDataObject.getSolutionId());
+	logger.info("<-------solutionRevisionId-------->"+deployDataObject.getSolutionRevisionId());
+	logger.info("<-------userId-------->"+deployDataObject.getUserId());
 
 	AzureBean azureBean=new AzureBean();
+	AzureContainerBean containerBean=new AzureContainerBean();
 	try{
 	final String saName = SdkContext.randomResourceName("sa", 20);	   
     final Region region = Region.US_EAST;
@@ -348,7 +375,10 @@ public void run() {
     		logger.info("<----azureBean VM-------->"+azureRegistry.loginServerUrl());
     		logger.info("<----azureBean VM-------->"+acrCredentials.passwords().get(0).value());
         	DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName);
+        	containerBean.setContainerIp(azureBean.getAzureVMIP());
+        	containerBean.setContainerPort("8557");
         }
+    createDeploymentData(dataSource,dataUserName,dataPassword,containerBean,deployDataObject.getSolutionId(),deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"DP");   
 	}catch(Exception e){
 		logger.error("Error in AzureSimpleSolution===========" +e.getMessage());
 		e.printStackTrace();
@@ -364,6 +394,40 @@ public void setuidHashmap(String uidNumStr,String vmDetails){
 	HashMap<String,String> singlatonMap=SingletonMapClass.getInstance();
 	singlatonMap.put(uidNumStr, vmDetails);
 	logger.info("<---------------setuidHashmap-------Run End-------------------------->"+singlatonMap);
+}
+
+public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+	CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+	return client;
+}
+
+public void createDeploymentData(String dataSource,String dataUserName,String dataPassword,AzureContainerBean containerBean,
+		String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
+	logger.info("<---------Start createDeploymentData ------------------------->");
+	logger.info("<---------dataSource-------->"+dataSource);
+	logger.info("<-------dataUserName-------------->"+dataUserName);
+	logger.info("<--------dataPassword------------->"+dataPassword);
+	logger.info("<---------solutionId------------------->"+solutionId);
+	logger.info("<--------solutionRevisionId-------------------->"+solutionRevisionId);
+	logger.info("<------userId--------------->"+userId);
+	logger.info("<------uidNumber--------------->"+uidNumber);
+	logger.info("<------deploymentStatusCode--------------->"+deploymentStatusCode);
+	ObjectMapper mapper = new ObjectMapper();
+	CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+	if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
+		MLPSolutionDeployment mlp=new MLPSolutionDeployment();
+		mlp.setSolutionId(solutionId);
+		mlp.setUserId(userId);
+		mlp.setRevisionId(solutionRevisionId);
+		mlp.setDeploymentId(uidNumber);
+		mlp.setDeploymentStatusCode(deploymentStatusCode);
+		String azureDetails=mapper.writeValueAsString(containerBean);
+		mlp.setDetail(azureDetails);
+		logger.info("<---------azureDetails------------------------->"+azureDetails);
+		MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
+		logger.info("<---------mlpDeployment------------------------->"+mlpDeployment);
+	}
+	logger.info("<---------End createDeploymentData ------------------------->");
 }
 
 public String getTagFromImage(String imageName){

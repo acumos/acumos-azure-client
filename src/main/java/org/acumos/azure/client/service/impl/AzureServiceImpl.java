@@ -1280,24 +1280,33 @@ public class AzureServiceImpl implements AzureService {
 		logger.info("<--End-------iterateImageMap-------list---->"+list);
 		return list;
 	}
-	public String getBluePrintNexus(String solutionId, String version,String datasource,String userName,String password,
+	public String getBluePrintNexus(String solutionId, String revisionId,String datasource,String userName,String password,
 			String nexusUrl,String nexusUserName,String nexusPassword) throws  Exception{
+		  logger.info("------ Start getBluePrintNexus-----------------");
+		  logger.info("-------solutionId-----------"+solutionId);
+		  logger.info("-------revisionId-----------"+revisionId);
+		  logger.info("-------datasource-----------"+datasource);
+		  logger.info("-------userName-----------"+userName);
+		  logger.info("-------password-----------"+password);
+		  logger.info("-------nexusUrl-----------"+nexusUrl);
+		  logger.info("-------nexusUserName-----------"+nexusUserName);
+		  logger.info("-------nexusPassword-----------"+nexusPassword);
 		  List<MLPSolutionRevision> mlpSolutionRevisionList;
-		  String solutionRevisionId = null;
+		  String solutionRevisionId = revisionId;
 		  List<MLPArtifact> mlpArtifactList;
 		  String nexusURI = "";
 		  String artifactType="BP";
 		  String bluePrintStr="";
 		  ByteArrayOutputStream byteArrayOutputStream = null;
 		  CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,password);
-		  mlpSolutionRevisionList = getSolutionRevisionsList(solutionId,datasource,userName,password);
+		 /* mlpSolutionRevisionList = getSolutionRevisionsList(solutionId,datasource,userName,password);
 		// 2. Match the version with the SolutionRevision and get the solutionRevisionId.
 			if (null != mlpSolutionRevisionList && !mlpSolutionRevisionList.isEmpty()) {
 					solutionRevisionId = mlpSolutionRevisionList.stream()
 								.filter(mlp -> mlp.getVersion().equals(version))
 								.findFirst().get().getRevisionId();
 				  logger.info("------ SolutionRevisonId for Version : " + solutionRevisionId + " -------");
-				}
+				}*/
 			if (null != solutionRevisionId) {
 				// 3. Get the list of Artifiact for the SolutionId and SolutionRevisionId.
 				mlpArtifactList = cmnDataService.getSolutionRevisionArtifacts(solutionId, solutionRevisionId);
@@ -1324,7 +1333,7 @@ public class AzureServiceImpl implements AzureService {
 			if(!file.exists()){
 				 throw  new Exception("blueprint.json file is not exist");
 			}
-			
+			logger.info("------ End getBluePrintNexus-----------------");	
 		return bluePrintStr;	
 	  }
 	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String password)throws  Exception{

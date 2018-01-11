@@ -30,8 +30,29 @@ public class AzureDeployDataObject {
 	private String acrName;
 	private String solutionId;
 	private String storageAccount;
-	private String solutionVersion;
+	//private String solutionVersion;
 	/*private String imagetag;*/
+	private String solutionRevisionId;
+	private String userId;
+	
+
+	
+	
+	public String getSolutionRevisionId() {
+		return solutionRevisionId;
+	}
+
+	public void setSolutionRevisionId(String solutionRevisionId) {
+		this.solutionRevisionId = solutionRevisionId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
 	/**
 	 * @return the client
@@ -148,13 +169,13 @@ public class AzureDeployDataObject {
     
 	
 	
-	public String getSolutionVersion() {
+	/*public String getSolutionVersion() {
 		return solutionVersion;
 	}
 
 	public void setSolutionVersion(String solutionVersion) {
 		this.solutionVersion = solutionVersion;
-	}
+	}*/
 
 	/*public String getImagetag() {
 		return imagetag;
@@ -171,7 +192,7 @@ public class AzureDeployDataObject {
 	public String toString() {
 		return "AzureDeployDataObject [client=" + client + ", tenant=" + tenant + ", key=" + key + ", subscriptionKey="
 				+ subscriptionKey + ", rgName=" + rgName + ", acrName=" + acrName + ", solutionId=" + solutionId + ", storageAccount=" + storageAccount
-				+ ", solutionVersion=" + solutionVersion + "]";
+				+ ", solutionRevisionId=" + solutionRevisionId +", userId=" + userId + "]";
 	}
 
 }
