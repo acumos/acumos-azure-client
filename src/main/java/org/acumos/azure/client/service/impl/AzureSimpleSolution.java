@@ -333,6 +333,13 @@ public class AzureSimpleSolution implements Runnable {
 					deployDataObject.getUserId(), uidNumStr, "DP");
 		} catch (Exception e) {
 			logger.error("Error in AzureSimpleSolution===========" + e.getMessage());
+			try{
+				createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
+						deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
+						deployDataObject.getUserId(), uidNumStr, "FA");
+			}catch(Exception ex){
+				logger.error("Error in saving data===========" +ex.getMessage());
+			}
 			e.printStackTrace();
 		}
 		String vmDetail = azureBean.getAzureVMIP() + "#8557";

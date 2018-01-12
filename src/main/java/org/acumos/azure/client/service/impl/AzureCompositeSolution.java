@@ -481,18 +481,20 @@ public class AzureCompositeSolution implements Runnable {
 				putBluePrintDetails(bluePrint,urlBluePrint);
 		  }
 		 if(azureContainerBeanList!=null){
-       	  for(AzureContainerBean containerBean:azureContainerBeanList){
-       		  if(containerBean!=null){
-       			  logger.info("====containerBean====Ip==: " + containerBean.getContainerIp()+"==Port=="+containerBean.getContainerPort()
-       			  +"==ContainerName=="+containerBean.getContainerName()); 
-       			  createDeploymentData(dataSource,dataUserName,dataPassword,containerBean,deployDataObject.getSolutionId(),
-       					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"DP");
-       		  }
+       	  
+   			  logger.info("Start saving data in database=============="); 
+   			createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
+   					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"DP");
        		  
-       	  }
          }
 		}catch(Exception e){
 			logger.error("Error in AzureCompositeSolution===========" +e.getMessage());
+			try{
+				createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
+	   					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"FA");
+			}catch(Exception ex){
+				logger.error("Error in saving data===========" +ex.getMessage());
+			}
 			e.printStackTrace();
 		}
 		 
@@ -560,9 +562,9 @@ public class AzureCompositeSolution implements Runnable {
 		return client;
 	}
 
-	public void createDeploymentData(String dataSource,String dataUserName,String dataPassword,AzureContainerBean containerBean,
+	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPassword,List<AzureContainerBean> azureContainerBeanList,
 			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
-		logger.info("<---------Start createDeploymentData ------------------------->");
+		logger.info("<---------Start createDeploymentCompositeData ------------------------->");
 		logger.info("<---------dataSource-------->"+dataSource);
 		logger.info("<-------dataUserName-------------->"+dataUserName);
 		logger.info("<--------dataPassword------------->"+dataPassword);
@@ -571,6 +573,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.info("<------userId--------------->"+userId);
 		logger.info("<------uidNumber--------------->"+uidNumber);
 		logger.info("<------deploymentStatusCode--------------->"+deploymentStatusCode);
+		logger.info("<------azureContainerBeanList--------------->"+azureContainerBeanList);
 		ObjectMapper mapper = new ObjectMapper();
 		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
 		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
@@ -580,13 +583,13 @@ public class AzureCompositeSolution implements Runnable {
 			mlp.setRevisionId(solutionRevisionId);
 			mlp.setDeploymentId(uidNumber);
 			mlp.setDeploymentStatusCode(deploymentStatusCode);
-			String azureDetails=mapper.writeValueAsString(containerBean);
+			String azureDetails=mapper.writeValueAsString(azureContainerBeanList);
 			mlp.setDetail(azureDetails);
 			logger.info("<---------azureDetails------------------------->"+azureDetails);
 			MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
 			logger.info("<---------mlpDeployment------------------------->"+mlpDeployment);
 		}
-		logger.info("<---------End createDeploymentData ------------------------->");
+		logger.info("<---------End createDeploymentCompositeData ------------------------->");
 	}
 
 }

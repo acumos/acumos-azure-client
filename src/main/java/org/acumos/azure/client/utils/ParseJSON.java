@@ -29,7 +29,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
+import org.acumos.azure.client.transport.AzureContainerBean;
+import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.client.ICommonDataServiceRestClient;
+import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -387,7 +392,7 @@ public static NodeTree<String> findDataInTree(NodeTree node, String searchQuery)
 	  node.getChildren().forEach(each ->  printTree(each, (appender + appender),linkedList));
 	  
  }	
-/* public static CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+ /*public static CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
 		ICommonDataServiceRestClient client1 = CommonDataServiceRestClientImpl.getInstance(datasource, userName, password);
 		return client;
@@ -396,12 +401,24 @@ public static void main(String args[]){
 		try{
 			CommonDataServiceRestClientImpl client = getClient("http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8000/ccds","ccds_client","ccds_client");
 			UUID uidNumber = UUID.randomUUID();
+			List<AzureContainerBean> AzureContainerBeanList=new ArrayList<AzureContainerBean>();
 			AzureContainerBean containerBean=new AzureContainerBean();
-			containerBean.setContainerIp("11.11.10.90");
+			
+			AzureContainerBean containerBean2=new AzureContainerBean();
+			
+			containerBean.setContainerIp("11.11.10.80");
 			containerBean.setContainerPort("8080");
+			containerBean.setContainerName("A");
+			
+			containerBean2.setContainerIp("11.11.10.81");
+			containerBean2.setContainerPort("8081");
+			containerBean2.setContainerName("B");
+			AzureContainerBeanList.add(containerBean);
+			AzureContainerBeanList.add(containerBean2);
+			
 			ObjectMapper mapper = new ObjectMapper();
-			String azureDetails=mapper.writeValueAsString(containerBean);
-			System.out.println("=========azureDetails========"+azureDetails);
+			String azureDetails=mapper.writeValueAsString(AzureContainerBeanList);
+			System.out.println("=========azureDetails========"+AzureContainerBeanList);
 			//ObjectMapper mapper = new ObjectMapper();
 			//uidNumStr=uidNumber.toString();
 			String deploymentStatusCode=uidNumber.toString();
