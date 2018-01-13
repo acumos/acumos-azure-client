@@ -22,33 +22,40 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>
-		<encoding>UTF-8</encoding>
 		<!-- Stand-alone RESTFul application -->
 		<start-class>org.acumos.azure.client.AzureClientServiceApplication</start-class>
+		<!-- tests still depend on Azure host -->
+		<skipTests>true</skipTests>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
-		<eelf.version>1.0.0</eelf.version>
-		<!-- tests require database to be running -->
-		<skipTests>true</skipTests>
-		<!-- Docker daemon -->
-		<docker.host.url>unix:/var/run/docker.sock</docker.host.url>
-		<!-- Docker image registry -->
-		<docker.registry.url>Set by Jenkins</docker.registry.url>
-		<docker.registry.login>Registry userId - supplied by jenkins</docker.registry.login>
-		<docker.registry.password>Registry password - supplied by jenkins</docker.registry.password>
-		<acumos.nexus.url>Set by Jenkins</acumos.nexus.url>
-		<acumos.nexus.snapshot.path>Set by Jenkins</acumos.nexus.snapshot.path>
-		<acumos.nexus.release.path>Set by Jenkins</acumos.nexus.release.path>
+		<!-- Not supplied to all jobs; e.g., Javadoc -->
+		<docker.pull.registry>nexus3.acumos.org:10001</docker.pull.registry>
+		<!-- Supplied by Jenkins -->
+		<docker.push.registry>${env.NEXUS3_PUSH_REGISTRY}</docker.push.registry>
 	</properties>
 
+	<!-- Some dependencies are specific to Acumos, but this POM defines no repositories 
+		section. The Jenkins server specifies Acumos repositories. Developers should 
+		ensure their ~/.m2/settings.xml file has the following URLs in both the repositories 
+		and pluginRepositories sections or in a profile: https://nexus.acumos.org/content/repositories/snapshots/ 
+		https://nexus.acumos.org/content/repositories/releases/ -->
+
 	<dependencies>
-	    <dependency>
+		<dependency>
+			<groupId>org.acumos.common-dataservice</groupId>
+			<artifactId>cmn-data-svc-client</artifactId>
+			<version>1.12.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>org.acumos.acumos-nexus-client</groupId>
+			<artifactId>acumos-nexus-client</artifactId>
+			<version>2.0.0-SNAPSHOT</version>
+		</dependency>
+		<dependency>
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-api</artifactId>
 			<!-- Spring chooses <version>${slf4j.version}</version> -->
 		</dependency>
-		<!-- <dependency> <groupId>org.springframework</groupId> <artifactId>spring-context-support</artifactId> 
-			</dependency> -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -170,16 +177,6 @@
 		    <artifactId>json-simple</artifactId>
 		    <version>1.1.1</version>
 		</dependency>
-		<dependency>
-			<groupId>org.acumos.common-dataservice</groupId>
-			<artifactId>cmn-data-svc-client</artifactId>
-			<version>1.10.1-SNAPSHOT</version>
-		</dependency>
-		<dependency>
-			<groupId>org.acumos</groupId>
-			<artifactId>acumos-nexus-client</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
 	</dependencies>
 
 	<build>
@@ -222,6 +219,21 @@
 				</configuration>
 			</plugin>
 			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+				<!-- Spring sets the <version>2.5</version> -->
+				<configuration>
+					<archive>
+						<manifest>
+							<addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+						</manifest>
+						<manifestEntries>
+							<Implementation-Version>${project.version}-b${build.number}</Implementation-Version>
+						</manifestEntries>
+					</archive>
+				</configuration>
+			</plugin>
+			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
@@ -240,7 +252,7 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.6.201602180812</version>
+				<version>0.7.9</version>
 				<executions>
 					<execution>
 						<id>default-prepare-agent</id>
@@ -263,18 +275,21 @@
 				<version>0.21.0</version>
 				<configuration>
 					<verbose>true</verbose>
-					<dockerHost>${docker.host.url}</dockerHost>
-					<registry>${docker.registry.url}</registry>
-					<authConfig>
-						<username>${docker.registry.login}</username>
-						<password>${docker.registry.password}</password>
-					</authConfig>
+					<!-- docker runs on the LF build minion so the default value is ok -->
+					<!-- LF <dockerHost>unix:///var/run/docker.sock</dockerHost> LF -->
+					<pullRegistry>${docker.pull.registry}</pullRegistry>
+					<pushRegistry>${docker.push.registry}</pushRegistry>
+					<!-- LF credentials are not supplied here -->
 					<images>
 						<image>
+							<!-- Specify a tag to avoid default tag "latest" -->
 							<name>acumos-azure-client:${project.version}</name>
 							<build>
-								<!-- This is the same FROM used in a Dockerfile -->
 								<from>frolvlad/alpine-oraclejdk8:slim</from>
+								<tags>
+									<!-- Add tag with build number -->
+									<tag>${project.version}-b${build.number}</tag>
+								</tags>
 								<assembly>
 									<inline>
 										<files>
