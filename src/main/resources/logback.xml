@@ -62,7 +62,7 @@
     <root level="DEBUG">
     <!-- <root>
         <level value="${logger.root.level}"/> -->
-        
+        <appender-ref ref="CONSOLE"/>
         <appender-ref ref="DEBUG_FILE"/>
         <appender-ref ref="ERROR_FILE"/>
     </root>
