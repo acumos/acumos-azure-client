@@ -25,7 +25,9 @@ import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
@@ -567,12 +569,14 @@ public class AzureCompositeSolution implements Runnable {
 			logger.info("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
 			ObjectMapper mapper = new ObjectMapper();
 			String dockerJson=mapper.writeValueAsString(dockerList);
 			logger.info("<----dockerJson---------->"+dockerJson);
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 		    	
-		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson);
+		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
 		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
 		   
 		  } catch (Exception e) {
@@ -587,11 +591,13 @@ public class AzureCompositeSolution implements Runnable {
 			logger.info("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			ObjectMapper mapper = new ObjectMapper();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
 			String blueprintJson=mapper.writeValueAsString(bluePrint); 
 			logger.info("<----blueprintJson---------->"+blueprintJson);
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson);
+		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson,headers);
 		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
 		   
 		  } catch (Exception e) {
