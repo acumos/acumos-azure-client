@@ -475,10 +475,10 @@ public class AzureCompositeSolution implements Runnable {
 		  String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
 		  logger.info("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
 		  if(azureBean.getDockerinfolist()!=null){
-				putContainerDetails(azureBean.getDockerinfolist(),urlDockerInfo);
+			  putContainerDetailsJSON(azureBean.getDockerinfolist(),urlDockerInfo);
 			}
 		 if(bluePrint!=null){
-				putBluePrintDetails(bluePrint,urlBluePrint);
+			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
 		 if(azureContainerBeanList!=null){
        	  
@@ -561,7 +561,45 @@ public class AzureCompositeSolution implements Runnable {
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
 		return client;
 	}
-
+	public void putContainerDetailsJSON(DockerInfoList  dockerList,String apiUrl){
+		logger.info("<--------Start---putContainerDetailsJSON------->");
+		try {
+			logger.info("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
+			final String url = apiUrl;
+			RestTemplate restTemplate = new RestTemplate();
+			ObjectMapper mapper = new ObjectMapper();
+			String dockerJson=mapper.writeValueAsString(dockerList);
+			logger.info("<----dockerJson---------->"+dockerJson);
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    	
+		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+		   
+		  } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("<---------Exception----------->"+e.getMessage());
+		 }
+		logger.info("<--------End---putContainerDetailsJSON------->");
+	}
+	public void putBluePrintDetailsJSON(Blueprint  bluePrint,String apiUrl){
+		logger.info("<--------Start---putBluePrintDetailsJSON------->");
+		try {
+			logger.info("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
+			final String url = apiUrl;
+			ObjectMapper mapper = new ObjectMapper();
+			String blueprintJson=mapper.writeValueAsString(bluePrint); 
+			logger.info("<----blueprintJson---------->"+blueprintJson);
+			RestTemplate restTemplate = new RestTemplate();
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+		   
+		  } catch (Exception e) {
+            logger.error("<---------Exception----------->"+e.getMessage());
+            e.printStackTrace();
+		 }
+		logger.info("<--------End---putBluePrintDetailsJSON------->");
+	}
 	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPassword,List<AzureContainerBean> azureContainerBeanList,
 			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
 		logger.info("<---------Start createDeploymentCompositeData ------------------------->");
