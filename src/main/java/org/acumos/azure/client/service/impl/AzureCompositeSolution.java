@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import com.github.dockerjava.api.command.InspectContainerResponse;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.SingletonMapClass;
@@ -106,6 +106,7 @@ public class AzureCompositeSolution implements Runnable {
 	   }
 	public void run() {
 		logger.info("<-----------------AzureCompositeSolution-----Run Started-------------------------->");
+		logger.debug("<-----------------AzureCompositeSolution-----Run Started---*************----------------------->");
 		logger.info("<-------azure-------->"+azure);
 		logger.info("<-------deployDataObject-------->"+deployDataObject);
 		logger.info("<-------dockerContainerPrefix-------->"+dockerContainerPrefix);
@@ -266,6 +267,18 @@ public class AzureCompositeSolution implements Runnable {
 			                    .withName(dockerContainerName+"_"+dockerCount)
 			                    //.withCmd("/hello")
 			                    .exec();
+		            	try{
+		            		logger.info("<----Start Inspection-----imageName---->"+imageName);
+		            		InspectContainerResponse inspectContainer=dockerClient.inspectContainerCmd(dockerContainerInstance.getId()).exec();
+			            	if(inspectContainer!=null && inspectContainer.getNetworkSettings()!=null && inspectContainer.getNetworkSettings().getIpAddress()!=null){
+			            		String ipNumberrr=inspectContainer.getNetworkSettings().getIpAddress();
+			            		logger.info("<----ipNumberrr--------->"+ipNumberrr);
+			            		logger.info("<----remoteDockerContainerInstance--------->"+inspectContainer.getNetworkSettings().getIpAddress());
+			            	}
+			            	logger.info("<----end Inspection-----imageName---->"+imageName);
+		            	}catch(Exception exce){
+		            		logger.info("Exception in inspection================ "+exce.getMessage());
+		            	}
 		            	
 		            	if(imageName!=null && !"".equals(imageName)){
 		            		String tag=getTagFromImage(imageName);
@@ -415,13 +428,14 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	}
 			    		            	
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
-			    		            	final String vmUserName = "dockerUser";
-			    		        		final String vmPassword = "12NewPA$$w0rd!";
+			    		            	final String vmUserName = dockerVMUserName;
+			    		        		final String vmPassword = dockerVMPassword;
 			    		        		String repositoryName="";
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";
 			    		        		logger.info("====azureVMIP======: " + azureVMIP);
 			    		        		logger.info("====vmUserName======: " + vmUserName);
+			    		        		logger.info("====vmPassword======: " + vmPassword);
 			    		        		logger.info("====registryServerUrl======: " + azureRegistry.loginServerUrl());
 			    		        		logger.info("====username======: " + acrCredentials.username());
 			    		        		logger.info("====password======: " + acrCredentials.passwords().get(0).value());

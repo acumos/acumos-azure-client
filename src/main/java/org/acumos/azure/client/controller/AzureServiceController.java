@@ -471,6 +471,10 @@ public class AzureServiceController extends AbstractController {
 			String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
 			String dataUserName=env.getProperty("cmndatasvc.cmndatasvcuser");
 			String dataPassword=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
+			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
+			logger.info("<------dockerVMUserName---------->"+dockerVMUserName);
+			logger.info("<------dockerVMUserName---------->"+dockerVMUserName);
 			/*
 			String nexusUrl=env.getProperty("nexus.url");
 			String nexusUserName=env.getProperty("nexus.username");
@@ -575,6 +579,10 @@ public class AzureServiceController extends AbstractController {
 			String nexusPassword=env.getProperty("nexus.password");
 			String dockerRegistryname=env.getProperty("docker.registry.name");
 			logger.info("<------dockerRegistryname---------->"+dockerRegistryname);
+			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
+			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
+			logger.info("<------dockerVMUserName---------->"+dockerVMUserName);
+			logger.info("<------dockerVMUserName---------->"+dockerVMUserName);
 			if (authObject == null) {
 				logger.info("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);

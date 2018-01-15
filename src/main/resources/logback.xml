@@ -59,7 +59,7 @@
             <pattern>%d{ISO8601} %-5p [%c{3}] \(%t:%X{}\) %m%n</pattern>
         </encoder>
     </appender> -->
-    <root level="INFO">
+    <root level="DEBUG">
     <!-- <root>
         <level value="${logger.root.level}"/> -->
         <appender-ref ref="CONSOLE"/>

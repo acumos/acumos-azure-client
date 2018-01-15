@@ -315,10 +315,12 @@ public class AzureSimpleSolution implements Runnable {
 				}
 
 				String azureVMIP = azureBean.getAzureVMIP();
-				final String vmUserName = "dockerUser";
-				final String vmPassword = "12NewPA$$w0rd!";
+				final String vmUserName = dockerVMUserName;
+				final String vmPassword = dockerVMPassword;
 				String repositoryName = "";
 				repositoryName = privateRepoUrl + ":" + tagImage;
+				logger.info("<----vmUserName-------->" + vmUserName);
+				logger.info("<----vmPassword-------->" + vmPassword);
 				logger.info("<----azureBean VM-------->" + azureBean.getAzureVMIP());
 				logger.info("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.info("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
