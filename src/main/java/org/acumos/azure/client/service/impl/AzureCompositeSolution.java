@@ -273,7 +273,8 @@ public class AzureCompositeSolution implements Runnable {
 			            	if(inspectContainer!=null && inspectContainer.getNetworkSettings()!=null && inspectContainer.getNetworkSettings().getIpAddress()!=null){
 			            		String ipNumberrr=inspectContainer.getNetworkSettings().getIpAddress();
 			            		logger.info("<----ipNumberrr--------->"+ipNumberrr);
-			            		logger.info("<----remoteDockerContainerInstance--------->"+inspectContainer.getNetworkSettings().getIpAddress());
+			            		logger.info("<----remoteDockerContainerInstance------1--->"+inspectContainer.getNetworkSettings().getPorts());
+			            		logger.info("<----remoteDockerContainerInstance----2----->"+inspectContainer.getNetworkSettings().getPortMapping());
 			            	}
 			            	logger.info("<----end Inspection-----imageName---->"+imageName);
 		            	}catch(Exception exce){
