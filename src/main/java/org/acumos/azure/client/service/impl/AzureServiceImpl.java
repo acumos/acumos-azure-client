@@ -87,23 +87,27 @@ public class AzureServiceImpl implements AzureService {
 	}
 	
 	private CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+		logger.debug("<------start----getClient------------>");
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+		logger.debug("<------End----getClient---------client--->"+client);
 		return client;
 	}
 	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName,String nexusPassword) {
+		logger.debug("<------start----nexusArtifactClient------------>");
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
 		repositoryLocation.setUrl(nexusUrl);
 		repositoryLocation.setUsername(nexusUserName);
 		repositoryLocation.setPassword(nexusPassword);
 		NexusArtifactClient nexusArtifactClient = new NexusArtifactClient(repositoryLocation);
+		logger.debug("<------End----nexusArtifactClient------------>");
 		return nexusArtifactClient;
 	}
 	@Override
 	public Azure authorize(AzureDeployDataObject authObject) {
 		// TODO Auto-generated method stub
-		logger.info("<------start----authorize in AzureServiceImpl------------>");
-		logger.info(" authentication parameters:: "+ authObject.toString() );
+		logger.debug("<------start----authorize in AzureServiceImpl------------>");
+		logger.debug(" authentication parameters:: "+ authObject.toString() );
 		
 		ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(
 				authObject.getClient(), authObject.getTenant(), authObject.getKey(), AzureEnvironment.AZURE);
@@ -111,12 +115,12 @@ public class AzureServiceImpl implements AzureService {
 		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC)
 				.authenticate(credentials)
 				.withSubscription(authObject.getSubscriptionKey());
-		logger.info("try getting some info : " + azure.subscriptionId() + " " + azure.containerRegistries());
-		logger.info("Azure AD Authorization Successful...");
-		logger.info("<------End----authorize in AzureServiceImpl------------>");
+		logger.debug("try getting some info : " + azure.subscriptionId() + " " + azure.containerRegistries());
+		logger.debug("Azure AD Authorization Successful...");
+		logger.debug("<------End----authorize in AzureServiceImpl------------>");
 		return azure;
 	}
-	
+	/*
 	@Override
 	public AzureBean pushSingleImage(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
@@ -216,9 +220,9 @@ public class AzureServiceImpl implements AzureService {
 	            		}
 	            	}
 	            	logger.info("===imageName======="+imageName+"========imageTagVal===="+imageTagVal);
-	            	/*if(imageName!=null && imageName.contains(bluePrintName)){
+	            	if(imageName!=null && imageName.contains(bluePrintName)){
 	            		containerInstanceBluePrint=dockerContainerName+"_"+dockerCount;
-	            	}*/
+	            	}
 	            	hmap.put(dockerContainerName+"_"+dockerCount, dockerContainerInstance);
 	            	containerTagMap.put(dockerContainerName+"_"+dockerCount, imageTagVal);
 	            	containerImageMap.put(dockerContainerName+"_"+dockerCount, imageName);
@@ -285,7 +289,7 @@ public class AzureServiceImpl implements AzureService {
 	            
 	            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
 	            // Remove the temp image from the local Docker host
-	            /*try {
+	            try {
 	            	Iterator itr5=list.iterator();
 		            while(itr5.hasNext()){
 		            	String imageName=(String)itr5.next();
@@ -293,7 +297,7 @@ public class AzureServiceImpl implements AzureService {
 		            }
 	            } catch (NotFoundException e) {
 	            	logger.error("Error in removing images "+e.getMessage());
-	            }*/
+	            }
 
 	            //=============================================================
 	            // Verify that the image we saved in the Azure Container registry can be pulled and instantiated locally
@@ -550,7 +554,7 @@ public class AzureServiceImpl implements AzureService {
 		            
 		            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
 		            // Remove the temp image from the local Docker host
-		            /*try {
+		            try {
 		            	Iterator itr5=list.iterator();
 			            while(itr5.hasNext()){
 			            	String imageName=(String)itr5.next();
@@ -558,7 +562,7 @@ public class AzureServiceImpl implements AzureService {
 			            }
 		            } catch (NotFoundException e) {
 		            	logger.error("Error in removing images "+e.getMessage());
-		            }*/
+		            }
 	
 		            //=============================================================
 		            // Verify that the image we saved in the Azure Container registry can be pulled and instantiated locally
@@ -579,9 +583,9 @@ public class AzureServiceImpl implements AzureService {
 		            images = dockerClient.listImagesCmd()
 		                    .withShowAll(true)
 		                    .exec();
-		            /*for (Image image : images) {
+		            for (Image image : images) {
 		            	logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
-		            }*/
+		            }
 		            
 	                  logger.info("<----remoteDockerClient with privateRepoUrl--------->");
 	                  int imageCount=1;
@@ -886,7 +890,7 @@ public class AzureServiceImpl implements AzureService {
 		            
 		            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
 		            // Remove the temp image from the local Docker host
-		            /*try {
+		            try {
 		            	Iterator itr5=list.iterator();
 			            while(itr5.hasNext()){
 			            	String imageName=(String)itr5.next();
@@ -894,7 +898,7 @@ public class AzureServiceImpl implements AzureService {
 			            }
 		            } catch (NotFoundException e) {
 		            	logger.error("Error in removing images "+e.getMessage());
-		            }*/
+		            }
 	
 		            //=============================================================
 		            // Verify that the image we saved in the Azure Container registry can be pulled and instantiated locally
@@ -941,11 +945,11 @@ public class AzureServiceImpl implements AzureService {
 		            	
 		            	logger.info("azureRegistry.loginServerUrl22222222222222="+authConfigVal.getRegistryAddress()+ ", acrCredentials.username "+ authConfigVal.getUsername()+ ","
 		            			+ " acrCredentials.passwords" +authConfigVal.getPassword());
-		            	  /*String dockerHostUrl = "tcp://" + azureBean.getAzureVMIP() + ":80";
+		            	  String dockerHostUrl = "tcp://" + azureBean.getAzureVMIP() + ":80";
 		            	  DockerClientConfig dockerClientConfig=DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(dockerHostUrl).withDockerTlsVerify(false)
 						.build();
 		            	
-		            	remoteDockerClient=DockerClientBuilder.getInstance(dockerClientConfig).build();*/
+		            	remoteDockerClient=DockerClientBuilder.getInstance(dockerClientConfig).build();
 		            	 remoteDockerClient.pullImageCmd(privateRepoUrl)
 		                 .withAuthConfig(authConfigVal)
 		                 .exec(new PullImageResultCallback()).awaitCompletion();
@@ -1004,8 +1008,8 @@ public class AzureServiceImpl implements AzureService {
 		    		            	if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
 		    		            		logger.info("<--if Part--containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 		    		            		//ExposedPort exportPort=new ExposedPort(8555);
-		    			            	 /*remoteDockerContainerInstance = remoteDockerClient.createContainerCmd(privateRepoUrl+":"+tagImage)
-		    				                    .withName(dockerContainerName + "-private_"+remoteCount).withExposedPorts(exportPort).exec();*/
+		    			            	 remoteDockerContainerInstance = remoteDockerClient.createContainerCmd(privateRepoUrl+":"+tagImage)
+		    				                    .withName(dockerContainerName + "-private_"+remoteCount).withExposedPorts(exportPort).exec();
 		    		            		ExposedPort tcp8555 = ExposedPort.tcp(8555);
 		    		                    Ports portBindings = new Ports();
 		    		                    portBindings.bind(tcp8555, new Ports.Binding("0.0.0.0", "8555"));
@@ -1146,7 +1150,7 @@ public class AzureServiceImpl implements AzureService {
 	            //=============================================================
 	            // Push the new Docker image to the Azure Container Registry
 
-	           /* dockerClient.pushImageCmd(privateRepoUrl)
+	            dockerClient.pushImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PushImageResultCallback()).awaitSuccess();
 
@@ -1181,19 +1185,19 @@ public class AzureServiceImpl implements AzureService {
 	                    .exec();
 	            for (Container container : dockerContainers) {
 	               System.out.println("\tFound Docker container "+ container.getImage());
-	            }*/
+	            }
 	            //#####################################################################################
 	            
 	            Thread.sleep(5000);
 	            logger.info("Successfuly Deployed the docker image to Azure Container Resgistry");
 	            logger.info("<------End----pushImage in AzureServiceImpl------------>");
 	            return azureBean;
-	}
+	}*/
 	
 	public void putContainerDetails(DockerInfoList  dockerList,String apiUrl){
-		logger.info("<--------Start---putContainerDetails------->");
+		logger.debug("<--------Start---putContainerDetails------->");
 		try {
-			logger.info("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
+			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -1205,12 +1209,12 @@ public class AzureServiceImpl implements AzureService {
             e.printStackTrace();
             logger.error("<---------Exception----------->"+e.getMessage());
 		 }
-		logger.info("<--------End---putContainerDetails------->");
+		logger.debug("<--------End---putContainerDetails------->");
 	}
 	public void putBluePrintDetails(Blueprint  bluePrint,String apiUrl){
-		logger.info("<--------Start---putContainerDetails------->");
+		logger.debug("<--------Start---putContainerDetails------->");
 		try {
-			logger.info("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
+			logger.debug("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -1221,7 +1225,7 @@ public class AzureServiceImpl implements AzureService {
              e.printStackTrace();
             logger.error("<---------Exception----------->"+e.getMessage());
 		 }
-		logger.info("<--------End---putContainerDetails------->");
+		logger.debug("<--------End---putContainerDetails------->");
 	}
 	public String getTagFromImage(String imageName){
 		String imageTag=null;
@@ -1240,31 +1244,31 @@ public class AzureServiceImpl implements AzureService {
 	}
 	
 	public ArrayList<String> iterateImageMap(HashMap<String,String> imageMap){
-		logger.info("<--Start-------iterateImageMap-------imageMap---->"+imageMap);
+		logger.debug("<--Start-------iterateImageMap-------imageMap---->"+imageMap);
 		ArrayList<String> list=new ArrayList<String>();
 		 Iterator it = imageMap.entrySet().iterator();
 		    while (it.hasNext()) {
 		        Map.Entry pair = (Map.Entry)it.next();
-		        logger.info(pair.getKey() + " = " + pair.getValue());
+		        logger.debug(pair.getKey() + " = " + pair.getValue());
 		        if(pair.getKey()!=null){
 		        	list.add((String)pair.getKey());
 		        }
 		        //it.remove(); // avoids a ConcurrentModificationException
 		    }
-		logger.info("<--End-------iterateImageMap-------list---->"+list);
+		logger.debug("<--End-------iterateImageMap-------list---->"+list);
 		return list;
 	}
 	public String getBluePrintNexus(String solutionId, String revisionId,String datasource,String userName,String password,
 			String nexusUrl,String nexusUserName,String nexusPassword) throws  Exception{
-		  logger.info("------ Start getBluePrintNexus-----------------");
-		  logger.info("-------solutionId-----------"+solutionId);
-		  logger.info("-------revisionId-----------"+revisionId);
-		  logger.info("-------datasource-----------"+datasource);
-		  logger.info("-------userName-----------"+userName);
-		  logger.info("-------password-----------"+password);
-		  logger.info("-------nexusUrl-----------"+nexusUrl);
-		  logger.info("-------nexusUserName-----------"+nexusUserName);
-		  logger.info("-------nexusPassword-----------"+nexusPassword);
+		  logger.debug("------ Start getBluePrintNexus-----------------");
+		  logger.debug("-------solutionId-----------"+solutionId);
+		  logger.debug("-------revisionId-----------"+revisionId);
+		  logger.debug("-------datasource-----------"+datasource);
+		  logger.debug("-------userName-----------"+userName);
+		  logger.debug("-------password-----------"+password);
+		  logger.debug("-------nexusUrl-----------"+nexusUrl);
+		  logger.debug("-------nexusUserName-----------"+nexusUserName);
+		  logger.debug("-------nexusPassword-----------"+nexusPassword);
 		  List<MLPSolutionRevision> mlpSolutionRevisionList;
 		  String solutionRevisionId = revisionId;
 		  List<MLPArtifact> mlpArtifactList;
@@ -1279,7 +1283,7 @@ public class AzureServiceImpl implements AzureService {
 					solutionRevisionId = mlpSolutionRevisionList.stream()
 								.filter(mlp -> mlp.getVersion().equals(version))
 								.findFirst().get().getRevisionId();
-				  logger.info("------ SolutionRevisonId for Version : " + solutionRevisionId + " -------");
+				  logger.debug("------ SolutionRevisonId for Version : " + solutionRevisionId + " -------");
 				}*/
 			if (null != solutionRevisionId) {
 				// 3. Get the list of Artifiact for the SolutionId and SolutionRevisionId.
@@ -1288,7 +1292,7 @@ public class AzureServiceImpl implements AzureService {
 					nexusURI = mlpArtifactList.stream()
 							.filter(mlpArt -> mlpArt.getArtifactTypeCode().equalsIgnoreCase(artifactType)).findFirst()
 							.get().getUri();
-					logger.info("------ Nexus URI : " + nexusURI + " -------");
+					logger.debug("------ Nexus URI : " + nexusURI + " -------");
 					if (null != nexusURI) {
 						NexusArtifactClient nexusArtifactClient=nexusArtifactClient(nexusUrl,nexusUserName,nexusPassword);
 						File f = new File("blueprint.json");
@@ -1296,7 +1300,7 @@ public class AzureServiceImpl implements AzureService {
 						    f.delete();
 						}
 						byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
-						logger.info("------- byteArrayOutputStream ---blueprint.json-------"+byteArrayOutputStream.toString());
+						logger.debug("------- byteArrayOutputStream ---blueprint.json-------"+byteArrayOutputStream.toString());
 						OutputStream outputStream = new FileOutputStream("blueprint.json"); 
 						byteArrayOutputStream.writeTo(outputStream);
 						bluePrintStr=byteArrayOutputStream.toString();
@@ -1307,7 +1311,7 @@ public class AzureServiceImpl implements AzureService {
 			if(!file.exists()){
 				 throw  new Exception("blueprint.json file is not exist");
 			}
-			logger.info("------ End getBluePrintNexus-----------------");	
+			logger.debug("------ End getBluePrintNexus-----------------");	
 		return bluePrintStr;	
 	  }
 	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String password)throws  Exception{
@@ -1327,7 +1331,7 @@ public class AzureServiceImpl implements AzureService {
 	        	String containerName=(String)pair.getKey();
 	        	sequenceList.add((String)pair.getValue());
 	        }
-	        logger.info("======sequenceList=============="+sequenceList);
+	        logger.debug("======sequenceList=============="+sequenceList);
 	        return sequenceList;
 		}
 	/*public void callBluePrint(){

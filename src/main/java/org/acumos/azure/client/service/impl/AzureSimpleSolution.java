@@ -1,3 +1,22 @@
+/*-
+ * ===============LICENSE_START=======================================================
+ * Acumos
+ * ===================================================================================
+ * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * ===================================================================================
+ * This Acumos software file is distributed by AT&T and Tech Mahindra
+ * under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * This file is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===============LICENSE_END=========================================================
+ */
 package org.acumos.azure.client.service.impl;
 
 import java.nio.file.Files;
@@ -87,30 +106,30 @@ public class AzureSimpleSolution implements Runnable {
 	}
 
 	public void run() {
-		logger.info("<-----------------AzureSimpleSolution-----Run Started-------------------------->");
-		logger.info("<-------azure-------->" + azure);
-		logger.info("<-------deployDataObject-------->" + deployDataObject);
-		logger.info("<-------dockerContainerPrefix-------->" + dockerContainerPrefix);
-		logger.info("<-------dockerUserName-------->" + dockerUserName);
-		logger.info("<-------dockerPwd-------->" + dockerPwd);
-		logger.info("<-------localEnvDockerHost-------->" + localEnvDockerHost);
-		logger.info("<-------localEnvDockerCertPath-------->" + localEnvDockerCertPath);
-		logger.info("<-------list-------->" + list);
-		logger.info("<-------bluePrintName-------->" + bluePrintName);
-		logger.info("<-------bluePrintUser-------->" + bluePrintUser);
-		logger.info("<-------bluePrintPass-------->" + bluePrintPass);
-		logger.info("<-------networkSecurityGroup-------->" + networkSecurityGroup);
-		logger.info("<-------dockerRegistryName-------->" + dockerRegistryName);
-		logger.info("<-------uidNumStr-------->" + uidNumStr);
-		logger.info("<-------dataSource-------->" + dataSource);
-		logger.info("<-------dataUserName-------->" + dataUserName);
-		logger.info("<-------dataPassword-------->" + dataPassword);
-		logger.info("<-------dockerVMUserName-------->" + dockerVMUserName);
-		logger.info("<-------dockerVMPassword-------->" + dockerVMPassword);
+		logger.debug("<-----------------AzureSimpleSolution-----Run Started-------------------------->");
+		logger.debug("<-------azure-------->" + azure);
+		logger.debug("<-------deployDataObject-------->" + deployDataObject);
+		logger.debug("<-------dockerContainerPrefix-------->" + dockerContainerPrefix);
+		logger.debug("<-------dockerUserName-------->" + dockerUserName);
+		logger.debug("<-------dockerPwd-------->" + dockerPwd);
+		logger.debug("<-------localEnvDockerHost-------->" + localEnvDockerHost);
+		logger.debug("<-------localEnvDockerCertPath-------->" + localEnvDockerCertPath);
+		logger.debug("<-------list-------->" + list);
+		logger.debug("<-------bluePrintName-------->" + bluePrintName);
+		logger.debug("<-------bluePrintUser-------->" + bluePrintUser);
+		logger.debug("<-------bluePrintPass-------->" + bluePrintPass);
+		logger.debug("<-------networkSecurityGroup-------->" + networkSecurityGroup);
+		logger.debug("<-------dockerRegistryName-------->" + dockerRegistryName);
+		logger.debug("<-------uidNumStr-------->" + uidNumStr);
+		logger.debug("<-------dataSource-------->" + dataSource);
+		logger.debug("<-------dataUserName-------->" + dataUserName);
+		logger.debug("<-------dataPassword-------->" + dataPassword);
+		logger.debug("<-------dockerVMUserName-------->" + dockerVMUserName);
+		logger.debug("<-------dockerVMPassword-------->" + dockerVMPassword);
 
-		logger.info("<-------solutionId-------->" + deployDataObject.getSolutionId());
-		logger.info("<-------solutionRevisionId-------->" + deployDataObject.getSolutionRevisionId());
-		logger.info("<-------userId-------->" + deployDataObject.getUserId());
+		logger.debug("<-------solutionId-------->" + deployDataObject.getSolutionId());
+		logger.debug("<-------solutionRevisionId-------->" + deployDataObject.getSolutionRevisionId());
+		logger.debug("<-------userId-------->" + deployDataObject.getUserId());
 
 		AzureBean azureBean = new AzureBean();
 		AzureContainerBean containerBean = new AzureContainerBean();
@@ -139,16 +158,16 @@ public class AzureSimpleSolution implements Runnable {
 			// Create an SSH private/public key pair to be used when creating the container
 			// service
 
-			logger.info("Creating an SSH private and public key pair");
+			logger.debug("Creating an SSH private and public key pair");
 
 			SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", "ACS");
-			logger.info("SSH private key value: \n" + sshKeys.getSshPrivateKey());
-			logger.info("SSH public key value: \n" + sshKeys.getSshPublicKey());
+			logger.debug("SSH private key value: \n" + sshKeys.getSshPrivateKey());
+			logger.debug("SSH public key value: \n" + sshKeys.getSshPublicKey());
 
 			// =============================================================
 			// Create an Azure Container Service with Kubernetes orchestration
 
-			logger.info(
+			logger.debug(
 					"Creating an Azure Container Service with Kubernetes ochestration and one agent (virtual machine)");
 
 			Date t1 = new Date();
@@ -157,7 +176,7 @@ public class AzureSimpleSolution implements Runnable {
 			// Create an Azure Container Registry to store and manage private Docker
 			// container images
 
-			logger.info("Creating an Azure Container Registry");
+			logger.debug("Creating an Azure Container Registry");
 			Date t2 = new Date();
 			t1 = new Date();
 
@@ -166,12 +185,12 @@ public class AzureSimpleSolution implements Runnable {
 					deployDataObject.getAcrName());
 
 			t2 = new Date();
-			logger.info("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000)
+			logger.debug("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000)
 					+ " seconds) " + azureRegistry.id());
 			Utils.print(azureRegistry);
 
 			RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
-			logger.info("azureRegistry.loginServerUrl=" + azureRegistry.loginServerUrl() + ", acrCredentials.username "
+			logger.debug("azureRegistry.loginServerUrl=" + azureRegistry.loginServerUrl() + ", acrCredentials.username "
 					+ acrCredentials.username() + ", acrCredentials.passwords"
 					+ acrCredentials.passwords().get(0).value());
 			DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
@@ -180,7 +199,7 @@ public class AzureSimpleSolution implements Runnable {
 					networkSecurityGroup, dockerRegistryPort, dockerRegistryName);
 
 			AuthConfig authConfig = new AuthConfig().withUsername(dockerUserName).withPassword(dockerPwd);
-			logger.info("Start pulling images from nexus::::::::");
+			logger.debug("Start pulling images from nexus::::::::");
 			Iterator itr = list.iterator();
 			while (itr.hasNext()) {
 				String imageName = (String) itr.next();
@@ -210,7 +229,7 @@ public class AzureSimpleSolution implements Runnable {
 						imageTagVal = tag;
 					}
 				}
-				logger.info("===imageName=======" + imageName + "========imageTagVal====" + imageTagVal);
+				logger.debug("===imageName=======" + imageName + "========imageTagVal====" + imageTagVal);
 				/*
 				 * if(imageName!=null && imageName.contains(bluePrintName)){
 				 * containerInstanceBluePrint=dockerContainerName+"_"+dockerCount; }
@@ -221,11 +240,11 @@ public class AzureSimpleSolution implements Runnable {
 				Thread.sleep(30000);
 				dockerCount++;
 			}
-			logger.info("List All Docker containers:");
+			logger.debug("List All Docker containers:");
 			List<Container> dockerContainers = dockerClient.listContainersCmd().withShowAll(true).exec();
 
 			for (Container container : dockerContainers) {
-				logger.info("All Docker container with images and Name %s (%s)\n" + container.getImage()
+				logger.debug("All Docker container with images and Name %s (%s)\n" + container.getImage()
 						+ "<-----container.getId()----->" + container.getId());
 			}
 
@@ -233,7 +252,7 @@ public class AzureSimpleSolution implements Runnable {
 			// Commit the new container
 			// String privateRepoUrl = azureRegistry.loginServerUrl() + "/samples/" +
 			// dockerContainerName;
-			// logger.info("privateRepoUrl::::::::::::::::::"+privateRepoUrl);
+			// logger.debug("privateRepoUrl::::::::::::::::::"+privateRepoUrl);
 			HashMap<String, String> repoUrlMap = new HashMap<String, String>();
 			Iterator itrContainer = hmap.entrySet().iterator();
 			while (itrContainer.hasNext()) {
@@ -243,27 +262,27 @@ public class AzureSimpleSolution implements Runnable {
 				CreateContainerResponse dockerContainerInstance = (CreateContainerResponse) pair.getValue();
 
 				String privateRepoUrl = azureRegistry.loginServerUrl() + "/samples/" + containerName;
-				logger.info("dockerContainerInstance.getId():::::::::::::::::" + dockerContainerInstance.getId()
+				logger.debug("dockerContainerInstance.getId():::::::::::::::::" + dockerContainerInstance.getId()
 						+ "===privateRepoUrl====" + privateRepoUrl);
 				if (containerTagMap != null && containerTagMap.get(containerName) != null) {
 					imageTagLatest = containerTagMap.get(containerName);
 				}
-				logger.info("containerName======" + containerName + "==imageTagLatest======" + imageTagLatest);
+				logger.debug("containerName======" + containerName + "==imageTagLatest======" + imageTagLatest);
 				String dockerImageId = dockerClient.commitCmd(dockerContainerInstance.getId())
 						.withRepository(privateRepoUrl).withTag(imageTagLatest).exec();
-				logger.info("dockerImageId::::::::::::::::::" + dockerImageId);
+				logger.debug("dockerImageId::::::::::::::::::" + dockerImageId);
 				repoUrlMap.put(containerName, privateRepoUrl);
 				// We can now remove the temporary container instance
 				dockerClient.removeContainerCmd(dockerContainerInstance.getId()).withForce(true).exec();
 				Thread.sleep(5000);
 			}
 			// #####################################################################################
-			logger.info("<----Before Docker remoteDockerClient--------------------------->");
+			logger.debug("<----Before Docker remoteDockerClient--------------------------->");
 			DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(),
 					region, azureRegistry.loginServerUrl(), acrCredentials.username(),
 					acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath, azureBean,
 					networkSecurityGroup, dockerRegistryPort, dockerRegistryName);
-			logger.info("<----After Docker remoteDockerClient--------------------------->");
+			logger.debug("<----After Docker remoteDockerClient--------------------------->");
 			// =============================================================
 			// Push the new Docker image to the Azure Container Registry
 			Iterator repoContainer = repoUrlMap.entrySet().iterator();
@@ -277,7 +296,7 @@ public class AzureSimpleSolution implements Runnable {
 				Thread.sleep(50000);
 			}
 
-			logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
+			logger.debug("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
 			// Remove the temp image from the local Docker host
 			/*
 			 * try { Iterator itr5=list.iterator(); while(itr5.hasNext()){ String
@@ -290,19 +309,19 @@ public class AzureSimpleSolution implements Runnable {
 			// =============================================================
 			// Verify that the image we saved in the Azure Container registry can be pulled
 			// and instantiated locally
-			logger.info("<----pull images from Azure registry to locally--------->");
+			logger.debug("<----pull images from Azure registry to locally--------->");
 			repoContainer = repoUrlMap.entrySet().iterator();
 			while (repoContainer.hasNext()) {
 				Map.Entry pair = (Map.Entry) repoContainer.next();
 				String containerName = (String) pair.getKey();
 				String privateRepoUrl = (String) pair.getValue();
-				logger.info("<----pull images from Azure registry to locally-----privateRepoUrl---->" + privateRepoUrl);
+				logger.debug("<----pull images from Azure registry to locally-----privateRepoUrl---->" + privateRepoUrl);
 				dockerClient.pullImageCmd(privateRepoUrl).withAuthConfig(dockerClient.authConfig())
 						.exec(new PullImageResultCallback()).awaitSuccess();
 				Thread.sleep(50000);
 			}
 
-			logger.info("<----remoteDockerClient with privateRepoUrl--------->");
+			logger.debug("<----remoteDockerClient with privateRepoUrl--------->");
 
 			repoContainer = repoUrlMap.entrySet().iterator();
 			while (repoContainer.hasNext()) {
@@ -319,12 +338,12 @@ public class AzureSimpleSolution implements Runnable {
 				final String vmPassword = dockerVMPassword;
 				String repositoryName = "";
 				repositoryName = privateRepoUrl + ":" + tagImage;
-				logger.info("<----vmUserName-------->" + vmUserName);
-				logger.info("<----vmPassword-------->" + vmPassword);
-				logger.info("<----azureBean VM-------->" + azureBean.getAzureVMIP());
-				logger.info("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
-				logger.info("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
-				logger.info("<----azureBean VM-------->" + acrCredentials.passwords().get(0).value());
+				logger.debug("<----vmUserName-------->" + vmUserName);
+				logger.debug("<----vmPassword-------->" + vmPassword);
+				logger.debug("<----azureBean VM-------->" + azureBean.getAzureVMIP());
+				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
+				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
+				logger.debug("<----azureBean VM-------->" + acrCredentials.passwords().get(0).value());
 				DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),
 						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
@@ -346,16 +365,16 @@ public class AzureSimpleSolution implements Runnable {
 		}
 		String vmDetail = azureBean.getAzureVMIP() + "#8557";
 		setuidHashmap(uidNumStr, vmDetail);
-		logger.info("<---------------AzureSimpleSolution-------Run End-------------------------->");
+		logger.debug("<---------------AzureSimpleSolution-------Run End-------------------------->");
 		// code in the other thread, can reference "var" variable
 	}
 
 	public void setuidHashmap(String uidNumStr, String vmDetails) {
-		logger.info("<---------------setuidHashmap-------Run Start-------------------------->" + uidNumStr
+		logger.debug("<---------------setuidHashmap-------Run Start-------------------------->" + uidNumStr
 				+ "====vmDetails======" + vmDetails);
 		HashMap<String, String> singlatonMap = SingletonMapClass.getInstance();
 		singlatonMap.put(uidNumStr, vmDetails);
-		logger.info("<---------------setuidHashmap-------Run End-------------------------->" + singlatonMap);
+		logger.debug("<---------------setuidHashmap-------Run End-------------------------->" + singlatonMap);
 	}
 
 	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String password) {
@@ -366,15 +385,15 @@ public class AzureSimpleSolution implements Runnable {
 	public void createDeploymentData(String dataSource, String dataUserName, String dataPassword,
 			AzureContainerBean containerBean, String solutionId, String solutionRevisionId, String userId,
 			String uidNumber, String deploymentStatusCode) throws Exception {
-		logger.info("<---------Start createDeploymentData ------------------------->");
-		logger.info("<---------dataSource-------->" + dataSource);
-		logger.info("<-------dataUserName-------------->" + dataUserName);
-		logger.info("<--------dataPassword------------->" + dataPassword);
-		logger.info("<---------solutionId------------------->" + solutionId);
-		logger.info("<--------solutionRevisionId-------------------->" + solutionRevisionId);
-		logger.info("<------userId--------------->" + userId);
-		logger.info("<------uidNumber--------------->" + uidNumber);
-		logger.info("<------deploymentStatusCode--------------->" + deploymentStatusCode);
+		logger.debug("<---------Start createDeploymentData ------------------------->");
+		logger.debug("<---------dataSource-------->" + dataSource);
+		logger.debug("<-------dataUserName-------------->" + dataUserName);
+		logger.debug("<--------dataPassword------------->" + dataPassword);
+		logger.debug("<---------solutionId------------------->" + solutionId);
+		logger.debug("<--------solutionRevisionId-------------------->" + solutionRevisionId);
+		logger.debug("<------userId--------------->" + userId);
+		logger.debug("<------uidNumber--------------->" + uidNumber);
+		logger.debug("<------deploymentStatusCode--------------->" + deploymentStatusCode);
 		ObjectMapper mapper = new ObjectMapper();
 		CommonDataServiceRestClientImpl client = getClient(dataSource, dataUserName, dataPassword);
 		if (solutionId != null && solutionRevisionId != null && userId != null && uidNumber != null) {
@@ -386,11 +405,11 @@ public class AzureSimpleSolution implements Runnable {
 			mlp.setDeploymentStatusCode(deploymentStatusCode);
 			String azureDetails = mapper.writeValueAsString(containerBean);
 			mlp.setDetail(azureDetails);
-			logger.info("<---------azureDetails------------------------->" + azureDetails);
+			logger.debug("<---------azureDetails------------------------->" + azureDetails);
 			MLPSolutionDeployment mlpDeployment = client.createSolutionDeployment(mlp);
-			logger.info("<---------mlpDeployment------------------------->" + mlpDeployment);
+			logger.debug("<---------mlpDeployment------------------------->" + mlpDeployment);
 		}
-		logger.info("<---------End createDeploymentData ------------------------->");
+		logger.debug("<---------End createDeploymentData ------------------------->");
 	}
 
 	public String getTagFromImage(String imageName) {

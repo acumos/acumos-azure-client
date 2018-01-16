@@ -97,7 +97,7 @@ public class ParseJSON {
 		return imageMap;	
 	}
 	
-	public static void jsonArrayParse(Object obj){
+	public  void jsonArrayParse(Object obj){
 		JSONArray jsonArr = (JSONArray) obj;
 		Iterator itr = jsonArr.iterator();
 		Iterator<Map.Entry> itr1=null;
@@ -105,7 +105,7 @@ public class ParseJSON {
 			 itr1 = ((Map) itr.next()).entrySet().iterator();
 	            while (itr1.hasNext()) {
 	                Map.Entry pair = itr1.next();
-	                System.out.println("-->"+pair.getKey() + " : " + pair.getValue());
+	                log.debug("-->"+pair.getKey() + " : " + pair.getValue());
 	            }
          }
 	}
@@ -217,7 +217,7 @@ public class ParseJSON {
 		//log.debug("<----------End jsonFileToObject in ParseJSON---------------------list---->"+list);
 		return blueprint;	
 	}
-	public static ArrayList<Component> jsonArrayParseObject(Object obj){
+	public  ArrayList<Component> jsonArrayParseObject(Object obj){
 		
 		JSONArray jsonArr = (JSONArray) obj;
 		Iterator itr = jsonArr.iterator();
@@ -237,7 +237,7 @@ public class ParseJSON {
 	                		String operation=(String)objVar.get("operation");
 	                		OperationSignature opr=new OperationSignature();
 	                		opr.setOperation(operation);
-	                		System.out.println("=======operation==========="+operation);
+	                		log.debug("=======operation==========="+operation);
 	                		component.setOperationSignature(opr);
 	                	}
 	                }
@@ -276,7 +276,7 @@ public LinkedList<String> getSequenceFromJSON()throws  Exception{
 	        	
 	        	String contName="test";
 	        	NodeTree<String> testNode=new NodeTree<String>(contName);
-	        	System.out.println("Second while");
+	        	log.debug("Second while");
 	            while (itr4.hasNext()) {
 	                Map.Entry pair = itr4.next();
 	                String key=(String)pair.getKey();
@@ -287,7 +287,7 @@ public LinkedList<String> getSequenceFromJSON()throws  Exception{
 	                	containerName=val;
 	                	contName=val;
 	                }else{
-	                	System.out.println("-bbbbbkey->"+pair.getKey() );
+	                	log.debug("-bbbbbkey->"+pair.getKey() );
 	                }
 	                if(key!=null && key.equalsIgnoreCase("image")){
 	                	imageName=val;
@@ -316,10 +316,10 @@ public LinkedList<String> getSequenceFromJSON()throws  Exception{
 	            }
 	        }
          }
-        System.out.println("=======Print==================================");
+        log.debug("=======Print==================================");
         printTree(root, " ",linkedList);
         Collections.reverse(linkedList);
-        System.out.println("=======Print=======================linkedList==========="+linkedList);
+        log.debug("=======Print=======================linkedList==========="+linkedList);
         
         }catch(Exception e){
         	//log.error("<-In Exception-contentString--parseJsonFile-->"+e.getMessage());
@@ -330,7 +330,7 @@ public LinkedList<String> getSequenceFromJSON()throws  Exception{
 		return linkedList;	
 	}
 
-public static void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTree<String> rootNode){
+public  void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTree<String> rootNode){
 	JSONArray jsonArr = (JSONArray) obj;
 	Iterator itr = jsonArr.iterator();
 	Iterator<Map.Entry> itr1=null;
@@ -338,7 +338,7 @@ public static void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTre
 		 itr1 = ((Map) itr.next()).entrySet().iterator();
             while (itr1.hasNext()) {
                 Map.Entry pair = itr1.next();
-                System.out.println("--iiii>"+pair.getKey() + " : " + pair.getValue());
+                log.debug("--iiii>"+pair.getKey() + " : " + pair.getValue());
                 if(pair.getKey() !=null && pair.getKey().equals("name") && pair.getValue()!=null){
                 	String data=String.valueOf(pair.getValue());
                 	NodeTree<String> subNode=new NodeTree<String>(data);
@@ -361,23 +361,23 @@ public static void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTre
      	            }
                 	//newNode.addChild(new NodeTree<String>(data));
                 }
-                System.out.println("ccccc-->"+pair.getKey() + " : " + pair.getValue());
+                log.debug("ccccc-->"+pair.getKey() + " : " + pair.getValue());
             }
      }
 }
 
-public static NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
+public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	NodeTree<String> ss=null;
 	 if(node.getData().equals(searchQuery)) {
-		 System.out.println("========node.getData()========="+node.getData());
+		 log.debug("========node.getData()========="+node.getData());
 	    return node;
 	 }
 	 List<NodeTree<String>> children=node.getChildren(); 
 	 int count=children.size();
 	 for(NodeTree each : children) {
-		 System.out.println(each.getData());
+		 //log.debug(each.getData());
 		 NodeTree<String> findDataInTree = findDataInTree(each, searchQuery);
-		 System.out.println("======findDataInTree==node.getData()========="+node.getData());
+		 log.debug("======findDataInTree==node.getData()========="+node.getData());
 		 if(findDataInTree!=null){
 			 return findDataInTree; 
 		 }
@@ -386,8 +386,8 @@ public static NodeTree<String> findDataInTree(NodeTree node, String searchQuery)
 	 }
 	return ss; 
 }
- public static <T> void printTree(NodeTree<T> node, String appender,LinkedList<String> linkedList) {
-	  System.out.println(appender + node.getData());
+ public  <T> void printTree(NodeTree<T> node, String appender,LinkedList<String> linkedList) {
+	  log.debug(appender + node.getData());
 	  linkedList.add(String.valueOf(node.getData()));
 	  node.getChildren().forEach(each ->  printTree(each, (appender + appender),linkedList));
 	  

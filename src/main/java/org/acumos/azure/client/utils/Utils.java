@@ -279,7 +279,7 @@ public final class Utils {
 				.append(resource.managedServiceIdentityPrincipalId());
 		msi.append("\n\t\t\tMSI Active Directory Tenant Id:").append(resource.managedServiceIdentityTenantId());
 
-		log.info(new StringBuilder().append("Virtual Machine: ").append(resource.id()).append("Name: ")
+		log.debug(new StringBuilder().append("Virtual Machine: ").append(resource.id()).append("Name: ")
 				.append(resource.name()).append("\n\tResource group: ").append(resource.resourceGroupName())
 				.append("\n\tRegion: ").append(resource.region()).append("\n\tTags: ").append(resource.tags())
 				.append("\n\tHardwareProfile: ").append("\n\t\tSize: ").append(resource.size()).append(storageProfile)
@@ -294,7 +294,7 @@ public final class Utils {
 	 */
 	public static void print(AvailabilitySet resource) {
 
-		log.info(new StringBuilder().append("Availability Set: ").append(resource.id()).append("Name: ")
+		log.debug(new StringBuilder().append("Availability Set: ").append(resource.id()).append("Name: ")
 				.append(resource.name()).append("\n\tResource group: ").append(resource.resourceGroupName())
 				.append("\n\tRegion: ").append(resource.region()).append("\n\tTags: ").append(resource.tags())
 				.append("\n\tFault domain count: ").append(resource.faultDomainCount())
@@ -327,7 +327,7 @@ public final class Utils {
 			}
 		}
 
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -361,7 +361,7 @@ public final class Utils {
 				.append(resource.primaryIPConfiguration().networkId()).append("\n\tPrimary subnet name:")
 				.append(resource.primaryIPConfiguration().subnetName());
 
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -386,7 +386,7 @@ public final class Utils {
 					.append("\n\t\tPriority: ").append(rule.priority());
 		}
 
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -396,7 +396,7 @@ public final class Utils {
 	 *            a public IP address
 	 */
 	public static void print(PublicIPAddress resource) {
-		log.info(new StringBuilder().append("Public IP Address: ").append(resource.id()).append("Name: ")
+		log.debug(new StringBuilder().append("Public IP Address: ").append(resource.id()).append("Name: ")
 				.append(resource.name()).append("\n\tResource group: ").append(resource.resourceGroupName())
 				.append("\n\tRegion: ").append(resource.region()).append("\n\tTags: ").append(resource.tags())
 				.append("\n\tIP Address: ").append(resource.ipAddress()).append("\n\tLeaf domain label: ")
@@ -424,7 +424,7 @@ public final class Utils {
 					.append("\n\t\tSecret permissions: ")
 					.append(Joiner.on(", ").join(accessPolicy.permissions().secrets()));
 		}
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -434,7 +434,7 @@ public final class Utils {
 	 *            a storage account
 	 */
 	public static void print(StorageAccount storageAccount) {
-		log.info(storageAccount.name() + " created @ " + storageAccount.creationTime());
+		log.debug(storageAccount.name() + " created @ " + storageAccount.creationTime());
 	}
 
 	/**
@@ -446,7 +446,7 @@ public final class Utils {
 	public static void print(List<StorageAccountKey> storageAccountKeys) {
 		for (int i = 0; i < storageAccountKeys.size(); i++) {
 			StorageAccountKey storageAccountKey = storageAccountKeys.get(i);
-			log.info("Key (" + i + ") " + storageAccountKey.keyName() + "=" + storageAccountKey.value());
+			log.debug("Key (" + i + ") " + storageAccountKey.keyName() + "=" + storageAccountKey.value());
 		}
 	}
 
@@ -483,7 +483,7 @@ public final class Utils {
 			}
 		}
 
-		log.info(redisInfo.toString());
+		log.debug(redisInfo.toString());
 	}
 
 	/**
@@ -497,7 +497,7 @@ public final class Utils {
 				.append(redisAccessKeys.primaryKey()).append("', ").append("\n\tSecondary Key: '")
 				.append(redisAccessKeys.secondaryKey()).append("', ");
 
-		log.info(redisKeys.toString());
+		log.debug(redisKeys.toString());
 	}
 
 	/**
@@ -668,7 +668,7 @@ public final class Utils {
 					.append(new ArrayList<String>(backend.loadBalancingRules().keySet()));
 		}
 
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -678,7 +678,7 @@ public final class Utils {
 	 *            a list of batch account keys
 	 */
 	public static void print(BatchAccountKeys batchAccountKeys) {
-		log.info("Primary Key (" + batchAccountKeys.primary() + ") Secondary key = (" + batchAccountKeys.secondary()
+		log.debug("Primary Key (" + batchAccountKeys.primary() + ") Secondary key = (" + batchAccountKeys.secondary()
 				+ ")");
 	}
 
@@ -718,7 +718,7 @@ public final class Utils {
 			}
 		}
 
-		log.info(new StringBuilder().append("BatchAccount: ").append(batchAccount.id()).append("Name: ")
+		log.debug(new StringBuilder().append("BatchAccount: ").append(batchAccount.id()).append("Name: ")
 				.append(batchAccount.name()).append("\n\tResource group: ").append(batchAccount.resourceGroupName())
 				.append("\n\tRegion: ").append(batchAccount.region()).append("\n\tTags: ").append(batchAccount.tags())
 				.append("\n\tAccountEndpoint: ").append(batchAccount.accountEndpoint()).append("\n\tPoolQuota: ")
@@ -751,7 +751,7 @@ public final class Utils {
 		for (String nameServer : resource.nameServers()) {
 			builder = builder.append("\n\t\t" + nameServer);
 		}
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -769,7 +769,7 @@ public final class Utils {
 				.append("\n\tStatus: ").append(resource.status()).append("\n\tIssuance time: ")
 				.append(resource.lastCertificateIssuanceTime()).append("\n\tSigned certificate: ")
 				.append(resource.signedCertificate() == null ? null : resource.signedCertificate().thumbprint());
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -783,7 +783,7 @@ public final class Utils {
 				.append("Name: ").append(resource.name()).append("\n\tResource group: ")
 				.append(resource.resourceGroupName()).append("\n\tRegion: ").append(resource.region())
 				.append("\n\tPricing tier: ").append(resource.pricingTier());
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -818,7 +818,7 @@ public final class Utils {
 			builder = builder.append("\n\t\t" + conn.name() + ": " + conn.value() + " - " + conn.type()
 					+ (conn.sticky() ? " - slot setting" : ""));
 		}
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -884,7 +884,7 @@ public final class Utils {
 						.append(endpoint.routingWeight());
 			}
 		}
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -994,7 +994,7 @@ public final class Utils {
 				}
 			}
 		}
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -1012,7 +1012,7 @@ public final class Utils {
 				.append("\n\tUser: ").append(acrCredentials.username()).append("\n\tFirst Password: ")
 				.append(acrCredentials.passwords().get(0).value()).append("\n\tSecond Password: ")
 				.append(acrCredentials.passwords().get(1).value());
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -1040,7 +1040,7 @@ public final class Utils {
 			info.append("\n\tName: ").append(containerService.servicePrincipalClientId());
 		}
 
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -1068,7 +1068,7 @@ public final class Utils {
 			info.append("\n\t\tKey name: ").append(queryKey.name());
 			info.append("\n\t\t   Value: ").append(queryKey.key());
 		}
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -1247,7 +1247,7 @@ public final class Utils {
 				.append("\n\tRegion: ").append(sqlServer.region()).append("\n\tSqlServer version: ")
 				.append(sqlServer.version()).append("\n\tFully qualified name for Sql Server: ")
 				.append(sqlServer.fullyQualifiedDomainName());
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1270,7 +1270,7 @@ public final class Utils {
 				.append(database.maxSizeBytes()).append("\n\tDefault secondary location of SQL database: ")
 				.append(database.defaultSecondaryLocation());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1287,7 +1287,7 @@ public final class Utils {
 				.append("\n\tStart IP Address of the firewall rule: ").append(firewallRule.startIPAddress())
 				.append("\n\tEnd IP Address of the firewall rule: ").append(firewallRule.endIPAddress());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1310,7 +1310,7 @@ public final class Utils {
 				.append(elasticPool.state()).append("\n\tStorage capacity in MBs for the elastic pool: ")
 				.append(elasticPool.storageMB());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1337,7 +1337,7 @@ public final class Utils {
 				.append(elasticPoolActivity.requestedDatabaseDtuMin()).append("\n\tRequested DTU limit in activity: ")
 				.append(elasticPoolActivity.requestedDtu());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 
 	}
 
@@ -1363,7 +1363,7 @@ public final class Utils {
 				.append(databaseActivity.errorMessage()).append("\n\tError severity of activity: ")
 				.append(databaseActivity.errorSeverity());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1533,7 +1533,7 @@ public final class Utils {
 				info.append(config.name());
 			}
 		}
-		log.info(info.toString());
+		log.debug(info.toString());
 	}
 
 	/**
@@ -1581,7 +1581,7 @@ public final class Utils {
 				}
 			}
 		}
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1680,7 +1680,7 @@ public final class Utils {
 				.append(serviceBusNamespace.sku().name()).append("\n\t\tTier: ")
 				.append(serviceBusNamespace.sku().tier());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1714,7 +1714,7 @@ public final class Utils {
 				.append("\n\tLockDurationInSeconds: ").append(queue.lockDurationInSeconds())
 				.append("\n\tTransferDeadLetterMessageCount: ").append(queue.transferDeadLetterMessageCount());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 
 	}
 
@@ -1737,7 +1737,7 @@ public final class Utils {
 			builder.append("\n\t\tAccessRight: ").append("\n\t\t\tName :").append(right.name());
 		}
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1752,7 +1752,7 @@ public final class Utils {
 				.append(keys.primaryConnectionString()).append("\n\tSecondaryKey: ").append(keys.secondaryKey())
 				.append("\n\tSecondaryConnectionString: ").append(keys.secondaryConnectionString());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1773,7 +1773,7 @@ public final class Utils {
 			builder.append("\n\t\tAccessRight: ").append("\n\t\t\tName :").append(right.name());
 		}
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1803,7 +1803,7 @@ public final class Utils {
 				.append("\n\tSubscriptionCount: ").append(topic.subscriptionCount())
 				.append("\n\tTransferDeadLetterMessageCount: ").append(topic.transferDeadLetterMessageCount());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1840,7 +1840,7 @@ public final class Utils {
 				.append("\n\tTransferDeadLetterMessageCount: ")
 				.append(serviceBusSubscription.transferDeadLetterMessageCount());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1862,7 +1862,7 @@ public final class Utils {
 			builder.append("\n\t\tAccessRight: ").append("\n\t\t\tName :").append(right.name());
 		}
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1901,7 +1901,7 @@ public final class Utils {
 				.append("\n\tMail Nickname: ").append(user.mailNickname()).append("\n\tSign In Name: ")
 				.append(user.signInName()).append("\n\tUser Principal Name: ").append(user.userPrincipalName());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1935,7 +1935,7 @@ public final class Utils {
 			builder.append("\n\t\tAssignable Scope: ").append("\n\t\t\tName :").append(scope);
 		}
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1949,7 +1949,7 @@ public final class Utils {
 				.append(roleAssignment.scope()).append("\n\tPrincipal Id: ").append(roleAssignment.principalId())
 				.append("\n\tRole Definition Id: ").append(roleAssignment.roleDefinitionId());
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1968,7 +1968,7 @@ public final class Utils {
 					.append(object.name());
 		}
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -1985,7 +1985,7 @@ public final class Utils {
 			builder.append("\n\t\t").append(replyUrl);
 		}
 
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -2004,7 +2004,7 @@ public final class Utils {
 		for (String name : names) {
 			builder.append("\n\t\tName: ").append(name);
 		}
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -2017,7 +2017,7 @@ public final class Utils {
 		StringBuilder builder = new StringBuilder().append("Network Watcher: ").append(nw.id()).append("\n\tName: ")
 				.append(nw.name()).append("\n\tResource group name: ").append(nw.resourceGroupName())
 				.append("\n\tRegion name: ").append(nw.regionName());
-		log.info(builder.toString());
+		log.debug(builder.toString());
 	}
 
 	/**
@@ -2043,7 +2043,7 @@ public final class Utils {
 			sb.append("\n\t\tLocal port: ").append(filter.localPort());
 			sb.append("\n\t\tRemote port: ").append(filter.remotePort());
 		}
-		log.info(sb.toString());
+		log.debug(sb.toString());
 	}
 
 	/**
@@ -2053,7 +2053,7 @@ public final class Utils {
 	 *            IP flow verification info
 	 */
 	public static void print(VerificationIPFlow resource) {
-		log.info(new StringBuilder("IP flow verification: ").append("\n\tAccess: ").append(resource.access())
+		log.debug(new StringBuilder("IP flow verification: ").append("\n\tAccess: ").append(resource.access())
 				.append("\n\tRule name: ").append(resource.ruleName()).toString());
 	}
 
@@ -2076,7 +2076,7 @@ public final class Utils {
 						.append(association.associationType());
 			}
 		}
-		log.info(sb.toString());
+		log.debug(sb.toString());
 	}
 
 	/**
@@ -2086,7 +2086,7 @@ public final class Utils {
 	 *            flow log settings
 	 */
 	public static void print(FlowLogSettings resource) {
-		log.info(new StringBuilder().append("Flow log settings: ").append("Target resource id: ")
+		log.debug(new StringBuilder().append("Flow log settings: ").append("Target resource id: ")
 				.append(resource.targetResourceId()).append("\n\tFlow log enabled: ").append(resource.enabled())
 				.append("\n\tStorage account id: ").append(resource.storageId())
 				.append("\n\tRetention policy enabled: ").append(resource.isRetentionEnabled())
@@ -2124,7 +2124,7 @@ public final class Utils {
 			sb.append("\n\t\tDefault security rules:");
 			printSecurityRule(sb, sgni.securityRuleAssociations().defaultSecurityRules());
 		}
-		log.info(sb.toString());
+		log.debug(sb.toString());
 	}
 
 	private static void printSecurityRule(StringBuilder sb, List<SecurityRuleInner> rules) {
@@ -2148,7 +2148,7 @@ public final class Utils {
 	 *            an availability set
 	 */
 	public static void print(NextHop resource) {
-		log.info(new StringBuilder("Next hop: ").append("Next hop type: ").append(resource.nextHopType())
+		log.debug(new StringBuilder("Next hop: ").append("Next hop type: ").append(resource.nextHopType())
 				.append("\n\tNext hop ip address: ").append(resource.nextHopIpAddress()).append("\n\tRoute table id: ")
 				.append(resource.routeTableId()).toString());
 	}

@@ -1,3 +1,22 @@
+/*-
+ * ===============LICENSE_START=======================================================
+ * Acumos
+ * ===================================================================================
+ * Copyright (C) 2017 AT&T Intellectual Property & Tech Mahindra. All rights reserved.
+ * ===================================================================================
+ * This Acumos software file is distributed by AT&T and Tech Mahindra
+ * under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *  
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *  
+ * This file is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * ===============LICENSE_END=========================================================
+ */
 package org.acumos.azure.client.service.impl;
 
 import java.nio.file.Files;
@@ -48,7 +67,7 @@ import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
 public class AzureCompositeSolution implements Runnable {
 	
 	
-	Logger logger =LoggerFactory.getLogger(AzureSimpleSolution.class);	
+	Logger logger =LoggerFactory.getLogger(AzureCompositeSolution.class);	
 	private Azure azure;
 	private AzureDeployDataObject deployDataObject;
 	private String dockerContainerPrefix;
@@ -105,37 +124,37 @@ public class AzureCompositeSolution implements Runnable {
 	    
 	   }
 	public void run() {
-		logger.info("<-----------------AzureCompositeSolution-----Run Started-------------------------->");
+		logger.debug("<-----------------AzureCompositeSolution-----Run Started-------------------------->");
 		logger.debug("<-----------------AzureCompositeSolution-----Run Started---*************----------------------->");
-		logger.info("<-------azure-------->"+azure);
-		logger.info("<-------deployDataObject-------->"+deployDataObject);
-		logger.info("<-------dockerContainerPrefix-------->"+dockerContainerPrefix);
-		logger.info("<-------dockerUserName-------->"+dockerUserName);
-		logger.info("<-------dockerPwd-------->"+dockerPwd);
-		logger.info("<-------localEnvDockerHost-------->"+localEnvDockerHost);
-		logger.info("<-------localEnvDockerCertPath-------->"+localEnvDockerCertPath);
-		logger.info("<-------list-------->"+list);
-		logger.info("<-------bluePrintName-------->"+bluePrintName);
-		logger.info("<-------bluePrintUser-------->"+bluePrintUser);
-		logger.info("<-------bluePrintPass-------->"+bluePrintPass);
-		logger.info("<-------networkSecurityGroup-------->"+networkSecurityGroup);
-		logger.info("<-------dockerRegistryName-------->"+dockerRegistryName);
-		logger.info("<-------uidNumStr-------->"+uidNumStr);
-		logger.info("<-------sequenceList-------->"+sequenceList);
-		logger.info("<-------imageMap-------->"+imageMap);
+		logger.debug("<-------azure-------->"+azure);
+		logger.debug("<-------deployDataObject-------->"+deployDataObject);
+		logger.debug("<-------dockerContainerPrefix-------->"+dockerContainerPrefix);
+		logger.debug("<-------dockerUserName-------->"+dockerUserName);
+		logger.debug("<-------dockerPwd-------->"+dockerPwd);
+		logger.debug("<-------localEnvDockerHost-------->"+localEnvDockerHost);
+		logger.debug("<-------localEnvDockerCertPath-------->"+localEnvDockerCertPath);
+		logger.debug("<-------list-------->"+list);
+		logger.debug("<-------bluePrintName-------->"+bluePrintName);
+		logger.debug("<-------bluePrintUser-------->"+bluePrintUser);
+		logger.debug("<-------bluePrintPass-------->"+bluePrintPass);
+		logger.debug("<-------networkSecurityGroup-------->"+networkSecurityGroup);
+		logger.debug("<-------dockerRegistryName-------->"+dockerRegistryName);
+		logger.debug("<-------uidNumStr-------->"+uidNumStr);
+		logger.debug("<-------sequenceList-------->"+sequenceList);
+		logger.debug("<-------imageMap-------->"+imageMap);
 		
-		logger.info("<-------dataSource-------->"+dataSource);
-		logger.info("<-------dataUserName-------->"+dataUserName);
-		logger.info("<-------dataPassword-------->"+dataPassword);
-		logger.info("<-------dockerVMUserName-------->"+dockerVMUserName);
-		logger.info("<-------dockerVMPassword-------->"+dockerVMPassword);
+		logger.debug("<-------dataSource-------->"+dataSource);
+		logger.debug("<-------dataUserName-------->"+dataUserName);
+		logger.debug("<-------dataPassword-------->"+dataPassword);
+		logger.debug("<-------dockerVMUserName-------->"+dockerVMUserName);
+		logger.debug("<-------dockerVMPassword-------->"+dockerVMPassword);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
 		List<AzureContainerBean> azureContainerBeanList=new ArrayList<AzureContainerBean>();
 		
 		try{
-			logger.info("<-------------start pushCompositeImage------------------------------>");
+			logger.debug("<-------------start pushCompositeImage------------------------------>");
 		    
 			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
 			DockerInfoList  dockerList=new DockerInfoList();
@@ -149,10 +168,10 @@ public class AzureCompositeSolution implements Runnable {
 	        String containerInstanceBluePrint="";
 	        //String bluePrintContainerId="";
 	        
-	        logger.info("<--------------dockerRegistryName--------------------------->"+dockerRegistryName);
-	        logger.info("<--------------list--------------------------->"+list);
-	        logger.info("<--------------sequenceList--------------------------->"+sequenceList);
-	        logger.info("<---------bluePrintName------------->"+bluePrintName);
+	        logger.debug("<--------------dockerRegistryName--------------------------->"+dockerRegistryName);
+	        logger.debug("<--------------list--------------------------->"+list);
+	        logger.debug("<--------------sequenceList--------------------------->"+sequenceList);
+	        logger.debug("<---------bluePrintName------------->"+bluePrintName);
 	        String portArr[]={"8556","8557","8558","8559","8560","8561","8562","8563","8564","8565"};
             if(list!=null && list.size() > 0){
             	
@@ -177,17 +196,17 @@ public class AzureCompositeSolution implements Runnable {
 		            //=============================================================
 		            // Create an SSH private/public key pair to be used when creating the container service
 	
-		            logger.info("Creating an SSH private and public key pair");
+		            logger.debug("Creating an SSH private and public key pair");
 	
 		            SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", "ACS");
-		            logger.info("SSH private key value: \n" + sshKeys.getSshPrivateKey());
-		            logger.info("SSH public key value: \n" + sshKeys.getSshPublicKey());
+		            logger.debug("SSH private key value: \n" + sshKeys.getSshPrivateKey());
+		            logger.debug("SSH public key value: \n" + sshKeys.getSshPublicKey());
 	
 	
 		            //=============================================================
 		            // Create an Azure Container Service with Kubernetes orchestration
 	
-		            logger.info("Creating an Azure Container Service with Kubernetes ochestration and one agent (virtual machine)");
+		            logger.debug("Creating an Azure Container Service with Kubernetes ochestration and one agent (virtual machine)");
 	
 		            Date t1 = new Date();        
 	
@@ -195,7 +214,7 @@ public class AzureCompositeSolution implements Runnable {
 		            //=============================================================
 		            // Create an Azure Container Registry to store and manage private Docker container images
 	
-		            logger.info("Creating an Azure Container Registry");
+		            logger.debug("Creating an Azure Container Registry");
 		            Date t2 = new Date();
 		            t1 = new Date();
 	                
@@ -203,7 +222,7 @@ public class AzureCompositeSolution implements Runnable {
 		            Registry azureRegistry = azure.containerRegistries().getByResourceGroup(deployDataObject.getRgName(), deployDataObject.getAcrName());
 		            
 		            t2 = new Date();
-		            logger.info("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000) + " seconds) " + azureRegistry.id());
+		            logger.debug("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000) + " seconds) " + azureRegistry.id());
 		            Utils.print(azureRegistry);
 	
 	
@@ -211,7 +230,7 @@ public class AzureCompositeSolution implements Runnable {
 		            // Create a Docker client that will be used to push/pull images to/from the Azure Container Registry
 	
 		            RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
-		            logger.info("azureRegistry.loginServerUrl="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
+		            logger.debug("azureRegistry.loginServerUrl="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
 		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
 		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
@@ -227,12 +246,12 @@ public class AzureCompositeSolution implements Runnable {
 		            //=============================================================
 		            // Pull a temp image from public Docker repo and create a temporary container from that image
 		            // These steps can be replaced and instead build a custom image using a Dockerfile and the app's JAR
-		            logger.info("Start pulling images from nexus::::::::");
+		            logger.debug("Start pulling images from nexus::::::::");
 		            Iterator itr=list.iterator();
 		            while(itr.hasNext()){
 		            	 
 		            	String imageName=(String)itr.next();
-		            	//logger.info("Nexus Image Name------------------->"+imageName);
+		            	//logger.debug("Nexus Image Name------------------->"+imageName);
 		            	if(imageName!=null && imageName.contains(bluePrintName)){
 		            		dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig2)
 		                    //.withTag(dockerImageTag)
@@ -249,10 +268,10 @@ public class AzureCompositeSolution implements Runnable {
 		            }
 		            
 		            
-		            logger.info("List local Docker images:");
+		            logger.debug("List local Docker images:");
 		            List<Image> images = dockerClient.listImagesCmd().withShowAll(true).exec();
 		            //for (Image image : images) {
-		            	//logger.info("Docker Images \n"+ image.getRepoTags()[0]+"<----image.getId()--->"+ image.getId());
+		            	//logger.debug("Docker Images \n"+ image.getRepoTags()[0]+"<----image.getId()--->"+ image.getId());
 		            //}
 		            int dockerCount=1;
 		            HashMap<String,CreateContainerResponse> hmap=new HashMap<String,CreateContainerResponse>();
@@ -268,17 +287,21 @@ public class AzureCompositeSolution implements Runnable {
 			                    //.withCmd("/hello")
 			                    .exec();
 		            	try{
-		            		logger.info("<----Start Inspection-----imageName---->"+imageName);
+		            		logger.debug("<----Start Inspection-----imageName---->"+imageName);
 		            		InspectContainerResponse inspectContainer=dockerClient.inspectContainerCmd(dockerContainerInstance.getId()).exec();
-			            	if(inspectContainer!=null && inspectContainer.getNetworkSettings()!=null && inspectContainer.getNetworkSettings().getIpAddress()!=null){
+			            	if(inspectContainer.getConfig()!=null ){
 			            		String ipNumberrr=inspectContainer.getNetworkSettings().getIpAddress();
-			            		logger.info("<----ipNumberrr--------->"+ipNumberrr);
-			            		logger.info("<----remoteDockerContainerInstance------1--->"+inspectContainer.getNetworkSettings().getPorts());
-			            		logger.info("<----remoteDockerContainerInstance----2----->"+inspectContainer.getNetworkSettings().getPortMapping());
+			            		logger.debug("<----ipNumberrr--------->"+ipNumberrr);
+			            		//logger.debug("<----remoteDockerContainerInstance------1--->"+inspectContainer.getNetworkSettings().);
+			            		logger.debug("<----remoteDockerContainerInstance----2----->"+inspectContainer.getConfig().getExposedPorts());
+			            		int len=inspectContainer.getConfig().getExposedPorts().length;
+			            		for(int m=0;m<len;m++){
+			            			logger.debug("<----m---->"+inspectContainer.getConfig().getExposedPorts()[m]);
+			            		}
 			            	}
-			            	logger.info("<----end Inspection-----imageName---->"+imageName);
+			            	logger.debug("<----end Inspection-----imageName---->"+imageName);
 		            	}catch(Exception exce){
-		            		logger.info("Exception in inspection================ "+exce.getMessage());
+		            		logger.debug("Exception in inspection================ "+exce.getMessage());
 		            	}
 		            	
 		            	if(imageName!=null && !"".equals(imageName)){
@@ -287,7 +310,7 @@ public class AzureCompositeSolution implements Runnable {
 		            			imageTagVal=tag;
 		            		}
 		            	}
-		            	logger.info("===imageName======="+imageName+"========imageTagVal===="+imageTagVal);
+		            	logger.debug("===imageName======="+imageName+"========imageTagVal===="+imageTagVal);
 		            	if(imageName!=null && imageName.contains(bluePrintName)){
 		            		containerInstanceBluePrint=dockerContainerName+"_"+dockerCount;
 		            	}
@@ -297,19 +320,19 @@ public class AzureCompositeSolution implements Runnable {
 		            	Thread.sleep(30000);
 		            	dockerCount++;
 		            }
-		            System.out.println("=======containerImageMap====="+containerImageMap);
-		            logger.info("List All Docker containers:");
+		            logger.debug("=======containerImageMap====="+containerImageMap);
+		            logger.debug("List All Docker containers:");
 		            List<Container> dockerContainers = dockerClient.listContainersCmd()
 		                    .withShowAll(true)
 		                    .exec();
 		            for (Container container : dockerContainers) {
-		            	logger.info("All Docker container with images and Name %s (%s)\n"+container.getImage()+"<-----container.getId()----->"+container.getId());
+		            	logger.debug("All Docker container with images and Name %s (%s)\n"+container.getImage()+"<-----container.getId()----->"+container.getId());
 		            }
 	
 		            //=============================================================
 		            // Commit the new container
 	               //String privateRepoUrl = azureRegistry.loginServerUrl() + "/samples/" + dockerContainerName;
-		          //logger.info("privateRepoUrl::::::::::::::::::"+privateRepoUrl);
+		          //logger.debug("privateRepoUrl::::::::::::::::::"+privateRepoUrl);
 		            HashMap<String,String> repoUrlMap=new HashMap<String,String>();  
 		            Iterator itrContainer=hmap.entrySet().iterator();
 		            while(itrContainer.hasNext()){
@@ -319,15 +342,15 @@ public class AzureCompositeSolution implements Runnable {
 		            	CreateContainerResponse dockerContainerInstance=(CreateContainerResponse)pair.getValue();
 		            	
 		            	String privateRepoUrl = azureRegistry.loginServerUrl() + "/samples/" + containerName;
-		            	logger.info("dockerContainerInstance.getId():::::::::::::::::"+dockerContainerInstance.getId()+"===privateRepoUrl===="+privateRepoUrl);
+		            	logger.debug("dockerContainerInstance.getId():::::::::::::::::"+dockerContainerInstance.getId()+"===privateRepoUrl===="+privateRepoUrl);
 		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
 		            		imageTagLatest=containerTagMap.get(containerName);
 		            	}
-		            	logger.info("containerName======"+containerName+"==imageTagLatest======"+imageTagLatest);
+		            	logger.debug("containerName======"+containerName+"==imageTagLatest======"+imageTagLatest);
 			            String dockerImageId = dockerClient.commitCmd(dockerContainerInstance.getId())
 			                    .withRepository(privateRepoUrl)
 			                    .withTag(imageTagLatest).exec();
-			            logger.info("dockerImageId::::::::::::::::::"+dockerImageId);
+			            logger.debug("dockerImageId::::::::::::::::::"+dockerImageId);
 			            repoUrlMap.put(containerName, privateRepoUrl);
 			            // We can now remove the temporary container instance
 			            dockerClient.removeContainerCmd(dockerContainerInstance.getId())
@@ -336,11 +359,11 @@ public class AzureCompositeSolution implements Runnable {
 			            Thread.sleep(5000);
 		            }
 		            //#####################################################################################
-		            logger.info("<----Before Docker remoteDockerClient--------------------------->");
+		            logger.debug("<----Before Docker remoteDockerClient--------------------------->");
 		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
 		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
-		            logger.info("<----After Docker remoteDockerClient--------------------------->");
+		            logger.debug("<----After Docker remoteDockerClient--------------------------->");
 		            //=============================================================
 		            // Push the new Docker image to the Azure Container Registry
 		            Iterator repoContainer=repoUrlMap.entrySet().iterator();
@@ -355,7 +378,7 @@ public class AzureCompositeSolution implements Runnable {
 		            	Thread.sleep(50000);
 		            }
 		            
-		            logger.info("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
+		            logger.debug("<----Pushed Images to privaterepourl and removing imgage from local docker host---------->");
 		            // Remove the temp image from the local Docker host
 		            /*try {
 		            	Iterator itr5=list.iterator();
@@ -369,28 +392,28 @@ public class AzureCompositeSolution implements Runnable {
 	
 		            //=============================================================
 		            // Verify that the image we saved in the Azure Container registry can be pulled and instantiated locally
-		            logger.info("<----pull images from Azure registry to locally--------->");
+		            logger.debug("<----pull images from Azure registry to locally--------->");
 		             repoContainer=repoUrlMap.entrySet().iterator();
 		            while(repoContainer.hasNext()){
 		            	Map.Entry pair = (Map.Entry)repoContainer.next();
 		            	String containerName=(String)pair.getKey();
 		            	String privateRepoUrl=(String)pair.getValue();
-		            	 logger.info("<----pull images from Azure registry to locally-----privateRepoUrl---->"+privateRepoUrl);
+		            	 logger.debug("<----pull images from Azure registry to locally-----privateRepoUrl---->"+privateRepoUrl);
 		            	dockerClient.pullImageCmd(privateRepoUrl)
 	                    .withAuthConfig(dockerClient.authConfig())
 	                    .exec(new PullImageResultCallback()).awaitSuccess();
 		            	Thread.sleep(50000);
 		            }
 		            
-		            logger.info("List local Docker images after pulling sample image from the Azure Container Registry:");
+		            logger.debug("List local Docker images after pulling sample image from the Azure Container Registry:");
 		            images = dockerClient.listImagesCmd()
 		                    .withShowAll(true)
 		                    .exec();
 		            /*for (Image image : images) {
-		            	logger.info("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
+		            	logger.debug("List Image after pulling locally \n"+ image.getRepoTags()[0]+"<-------ImageId--------->"+ image.getId());
 		            }*/
 		            
-	                  logger.info("<----remoteDockerClient with privateRepoUrl--------->");
+	                  logger.debug("<----remoteDockerClient with privateRepoUrl--------->");
 	                  int imageCount=1;
 	                  int remoteCount=1;
 	                  int count=0;
@@ -399,7 +422,7 @@ public class AzureCompositeSolution implements Runnable {
 			            	Iterator seqItr = sequenceList.iterator();
 			                while (seqItr.hasNext()) {
 			                    String jsonContainerName=(String)seqItr.next(); 
-			                    logger.info("<----jsonContainerName--------->"+jsonContainerName);
+			                    logger.debug("<----jsonContainerName--------->"+jsonContainerName);
 			                    if(jsonContainerName!=null && !"".equals(jsonContainerName)){
 			                    	
 			                    	repoContainer=repoUrlMap.entrySet().iterator();
@@ -414,17 +437,17 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	if(containerTagMap!=null && containerTagMap.get(containerName)!=null){
 			    		            		tagImage=containerTagMap.get(containerName);
 			    		            	}
-			    		            	logger.info("<----tagImage------------------>"+tagImage);
+			    		            	logger.debug("<----tagImage------------------>"+tagImage);
 			    		            	if(containerImageMap!=null && containerImageMap.get(containerName)!=null){
 			    		            		imageName=containerImageMap.get(containerName);
-			    		            		logger.info("<----imageName--------->"+imageName+"====imageMap=="+imageMap);
+			    		            		logger.debug("<----imageName--------->"+imageName+"====imageMap=="+imageMap);
 			    		            		if(imageName!=null && imageMap!=null && imageMap.get(imageName)!=null){
 			    		            			finalContainerName=imageMap.get(imageName);
 			    		            		}
 			    		            	}
-			    		            	logger.info("<--Before--jsonContainerName--------->"+jsonContainerName+"===jsonContainerName==="+jsonContainerName);
+			    		            	logger.debug("<--Before--jsonContainerName--------->"+jsonContainerName+"===jsonContainerName==="+jsonContainerName);
 			    		            	if(finalContainerName!=null && !finalContainerName.equalsIgnoreCase(jsonContainerName)){
-			    		            		 logger.info("Continue.............................................");
+			    		            		 logger.debug("Continue.............................................");
 			    		            		continue;
 			    		            	}
 			    		            	
@@ -434,17 +457,17 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		String repositoryName="";
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";
-			    		        		logger.info("====azureVMIP======: " + azureVMIP);
-			    		        		logger.info("====vmUserName======: " + vmUserName);
-			    		        		logger.info("====vmPassword======: " + vmPassword);
-			    		        		logger.info("====registryServerUrl======: " + azureRegistry.loginServerUrl());
-			    		        		logger.info("====username======: " + acrCredentials.username());
-			    		        		logger.info("====password======: " + acrCredentials.passwords().get(0).value());
-			    		        		logger.info("====repositoryName======: " + repositoryName);
-			    		        		logger.info("====finalContainerName======: " + finalContainerName);
-			    		        		logger.info("====imageCount======: " + imageCount);
+			    		        		logger.debug("====azureVMIP======: " + azureVMIP);
+			    		        		logger.debug("====vmUserName======: " + vmUserName);
+			    		        		logger.debug("====vmPassword======: " + vmPassword);
+			    		        		logger.debug("====registryServerUrl======: " + azureRegistry.loginServerUrl());
+			    		        		logger.debug("====username======: " + acrCredentials.username());
+			    		        		logger.debug("====password======: " + acrCredentials.passwords().get(0).value());
+			    		        		logger.debug("====repositoryName======: " + repositoryName);
+			    		        		logger.debug("====finalContainerName======: " + finalContainerName);
+			    		        		logger.debug("====imageCount======: " + imageCount);
 			    		        		if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
-			    		        			logger.info("<--if Part--containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
+			    		        			logger.debug("<--if Part--containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 			    		        			portNumber="8555";
 			    		        			azureBean.setBluePrintIp(azureVMIP);
 			            			        azureBean.setBluePrintPort(portNumber);
@@ -458,7 +481,7 @@ public class AzureCompositeSolution implements Runnable {
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
 		            		            dockerInfoList.add(dockerinfo);
-		            		            logger.info("====Start Deploying=====================repositoryName=======: "+repositoryName);
+		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
 			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumber);
 			    		        		AzureContainerBean containerBean=new AzureContainerBean();
@@ -471,26 +494,26 @@ public class AzureCompositeSolution implements Runnable {
 			                    }
 			                }
 	                  }  
-	                  logger.info("====dockerInfoList======: " + dockerInfoList);
+	                  logger.debug("====dockerInfoList======: " + dockerInfoList);
 	                  if(dockerInfoList!=null && dockerInfoList.size() > 0){
 			            	dockerList.setDockerList(dockerInfoList);
 			            }
-	                  logger.info("containeDetailMap==========>"+containeDetailMap+"=====dockerList====="+dockerList);
+	                  logger.debug("containeDetailMap==========>"+containeDetailMap+"=====dockerList====="+dockerList);
 	  	              azureBean.setDockerinfolist(dockerList);	
 		            
 			}
           
           String azureDetails=mapper.writeValueAsString(azureBean.getDockerinfolist());  
           setuidHashmapComposite(uidNumStr,azureDetails);
-          logger.info("azureDetails=============="+azureDetails);
-          logger.info("Dockerinfolist=============="+mapper.writeValueAsString(azureBean.getDockerinfolist()));
-  		  logger.info("bluePrint==================="+mapper.writeValueAsString(bluePrint));	
+          logger.debug("azureDetails=============="+azureDetails);
+          logger.debug("Dockerinfolist=============="+mapper.writeValueAsString(azureBean.getDockerinfolist()));
+  		  logger.debug("bluePrint==================="+mapper.writeValueAsString(bluePrint));	
   		  DockerInfoList dockerInfoList=azureBean.getDockerinfolist();
 		  String vmIP=azureBean.getAzureVMIP().trim();
 		  String bluePrintPort=azureBean.getBluePrintPort().trim();
 		  String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
 		  String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
-		  logger.info("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
+		  logger.debug("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
 		  if(azureBean.getDockerinfolist()!=null){
 			  putContainerDetailsJSON(azureBean.getDockerinfolist(),urlDockerInfo);
 			}
@@ -499,7 +522,7 @@ public class AzureCompositeSolution implements Runnable {
 		  }
 		 if(azureContainerBeanList!=null){
        	  
-   			  logger.info("Start saving data in database=============="); 
+   			  logger.debug("Start saving data in database=============="); 
    			createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"DP");
        		  
@@ -515,7 +538,7 @@ public class AzureCompositeSolution implements Runnable {
 			e.printStackTrace();
 		}
 		 
-		logger.info("<-----------------AzureCompositeSolution-----Run end-------------------------->");
+		logger.debug("<-----------------AzureCompositeSolution-----Run end-------------------------->");
 	}
 	
 	public String getTagFromImage(String imageName){
@@ -535,9 +558,9 @@ public class AzureCompositeSolution implements Runnable {
 	}
 	
 	public void putContainerDetails(DockerInfoList  dockerList,String apiUrl){
-		logger.info("<--------Start---putContainerDetails------->");
+		logger.debug("<--------Start---putContainerDetails------->");
 		try {
-			logger.info("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
+			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -549,12 +572,12 @@ public class AzureCompositeSolution implements Runnable {
             e.printStackTrace();
             logger.error("<---------Exception----------->"+e.getMessage());
 		 }
-		logger.info("<--------End---putContainerDetails------->");
+		logger.debug("<--------End---putContainerDetails------->");
 	}
 	public void putBluePrintDetails(Blueprint  bluePrint,String apiUrl){
-		logger.info("<--------Start---putContainerDetails------->");
+		logger.debug("<--------Start---putContainerDetails------->");
 		try {
-			logger.info("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
+			logger.debug("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
@@ -565,13 +588,13 @@ public class AzureCompositeSolution implements Runnable {
              e.printStackTrace();
             logger.error("<---------Exception----------->"+e.getMessage());
 		 }
-		logger.info("<--------End---putContainerDetails------->");
+		logger.debug("<--------End---putContainerDetails------->");
 	}
 	public void setuidHashmapComposite(String uidNumStr,String azureDetails){
-		logger.info("<---------------setuidHashmap-------Run Start-------------------------->"+azureDetails+"====="+uidNumStr);
+		logger.debug("<---------------setuidHashmap-------Run Start-------------------------->"+azureDetails+"====="+uidNumStr);
 		HashMap<String,String> singlatonMap=SingletonMapClass.getInstance();
 		singlatonMap.put(uidNumStr, azureDetails);
-		logger.info("<---------------setuidHashmap-------Run End-------------------------->"+singlatonMap);
+		logger.debug("<---------------setuidHashmap-------Run End-------------------------->"+singlatonMap);
 	}	
 	
 	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
@@ -579,16 +602,16 @@ public class AzureCompositeSolution implements Runnable {
 		return client;
 	}
 	public void putContainerDetailsJSON(DockerInfoList  dockerList,String apiUrl){
-		logger.info("<--------Start---putContainerDetailsJSON------->");
+		logger.debug("<--------Start---putContainerDetailsJSON------->");
 		try {
-			logger.info("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
+			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			ObjectMapper mapper = new ObjectMapper();
 			String dockerJson=mapper.writeValueAsString(dockerList);
-			logger.info("<----dockerJson---------->"+dockerJson);
+			logger.debug("<----dockerJson---------->"+dockerJson);
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 		    	
 		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
@@ -598,18 +621,18 @@ public class AzureCompositeSolution implements Runnable {
             e.printStackTrace();
             logger.error("<---------Exception----------->"+e.getMessage());
 		 }
-		logger.info("<--------End---putContainerDetailsJSON------->");
+		logger.debug("<--------End---putContainerDetailsJSON------->");
 	}
 	public void putBluePrintDetailsJSON(Blueprint  bluePrint,String apiUrl){
-		logger.info("<--------Start---putBluePrintDetailsJSON------->");
+		logger.debug("<--------Start---putBluePrintDetailsJSON------->");
 		try {
-			logger.info("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
+			logger.debug("<----bluePrint---------->"+bluePrint.toString()+"======apiUrl==="+apiUrl);
 			final String url = apiUrl;
 			ObjectMapper mapper = new ObjectMapper();
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
 			String blueprintJson=mapper.writeValueAsString(bluePrint); 
-			logger.info("<----blueprintJson---------->"+blueprintJson);
+			logger.debug("<----blueprintJson---------->"+blueprintJson);
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
 		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson,headers);
@@ -619,20 +642,20 @@ public class AzureCompositeSolution implements Runnable {
             logger.error("<---------Exception----------->"+e.getMessage());
             e.printStackTrace();
 		 }
-		logger.info("<--------End---putBluePrintDetailsJSON------->");
+		logger.debug("<--------End---putBluePrintDetailsJSON------->");
 	}
 	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPassword,List<AzureContainerBean> azureContainerBeanList,
 			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
-		logger.info("<---------Start createDeploymentCompositeData ------------------------->");
-		logger.info("<---------dataSource-------->"+dataSource);
-		logger.info("<-------dataUserName-------------->"+dataUserName);
-		logger.info("<--------dataPassword------------->"+dataPassword);
-		logger.info("<---------solutionId------------------->"+solutionId);
-		logger.info("<--------solutionRevisionId-------------------->"+solutionRevisionId);
-		logger.info("<------userId--------------->"+userId);
-		logger.info("<------uidNumber--------------->"+uidNumber);
-		logger.info("<------deploymentStatusCode--------------->"+deploymentStatusCode);
-		logger.info("<------azureContainerBeanList--------------->"+azureContainerBeanList);
+		logger.debug("<---------Start createDeploymentCompositeData ------------------------->");
+		logger.debug("<---------dataSource-------->"+dataSource);
+		logger.debug("<-------dataUserName-------------->"+dataUserName);
+		logger.debug("<--------dataPassword------------->"+dataPassword);
+		logger.debug("<---------solutionId------------------->"+solutionId);
+		logger.debug("<--------solutionRevisionId-------------------->"+solutionRevisionId);
+		logger.debug("<------userId--------------->"+userId);
+		logger.debug("<------uidNumber--------------->"+uidNumber);
+		logger.debug("<------deploymentStatusCode--------------->"+deploymentStatusCode);
+		logger.debug("<------azureContainerBeanList--------------->"+azureContainerBeanList);
 		ObjectMapper mapper = new ObjectMapper();
 		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
 		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
@@ -644,11 +667,11 @@ public class AzureCompositeSolution implements Runnable {
 			mlp.setDeploymentStatusCode(deploymentStatusCode);
 			String azureDetails=mapper.writeValueAsString(azureContainerBeanList);
 			mlp.setDetail(azureDetails);
-			logger.info("<---------azureDetails------------------------->"+azureDetails);
+			logger.debug("<---------azureDetails------------------------->"+azureDetails);
 			MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
-			logger.info("<---------mlpDeployment------------------------->"+mlpDeployment);
+			logger.debug("<---------mlpDeployment------------------------->"+mlpDeployment);
 		}
-		logger.info("<---------End createDeploymentCompositeData ------------------------->");
+		logger.debug("<---------End createDeploymentCompositeData ------------------------->");
 	}
 
 }

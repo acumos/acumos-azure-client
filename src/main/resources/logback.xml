@@ -68,13 +68,15 @@
     </root>
 
     <!-- Third Parties Logs -->
-    <logger name="com.security.service" level="INFO" additivity="false">
+    <!-- <logger name="com.security.service" level="INFO" additivity="false">
         <appender-ref ref="CONSOLE"/>
-       <!--  <appender-ref ref="ACCESS_FILE" /> -->
-    </logger>
+        <appender-ref ref="ACCESS_FILE" />
+    </logger> -->
     <logger name="org.springframework">
         <level value="WARN"/>
     </logger>
+    <logger name="org.apache" level="WARN" />
+    <logger name="httpclient" level="WARN" /> 
 
     <!-- <logger name="org.acumos.azure.client.controller">
         <level value="DEBUG"/>
