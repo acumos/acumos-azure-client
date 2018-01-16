@@ -473,6 +473,8 @@ public class AzureServiceController extends AbstractController {
 			String dataPassword=env.getProperty("cmndatasvc.cmndatasvcpwd");
 			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
+			String solutionPort=env.getProperty("docker.solutionPort");
+			logger.debug("<------solutionPort---------->"+solutionPort);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			/*
@@ -534,7 +536,7 @@ public class AzureServiceController extends AbstractController {
             AzureSimpleSolution myRunnable = new AzureSimpleSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
             		env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"),false),
             				null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryname,uidNumStr,dataSource,dataUserName,dataPassword,
-            				dockerVMUserName,dockerVMPassword);
+            				dockerVMUserName,dockerVMPassword,solutionPort);
             
             Thread t = new Thread(myRunnable);
             t.start();
@@ -583,6 +585,8 @@ public class AzureServiceController extends AbstractController {
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
+			String solutionPort=env.getProperty("docker.solutionPort");
+			logger.debug("<------solutionPort---------->"+solutionPort);
 			if (authObject == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);
@@ -612,7 +616,7 @@ public class AzureServiceController extends AbstractController {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
                         env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,imageMap,
-                        sequenceList,dockerRegistryname,bluePrint,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword);
+                        sequenceList,dockerRegistryname,bluePrint,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort);
 
 
                   Thread t = new Thread(compositeRunner);

@@ -91,12 +91,13 @@ public class AzureCompositeSolution implements Runnable {
 	private String dataPassword;
 	private String dockerVMUserName;
 	private String dockerVMPassword;
+	private String solutionPort;
 
 
 	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
 			String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
-			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword) {
+			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -121,6 +122,7 @@ public class AzureCompositeSolution implements Runnable {
 	    this.dataPassword=dataPassword;
 	    this.dockerVMUserName=dockerVMUserName;
 	    this.dockerVMPassword=dockerVMPassword;
+	    this.solutionPort=solutionPort;
 	    
 	   }
 	public void run() {
@@ -148,6 +150,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<-------dataPassword-------->"+dataPassword);
 		logger.debug("<-------dockerVMUserName-------->"+dockerVMUserName);
 		logger.debug("<-------dockerVMPassword-------->"+dockerVMPassword);
+		logger.debug("<-------solutionPort-------->"+solutionPort);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
@@ -457,6 +460,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		String repositoryName="";
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";
+			    		        		String portNumberString="";
 			    		        		logger.debug("====azureVMIP======: " + azureVMIP);
 			    		        		logger.debug("====vmUserName======: " + vmUserName);
 			    		        		logger.debug("====vmPassword======: " + vmPassword);
@@ -471,8 +475,14 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			portNumber="8555";
 			    		        			azureBean.setBluePrintIp(azureVMIP);
 			            			        azureBean.setBluePrintPort(portNumber);
+			            			        portNumberString=portNumber+":"+portNumber;
 			    		        		}else{
 			    		        			portNumber=portArr[count];
+			    		        			if(solutionPort!=null && !"".equals(solutionPort)){
+			    		        				portNumberString=portNumber+":"+solutionPort;
+			    		        			}else{
+			    		        				portNumberString=portNumber+":"+portNumber;
+			    		        			}
 			    		        			count++;
 			    		        			
 			    		        		}
@@ -481,9 +491,10 @@ public class AzureCompositeSolution implements Runnable {
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
 		            		            dockerInfoList.add(dockerinfo);
+		            		            logger.debug("====portNumberString======: " + portNumberString);
 		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
-			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumber);
+			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumberString);
 			    		        		AzureContainerBean containerBean=new AzureContainerBean();
 			    		        		containerBean.setContainerName(finalContainerName);
 			    		        		containerBean.setContainerIp(azureVMIP);

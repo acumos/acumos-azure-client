@@ -76,12 +76,13 @@ public class AzureSimpleSolution implements Runnable {
 	private String dataPassword;
 	private String dockerVMUserName;
 	private String dockerVMPassword;
+	private String solutionPort;
 
 	public AzureSimpleSolution(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix,
 			String dockerUserName, String dockerPwd, String localEnvDockerHost, String localEnvDockerCertPath,
 			ArrayList<String> list, String bluePrintName, String bluePrintUser, String bluePrintPass,
 			String networkSecurityGroup, String dockerRegistryName, String uidNumStr, String dataSource,
-			String dataUserName, String dataPassword, String dockerVMUserName, String dockerVMPassword) {
+			String dataUserName, String dataPassword, String dockerVMUserName, String dockerVMPassword,String solutionPort) {
 		this.azure = azure;
 		this.deployDataObject = deployDataObject;
 		this.dockerContainerPrefix = dockerContainerPrefix;
@@ -102,6 +103,7 @@ public class AzureSimpleSolution implements Runnable {
 		this.dataPassword = dataPassword;
 		this.dockerVMUserName = dockerVMUserName;
 		this.dockerVMPassword = dockerVMPassword;
+		this.solutionPort = solutionPort;
 
 	}
 
@@ -126,6 +128,7 @@ public class AzureSimpleSolution implements Runnable {
 		logger.debug("<-------dataPassword-------->" + dataPassword);
 		logger.debug("<-------dockerVMUserName-------->" + dockerVMUserName);
 		logger.debug("<-------dockerVMPassword-------->" + dockerVMPassword);
+		logger.debug("<-------solutionPort-------->" + solutionPort);
 
 		logger.debug("<-------solutionId-------->" + deployDataObject.getSolutionId());
 		logger.debug("<-------solutionRevisionId-------->" + deployDataObject.getSolutionRevisionId());
@@ -344,6 +347,7 @@ public class AzureSimpleSolution implements Runnable {
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + acrCredentials.passwords().get(0).value());
+				//String portNumberString=
 				DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),
 						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());

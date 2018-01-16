@@ -432,7 +432,7 @@ public class DockerUtils {
 		log.debug("====finalContainerName======: " + finalContainerName);
 		log.debug("====imageCount======: " + imageCount);
 		log.debug("====portNumber======: " + portNumber);
-		String portNumberString = portNumber + ":" + portNumber;
+		String portNumberString = portNumber;
 		log.debug("====portNumberString======: " + portNumberString);
 		SSHShell sshShell = null;
 		try {
