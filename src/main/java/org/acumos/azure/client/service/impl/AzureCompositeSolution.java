@@ -158,7 +158,14 @@ public class AzureCompositeSolution implements Runnable {
 		
 		try{
 			logger.debug("<-------------start pushCompositeImage------------------------------>");
-		    
+		    if(dockerVMUserName!=null){
+		    	dockerVMUserName=dockerVMUserName.trim();	
+		    }
+		    if(dockerVMPassword!=null){
+		    	dockerVMPassword=dockerVMPassword.trim();	
+		    }
+		    logger.debug("<-------dockerVMUserName----Trim---->"+dockerVMUserName);
+			logger.debug("<-------dockerVMPassword-----Trim--->"+dockerVMPassword);
 			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
 			DockerInfoList  dockerList=new DockerInfoList();
 			//final String saName = SdkContext.randomResourceName("sa", 20);	   
@@ -236,7 +243,7 @@ public class AzureCompositeSolution implements Runnable {
 		            logger.debug("azureRegistry.loginServerUrl="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
 		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
-		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
+		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword);
 		            
 		            AuthConfig authConfig = new AuthConfig()
 		                    .withUsername(dockerUserName)
@@ -365,7 +372,7 @@ public class AzureCompositeSolution implements Runnable {
 		            logger.debug("<----Before Docker remoteDockerClient--------------------------->");
 		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
-		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName);
+		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword);
 		            logger.debug("<----After Docker remoteDockerClient--------------------------->");
 		            //=============================================================
 		            // Push the new Docker image to the Azure Container Registry
@@ -455,8 +462,8 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	}
 			    		            	
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
-			    		            	final String vmUserName = "dockerUser";
-			    		        		final String vmPassword = "12NewPA$$w0rd!";
+			    		            	final String vmUserName=dockerVMUserName;
+			    		        		final String vmPassword=dockerVMPassword;
 			    		        		String repositoryName="";
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";

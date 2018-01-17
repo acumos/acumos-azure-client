@@ -146,7 +146,7 @@ public class DockerUtils {
 	 */
 	public static DockerClient createDockerClient(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, String localEnvDockerHost, String localEnvDockerCertPath,
-			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName)
+			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword)
 			throws Exception {
 		// final String envDockerHost = System.getenv("DOCKER_HOST");
 		final String envDockerHost = localEnvDockerHost;
@@ -162,7 +162,7 @@ public class DockerUtils {
 			// attempt to configure a Docker engine running inside a new Azure virtual
 			// machine
 			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, password, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword);
 		} else {
 			dockerHostUrl = envDockerHost;
 			log.debug("Using local settings to connect to a Docker service: " + dockerHostUrl);
@@ -280,19 +280,22 @@ public class DockerUtils {
 	 */
 	public static DockerClient fromNewDockerVM(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, AzureBean azureBean, String networkSecurityGroup,
-			String dockerRegistryPort, String dockerRegistryName) throws Exception {
+			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword) throws Exception {
 		// final String dockerVMName = SdkContext.randomResourceName("dockervm", 15);
 		// final String publicIPDnsLabel = SdkContext.randomResourceName("pip", 10);
 		final String vnetName = SdkContext.randomResourceName("vnet", 24);
 		final String frontEndNSGName = SdkContext.randomResourceName("fensg", 24);
 		final String networkInterfaceName1 = SdkContext.randomResourceName("nic1", 24);
 		final String publicIPAddressLeafDNS1 = SdkContext.randomResourceName("pip1", 24);
-		final String vmUserName = "dockerUser";
-		final String vmPassword = "12NewPA$$w0rd!";
+		/*final String vmUserName = "dockerUser";
+		final String vmPassword = "12NewPA$$w0rd!";*/
+		final String vmUserName=dockerVMUserName;
+		final String vmPassword=dockerVMPassword;
 
 		log.debug("========frontEndNSGName======" + frontEndNSGName + "====vnetName=======" + vnetName);
 		log.debug("========networkSecurityGroup======" + networkSecurityGroup + "====dockerRegistryPort======="
 				+ dockerRegistryPort);
+		log.debug("vmUserName===="+vmUserName+"===vmPassword=="+vmPassword);
 		// Could not find a Docker environment; presume that there is no local Docker
 		// engine running and
 		// attempt to configure a Docker engine running inside a new Azure virtual

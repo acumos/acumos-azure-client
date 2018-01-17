@@ -137,6 +137,14 @@ public class AzureSimpleSolution implements Runnable {
 		AzureBean azureBean = new AzureBean();
 		AzureContainerBean containerBean = new AzureContainerBean();
 		try {
+			if(dockerVMUserName!=null){
+		    	dockerVMUserName=dockerVMUserName.trim();	
+		    }
+		    if(dockerVMPassword!=null){
+		    	dockerVMPassword=dockerVMPassword.trim();	
+		    }
+		    logger.debug("<-------dockerVMUserName----Trim---->"+dockerVMUserName);
+			logger.debug("<-------dockerVMPassword-----Trim--->"+dockerVMPassword);
 			final String saName = SdkContext.randomResourceName("sa", 20);
 			final Region region = Region.US_EAST;
 			final String dockerContainerName = dockerContainerPrefix + System.currentTimeMillis();// "acrsample";
@@ -199,7 +207,7 @@ public class AzureSimpleSolution implements Runnable {
 			DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 					azureRegistry.loginServerUrl(), acrCredentials.username(),
 					acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword);
 
 			AuthConfig authConfig = new AuthConfig().withUsername(dockerUserName).withPassword(dockerPwd);
 			logger.debug("Start pulling images from nexus::::::::");
@@ -284,7 +292,7 @@ public class AzureSimpleSolution implements Runnable {
 			DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(),
 					region, azureRegistry.loginServerUrl(), acrCredentials.username(),
 					acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword);
 			logger.debug("<----After Docker remoteDockerClient--------------------------->");
 			// =============================================================
 			// Push the new Docker image to the Azure Container Registry
@@ -337,8 +345,8 @@ public class AzureSimpleSolution implements Runnable {
 				}
 
 				String azureVMIP = azureBean.getAzureVMIP();
-				final String vmUserName = "dockerUser";
-				final String vmPassword = "12NewPA$$w0rd!";
+				final String vmUserName=dockerVMUserName;
+				final String vmPassword=dockerVMPassword;
 				String repositoryName = "";
 				repositoryName = privateRepoUrl + ":" + tagImage;
 				logger.debug("<----vmUserName-------->" + vmUserName);
