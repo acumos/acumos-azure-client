@@ -296,7 +296,7 @@ public class AzureCompositeSolution implements Runnable {
 			                    .withName(dockerContainerName+"_"+dockerCount)
 			                    //.withCmd("/hello")
 			                    .exec();
-		            	try{
+		            	/*try{
 		            		logger.debug("<----Start Inspection-----imageName---->"+imageName);
 		            		InspectContainerResponse inspectContainer=dockerClient.inspectContainerCmd(dockerContainerInstance.getId()).exec();
 			            	if(inspectContainer.getConfig()!=null ){
@@ -312,7 +312,7 @@ public class AzureCompositeSolution implements Runnable {
 			            	logger.debug("<----end Inspection-----imageName---->"+imageName);
 		            	}catch(Exception exce){
 		            		logger.debug("Exception in inspection================ "+exce.getMessage());
-		            	}
+		            	}*/
 		            	
 		            	if(imageName!=null && !"".equals(imageName)){
 		            		String tag=getTagFromImage(imageName);
@@ -462,8 +462,8 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	}
 			    		            	
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
-			    		            	final String vmUserName=dockerVMUserName;
-			    		        		final String vmPassword=dockerVMPassword;
+			    		            	final String vmUserName="dockerUser";
+			    		        		final String vmPassword="12NewPA$$w0rd!";
 			    		        		String repositoryName="";
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";

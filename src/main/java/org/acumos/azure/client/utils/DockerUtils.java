@@ -287,10 +287,10 @@ public class DockerUtils {
 		final String frontEndNSGName = SdkContext.randomResourceName("fensg", 24);
 		final String networkInterfaceName1 = SdkContext.randomResourceName("nic1", 24);
 		final String publicIPAddressLeafDNS1 = SdkContext.randomResourceName("pip1", 24);
-		/*final String vmUserName = "dockerUser";
-		final String vmPassword = "12NewPA$$w0rd!";*/
-		final String vmUserName=dockerVMUserName;
-		final String vmPassword=dockerVMPassword;
+		final String vmUserName = "dockerUser";
+		final String vmPassword = "12NewPA$$w0rd!";
+		/*final String vmUserName=dockerVMUserName;
+		final String vmPassword=dockerVMPassword;*/
 
 		log.debug("========frontEndNSGName======" + frontEndNSGName + "====vnetName=======" + vnetName);
 		log.debug("========networkSecurityGroup======" + networkSecurityGroup + "====dockerRegistryPort======="
