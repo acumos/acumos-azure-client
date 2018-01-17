@@ -477,6 +477,10 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------solutionPort---------->"+solutionPort);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
+			dockerVMUserName="dockerUser";
+			dockerVMPassword="12NewPA$$w0rd!";	
+			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
+			logger.debug("<------dockerVMUserName-----2----->"+dockerVMUserName);
 			/*
 			String nexusUrl=env.getProperty("nexus.url");
 			String nexusUserName=env.getProperty("nexus.username");
@@ -585,6 +589,10 @@ public class AzureServiceController extends AbstractController {
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
+			dockerVMUserName="dockerUser";
+			dockerVMPassword="12NewPA$$w0rd!";	
+			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
+			logger.debug("<------dockerVMUserName-----2----->"+dockerVMUserName);
 			String solutionPort=env.getProperty("docker.solutionPort");
 			logger.debug("<------solutionPort---------->"+solutionPort);
 			if (authObject == null) {
