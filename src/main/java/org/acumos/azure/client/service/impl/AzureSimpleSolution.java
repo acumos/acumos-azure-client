@@ -394,7 +394,7 @@ public class AzureSimpleSolution implements Runnable {
 		return client;
 	}
 
-	public void createDeploymentData(String dataSource, String dataUserName, String dataPassword,
+	public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPassword,
 			AzureContainerBean containerBean, String solutionId, String solutionRevisionId, String userId,
 			String uidNumber, String deploymentStatusCode) throws Exception {
 		logger.debug("<---------Start createDeploymentData ------------------------->");
@@ -406,6 +406,7 @@ public class AzureSimpleSolution implements Runnable {
 		logger.debug("<------userId--------------->" + userId);
 		logger.debug("<------uidNumber--------------->" + uidNumber);
 		logger.debug("<------deploymentStatusCode--------------->" + deploymentStatusCode);
+		MLPSolutionDeployment mlpDeployment=null;
 		ObjectMapper mapper = new ObjectMapper();
 		CommonDataServiceRestClientImpl client = getClient(dataSource, dataUserName, dataPassword);
 		if (solutionId != null && solutionRevisionId != null && userId != null && uidNumber != null) {
@@ -418,10 +419,11 @@ public class AzureSimpleSolution implements Runnable {
 			String azureDetails = mapper.writeValueAsString(containerBean);
 			mlp.setDetail(azureDetails);
 			logger.debug("<---------azureDetails------------------------->" + azureDetails);
-			MLPSolutionDeployment mlpDeployment = client.createSolutionDeployment(mlp);
+			mlpDeployment = client.createSolutionDeployment(mlp);
 			logger.debug("<---------mlpDeployment------------------------->" + mlpDeployment);
 		}
 		logger.debug("<---------End createDeploymentData ------------------------->");
+		return mlpDeployment;
 	}
 
 	public String getTagFromImage(String imageName) {

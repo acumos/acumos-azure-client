@@ -451,7 +451,7 @@ public class AzureServiceController extends AbstractController {
 	
 	@RequestMapping(value = {org.acumos.azure.client.api.APINames.AZURE_AUTH_PUSH_SINGLE_IMAGE}, method = RequestMethod.POST, produces = APPLICATION_JSON)
 	@ResponseBody
-	public String singleImageAzureDeployment(HttpServletRequest request, @RequestBody AzureDeployBean auth, HttpServletResponse response) throws Exception {
+	public String singleImageAzureDeployment(HttpServletRequest request,@RequestBody AzureDeployBean auth,HttpServletResponse response) throws Exception {
 		logger.debug("<------start----singleImageAzureDeployment------------>");
 		JSONObject  jsonOutput = new JSONObject();
 		
@@ -477,8 +477,8 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------solutionPort---------->"+solutionPort);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMPassword---------->"+dockerVMPassword);
-			dockerVMUserName="dockerUser";
-			dockerVMPassword="12NewPA$$w0rd!";	
+			//dockerVMUserName="dockerUser";
+			//dockerVMPassword="12NewPA$$w0rd!";	
 			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
 			logger.debug("<------dockerVMPassword-----2----->"+dockerVMPassword);
 			/*
@@ -531,6 +531,7 @@ public class AzureServiceController extends AbstractController {
             if(auth.getUserId()!=null){
             	authObject.setUserId(auth.getUserId());
             }
+            
             Azure azure = azureImpl.authorize(authObject);
             /*if(azure!=null) {
             	azBean=azureImpl.pushSingleImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
@@ -561,7 +562,7 @@ public class AzureServiceController extends AbstractController {
 	@RequestMapping(value = {org.acumos.azure.client.api.APINames.AZURE_AUTH_PUSH_COMPOSITE_IMAGE}, method = RequestMethod.POST, produces = APPLICATION_JSON)
 	@ResponseBody
 	public String compositeSolutionAzureDeployment(HttpServletRequest request, @RequestBody AzureDeployDataObject authObject, HttpServletResponse response) throws Exception {
-		logger.debug("<------start----singleImageAzureDeployment------------>");
+		logger.debug("<------start----compositeSolutionAzureDeployment------------>");
 		JSONObject  jsonOutput = new JSONObject();
 		AzureServiceImpl azureImpl=new AzureServiceImpl();
 		String uidNumStr="";
@@ -589,8 +590,8 @@ public class AzureServiceController extends AbstractController {
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMPassword---------->"+dockerVMPassword);
-			dockerVMUserName="dockerUser";
-			dockerVMPassword="12NewPA$$w0rd!";	
+			//dockerVMUserName="dockerUser";
+			//dockerVMPassword="12NewPA$$w0rd!";	
 			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
 			logger.debug("<------dockerVMPassword-----2----->"+dockerVMPassword);
 			String solutionPort=env.getProperty("docker.solutionPort");
