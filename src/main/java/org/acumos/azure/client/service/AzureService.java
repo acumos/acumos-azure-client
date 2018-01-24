@@ -66,7 +66,7 @@ public interface AzureService {
 			String localEnvDockerHost, String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
 			String networkSecurityGroup,String dockerRegistryPort,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName) throws IOException, Exception;
 	*/
-	public void putContainerDetails(DockerInfoList  dockerList,String apiUrl);
-	public void putBluePrintDetails(Blueprint  bluePrint,String apiUrl);
+	/*public void putContainerDetails(DockerInfoList  dockerList,String apiUrl);
+	public void putBluePrintDetails(Blueprint  bluePrint,String apiUrl);*/
 	
 }

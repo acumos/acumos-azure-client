@@ -116,5 +116,15 @@ public class AzureServiceControllerTest {
 			
 		
 	}
+		
+		@Test
+		public void getUIDDetailsTest() {
+			String result = "";
+			/*try {
+				
+			}catch (Exception e) {
+				logger.info("failed tot execute the above test case of singleImageAzureDeploymentTest"+e.getMessage());
+			}*/
+			}
 
 }

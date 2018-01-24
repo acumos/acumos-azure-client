@@ -577,7 +577,7 @@ public class AzureCompositeSolution implements Runnable {
 		return imageTag;
 	}
 	
-	public void putContainerDetails(DockerInfoList  dockerList,String apiUrl){
+	/*public void putContainerDetails(DockerInfoList  dockerList,String apiUrl){
 		logger.debug("<--------Start---putContainerDetails------->");
 		try {
 			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
@@ -609,7 +609,7 @@ public class AzureCompositeSolution implements Runnable {
             logger.error("<---------Exception----------->"+e.getMessage());
 		 }
 		logger.debug("<--------End---putContainerDetails------->");
-	}
+	}*/
 	public void setuidHashmapComposite(String uidNumStr,String azureDetails){
 		logger.debug("<---------------setuidHashmap-------Run Start-------------------------->"+azureDetails+"====="+uidNumStr);
 		HashMap<String,String> singlatonMap=SingletonMapClass.getInstance();

@@ -86,7 +86,7 @@ public class AzureServiceImpl implements AzureService {
 	 this.env=envrionment;
 	}
 	
-	private CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
 		logger.debug("<------start----getClient------------>");
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
 		logger.debug("<------End----getClient---------client--->"+client);
@@ -1194,7 +1194,7 @@ public class AzureServiceImpl implements AzureService {
 	            return azureBean;
 	}*/
 	
-	public void putContainerDetails(DockerInfoList  dockerList,String apiUrl){
+	/*public void putContainerDetails(DockerInfoList  dockerList,String apiUrl){
 		logger.debug("<--------Start---putContainerDetails------->");
 		try {
 			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
@@ -1241,7 +1241,7 @@ public class AzureServiceImpl implements AzureService {
 		   }
 		}
 		return imageTag;
-	}
+	}*/
 	
 	public ArrayList<String> iterateImageMap(HashMap<String,String> imageMap){
 		logger.debug("<--Start-------iterateImageMap-------imageMap---->"+imageMap);
