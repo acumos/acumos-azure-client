@@ -3,9 +3,9 @@ package org.acumos.azure.client.testcontroller;
 import org.acumos.azure.client.controller.AzureServiceController;
 import org.acumos.azure.client.transport.AzureDeployBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
+import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AppProperties;
-import org.acumos.azure.client.utils.JsonRequest;
-import org.acumos.azure.client.utils.JsonResponse;
+
 import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,6 +32,9 @@ import static org.junit.Assert.*;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.HashMap;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -119,12 +122,18 @@ public class AzureServiceControllerTest {
 		
 		@Test
 		public void getUIDDetailsTest() {
-			String result = "";
-			/*try {
-				
+			logger.info("<---------Start-------getUIDDetailsTest-------------->");
+			try {
+				String result = null;
+				String uidStr="b8c14a19-47d0-486c-867b-7fd7c70dceb7";
+				HashMap<String,String> singlatonMap=SingletonMapClass.getInstance();
+				singlatonMap.put(uidStr, "test");
+				result=azureController.getUIDDetails(uidStr);
+				assertNotNull(result);
 			}catch (Exception e) {
-				logger.info("failed tot execute the above test case of singleImageAzureDeploymentTest"+e.getMessage());
-			}*/
+				logger.info("failed tot execute the above test case of getUIDDetailsTest"+e.getMessage());
 			}
+			logger.info("<---------End-------getUIDDetailsTest-------------->");
+		}
 
 }
