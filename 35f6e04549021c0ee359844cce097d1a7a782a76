@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7650e907_c7eae2b6",
+        "filename": ".factorypath",
+        "patchSetId": 1
+      },
+      "lineNbr": 169,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-01-29T21:51:38Z",
+      "side": 1,
+      "message": "Why is this Eclipse metadata file committed to gerrit?  Please remove",
+      "revId": "35f6e04549021c0ee359844cce097d1a7a782a76",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fd71cd55_a47f8448",
+        "filename": "pom.xml",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-01-29T21:51:38Z",
+      "side": 1,
+      "message": "This should be a -SNAPSHOT version",
+      "revId": "35f6e04549021c0ee359844cce097d1a7a782a76",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
