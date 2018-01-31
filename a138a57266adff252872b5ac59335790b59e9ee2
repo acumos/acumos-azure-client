@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "2970218b_427fda1e",
+        "filename": ".factorypath",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-01-31T14:49:31Z",
+      "side": 1,
+      "message": "Please remove this Eclipse metadata file",
+      "revId": "a138a57266adff252872b5ac59335790b59e9ee2",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
