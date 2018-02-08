@@ -355,9 +355,9 @@ public class AzureSimpleSolution implements Runnable {
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + acrCredentials.passwords().get(0).value());
-				//String portNumberString=
+				String portNumberString=solutionPort+":"+"8557";
 				DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),
-						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName);
+						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName,portNumberString);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
 			}

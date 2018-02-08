@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.acumos-azure-client</groupId>
 	<artifactId>acumos-azure-client</artifactId>
-	<version>1.54.0-SNAPSHOT</version>
+	<version>1.55.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>acumos-azure-client</name>
@@ -25,7 +25,7 @@
 		<!-- Stand-alone RESTFul application -->
 		<start-class>org.acumos.azure.client.AzureClientServiceApplication</start-class>
 		<!-- tests still depend on Azure host -->
-		<skipTests>true</skipTests>
+		<skipTests>false</skipTests>
 		<!-- Jenkins invokes mvn with argument -Dbuild.number=${BUILD_NUMBER} -->
 		<build.number>0</build.number>
 		<!-- Not supplied to all jobs; e.g., Javadoc -->
@@ -185,6 +185,11 @@
 			<!-- Spring sets the <version>4.11</version> -->
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+		    <groupId>org.pacesys</groupId>
+		    <artifactId>openstack4j</artifactId>
+		    <version>3.1.0</version>
+       </dependency>
 	</dependencies>
 
 	<build>

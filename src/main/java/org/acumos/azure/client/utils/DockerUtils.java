@@ -374,10 +374,13 @@ public class DockerUtils {
 		NicIPConfiguration nicIPConfiguration = dockerVM.getPrimaryNetworkInterface().primaryIPConfiguration();
 		PublicIPAddress publicIp = nicIPConfiguration.getPublicIPAddress();
 		String dockerHostIP = publicIp.ipAddress();
-		log.debug("===== dockerHostIP=====" + dockerHostIP + "========azureBean========" + azureBean);
+		String vmName=publicIp.name();
+		
+		log.debug(dockerVM.computerName()+"=Name==== dockerHostIP=====" + dockerHostIP + "========vmName========" + vmName);
 		if (azureBean != null && dockerHostIP != null && !"".equals(dockerHostIP)) {
 			log.debug("=====Setting dockerHostIP=====" + dockerHostIP);
 			azureBean.setAzureVMIP(dockerHostIP);
+			azureBean.setAzureVMName(vmName);
 		}
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,
@@ -494,13 +497,14 @@ public class DockerUtils {
 	}
 
 	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password, String repositoryName) {
+			String registryServerUrl, String username, String password, String repositoryName,String portNumberString) {
 		log.debug("====dockerHostIP======: " + dockerHostIP);
 		log.debug("====vmUserName======: " + vmUserName);
 		log.debug("====registryServerUrl======: " + registryServerUrl);
 		log.debug("====username======: " + username);
 		log.debug("====password======: " + password);
 		log.debug("====repositoryName======: " + repositoryName);
+		log.debug("====portNumberString======: " + portNumberString);
 		log.debug("====================start deploymentImageVM==================");
 		SSHShell sshShell = null;
 		try {
@@ -525,7 +529,7 @@ public class DockerUtils {
 
 			log.debug("====================start deploymentImageVM============1======");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-			String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:8557:8557  " + repositoryName + " \n";
+			String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:"+portNumberString+ repositoryName + " \n";
 			log.debug("====output==========Start============4======================: ");
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE.sh", ".azuredocker", true,

@@ -38,6 +38,17 @@ public class AzureBean implements Serializable {
 	private String bluePrintIp = null;
 	private String bluePrintPort = null;
 	private String azureVMIP = null;
+	private String azureVMName=null;
+	
+	
+
+	public String getAzureVMName() {
+		return azureVMName;
+	}
+
+	public void setAzureVMName(String azureVMName) {
+		this.azureVMName = azureVMName;
+	}
 
 	public String getBluePrintIp() {
 		return bluePrintIp;
