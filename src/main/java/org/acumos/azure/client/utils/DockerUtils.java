@@ -380,7 +380,7 @@ public class DockerUtils {
 		if (azureBean != null && dockerHostIP != null && !"".equals(dockerHostIP)) {
 			log.debug("=====Setting dockerHostIP=====" + dockerHostIP);
 			azureBean.setAzureVMIP(dockerHostIP);
-			azureBean.setAzureVMName(vmName);
+			azureBean.setAzureVMName(dockerVM.computerName());
 		}
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,

@@ -462,6 +462,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	}
 			    		            	
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
+			    		            	String azureVMName=azureBean.getAzureVMName();
 			    		            	//final String vmUserName="dockerUser";
 			    		        		//final String vmPassword="12NewPA$$w0rd!";
 			    		        		final String vmUserName=dockerVMUserName;
@@ -470,6 +471,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";
 			    		        		String portNumberString="";
+			    		        		logger.debug("====azureVMName======: " + azureVMName);
 			    		        		logger.debug("====azureVMIP======: " + azureVMIP);
 			    		        		logger.debug("====vmUserName======: " + vmUserName);
 			    		        		logger.debug("====vmPassword======: " + vmPassword);
@@ -496,7 +498,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			
 			    		        		}
 			    		        		imageCount++;
-			    		        		dockerinfo.setIpAddress(azureVMIP);
+			    		        		dockerinfo.setIpAddress(azureVMName);
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
 		            		            dockerInfoList.add(dockerinfo);
