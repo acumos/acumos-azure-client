@@ -5,7 +5,7 @@
 
 	<groupId>org.acumos.acumos-azure-client</groupId>
 	<artifactId>acumos-azure-client</artifactId>
-	<version>1.61.0-SNAPSHOT</version>
+	<version>1.63.0-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>acumos-azure-client</name>
@@ -46,7 +46,7 @@
 		<dependency>
 			<groupId>org.acumos.common-dataservice</groupId>
 			<artifactId>cmn-data-svc-client</artifactId>
-			<version>1.13.0-SNAPSHOT</version>
+			<version>1.13.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.acumos.acumos-nexus-client</groupId>

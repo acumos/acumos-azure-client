@@ -24,6 +24,7 @@ package org.acumos.azure.client.utils;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.acumos.azure.client.transport.AzureContainerBean;
+import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.acumos.cds.domain.MLPSolutionDeployment;
@@ -42,6 +44,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.JsonArray;
 
 //import org.yaml.snakeyaml.Yaml;
 
@@ -125,7 +128,6 @@ public class ParseJSON {
         // getting firstName and lastName
         String name = (String) jo.get("name");
         String version = (String) jo.get("version");
-        
         blueprint.setName(name);
         blueprint.setVersion(version);
         Iterator<Map.Entry> itr1=null;
@@ -217,6 +219,31 @@ public class ParseJSON {
 		//log.debug("<----------End jsonFileToObject in ParseJSON---------------------list---->"+list);
 		return blueprint;	
 	}
+	
+	
+	
+	/**
+	 * This method returns probe indicator
+	 * @param jo
+	 * @return
+	 */
+	private String getProbeIndicator(JSONObject jo) {
+		
+		JSONArray probeIndicator = (JSONArray) jo.get("probeIndocator");
+		Iterator itr = probeIndicator.iterator();
+		Iterator<Map.Entry> itr1=null;
+		String value = null;
+		 while (itr.hasNext()) {
+			 itr1 = ((Map) itr.next()).entrySet().iterator();
+	            while (itr1.hasNext()) {
+	                Map.Entry pair = itr1.next();
+	                value = (String)pair.getValue();
+	            }
+		 }
+		
+	  return value;	
+	}
+
 	public  ArrayList<Component> jsonArrayParseObject(Object obj){
 		
 		JSONArray jsonArr = (JSONArray) obj;
@@ -250,6 +277,79 @@ public class ParseJSON {
          }
 	  return listComponent;	 
 	}
+	
+	/**
+	 * 
+	 * @param obj
+	 * @return
+	 */
+	public ArrayList<Component> jsonArrayParseObjectProb(Object obj) {
+
+		JSONArray jsonArr = (JSONArray) obj;
+		Iterator itr = jsonArr.iterator();
+		ArrayList<Component> listComponent = new ArrayList<Component>();
+		Iterator<Map.Entry> itr1 = null;
+		while (itr.hasNext()) {
+			itr1 = ((Map) itr.next()).entrySet().iterator();
+
+			while (itr1.hasNext()) {
+				Map.Entry pair = itr1.next();
+				String key = (String) pair.getKey();
+				System.out.println("Key=" + key);
+
+				if (key != null && key.equalsIgnoreCase("connected_to")) {
+					JSONArray connArr = (JSONArray) pair.getValue();
+					Iterator conItr = connArr.iterator();
+					while (conItr.hasNext()) {
+
+						// JSONObject obj = conItr.next();
+						itr1 = ((Map) conItr.next()).entrySet().iterator();
+						Component component = new Component();
+						while (itr1.hasNext()) {
+							Map.Entry pair1 = itr1.next();
+							String connectedKey = (String) pair1.getKey();
+							if (connectedKey != null && connectedKey.equalsIgnoreCase("container_name")) {
+								String containerKey = (String) pair1.getKey();
+								String containerName = (String) pair1.getValue();
+								component.setName(containerName);
+							}
+
+							if (connectedKey != null && connectedKey.equalsIgnoreCase("operation_signature")) {
+								JSONObject objVar = (JSONObject) pair1.getValue();
+								OperationSignature opr = new OperationSignature();
+								if (objVar != null) {
+									String operation = (String) objVar.get("operation_name");
+									opr.setOperation(operation);
+									log.debug("=======operation===========" + operation);
+									component.setOperationSignature(opr);
+								}
+							}
+						}
+						listComponent.add(component);
+					}
+				}
+
+				// parent operation .. needs to check with mukesh
+				if (key != null && key.equalsIgnoreCase("operation_signature")) {
+					JSONObject objVar = (JSONObject) pair.getValue();
+					OperationSignature opr = new OperationSignature();
+					if (objVar != null) {
+						String operation = (String) objVar.get("operation_name");
+						opr.setOperation(operation);
+						log.debug("=======operation===========" + operation);
+						// component.setOperationSignature(opr);
+					}
+				}
+
+			}
+
+		}
+
+		return listComponent;
+	}
+	
+	
+	
 	
 public LinkedList<String> getSequenceFromJSON()throws  Exception{
 		
@@ -330,7 +430,8 @@ public LinkedList<String> getSequenceFromJSON()throws  Exception{
 		return linkedList;	
 	}
 
-public  void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTree<String> rootNode){
+
+ public  void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTree<String> rootNode){
 	JSONArray jsonArr = (JSONArray) obj;
 	Iterator itr = jsonArr.iterator();
 	Iterator<Map.Entry> itr1=null;
@@ -366,6 +467,64 @@ public  void sequenceJsonParse(Object obj,NodeTree<String> newNode,NodeTree<Stri
      }
 }
 
+
+	public void sequenceJsonParseProbe(Object obj, NodeTree<String> newNode, NodeTree<String> rootNode) {
+		
+		JSONArray jsonArr = (JSONArray) obj;
+		Iterator itr = jsonArr.iterator();
+		Iterator<Map.Entry> itr1 = null;
+		while (itr.hasNext()) {
+			itr1 = ((Map) itr.next()).entrySet().iterator();
+			while (itr1.hasNext()) {
+				Map.Entry pair = itr1.next();
+				log.debug("--iiii>" + pair.getKey() + " : " + pair.getValue());
+				
+				if (pair.getKey() != null && pair.getKey().equals("connected_to") && pair.getValue() != null) {
+					
+						JSONArray connArr = (JSONArray) pair.getValue();
+						Iterator conItr = connArr.iterator();
+						while (conItr.hasNext()) {
+							String data = null;
+							// JSONObject obj = conItr.next();
+							Iterator<Map.Entry> contrItr = ((Map) conItr.next()).entrySet().iterator();
+							while (contrItr.hasNext()) {
+								Map.Entry cntPair = contrItr.next();
+								String connectedKey = (String) cntPair.getKey();
+								if (connectedKey != null && connectedKey.equalsIgnoreCase("container_name")) {
+									String containerKey = (String) cntPair.getKey();
+									data = (String) cntPair.getValue();
+									///
+									//String data = String.valueOf(pair.getValue());
+									NodeTree<String> subNode = new NodeTree<String>(data);
+									NodeTree<String> searchNode = findDataInTree(rootNode, data);
+									if (searchNode != null) {
+										// NodeTree<String> searchNodeTemp=new NodeTree<String>(searchNode);
+										NodeTree<String> parent = searchNode.getParent();
+										String parentData = parent.getData();
+										if (parent != null) {
+											// int index = parent.getChildren().indexOf(searchNode);
+											parent.getChildren().remove(searchNode);
+											newNode.addChild(searchNode);
+										}
+										/*
+										 * NodeTree<String> parrentNode=findDataInTree(rootNode, parentData);
+										 * if(parrentNode!=null){ parrentNode.addChild(subNode); }
+										 */
+									} else {
+										newNode.addChild(subNode);
+									}
+										// newNode.addChild(new NodeTree<String>(data));
+								}
+							}
+					}
+				}
+					log.debug("ccccc-->" + pair.getKey() + " : " + pair.getValue());
+			}
+		}
+			
+						
+	}
+
 public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	NodeTree<String> ss=null;
 	 if(node.getData().equals(searchQuery)) {
@@ -392,12 +551,13 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	  node.getChildren().forEach(each ->  printTree(each, (appender + appender),linkedList));
 	  
  }	
- /*public static CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+ public static CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
 		ICommonDataServiceRestClient client1 = CommonDataServiceRestClientImpl.getInstance(datasource, userName, password);
 		return client;
 	}
-public static void main(String args[]){
+ 
+/*public static void main(String args[]){
 		try{
 			CommonDataServiceRestClientImpl client = getClient("http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8000/ccds","ccds_client","ccds_client");
 			UUID uidNumber = UUID.randomUUID();
@@ -434,8 +594,8 @@ public static void main(String args[]){
 			mlp.setTarget("pp");
 			//sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
 			//Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(oldstring);
-			mlp.setCreated(date);
-			mlp.setModified(date);pn
+			mlp.setCreated(new Date());
+			mlp.setModified(new Date());
 			mlp.setTarget("test");
 			mlp.setDetail("test2");
 			
@@ -461,7 +621,488 @@ public static void main(String args[]){
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}*/
+	} */
 	
+ 
+  /* public static void main(String args[]) {
+	   
+	   ParseJSON parseJson=new ParseJSON();
+	   try {
+		//Blueprint bluePrint=parseJson.jsonFileToObjectProbe();
+		// parseJson.parseJsonFileProbe();
+		   System.out.println("===="+parseJson.getNodeTypeContainerMap());
+		// parseJson.getSequenceFromJSONProbe();
+		   
+	} catch (Exception e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	   
+   }*/
+
+	public Blueprint jsonFileToObjectProbe()  throws  Exception {
+		// log.debug("<----------Start jsonFileToObject in
+		// --------------------------->");
+		
+		
+		ArrayList<String> list = new ArrayList<String>();
+		Blueprint blueprint = new Blueprint();
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+
+			JSONObject jo = (JSONObject) obj;
+			String prettyJSONString = jo.toString();
+			// testDumpWriterFromJSON(prettyJSONString);
+			// getting firstName and lastName
+			String name = (String) jo.get("name");
+			String version = (String) jo.get("version");
+
+			String probeIndicator = getProbeIndicator(jo);
+			
+			//Get input_ports
+			//JSONArray inputPorts = (JSONArray) jo.get("input_ports");
+			JSONArray trainingClients = (JSONArray) jo.get("training_clients");
+			
+			
+			blueprint.setProbeIndocator(probeIndicator);
+			blueprint.setName(name);
+			blueprint.setVersion(version);
+			Iterator<Map.Entry> itr1 = null;
+			
+			Orchestrator orchestratorBean = new Orchestrator();
+			Map orchestrator = ((Map) jo.get("orchestrator"));
+			if (orchestrator != null) {
+				itr1 = orchestrator.entrySet().iterator();
+				while (itr1.hasNext()) {
+					Map.Entry pair = itr1.next();
+					String key = (String) pair.getKey();
+					String value = (String) pair.getValue();
+					log.debug("-->" + pair.getKey() + " : " + pair.getValue());
+					if (key != null && key.equalsIgnoreCase("name")) {
+						orchestratorBean.setName(value);
+					}
+					if (key != null && key.equalsIgnoreCase("version")) {
+						orchestratorBean.setVersion(value);
+					}
+					if (key != null && key.equalsIgnoreCase("image")) {
+						orchestratorBean.setImage(value);
+					}
+				}
+			}
+			blueprint.setOrchestrator(orchestratorBean);
+		
+
+			/*JSONArray inputOperation = (JSONArray) jo.get("input_operation_signatures");
+			ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
+			if (inputOperation != null) {
+				log.debug("input_operation_signatures-->");
+				Iterator itr2 = inputOperation.iterator();
+				while (itr2.hasNext()) {
+					OperationSignature operationSignature = new OperationSignature();
+					itr1 = ((Map) itr2.next()).entrySet().iterator();
+					while (itr1.hasNext()) {
+						Map.Entry pair = itr1.next();
+						String key = (String) pair.getKey();
+						String value = (String) pair.getValue();
+						log.debug("-->" + pair.getKey() + " : " + pair.getValue());
+						if (key != null && key.equalsIgnoreCase("operation")) {
+							operationSignature.setOperation(value);
+						}
+
+					}
+					operationList.add(operationSignature);
+				}
+			}
+			blueprint.setInputs(operationList);
+			*/
+			
+			
+			/**
+			 * 
+			 * "input_operation_signatures": [
+	    		{
+	      			"operation_signature": "JSON representation of the input operation signature"
+	    		},
+	    		{
+	      			"operation_signature": "JSON representation of the input operation signature"
+	    		}
+	    		
+	    		new 
+	    		 "input_ports": [
+	    		{
+	      			"container_name": "Aggregator - 1",
+	      			"operation_signature": {
+	        		"operation_name": "aggregate"
+	      		}
+	    		},
+	    		{
+	      		"container_name": "Aggregator - 2",
+	      		"operation_signature": {
+	        	"operation_name": "aggregate - operation names can be identical but IP and Port of containers will differ"
+	      		}
+	    		}
+	  			],
+			 */
+			
+			JSONArray inputPorts = (JSONArray) jo.get(""
+					+ "");
+			ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
+			if (inputPorts != null) {
+				log.debug("input ports-->");
+				Iterator itr2 = inputPorts.iterator();
+				while (itr2.hasNext()) {
+					OperationSignature operationSignature = new OperationSignature();
+					itr1 = ((Map) itr2.next()).entrySet().iterator();
+					while (itr1.hasNext()) {
+						Map.Entry pair = itr1.next();
+						String key = (String) pair.getKey();
+						// String value = null;
+						log.debug("-->" + pair.getKey() + " : " + pair.getValue());
+						if (key != null && key.equalsIgnoreCase("operation_signature")) {
+							JSONObject jsonObject = (JSONObject) pair.getValue();
+							String operationName =(String) jsonObject.get("operation_name");
+							operationSignature.setOperation(operationName);
+							operationList.add(operationSignature);
+						}
+						/*// Add container name
+						if (key != null && key.equalsIgnoreCase("container_name")) {
+					         String value =(String)pair.getValue();									
+						
+						}*/
+						
+					}
+				}
+			}
+			blueprint.setInputs(operationList);
+			
+			
+			/**
+			 * 
+			 * old 
+			 * "nodes": [
+			    {
+			      "container_name": "Predictor-1",
+			      "image": "cognita-nexus01:8001/h2omodel_1110:1",
+			      "depends_on": [
+			        {
+			          "name": "Classifier-1",
+			          "operation_signature": "JSON representation of classify (Prediction) returns (Classification)"
+			        },
+			        {
+			          "name": "Classifier-2",
+			          "operation_signature": "JSON representation of operation signatures in Protbuf.json file"
+			        }
+			      ]
+			    }
+			 * 
+			 * new
+			 *  "nodes": [
+		    {
+		      "container_name": "Aggregator-1",
+		      "node_type": "DataMapper or MLModel or DataBroker or TrainingClient",
+		      "image": "url of the docker image of the named node in Nexus. Information consumed by deployer",
+		      "proto_uri": "url of the proto file of the ML Model, otherwise empty",
+		      "operation_signature_list": [
+		        {
+		          "operation_signature": {
+		            "operation_name": "aggregate",
+		            "input_message_name": "DataFrame - MC should send this message name to Probe along with proto_uri",
+		            "output_message_name": "DataFrames"
+		          },
+		          "connected_to": [
+		            {
+		              "container_name": "Predictor-1",
+		              "operation_signature": {
+		                "operation_name": "predict"
+		              }
+		            },
+		            {
+		              "container_name": "Predictor-2",
+		              "operation_signature": {
+		                "operation_name": "predict"
+		              }
+			 * 
+			 * 
+			 * 
+			 */
+			JSONArray nodes = (JSONArray) jo.get("nodes");
+			ArrayList<Node> nodeList = new ArrayList<Node>();
+			if (nodes != null) {
+				Iterator itr3 = nodes.iterator();
+				int nodeCount = 0;
+				while (itr3.hasNext()) {
+					Node node = new Node();
+					itr1 = ((Map) itr3.next()).entrySet().iterator();
+					log.debug("Nodes-->" + ++nodeCount);
+					while (itr1.hasNext()) {
+						Map.Entry pair = itr1.next();
+						String key = (String) pair.getKey();
+						//if (key != null && key.equalsIgnoreCase("connected_to")) {
+						/*if (key != null && key.equalsIgnoreCase("connected_to")) {
+							if (pair.getValue() != null) {
+								ArrayList<Component> listComponent = jsonArrayParseObjectProb(pair.getValue());
+								node.setDependsOn(listComponent);
+							}
+						} else*/ if(key != null && key.equalsIgnoreCase("operation_signature_list")) {
+							
+							if (pair.getValue() != null) {
+								ArrayList<Component> listComponent = jsonArrayParseObjectProb(pair.getValue());
+								node.setDependsOn(listComponent);
+							}
+							
+						
+					  }else {
+							log.debug("-->" + pair.getKey() + " : " + pair.getValue());
+							if (key != null && key.equalsIgnoreCase("container_name")) {
+								node.setContainerName((String) pair.getValue());
+							}
+							if (key != null && key.equalsIgnoreCase("image")) {
+								node.setImage((String) pair.getValue());
+							}
+							
+							if(key != null && key.equalsIgnoreCase("node_type")) {
+								node.setNode_type((String)pair.getValue());
+							}
+						}
+					}
+					nodeList.add(node);
+				}
+
+			}
+			blueprint.setNodes(nodeList);
+			log.debug("blueprint===" + mapper.writeValueAsString(blueprint) + "====" + blueprint.toString());
+			// testDumpWriter(data);
+		} catch (Exception e) {
+			log.error("<-In Exception-contentString--jsonFileToObject-->" + e.getMessage());
+			throw new Exception(e.getMessage());
+			// e.printStackTrace();
+		}
+		// log.debug("<----------End jsonFileToObject in
+		// ParseJSON---------------------list---->"+list);
+		return blueprint;
+	}
+
+	public HashMap<String, String> parseJsonFileProbe() throws Exception {
+		log.debug("<----------Start parseJsonFile in ParseJSON--------------------------->");
+		HashMap<String,String> imageMap=new HashMap<String,String>();
+		ArrayList<String> list=new ArrayList<String>();	
+		try
+		{
+		 
+       /* Object obj = new JSONParser().parse(new FileReader("blueprint-new.json"));
+        JSONObject jo = (JSONObject) obj;
+        JSONArray nodes = (JSONArray) jo.get("nodes");
+        if(nodes!=null && !nodes.isEmpty()){
+        	Iterator itr3 = nodes.iterator();
+	        int nodeCount=0; 
+	        while (itr3.hasNext()) 
+	        {
+	        	Iterator<Map.Entry> itr4 = ((Map) itr3.next()).entrySet().iterator();
+	        	log.debug("Nodes-->"+ ++nodeCount);
+	        	String containerName="";
+	        	String imageName="";
+	            while (itr4.hasNext()) {
+	                Map.Entry pair = itr4.next();
+	                String key=(String)pair.getKey();
+	                String val=(String)pair.getValue().toString();
+	                if(key!=null && key.equalsIgnoreCase("depends_on")){
+	                	jsonArrayParse(pair.getValue());
+	                }if(key!=null && key.equalsIgnoreCase("container_name")){
+	                	containerName=val;
+	                }else{
+	                	log.debug("-key->"+pair.getKey() + " --value-->" + pair.getValue());
+	                }
+	                if(key!=null && key.equalsIgnoreCase("image")){
+	                	imageName=val;
+	                	list.add(val);
+	                 }
+	                if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
+	                	imageMap.put(imageName, containerName);
+	                }
+	                
+	            }
+	        }
+         }*/
+			
+			
+			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+			Iterator<Map.Entry> itr1 = null;
+			JSONObject jo = (JSONObject) obj;
+	        JSONArray nodes = (JSONArray) jo.get("nodes");
+	        ArrayList<Node> nodeList = new ArrayList<Node>();
+			if (nodes != null) {
+				Iterator itr3 = nodes.iterator();
+				int nodeCount = 0;
+				while (itr3.hasNext()) {
+					Node node = new Node();
+					itr1 = ((Map) itr3.next()).entrySet().iterator();
+					log.debug("Nodes-->" + ++nodeCount);
+					String containerName = null,imageName  = null;
+					while (itr1.hasNext()) {
+						Map.Entry pair = itr1.next();
+						String key = (String) pair.getKey();
+						if (key != null && key.equalsIgnoreCase("container_name")) {
+								containerName =(String)pair.getValue();
+							}
+							if (key != null && key.equalsIgnoreCase("image")) {
+								imageName =(String)pair.getValue();
+							}
+							
+						if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
+							
+		                	imageMap.put(imageName, containerName);
+		                }
+					}
+			
+				}
+			}
+			
+		}catch(Exception e){
+        	log.error("<-In Exception-contentString--parseJsonFile-->"+e.getMessage());
+    	    throw new Exception(e.getMessage());
+       }
+		log.debug("<----------End parseJsonFile in ParseJSON---------------------imageMap---->"+imageMap);
+		return imageMap;	
+	}
+	
+	public HashMap<String, DeploymentBean> getNodeTypeContainerMap() throws Exception {
+		log.debug("<----------Start getNodeTypeContainerMap in ParseJSON--------------------------->");
+		HashMap<String,DeploymentBean> imageMap=new HashMap<String,DeploymentBean>();
+		ArrayList<String> list=new ArrayList<String>();	
+		try
+		{
+		
+			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+			Iterator<Map.Entry> itr1 = null;
+			JSONObject jo = (JSONObject) obj;
+	        JSONArray nodes = (JSONArray) jo.get("nodes");
+	        ArrayList<Node> nodeList = new ArrayList<Node>();
+			if (nodes != null) {
+				Iterator itr3 = nodes.iterator();
+				int nodeCount = 0;
+				while (itr3.hasNext()) {
+					Node node = new Node();
+					itr1 = ((Map) itr3.next()).entrySet().iterator();
+					log.debug("Nodes-->" + ++nodeCount);
+					String containerName = null,nodeType  = null,script=null;
+					DeploymentBean bean=new DeploymentBean();
+					while (itr1.hasNext()) {
+						Map.Entry pair = itr1.next();
+						String key = (String) pair.getKey();
+						if (key != null && key.equalsIgnoreCase("container_name")) {
+								containerName =(String)pair.getValue();
+								bean.setContainerName(containerName);
+							}
+							if (key != null && key.equalsIgnoreCase("node_type")) {
+								nodeType =(String)pair.getValue();
+								bean.setNodeType(nodeType);
+							}
+							if (key != null && key.equalsIgnoreCase("script")) {
+								script =(String)pair.getValue();
+								bean.setScript(script);
+							}
+							
+						if(containerName!=null && nodeType!=null && !"".equals(containerName) && !"".equals(nodeType)){
+							
+		                	imageMap.put(containerName,bean);
+		                }
+					}
+					log.debug("<---container_name-->"+bean.getContainerName()+"--node_type--"+bean.getNodeType()+"--Script--"+bean.getScript());
+			
+				}
+			}
+			
+		}catch(Exception e){
+        	log.error("<-In Exception-getNodeTypeContainerMap--parseJsonFile-->"+e.getMessage());
+    	    throw new Exception(e.getMessage());
+       }
+		log.debug("<----------End getNodeTypeContainerMap in ParseJSON---------------------imageMap---->"+imageMap);
+		return imageMap;	
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * @throws Exception
+	 */
+
+	public LinkedList<String> getSequenceFromJSONProbe()  throws  Exception {
+		String contentString="";
+		HashMap<String,String> imageMap=new HashMap<String,String>();
+		ArrayList<String> list=new ArrayList<String>();	
+		LinkedList<String> linkedList=new LinkedList<String>();
+		try
+		{
+		NodeTree<String> root = new NodeTree<String>("BluePrintContainer");
+        Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+        JSONObject jo = (JSONObject) obj;
+        JSONArray nodes = (JSONArray) jo.get("nodes");
+        if(nodes!=null && !nodes.isEmpty()){
+        	Iterator itr3 = nodes.iterator();
+	        int nodeCount=0; 
+	        while (itr3.hasNext()) 
+	        {
+	        	Iterator<Map.Entry> itr4 = ((Map) itr3.next()).entrySet().iterator();
+	        	Iterator<Map.Entry> itr5 = itr4;
+	        	//log.debug("Nodes-->"+ ++nodeCount);
+	        	String containerName="";
+	        	String imageName="";
+	        	
+	        	String contName="test";
+	        	NodeTree<String> testNode=new NodeTree<String>(contName);
+	        	log.debug("Second while");
+	            while (itr4.hasNext()) {
+	                Map.Entry pair = itr4.next();
+	                String key=(String)pair.getKey();
+	                String val=(String)pair.getValue().toString();
+	                if(key!=null && key.equalsIgnoreCase("operation_signature_list")){
+	                	sequenceJsonParseProbe(pair.getValue(),testNode,root);
+	                }if(key!=null && key.equalsIgnoreCase("container_name")){
+	                	containerName=val;
+	                	contName=val;
+	                }else{
+	                	log.debug("-bbbbbkey->"+pair.getKey() );
+	                }
+	                if(key!=null && key.equalsIgnoreCase("image")){
+	                	imageName=val;
+	                	list.add(val);
+	                 }
+	                if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
+	                	imageMap.put(imageName, containerName);
+	                }
+	                
+	            }
+	            testNode.setData(contName);
+	            NodeTree<String> searchNode=findDataInTree(root, contName);
+	            if(searchNode!=null){
+	            	NodeTree<String> parent=searchNode.getParent();
+	            	String parentData=parent.getData();
+	            	if (parent != null) {
+	    				int index = parent.getChildren().indexOf(searchNode);
+	    				parent.getChildren().remove(searchNode);
+	    			 }
+	            	NodeTree<String> parrentNode=findDataInTree(root, parentData);
+	            	if(parrentNode!=null){
+	            		parrentNode.addChild(testNode);
+	            	}
+	            }else{
+	            	root.addChild(testNode);
+	            }
+	        }
+         }
+        log.debug("=======Print==================================");
+        printTree(root, " ",linkedList);
+        Collections.reverse(linkedList);
+        log.debug("=======Print=======================linkedList==========="+linkedList);
+        
+        }catch(Exception e){
+        	//log.error("<-In Exception-contentString--parseJsonFile-->"+e.getMessage());
+        	e.printStackTrace();
+    	    throw new Exception(e.getMessage());
+       }
+		//log.debug("<----------End parseJsonFile in ParseJSON---------------------imageMap---->"+imageMap);
+		return linkedList;	
+	}
 	
 }

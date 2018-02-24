@@ -142,11 +142,14 @@ import com.microsoft.azure.management.trafficmanager.TrafficManagerAzureEndpoint
 import com.microsoft.azure.management.trafficmanager.TrafficManagerExternalEndpoint;
 import com.microsoft.azure.management.trafficmanager.TrafficManagerNestedProfileEndpoint;
 import com.microsoft.azure.management.trafficmanager.TrafficManagerProfile;
+
+import org.acumos.cds.domain.MLPNotification;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.acumos.azure.client.transport.MLNotification;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -254,4 +257,39 @@ public final class Utils {
 				.append(acrCredentials.passwords().get(1).value());
 		log.debug(info.toString());
 	}
+	
+	
+	public static MLNotification convertToMLNotification(MLPNotification mlpNotification) {
+		MLNotification mlNotification = new MLNotification();
+		if (!isEmptyOrNullString(mlpNotification.getNotificationId())) {
+			mlNotification.setNotificationId(mlpNotification.getNotificationId());
+		}
+		if (!isEmptyOrNullString(mlpNotification.getTitle())) {
+			mlNotification.setTitle(mlpNotification.getTitle());
+		}
+		if (!isEmptyOrNullString(mlpNotification.getMessage())) {
+			mlNotification.setMessage(mlpNotification.getMessage());
+		}
+		if (!isEmptyOrNullString(mlpNotification.getUrl())) {
+			mlNotification.setUrl(mlpNotification.getUrl());
+		}
+		if (mlpNotification.getStart() != null) {
+			mlNotification.setStart(mlpNotification.getStart());
+		}
+		if (mlpNotification.getEnd() != null) {
+			mlNotification.setEnd(mlpNotification.getEnd());
+		}
+		return mlNotification;
+	}
+	
+	
+	public static boolean isEmptyOrNullString(String input) {
+		boolean isEmpty = false;
+		if (null == input || 0 == input.trim().length()) {
+			isEmpty = true;
+		}
+		return isEmpty;
+	}
+	
+	
 }

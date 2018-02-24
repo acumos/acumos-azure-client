@@ -3,7 +3,7 @@
 <configuration>
 
     <contextName>AcumosONM</contextName>
-	<property name="LOG_HOME" value="../log" />
+	<property name="LOG_HOME" value="Azure_log" />
 	<timestamp key="bySecond" datePattern="yyyyMMdd.HHmmss" />
     <jmxConfigurator/>
     
