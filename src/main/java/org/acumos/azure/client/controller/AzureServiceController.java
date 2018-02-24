@@ -36,6 +36,7 @@ import org.acumos.azure.client.service.impl.AzureServiceImpl;
 import org.acumos.azure.client.service.impl.AzureSimpleSolution;
 import org.acumos.azure.client.transport.AzureDeployBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
+import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AppProperties;
 import org.acumos.azure.client.utils.AzureBean;
@@ -202,6 +203,14 @@ public class AzureServiceController extends AbstractController {
 			String bluePrintName=env.getProperty("blueprint.name");
 			String bluePrintUser=env.getProperty("docker.registry.bluePrint.username");
 			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
+			
+			//probe
+			String probePrintImage=env.getProperty("probe.ImageName");
+			String probePrintName=env.getProperty("probe.name");
+			String probUser=env.getProperty("docker.registry.probe.username");
+			String probePass=env.getProperty("docker.registry.probe.password");
+			
+			
 			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
 			//String dockerRegistryPort=env.getProperty("docker.registry.port");
 			String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
@@ -227,34 +236,71 @@ public class AzureServiceController extends AbstractController {
 				jsonOutput.put("status", APINames.AUTH_FAILED);
 				return jsonOutput.toString();
 			}
-            Azure azure = azureImpl.authorize(authObject);
+           
+            logger.debug("<------authObject.getUrlAttribute()---------->"+authObject.getUrlAttribute());
+            logger.debug("<-----authObject.getJsonMapping()---------->"+authObject.getJsonMapping());
+            logger.debug("<-----authObject.getJsonPosition()---------->"+authObject.getJsonPosition());
             logger.debug("<------SolutionId---------->"+authObject.getSolutionId());
 			logger.debug("<------authObject.getSolutionRevisionId()---------->"+authObject.getSolutionRevisionId());
-			String bluePrintStr=azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionRevisionId(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
-			logger.debug("<------bluePrintStr---------->"+bluePrintStr);
+			
+			Azure azure = azureImpl.authorize(authObject);
+			logger.debug("<---------Azure Authentication Complete----------->");
+			String bluePrintJsonStr=azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionRevisionId(),dataSource,userName,password,nexusUrl,nexusUserName,nexusPassword);
+			logger.debug("<------bluePrintJsonStr---------->"+bluePrintJsonStr);
 			ParseJSON parseJson=new ParseJSON();
-			Blueprint bluePrint=parseJson.jsonFileToObject();
 			
+			// Commented from 246 to 252 on 22-Feb-18 to support support probe.
 			
-			
+			/*Blueprint bluePrint=parseJson.jsonFileToObject();
+			//how many images
 			HashMap<String,String> imageMap=parseJson.parseJsonFile();
+			// images list
 			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
-			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();
+			//sequence
+			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();*/
 			
-			if(bluePrintImage!=null && !"".equals(bluePrintImage)){
+			//-------------- New Probe Start ------------------- ***
+			//For new blueprint.json
+			Blueprint bluePrintProbe =parseJson.jsonFileToObjectProbe();
+			//how many images
+			HashMap<String,String> imageMap=parseJson.parseJsonFileProbe();
+			//Node Type and container Name in nodes
+			HashMap<String,DeploymentBean> nodeTypeContainerMap=parseJson.getNodeTypeContainerMap();
+			// images list
+			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
+			
+			//sequence
+			LinkedList<String> sequenceList=parseJson.getSequenceFromJSONProbe();
+			
+			//-------------- New Probe Start ------------------- ***
+
+		
+
+			if (bluePrintProbe.getProbeIndocator() != null && !bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
+
+				if (probePrintImage != null && !"".equals(probePrintImage)) {
+					list.add(probePrintImage);
+					imageMap.put(probePrintImage, "probeContainer");
+				}
+			}
+			
+			if (bluePrintImage != null && !"".equals(bluePrintImage)) {
 				list.add(bluePrintImage);
 				imageMap.put(bluePrintImage, "BluePrintContainer");
 			}
+			
+						
+			//put condition to get probe
+			
 			logger.debug("<------list---------->"+list);
 			logger.debug("<------imageMap---------->"+imageMap);
 			if(azure!=null) {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
-                        env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,imageMap,
-                        sequenceList,dockerRegistryname,bluePrint,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort);
+                        env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
+                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort,nodeTypeContainerMap,bluePrintJsonStr);
 
-
-                  Thread t = new Thread(compositeRunner);
+	              Thread t = new Thread(compositeRunner);
                    t.start();
 				/*  azBean=azureImpl.pushCompositeImages(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
 						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),

@@ -34,10 +34,37 @@ public class AzureDeployDataObject {
 	/*private String imagetag;*/
 	private String solutionRevisionId;
 	private String userId;
+	private String urlAttribute;
+	private String jsonPosition;
+	private String jsonMapping;
 	
 
 	
 	
+	public String getUrlAttribute() {
+		return urlAttribute;
+	}
+
+	public void setUrlAttribute(String urlAttribute) {
+		this.urlAttribute = urlAttribute;
+	}
+
+	public String getJsonPosition() {
+		return jsonPosition;
+	}
+
+	public void setJsonPosition(String jsonPosition) {
+		this.jsonPosition = jsonPosition;
+	}
+
+	public String getJsonMapping() {
+		return jsonMapping;
+	}
+
+	public void setJsonMapping(String jsonMapping) {
+		this.jsonMapping = jsonMapping;
+	}
+
 	public String getSolutionRevisionId() {
 		return solutionRevisionId;
 	}

@@ -17,57 +17,41 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
+package org.acumos.azure.client.transport;
 
-package org.acumos.azure.client.utils;
-
-import java.io.Serializable;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class OperationSignature implements Serializable {
-
-	private static final long serialVersionUID = -8176878378145971860L;
-
-	public OperationSignature() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
-
-	public OperationSignature(String operation) {
-		super();
-		this.operation = operation;
-	}
+public class ContainerInfo {
 	
-	public OperationSignature(String operation , String containerName) {
-		super();
-		this.operation = operation;
-	}
-
-	@JsonProperty("containerName")
-	private String containerName = null;
 	
 	public String getContainerName() {
 		return containerName;
 	}
-
 	public void setContainerName(String containerName) {
 		this.containerName = containerName;
 	}
-
-	@JsonProperty("operation")
-	private String operation = null;
-
-	public String getOperation() {
-		return operation;
+	public String getContainerIp() {
+		return containerIp;
 	}
-
-	public void setOperation(String operation) {
-		this.operation = operation;
+	public void setContainerIp(String containerIp) {
+		this.containerIp = containerIp;
 	}
-
-	@Override
-	public String toString() {
-		return "OperationSignature [operation=" + operation + "]";
+	public String getContainerPort() {
+		return containerPort;
 	}
-
+	public void setContainerPort(String containerPort) {
+		this.containerPort = containerPort;
+	}
+	public String getNodeType() {
+		return nodeType;
+	}
+	public void setNodeType(String nodeType) {
+		this.nodeType = nodeType;
+	}
+	private String containerName;
+	private String containerIp;	
+	private String containerPort;
+	private String nodeType;
+	
+	
 }
+
+	

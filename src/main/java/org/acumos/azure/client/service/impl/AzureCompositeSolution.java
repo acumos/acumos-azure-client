@@ -40,6 +40,7 @@ import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
+import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,6 +64,11 @@ import com.microsoft.azure.management.containerregistry.Registry;
 import com.microsoft.azure.management.containerregistry.implementation.RegistryListCredentials;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
+import org.acumos.azure.client.transport.ContainerInfo;
+import org.acumos.azure.client.transport.DeploymentBean;
+import org.acumos.azure.client.transport.MLNotification;
+
+//import org.acumos.p
 
 public class AzureCompositeSolution implements Runnable {
 	
@@ -80,6 +86,9 @@ public class AzureCompositeSolution implements Runnable {
 	private String bluePrintName;
 	private String bluePrintUser;
 	private String bluePrintPass;
+	private String probeName;
+	private String probeUser;
+	private String probePass;
 	private String networkSecurityGroup;
 	private String dockerRegistryPort;
 	private HashMap<String,String> imageMap;
@@ -92,12 +101,16 @@ public class AzureCompositeSolution implements Runnable {
 	private String dockerVMUserName;
 	private String dockerVMPassword;
 	private String solutionPort;
-
+	private HashMap<String,DeploymentBean> nodeTypeContainerMap;
+    private String bluePrintJsonStr;
+	
+	
+	
 
 	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
-			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-			String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
-			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort) {
+			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeName,
+			String probeUser,String ProbePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
+			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,String bluePrintJsonStr) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -123,6 +136,8 @@ public class AzureCompositeSolution implements Runnable {
 	    this.dockerVMUserName=dockerVMUserName;
 	    this.dockerVMPassword=dockerVMPassword;
 	    this.solutionPort=solutionPort;
+	    this.nodeTypeContainerMap=nodeTypeContainerMap;
+	    this.bluePrintJsonStr=bluePrintJsonStr;
 	    
 	   }
 	public void run() {
@@ -151,10 +166,17 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<-------dockerVMUserName-------->"+dockerVMUserName);
 		logger.debug("<-------dockerVMPassword-------->"+dockerVMPassword);
 		logger.debug("<-------solutionPort-------->"+solutionPort);
+		logger.debug("<-------nodeTypeContainerMap-------->"+nodeTypeContainerMap);
+		logger.debug("<-------bluePrintJsonStr-------->"+bluePrintJsonStr);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
 		List<AzureContainerBean> azureContainerBeanList=new ArrayList<AzureContainerBean>();
+		List<ContainerInfo> probeContainerBeanList=new ArrayList<ContainerInfo>();
+		List<DeploymentBean> deploymentList=new ArrayList<DeploymentBean>();
+		
+		String probeIP = null;
+  	    String probePort = null;
 		
 		try{
 			logger.debug("<-------------start pushCompositeImage------------------------------>");
@@ -176,6 +198,7 @@ public class AzureCompositeSolution implements Runnable {
 	        String servicePrincipalSecret = deployDataObject.getKey(); // and corresponding secret
 	        //HashMap<String,String> containerMap=new HashMap<String,String>();
 	        String containerInstanceBluePrint="";
+	        String containerInstanceprobe="";
 	        //String bluePrintContainerId="";
 	        
 	        logger.debug("<--------------dockerRegistryName--------------------------->"+dockerRegistryName);
@@ -252,6 +275,10 @@ public class AzureCompositeSolution implements Runnable {
 		            AuthConfig authConfig2 = new AuthConfig()
 		                    .withUsername(bluePrintUser)
 		                    .withPassword(bluePrintPass);
+		            
+		            AuthConfig authConfigProb = new AuthConfig()
+		                    .withUsername(probeUser)
+		                    .withPassword(probePass);
 	
 		            //=============================================================
 		            // Pull a temp image from public Docker repo and create a temporary container from that image
@@ -261,14 +288,24 @@ public class AzureCompositeSolution implements Runnable {
 		            while(itr.hasNext()){
 		            	 
 		            	String imageName=(String)itr.next();
+		            	logger.debug("image name in run -->"+imageName);
 		            	//logger.debug("Nexus Image Name------------------->"+imageName);
 		            	if(imageName!=null && imageName.contains(bluePrintName)){
+		            		logger.debug("Pulling image start logging in-->"+imageName);
 		            		dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig2)
 		                    //.withTag(dockerImageTag)
 		                    .exec(new PullImageResultCallback())
 		                    .awaitSuccess();
 		            		
-		            	}else{
+		            	}else if(imageName!=null && imageName.contains(probeName)) {
+		            		logger.debug("Pulling image start logging in and pulling image-->"+imageName);
+		            		dockerClient.pullImageCmd(imageName).withAuthConfig(authConfigProb)
+		                    //.withTag(dockerImageTag)
+		                    .exec(new PullImageResultCallback())
+		                    .awaitSuccess();
+		            		
+		            	}
+		            	{
 		            	dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
 	                    //.withTag(dockerImageTag)
 	                    .exec(new PullImageResultCallback())
@@ -324,6 +361,12 @@ public class AzureCompositeSolution implements Runnable {
 		            	if(imageName!=null && imageName.contains(bluePrintName)){
 		            		containerInstanceBluePrint=dockerContainerName+"_"+dockerCount;
 		            	}
+		            	
+		            	if(imageName!=null && imageName.contains(probeName)){
+		            		logger.debug("containerInstanceprobe===>"+probeName);
+		            		containerInstanceprobe=dockerContainerName+"_"+dockerCount;
+		            	}
+		            	
 		            	hmap.put(dockerContainerName+"_"+dockerCount, dockerContainerInstance);
 		            	containerTagMap.put(dockerContainerName+"_"+dockerCount, imageTagVal);
 		            	containerImageMap.put(dockerContainerName+"_"+dockerCount, imageName);
@@ -460,7 +503,14 @@ public class AzureCompositeSolution implements Runnable {
 			    		            		 logger.debug("Continue.............................................");
 			    		            		continue;
 			    		            	}
-			    		            	
+			    		            	String nodeTypeContainer="";
+			    		            	if(nodeTypeContainerMap!=null && nodeTypeContainerMap.size() > 0 && nodeTypeContainerMap.get(finalContainerName)!=null){
+			    		            		DeploymentBean dBean=nodeTypeContainerMap.get(finalContainerName);
+			    		            		if(dBean!=null && dBean.getScript()!=null){
+			    		            			nodeTypeContainer=dBean.getScript();
+			    		            		}
+			    		            		
+			    		            	}
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
 			    		            	String azureVMName=azureBean.getAzureVMName();
 			    		            	//final String vmUserName="dockerUser";
@@ -481,6 +531,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		logger.debug("====repositoryName======: " + repositoryName);
 			    		        		logger.debug("====finalContainerName======: " + finalContainerName);
 			    		        		logger.debug("====imageCount======: " + imageCount);
+			    		        		logger.debug("====nodeTypeContainer======: " + nodeTypeContainer);
 			    		        		if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
 			    		        			logger.debug("<--if Part--containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 			    		        			portNumber="8555";
@@ -506,10 +557,34 @@ public class AzureCompositeSolution implements Runnable {
 		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
 			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumberString);
+			    		        		
 			    		        		AzureContainerBean containerBean=new AzureContainerBean();
 			    		        		containerBean.setContainerName(finalContainerName);
 			    		        		containerBean.setContainerIp(azureVMIP);
 			    		        		containerBean.setContainerPort(portNumber);
+			    		        		
+			    		        		DeploymentBean deploymentBean=new DeploymentBean();
+			    		        		deploymentBean.setAzureVMIP(azureVMIP);
+			    		        		deploymentBean.setAzureVMName(azureVMName);
+			    		        		deploymentBean.setContainerName(finalContainerName);
+			    		        		deploymentBean.setContainerPort(portNumber);
+			    		        		deploymentBean.setNodeType(nodeTypeContainer);
+			    		        		deploymentList.add(deploymentBean);
+			    		        		
+			    		        		
+			    		        		ContainerInfo containerInfo = new ContainerInfo();
+			    		        		containerInfo.setContainerName(finalContainerName);
+			    		        		containerInfo.setContainerIp(azureVMName);
+			    		        		containerInfo.setContainerPort(portNumber);
+			    		        		containerInfo.setNodeType(nodeTypeContainer);
+			    		        		if(containerInstanceprobe != null && !containerInstanceprobe.equals("")) {
+				    		        	   containerInfo.setNodeType("Probe");
+				    		        	   probeIP = azureVMIP;
+				    		        	   probePort = portNumber;
+			    		        		}
+
+			    		        		probeContainerBeanList.add(containerInfo);
+			    		        		
 			    		        		azureContainerBeanList.add(containerBean);
 			    		            }
 			                    	
@@ -536,12 +611,31 @@ public class AzureCompositeSolution implements Runnable {
 		  String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
 		  String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
 		  logger.debug("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
-		  if(azureBean.getDockerinfolist()!=null){
-			  putContainerDetailsJSON(azureBean.getDockerinfolist(),urlDockerInfo);
+		  String dataBrokerPort=getDataBrokerPort(deploymentList,"DataBroker");
+		  String dataBrokerScript=getDataBrokerScript(deploymentList,"DataBroker");
+		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/configDB";
+		  
+		  
+		  // Added for probe
+		  if(probeContainerBeanList != null && !probeContainerBeanList.isEmpty()){
+			  logger.debug("Inside probeContainerBeanList ==> ");
+			  putContainerDetailsJSONProbe(probeContainerBeanList,urlDockerInfo);
 			}
+		  
 		 if(bluePrint!=null){
 			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
+		 if(urlDataBroker!=null){
+			  putDataBrokerDetails(deployDataObject,urlDataBroker,dataBrokerScript);
+			}
+		 
+		 // Added notification for probe code
+		 if (bluePrint.getProbeIndocator() != null && !bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
+			 logger.debug("Probe indicator true. Starting generatenotircation==>");
+			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());
+		 }
+		 
+		
 		 if(azureContainerBeanList!=null){
        	  
    			  logger.debug("Start saving data in database=============="); 
@@ -562,6 +656,56 @@ public class AzureCompositeSolution implements Runnable {
 		 
 		logger.debug("<-----------------AzureCompositeSolution-----Run end-------------------------->");
 	}
+	
+	/**
+	 * 
+	 * @param notificationId
+	 * @param userId
+	 */
+	public void addNotificationUser(String notificationId, String userId) {
+        logger.debug("addNotificationUser");
+    	CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+    	client.addUserToNotification(notificationId,userId);
+     }
+	
+	
+	/**
+	 * 
+	 * @param mlpNotification
+	 * @return
+	 */
+	 public org.acumos.azure.client.transport.MLNotification createNotification(MLPNotification mlpNotification) {
+         logger.debug( "createNotification`");
+         CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+         MLNotification mlNotification = Utils.convertToMLNotification(client.createNotification(mlpNotification));
+         return mlNotification;
+	 }
+	 
+	/**
+	  * 
+	  * @param msg
+	  * @param userId
+	  */
+	 void generateNotification(String msg, String userId) {
+         MLPNotification notification = new MLPNotification();
+         try {
+                 if (msg != null) {
+                     notification.setTitle(msg);
+                     // Provide the IP address and port of the probe Instance
+                     notification.setMessage(msg);
+                     Date startDate = new Date();
+                     Date endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
+                     notification.setStart(startDate);
+                     notification.setEnd(endDate);
+                     CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+                     MLNotification mLNotification = createNotification(notification);
+                     client.addUserToNotification(mLNotification.getNotificationId(),userId);
+             }
+         } catch (Exception e) {
+                         logger.error("Exception Occurred while getNotifications", e);
+         }
+	 }
+
 	
 	public String getTagFromImage(String imageName){
 		String imageTag=null;
@@ -645,6 +789,31 @@ public class AzureCompositeSolution implements Runnable {
 		 }
 		logger.debug("<--------End---putContainerDetailsJSON------->");
 	}
+	
+	
+	public void putContainerDetailsJSONProbe(List<ContainerInfo> dockerList,String apiUrl){
+		logger.debug("<--------Start---putContainerDetailsJSON------->");
+		try {
+			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);
+			final String url = apiUrl;
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			ObjectMapper mapper = new ObjectMapper();
+			String dockerJson=mapper.writeValueAsString(dockerList);
+			logger.debug("<----dockerJson---------->"+dockerJson);
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    	
+		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+		   
+		  } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("<---------Exception----------->"+e.getMessage());
+		 }
+		logger.debug("<--------End---putContainerDetailsJSON------->");
+	}
+	
 	public void putBluePrintDetailsJSON(Blueprint  bluePrint,String apiUrl){
 		logger.debug("<--------Start---putBluePrintDetailsJSON------->");
 		try {
@@ -665,6 +834,33 @@ public class AzureCompositeSolution implements Runnable {
             e.printStackTrace();
 		 }
 		logger.debug("<--------End---putBluePrintDetailsJSON------->");
+	}
+	
+	public void putDataBrokerDetails(AzureDeployDataObject deployDataObject,String apiUrl,String dataBrokerScript){
+		logger.debug("<--------Start---putDataBrokerDetails------->");
+		try {
+			logger.debug("======apiUrl==="+apiUrl);
+			logger.debug("====UrlAttribute==="+deployDataObject.getUrlAttribute());
+			logger.debug("=====JsonMapping==="+deployDataObject.getJsonMapping());
+			logger.debug("=====JsonPosition==="+deployDataObject.getJsonPosition());
+			logger.debug("=====dataBrokerScript==="+dataBrokerScript);
+			/*final String url = apiUrl;
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			ObjectMapper mapper = new ObjectMapper();
+			String dockerJson=mapper.writeValueAsString("");
+			logger.debug("<----dockerJson---------->"+dockerJson);
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    	
+		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);*/
+		    
+		  } catch (Exception e) {
+            e.printStackTrace();
+            logger.error("<---------Exception----------->"+e.getMessage());
+		 }
+		logger.debug("<--------End---putDataBrokerDetails------->");
 	}
 	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPassword,List<AzureContainerBean> azureContainerBeanList,
 			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
@@ -694,6 +890,37 @@ public class AzureCompositeSolution implements Runnable {
 			logger.debug("<---------mlpDeployment------------------------->"+mlpDeployment);
 		}
 		logger.debug("<---------End createDeploymentCompositeData ------------------------->");
+	}
+	
+	public String getDataBrokerPort(List<DeploymentBean> deploymentList, String dataBrokerName){
+		logger.debug("<---------Start getDataBrokerIP ------------------------->");
+		String dataBrokerPort="";
+		logger.debug("<---deploymentList---->"+deploymentList);
+		logger.debug("<---dataBrokerName---->"+dataBrokerName);
+		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
+			for(DeploymentBean bean:deploymentList){
+				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)){
+					dataBrokerPort=bean.getContainerPort();
+				}
+			}
+		}
+		logger.debug("<---------End getDataBrokerIP -----------------dataBrokerPort-------->"+dataBrokerPort);
+		return dataBrokerPort;
+	}
+	public String getDataBrokerScript(List<DeploymentBean> deploymentList, String dataBrokerName){
+		logger.debug("<---------Start getDataBrokerScript ------------------------->");
+		String dataBrokerScript="";
+		logger.debug("<---deploymentList---->"+deploymentList);
+		logger.debug("<---dataBrokerName---->"+dataBrokerName);
+		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
+			for(DeploymentBean bean:deploymentList){
+				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)){
+					dataBrokerScript=bean.getScript();
+				}
+			}
+		}
+		logger.debug("<---------End getDataBrokerScript -----------------dataBrokerPort-------->"+dataBrokerScript);
+		return dataBrokerScript;
 	}
 
 }

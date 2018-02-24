@@ -41,6 +41,19 @@ public class Node implements Serializable {
 	@JsonProperty("image")
 	private String image = null;
 
+	
+	@JsonProperty("node_type")
+	private String node_type = null;
+
+	
+	public String getNode_type() {
+		return node_type;
+	}
+
+	public void setNode_type(String node_type) {
+		this.node_type = node_type;
+	}
+
 	@JsonProperty("depends_on")
 	private List<Component> dependsOn = null;
 
