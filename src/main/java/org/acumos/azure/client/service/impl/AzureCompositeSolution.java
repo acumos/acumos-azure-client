@@ -49,6 +49,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -613,7 +615,7 @@ public class AzureCompositeSolution implements Runnable {
 		  logger.debug("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
 		  String dataBrokerPort=getDataBrokerPort(deploymentList,"DataBroker");
 		  String dataBrokerScript=getDataBrokerScript(deploymentList,"DataBroker");
-		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/configDB";
+		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/file/configDB";
 		  
 		  
 		  // Added for probe
@@ -844,17 +846,16 @@ public class AzureCompositeSolution implements Runnable {
 			logger.debug("=====JsonMapping==="+deployDataObject.getJsonMapping());
 			logger.debug("=====JsonPosition==="+deployDataObject.getJsonPosition());
 			logger.debug("=====dataBrokerScript==="+dataBrokerScript);
-			/*final String url = apiUrl;
-			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			ObjectMapper mapper = new ObjectMapper();
-			String dockerJson=mapper.writeValueAsString("");
-			logger.debug("<----dockerJson---------->"+dockerJson);
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    	
-		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);*/
+			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
+			map.add("jsonUrl", deployDataObject.getUrlAttribute());
+			map.add("jsonScript", dataBrokerScript);
+			map.add("jsonMapping", deployDataObject.getJsonMapping());
+			map.add("jsonPosition", deployDataObject.getJsonPosition());
+			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
+			restTemplate.exchange(apiUrl, HttpMethod.PUT, request, String.class);
 		    
 		  } catch (Exception e) {
             e.printStackTrace();
