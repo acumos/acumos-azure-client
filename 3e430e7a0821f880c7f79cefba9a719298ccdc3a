@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3a6fa0e6_ff0ce093",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 613,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-02-27T11:26:05Z",
+      "side": 1,
+      "message": "If this means the IP address of the host virtual machine, it is a problem.  The destination should use a docker-compose name; docker will assign the IP address.",
+      "revId": "3e430e7a0821f880c7f79cefba9a719298ccdc3a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
