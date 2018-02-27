@@ -615,8 +615,8 @@ public class AzureCompositeSolution implements Runnable {
 		  logger.debug("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
 		  String dataBrokerPort=getDataBrokerPort(deploymentList,"DataBroker");
 		  String dataBrokerScript=getDataBrokerScript(deploymentList,"DataBroker");
-		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/file/configDB";
-		  
+		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/configDB";
+		  logger.debug("<-----urlDataBroker---------->"+urlDataBroker);
 		  
 		  // Added for probe
 		  if(probeContainerBeanList != null && !probeContainerBeanList.isEmpty()){
