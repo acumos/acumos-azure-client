@@ -140,6 +140,9 @@ public class AzureCompositeSolution implements Runnable {
 	    this.solutionPort=solutionPort;
 	    this.nodeTypeContainerMap=nodeTypeContainerMap;
 	    this.bluePrintJsonStr=bluePrintJsonStr;
+	    this.probeName=probeName;
+	    this.probeUser=probeUser;
+	    this.probePass=probePass;
 	    
 	   }
 	public void run() {
@@ -170,6 +173,9 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<-------solutionPort-------->"+solutionPort);
 		logger.debug("<-------nodeTypeContainerMap-------->"+nodeTypeContainerMap);
 		logger.debug("<-------bluePrintJsonStr-------->"+bluePrintJsonStr);
+		logger.debug("<-------probeName-------->"+probeName);
+		logger.debug("<-------probeUser-------->"+probeUser);
+		logger.debug("<-------probePass-------->"+probePass);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
@@ -617,7 +623,8 @@ public class AzureCompositeSolution implements Runnable {
 		  String dataBrokerScript=getDataBrokerScript(deploymentList,"DataBroker");
 		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/configDB";
 		  logger.debug("<-----urlDataBroker---------->"+urlDataBroker);
-		  
+		  logger.debug("<-----dataBrokerPort---------->"+dataBrokerPort);
+		  logger.debug("<-----dataBrokerScript---------->"+dataBrokerScript);
 		  // Added for probe
 		  if(probeContainerBeanList != null && !probeContainerBeanList.isEmpty()){
 			  logger.debug("Inside probeContainerBeanList ==> ");
@@ -627,7 +634,7 @@ public class AzureCompositeSolution implements Runnable {
 		 if(bluePrint!=null){
 			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
-		 if(urlDataBroker!=null){
+		 if(dataBrokerPort!=null && dataBrokerScript!=null && !"".equals(dataBrokerPort) && !"".equals(dataBrokerScript)){
 			  putDataBrokerDetails(deployDataObject,urlDataBroker,dataBrokerScript);
 			}
 		 

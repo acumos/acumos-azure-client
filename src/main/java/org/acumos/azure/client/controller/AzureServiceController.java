@@ -210,6 +210,10 @@ public class AzureServiceController extends AbstractController {
 			String probUser=env.getProperty("docker.registry.probe.username");
 			String probePass=env.getProperty("docker.registry.probe.password");
 			
+			logger.debug("<------probePrintImage---------->"+probePrintImage);
+			logger.debug("<------probePrintName---------->"+probePrintName);
+			logger.debug("<------probUser---------->"+probUser);
+			logger.debug("<------probePass---------->"+probePass);
 			
 			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
 			//String dockerRegistryPort=env.getProperty("docker.registry.port");
@@ -276,7 +280,7 @@ public class AzureServiceController extends AbstractController {
 
 		
 
-			if (bluePrintProbe.getProbeIndocator() != null && !bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
+			if (bluePrintProbe.getProbeIndocator() != null && bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
 
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
