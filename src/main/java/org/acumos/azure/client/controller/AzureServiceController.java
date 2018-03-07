@@ -262,23 +262,38 @@ public class AzureServiceController extends AbstractController {
 			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
 			//sequence
 			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();*/
+			boolean probeIndicator=parseJson.checkProbeIndicator();
+			Blueprint bluePrintProbe=null;
+			HashMap<String,String> imageMap=null;
+			HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
+			ArrayList<String> list=null;
+			LinkedList<String> sequenceList=null;
+			logger.debug("<------probeIndicator---------->"+probeIndicator);
+			if(probeIndicator){
+				//-------------- New Probe Start ------------------- ***
+				//For new blueprint.json
+				 bluePrintProbe =parseJson.jsonFileToObjectProbe();
+				//how many images
+				imageMap=parseJson.parseJsonFileProbe();
+				//Node Type and container Name in nodes
+				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap();
+				// images list
+				list=azureImpl.iterateImageMap(imageMap);
+				
+				//sequence
+				sequenceList=parseJson.getSequenceFromJSONProbe();
+			}else{
+				//old code 
+				bluePrintProbe=parseJson.jsonFileToObject();
+				imageMap=parseJson.parseJsonFile();
+				list=azureImpl.iterateImageMap(imageMap);
+				sequenceList=parseJson.getSequenceFromJSON();
+			}
 			
-			//-------------- New Probe Start ------------------- ***
-			//For new blueprint.json
-			Blueprint bluePrintProbe =parseJson.jsonFileToObjectProbe();
-			//how many images
-			HashMap<String,String> imageMap=parseJson.parseJsonFileProbe();
-			//Node Type and container Name in nodes
-			HashMap<String,DeploymentBean> nodeTypeContainerMap=parseJson.getNodeTypeContainerMap();
-			// images list
-			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
-			
-			//sequence
-			LinkedList<String> sequenceList=parseJson.getSequenceFromJSONProbe();
 			
 			//-------------- New Probe Start ------------------- ***
 
-		
+			logger.debug("<------bluePrintProbe.getProbeIndocator()---------->"+bluePrintProbe.getProbeIndocator());
 
 			if (bluePrintProbe.getProbeIndocator() != null && bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
 
