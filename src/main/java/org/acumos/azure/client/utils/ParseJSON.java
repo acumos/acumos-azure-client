@@ -24,19 +24,15 @@ package org.acumos.azure.client.utils;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
-import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.client.ICommonDataServiceRestClient;
-import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -44,9 +40,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonArray;
-
-//import org.yaml.snakeyaml.Yaml;
 
 public class ParseJSON {
 	
@@ -219,9 +212,7 @@ public class ParseJSON {
 		log.debug("<----------End jsonFileToObject in ParseJSON---------------------list---->"+list);
 		return blueprint;	
 	}
-	
-	
-	
+
 	/**
 	 * This method returns probe indicator
 	 * @param jo
@@ -348,12 +339,11 @@ public class ParseJSON {
 		log.debug("<----------End jsonArrayParseObjectProb in ParseJSON------------------->");
 		return listComponent;
 	}
-	
-	
-	
+
 	
 public LinkedList<String> getSequenceFromJSON(String jsonFileName)throws  Exception{
 	log.debug("<----------Start getSequenceFromJSON in ParseJSON-----------jsonFileName-------->"+jsonFileName);
+
 		String contentString="";
 		HashMap<String,String> imageMap=new HashMap<String,String>();
 		ArrayList<String> list=new ArrayList<String>();	
@@ -561,93 +551,6 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		ICommonDataServiceRestClient client1 = CommonDataServiceRestClientImpl.getInstance(datasource, userName, password);
 		return client;
 	}
- 
-/*public static void main(String args[]){
-		try{
-			CommonDataServiceRestClientImpl client = getClient("http://cognita-dev1-vm01-core.eastus.cloudapp.azure.com:8000/ccds","ccds_client","ccds_client");
-			UUID uidNumber = UUID.randomUUID();
-			List<AzureContainerBean> AzureContainerBeanList=new ArrayList<AzureContainerBean>();
-			AzureContainerBean containerBean=new AzureContainerBean();
-			
-			AzureContainerBean containerBean2=new AzureContainerBean();
-			
-			containerBean.setContainerIp("11.11.10.80");
-			containerBean.setContainerPort("8080");
-			containerBean.setContainerName("A");
-			
-			containerBean2.setContainerIp("11.11.10.81");
-			containerBean2.setContainerPort("8081");
-			containerBean2.setContainerName("B");
-			AzureContainerBeanList.add(containerBean);
-			AzureContainerBeanList.add(containerBean2);
-			
-			ObjectMapper mapper = new ObjectMapper();
-			String azureDetails=mapper.writeValueAsString(AzureContainerBeanList);
-			System.out.println("=========azureDetails========"+AzureContainerBeanList);
-			//ObjectMapper mapper = new ObjectMapper();
-			//uidNumStr=uidNumber.toString();
-			String deploymentStatusCode=uidNumber.toString();
-			System.out.println("=================="+deploymentStatusCode);
-			//List<MLPSolutionRevision> testList=client.getSolutionRevisions("02eab846-2bd0-4cfe-8470-9fc69fa0d877");
-			//System.out.println(testList.get(0));
-			//getSolutionRevisions(String solutionId)
-			MLPSolutionDeployment mlp=new MLPSolutionDeployment("1bb7424a-69d8-493d-8e5a-dbb87561f08c", "fa7038b2-1c3d-4f17-b439-cd59a7c0a38b", "7cd47ca4-1c5d-4cdc-909c-f7c17367b4d4",
-					"DP");
-			mlp.setDeploymentId(deploymentStatusCode);
-			mlp.setDetail(azureDetails);
-			String oldstring = "2018-01-10T16:50:39.402Z";
-			mlp.setTarget("pp");
-			//sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-			//Date date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").parse(oldstring);
-			mlp.setCreated(new Date());
-			mlp.setModified(new Date());
-			mlp.setTarget("test");
-			mlp.setDetail("test2");
-			
-			
-			 {
-			 -- "created": "2018-01-10T16:50:39.402Z",
-			  "deploymentId": "3956dec8-1028-4116-9669-ca5f43628f86",
-			  "deploymentStatusCode": "DP",
-			--  "detail": "1",
-			 -- "modified": "2018-01-10T16:50:39.402Z",
-			  "revisionId": "a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6",
-			  "solutionId": "02eab846-2bd0-4cfe-8470-9fc69fa0d877",
-			 -- "target": "111",
-			  "userId": "0505e537-ce79-4b1f-bf43-68d88933c369"
-			}
-			
-			//mlp.setDeploymentStatusCode("DP");
-			//client.createSolutionDeployment(arg0)
-			
-			client.createSolutionDeployment(mlp);
-		ParseJSON p=new ParseJSON();
-		System.out.println("===========vvvv=======");
-		}catch(Exception e){
-			e.printStackTrace();
-		}
-	} */
-	
- 
-   /*public static void main(String args[]) {
-	   
-	   ParseJSON parseJson=new ParseJSON();
-	   try {
-		//Blueprint bluePrint=parseJson.jsonFileToObjectProbe();
-		// parseJson.parseJsonFileProbe();
-		   parseJson.checkProbeIndicator();
-		   System.out.println("=1==="+parseJson.jsonFileToObjectProbe());
-		   System.out.println("=2==="+parseJson.parseJsonFileProbe());
-		   System.out.println("==3=="+parseJson.getNodeTypeContainerMap());
-		   System.out.println("==4=="+parseJson.getSequenceFromJSONProbe());
-		// parseJson.getSequenceFromJSONProbe();
-		   
-	} catch (Exception e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	   
-   }*/
    
    public boolean checkProbeIndicator(String jsonFileName)  throws  Exception {
 	   log.debug("<----------Start checkProbeIndicator --------------------------->");
@@ -720,33 +623,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					}
 				}
 			}
-			blueprint.setOrchestrator(orchestratorBean);
-		
-
-			/*JSONArray inputOperation = (JSONArray) jo.get("input_operation_signatures");
-			ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
-			if (inputOperation != null) {
-				log.debug("input_operation_signatures-->");
-				Iterator itr2 = inputOperation.iterator();
-				while (itr2.hasNext()) {
-					OperationSignature operationSignature = new OperationSignature();
-					itr1 = ((Map) itr2.next()).entrySet().iterator();
-					while (itr1.hasNext()) {
-						Map.Entry pair = itr1.next();
-						String key = (String) pair.getKey();
-						String value = (String) pair.getValue();
-						log.debug("-->" + pair.getKey() + " : " + pair.getValue());
-						if (key != null && key.equalsIgnoreCase("operation")) {
-							operationSignature.setOperation(value);
-						}
-
-					}
-					operationList.add(operationSignature);
-				}
-			}
-			blueprint.setInputs(operationList);
-			*/
-			
+			blueprint.setOrchestrator(orchestratorBean);			
 			
 			/**
 			 * 
@@ -922,43 +799,6 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		ArrayList<String> list=new ArrayList<String>();	
 		try
 		{
-		 
-       /* Object obj = new JSONParser().parse(new FileReader("blueprint-new.json"));
-        JSONObject jo = (JSONObject) obj;
-        JSONArray nodes = (JSONArray) jo.get("nodes");
-        if(nodes!=null && !nodes.isEmpty()){
-        	Iterator itr3 = nodes.iterator();
-	        int nodeCount=0; 
-	        while (itr3.hasNext()) 
-	        {
-	        	Iterator<Map.Entry> itr4 = ((Map) itr3.next()).entrySet().iterator();
-	        	log.debug("Nodes-->"+ ++nodeCount);
-	        	String containerName="";
-	        	String imageName="";
-	            while (itr4.hasNext()) {
-	                Map.Entry pair = itr4.next();
-	                String key=(String)pair.getKey();
-	                String val=(String)pair.getValue().toString();
-	                if(key!=null && key.equalsIgnoreCase("depends_on")){
-	                	jsonArrayParse(pair.getValue());
-	                }if(key!=null && key.equalsIgnoreCase("container_name")){
-	                	containerName=val;
-	                }else{
-	                	log.debug("-key->"+pair.getKey() + " --value-->" + pair.getValue());
-	                }
-	                if(key!=null && key.equalsIgnoreCase("image")){
-	                	imageName=val;
-	                	list.add(val);
-	                 }
-	                if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
-	                	imageMap.put(imageName, containerName);
-	                }
-	                
-	            }
-	        }
-         }*/
-			
-			
 			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 			Iterator<Map.Entry> itr1 = null;
 			JSONObject jo = (JSONObject) obj;
