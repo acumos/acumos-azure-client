@@ -21,6 +21,7 @@
 package org.acumos.azure.client.utils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -30,19 +31,18 @@ public class DockerInfoList implements Serializable {
 	private static final long serialVersionUID = -8959582621635414829L;
 
 	@JsonProperty("docker_info_list")
-	private List<DockerInfo> dockerList = null;
+	private ArrayList<DockerInfo> dockerList = null;
 
-	public DockerInfoList(List<DockerInfo> dockerList) {
+	public DockerInfoList(ArrayList<DockerInfo> dockerList) {
 		super();
 		this.dockerList = dockerList;
 	}
 
 	public DockerInfoList() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public List<DockerInfo> getDockerList() {
+	public ArrayList<DockerInfo> getDockerList() {
 		return dockerList;
 	}
 
@@ -52,16 +52,21 @@ public class DockerInfoList implements Serializable {
 				return d;
 		}
 		return null;
-
 	}
 
-	public void setDockerList(List<DockerInfo> dockerList) {
+	public void setDockerList(ArrayList<DockerInfo> dockerList) {
 		this.dockerList = dockerList;
 	}
 
+	public void addDockerInfo(DockerInfo dockerInfo) {
+		if(dockerList == null) 
+			dockerList = new ArrayList<>();
+		
+		dockerList.add(dockerInfo);
+	}
+	
 	@Override
 	public String toString() {
 		return "DockerInfos [dockerList=" + dockerList + "]";
 	}
-
 }

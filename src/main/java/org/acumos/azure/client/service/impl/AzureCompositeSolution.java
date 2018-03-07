@@ -478,7 +478,7 @@ public class AzureCompositeSolution implements Runnable {
 	                  int imageCount=1;
 	                  int remoteCount=1;
 	                  int count=0;
-	                  List<DockerInfo> dockerInfoList=new ArrayList<DockerInfo>();
+	                  ArrayList<DockerInfo> dockerInfoList=new ArrayList<DockerInfo>();
 	                  if(sequenceList!=null && sequenceList.size() > 0){
 			            	Iterator seqItr = sequenceList.iterator();
 			                while (seqItr.hasNext()) {
@@ -626,9 +626,9 @@ public class AzureCompositeSolution implements Runnable {
 		  logger.debug("<-----dataBrokerPort---------->"+dataBrokerPort);
 		  logger.debug("<-----dataBrokerScript---------->"+dataBrokerScript);
 		  // Added for probe
-		  if(probeContainerBeanList != null && !probeContainerBeanList.isEmpty()){
+		  if(dockerList != null){
 			  logger.debug("Inside probeContainerBeanList ==> ");
-			  putContainerDetailsJSONProbe(probeContainerBeanList,urlDockerInfo);
+			  putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
 			}
 		  
 		 if(bluePrint!=null){
@@ -639,7 +639,7 @@ public class AzureCompositeSolution implements Runnable {
 			}
 		 
 		 // Added notification for probe code
-		 if (bluePrint.getProbeIndocator() != null && !bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
+		 if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation==>");
 			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());
 		 }
@@ -800,7 +800,7 @@ public class AzureCompositeSolution implements Runnable {
 	}
 	
 	
-	public void putContainerDetailsJSONProbe(List<ContainerInfo> dockerList,String apiUrl){
+	public void putContainerDetailsJSONProbe(DockerInfoList dockerList,String apiUrl){
 		logger.debug("<--------Start---putContainerDetailsJSON------->");
 		try {
 			logger.debug("<----dockerList---------->"+dockerList.toString()+"======apiUrl==="+apiUrl);

@@ -29,13 +29,24 @@ public class DockerInfo implements Serializable {
 	private static final long serialVersionUID = 6384817901582893495L;
 
 	@JsonProperty("container_name")
-	private String container = null;
-
+	private String container = null; 
+	
 	@JsonProperty("ip_address")
 	private String ipAddress = null;
-
+	
 	@JsonProperty("port")
 	private String port = null;
+
+	/**
+	 * Constructor class
+	 * 
+	 * @param container
+	 *            Container
+	 * @param ipAddress
+	 *            IP address
+	 * @param port
+	 *            Port number
+	 */
 
 	public DockerInfo(String container, String ipAddress, String port) {
 		super();
@@ -44,9 +55,11 @@ public class DockerInfo implements Serializable {
 		this.port = port;
 	}
 
+	/**
+	 * Standard POJO no-arg constructor
+	 */
 	public DockerInfo() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
 	public String getContainer() {
@@ -77,5 +90,6 @@ public class DockerInfo implements Serializable {
 	public String toString() {
 		return "DockerInfo [container=" + container + ", ipAddress=" + ipAddress + ", port=" + port + "]";
 	}
-
 }
+
+
