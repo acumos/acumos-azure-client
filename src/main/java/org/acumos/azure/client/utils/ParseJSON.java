@@ -629,7 +629,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	} */
 	
  
-   public static void main(String args[]) {
+   /*public static void main(String args[]) {
 	   
 	   ParseJSON parseJson=new ParseJSON();
 	   try {
@@ -647,7 +647,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		e.printStackTrace();
 	}
 	   
-   }
+   }*/
    
    public boolean checkProbeIndicator()  throws  Exception {
 	   log.debug("<----------Start checkProbeIndicator --------------------------->");
