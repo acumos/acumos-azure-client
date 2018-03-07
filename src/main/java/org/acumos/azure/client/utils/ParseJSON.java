@@ -629,7 +629,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	} */
 	
  
-   /*public static void main(String args[]) {
+   public static void main(String args[]) {
 	   
 	   ParseJSON parseJson=new ParseJSON();
 	   try {
@@ -647,7 +647,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		e.printStackTrace();
 	}
 	   
-   }*/
+   }
    
    public boolean checkProbeIndicator()  throws  Exception {
 	   log.debug("<----------Start checkProbeIndicator --------------------------->");
@@ -867,34 +867,36 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					log.debug("Nodes-->" + ++nodeCount);
 					while (itr1.hasNext()) {
 						Map.Entry pair = itr1.next();
-						String key = (String) pair.getKey();
-						//if (key != null && key.equalsIgnoreCase("connected_to")) {
-						/*if (key != null && key.equalsIgnoreCase("connected_to")) {
-							if (pair.getValue() != null) {
-								ArrayList<Component> listComponent = jsonArrayParseObjectProb(pair.getValue());
-								node.setDependsOn(listComponent);
-							}
-						} else*/ if(key != null && key.equalsIgnoreCase("operation_signature_list")) {
+					   if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+							String key = (String) pair.getKey();
+							//if (key != null && key.equalsIgnoreCase("connected_to")) {
+							/*if (key != null && key.equalsIgnoreCase("connected_to")) {
+								if (pair.getValue() != null) {
+									ArrayList<Component> listComponent = jsonArrayParseObjectProb(pair.getValue());
+									node.setDependsOn(listComponent);
+								}
+							} else*/ if(key != null && key.equalsIgnoreCase("operation_signature_list")) {
+								
+								if (pair.getValue() != null) {
+									ArrayList<Component> listComponent = jsonArrayParseObjectProb(pair.getValue());
+									node.setDependsOn(listComponent);
+								}
+								
 							
-							if (pair.getValue() != null) {
-								ArrayList<Component> listComponent = jsonArrayParseObjectProb(pair.getValue());
-								node.setDependsOn(listComponent);
+						  }else {
+								log.debug("-->" + pair.getKey() + " : " + pair.getValue());
+								if (key != null && key.equalsIgnoreCase("container_name")) {
+									node.setContainerName((String) pair.getValue());
+								}
+								if (key != null && key.equalsIgnoreCase("image")) {
+									node.setImage((String) pair.getValue());
+								}
+								
+								if(key != null && key.equalsIgnoreCase("node_type")) {
+									node.setNode_type((String)pair.getValue());
+								}
 							}
-							
-						
-					  }else {
-							log.debug("-->" + pair.getKey() + " : " + pair.getValue());
-							if (key != null && key.equalsIgnoreCase("container_name")) {
-								node.setContainerName((String) pair.getValue());
-							}
-							if (key != null && key.equalsIgnoreCase("image")) {
-								node.setImage((String) pair.getValue());
-							}
-							
-							if(key != null && key.equalsIgnoreCase("node_type")) {
-								node.setNode_type((String)pair.getValue());
-							}
-						}
+					 }	
 					}
 					nodeList.add(node);
 				}
@@ -971,19 +973,22 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					log.debug("Nodes-->" + ++nodeCount);
 					String containerName = null,imageName  = null;
 					while (itr1.hasNext()) {
+						
 						Map.Entry pair = itr1.next();
-						String key = (String) pair.getKey();
-						if (key != null && key.equalsIgnoreCase("container_name")) {
-								containerName =(String)pair.getValue();
-							}
-							if (key != null && key.equalsIgnoreCase("image")) {
-								imageName =(String)pair.getValue();
-							}
-							
-						if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
-							
-		                	imageMap.put(imageName, containerName);
-		                }
+						if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+							String key = (String) pair.getKey();
+							if (key != null && key.equalsIgnoreCase("container_name")) {
+									containerName =(String)pair.getValue();
+								}
+								if (key != null && key.equalsIgnoreCase("image")) {
+									imageName =(String)pair.getValue();
+								}
+								
+							if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
+								
+			                	imageMap.put(imageName, containerName);
+			                }
+					  }	
 					}
 			
 				}
@@ -1020,24 +1025,26 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					DeploymentBean bean=new DeploymentBean();
 					while (itr1.hasNext()) {
 						Map.Entry pair = itr1.next();
-						String key = (String) pair.getKey();
-						if (key != null && key.equalsIgnoreCase("container_name")) {
-								containerName =(String)pair.getValue();
-								bean.setContainerName(containerName);
-							}
-							if (key != null && key.equalsIgnoreCase("node_type")) {
-								nodeType =(String)pair.getValue();
-								bean.setNodeType(nodeType);
-							}
-							if (key != null && key.equalsIgnoreCase("script")) {
-								script =(String)pair.getValue();
-								bean.setScript(script);
-							}
-							
-						if(containerName!=null && nodeType!=null && !"".equals(containerName) && !"".equals(nodeType)){
-							
-		                	imageMap.put(containerName,bean);
-		                }
+						if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+							String key = (String) pair.getKey();
+							if (key != null && key.equalsIgnoreCase("container_name")) {
+									containerName =(String)pair.getValue();
+									bean.setContainerName(containerName);
+								}
+								if (key != null && key.equalsIgnoreCase("node_type")) {
+									nodeType =(String)pair.getValue();
+									bean.setNodeType(nodeType);
+								}
+								if (key != null && key.equalsIgnoreCase("script")) {
+									script =(String)pair.getValue();
+									bean.setScript(script);
+								}
+								
+							if(containerName!=null && nodeType!=null && !"".equals(containerName) && !"".equals(nodeType)){
+								
+			                	imageMap.put(containerName,bean);
+			                }
+					  }	
 					}
 					log.debug("<---container_name-->"+bean.getContainerName()+"--node_type--"+bean.getNodeType()+"--Script--"+bean.getScript());
 			
@@ -1086,24 +1093,26 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	        	log.debug("Second while");
 	            while (itr4.hasNext()) {
 	                Map.Entry pair = itr4.next();
-	                String key=(String)pair.getKey();
-	                String val=(String)pair.getValue().toString();
-	                if(key!=null && key.equalsIgnoreCase("operation_signature_list")){
-	                	sequenceJsonParseProbe(pair.getValue(),testNode,root);
-	                }if(key!=null && key.equalsIgnoreCase("container_name")){
-	                	containerName=val;
-	                	contName=val;
-	                }else{
-	                	log.debug("-----------------key->"+pair.getKey() );
-	                }
-	                if(key!=null && key.equalsIgnoreCase("image")){
-	                	imageName=val;
-	                	list.add(val);
-	                 }
-	                if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
-	                	imageMap.put(imageName, containerName);
-	                }
-	                
+	                if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+	                	
+		                String key=(String)pair.getKey();
+		                String val=(String)pair.getValue().toString();
+		                if(key!=null && key.equalsIgnoreCase("operation_signature_list")){
+		                	sequenceJsonParseProbe(pair.getValue(),testNode,root);
+		                }if(key!=null && key.equalsIgnoreCase("container_name")){
+		                	containerName=val;
+		                	contName=val;
+		                }else{
+		                	log.debug("-----------------key->"+pair.getKey() );
+		                }
+		                if(key!=null && key.equalsIgnoreCase("image")){
+		                	imageName=val;
+		                	list.add(val);
+		                 }
+		                if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
+		                	imageMap.put(imageName, containerName);
+		                }
+		             } 
 	            }
 	            testNode.setData(contName);
 	            NodeTree<String> searchNode=findDataInTree(root, contName);
