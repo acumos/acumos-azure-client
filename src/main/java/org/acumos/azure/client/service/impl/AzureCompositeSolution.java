@@ -312,8 +312,8 @@ public class AzureCompositeSolution implements Runnable {
 		                    .exec(new PullImageResultCallback())
 		                    .awaitSuccess();
 		            		
-		            	}
-		            	{
+		            	}else{
+		            	logger.debug("image name in run else--------->"+imageName);
 		            	dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
 	                    //.withTag(dockerImageTag)
 	                    .exec(new PullImageResultCallback())
