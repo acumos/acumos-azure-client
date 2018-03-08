@@ -1334,6 +1334,17 @@ public class AzureServiceImpl implements AzureService {
 	        logger.debug("======sequenceList=============="+sequenceList);
 	        return sequenceList;
 		}
+	  public LinkedList<String> addProbeSequence(LinkedList<String> sequenceList,String probeContainerName){
+		  logger.debug("Start===addProbeSequence============");
+		  logger.debug("====probeContainerName==="+probeContainerName+"====sequenceList====="+sequenceList);
+		  if(sequenceList!=null && sequenceList.size() > 0 && probeContainerName!=null && !"".equals(probeContainerName)){
+			  int length=sequenceList.size();
+			  logger.debug("length============"+length);
+			  sequenceList.add((length-1), probeContainerName); 
+			}
+		  logger.debug("End====addProbeSequence==============="+sequenceList);
+		  return sequenceList;
+	  }
 	/*public void callBluePrint(){
 		try{
 		ParseJSON parseJson=new ParseJSON();
@@ -1343,12 +1354,19 @@ public class AzureServiceImpl implements AzureService {
 		}catch(Exception e){
 			e.printStackTrace();
 		}
-	}
+	}*/
 	
-	public static void main(String args[]){
+	/*public static void main(String args[]){
 		System.out.println("Started================");
 		AzureServiceImpl impl=new AzureServiceImpl();
-		impl.callBluePrint();
+		LinkedList<String> sequenceList=new LinkedList<String>();
+		  sequenceList.add("AlarmGenerator1");
+		  sequenceList.add("Classifier1");
+		  sequenceList.add("SQLDataBroker1");
+		  sequenceList.add("BluePrintContainer");
+		  String probeContainerName="probe";
+		impl.addProbeSequence(sequenceList, probeContainerName);
+		//impl.callBluePrint();
 		System.out.println("End==============");
 	}*/
 	
