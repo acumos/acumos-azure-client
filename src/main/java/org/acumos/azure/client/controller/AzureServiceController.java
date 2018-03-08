@@ -300,6 +300,7 @@ public class AzureServiceController extends AbstractController {
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
 					imageMap.put(probePrintImage, "probeContainer");
+					sequenceList=azureImpl.addProbeSequence(sequenceList,"probeContainer");
 				}
 			}
 			
@@ -311,8 +312,9 @@ public class AzureServiceController extends AbstractController {
 						
 			//put condition to get probe
 			
-			logger.debug("<------list---------->"+list);
-			logger.debug("<------imageMap---------->"+imageMap);
+			logger.debug("<------list------------------>"+list);
+			logger.debug("<------imageMap-------------->"+imageMap);
+			logger.debug("<------sequenceList---------->"+sequenceList);
 			if(azure!=null) {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 

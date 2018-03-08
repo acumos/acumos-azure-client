@@ -506,7 +506,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		            			finalContainerName=imageMap.get(imageName);
 			    		            		}
 			    		            	}
-			    		            	logger.debug("<--Before--jsonContainerName--------->"+jsonContainerName+"===jsonContainerName==="+jsonContainerName);
+			    		            	logger.debug("<--Before--jsonContainerName--------->"+jsonContainerName+"===finalContainerName==="+finalContainerName);
 			    		            	if(finalContainerName!=null && !finalContainerName.equalsIgnoreCase(jsonContainerName)){
 			    		            		 logger.debug("Continue.............................................");
 			    		            		continue;
@@ -585,14 +585,16 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		containerInfo.setContainerIp(azureVMName);
 			    		        		containerInfo.setContainerPort(portNumber);
 			    		        		containerInfo.setNodeType(nodeTypeContainer);
-			    		        		if(containerInstanceprobe != null && !containerInstanceprobe.equals("")) {
+			    		        		logger.debug("<--Before-Probe-containerInstanceprobe--------->"+containerInstanceprobe+"===containerName==="+containerName);
+			    		        		if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
+			    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
+			    		        			logger.debug("<--After-Probe-containerInstanceprobe--------->"+containerInstanceprobe+"===containerName==="+containerName);
 				    		        	   containerInfo.setNodeType("Probe");
 				    		        	   probeIP = azureVMIP;
 				    		        	   probePort = portNumber;
 			    		        		}
 
 			    		        		probeContainerBeanList.add(containerInfo);
-			    		        		
 			    		        		azureContainerBeanList.add(containerBean);
 			    		            }
 			                    	
@@ -635,12 +637,14 @@ public class AzureCompositeSolution implements Runnable {
 			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
 		 if(dataBrokerPort!=null && dataBrokerScript!=null && !"".equals(dataBrokerPort) && !"".equals(dataBrokerScript)){
+			 logger.debug("Inside putDataBrokerDetails ===========> ");
 			  putDataBrokerDetails(deployDataObject,urlDataBroker,dataBrokerScript);
 			}
 		 
 		 // Added notification for probe code
 		 if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
-			 logger.debug("Probe indicator true. Starting generatenotircation==>");
+			 logger.debug("Probe indicator true. Starting generatenotircation===========>");
+			 logger.debug("====probeIP===>"+probeIP+"===probePort=="+probePort);
 			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());
 		 }
 		 
@@ -684,9 +688,10 @@ public class AzureCompositeSolution implements Runnable {
 	 * @return
 	 */
 	 public org.acumos.azure.client.transport.MLNotification createNotification(MLPNotification mlpNotification) {
-         logger.debug( "createNotification`");
+		 logger.debug("Start===createNotification============");
          CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
          MLNotification mlNotification = Utils.convertToMLNotification(client.createNotification(mlpNotification));
+         logger.debug("End===createNotification============");
          return mlNotification;
 	 }
 	 
@@ -696,6 +701,8 @@ public class AzureCompositeSolution implements Runnable {
 	  * @param userId
 	  */
 	 void generateNotification(String msg, String userId) {
+		 logger.debug("Start===generateNotification============");
+		 logger.debug("=====userId====="+userId+"==msg==="+msg);
          MLPNotification notification = new MLPNotification();
          try {
                  if (msg != null) {
@@ -708,11 +715,13 @@ public class AzureCompositeSolution implements Runnable {
                      notification.setEnd(endDate);
                      CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
                      MLNotification mLNotification = createNotification(notification);
+                     logger.debug("=====mLNotification.getNotificationId()====="+mLNotification.getNotificationId());
                      client.addUserToNotification(mLNotification.getNotificationId(),userId);
              }
          } catch (Exception e) {
                          logger.error("Exception Occurred while getNotifications", e);
          }
+         logger.debug("End===generateNotification============"); 
 	 }
 
 	
