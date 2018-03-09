@@ -622,11 +622,11 @@ public class AzureCompositeSolution implements Runnable {
 		  String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
 		  logger.debug("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
 		  String dataBrokerPort=getDataBrokerPort(deploymentList,"DataBroker");
-		  String dataBrokerScript=getDataBrokerScript(deploymentList,"DataBroker");
+		  //String dataBrokerScript=getDataBrokerScript(deploymentList,"DataBroker");
 		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/configDB";
 		  logger.debug("<-----urlDataBroker---------->"+urlDataBroker);
 		  logger.debug("<-----dataBrokerPort---------->"+dataBrokerPort);
-		  logger.debug("<-----dataBrokerScript---------->"+dataBrokerScript);
+		  //logger.debug("<-----dataBrokerScript---------->"+dataBrokerScript);
 		  // Added for probe
 		  if(dockerList != null){
 			  logger.debug("Inside probeContainerBeanList ==> ");
@@ -636,9 +636,9 @@ public class AzureCompositeSolution implements Runnable {
 		 if(bluePrint!=null){
 			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
-		 if(dataBrokerPort!=null && dataBrokerScript!=null && !"".equals(dataBrokerPort) && !"".equals(dataBrokerScript)){
+		 if(dataBrokerPort!=null &&  !"".equals(dataBrokerPort)){
 			 logger.debug("Inside putDataBrokerDetails ===========> ");
-			  putDataBrokerDetails(deployDataObject,urlDataBroker,dataBrokerScript);
+			  putDataBrokerDetails(deployDataObject,urlDataBroker);
 			}
 		 
 		 // Added notification for probe code
@@ -854,20 +854,20 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<--------End---putBluePrintDetailsJSON------->");
 	}
 	
-	public void putDataBrokerDetails(AzureDeployDataObject deployDataObject,String apiUrl,String dataBrokerScript){
+	public void putDataBrokerDetails(AzureDeployDataObject deployDataObject,String apiUrl){
 		logger.debug("<--------Start---putDataBrokerDetails------->");
 		try {
 			logger.debug("======apiUrl==="+apiUrl);
 			logger.debug("====UrlAttribute==="+deployDataObject.getUrlAttribute());
 			logger.debug("=====JsonMapping==="+deployDataObject.getJsonMapping());
 			logger.debug("=====JsonPosition==="+deployDataObject.getJsonPosition());
-			logger.debug("=====dataBrokerScript==="+dataBrokerScript);
+			//logger.debug("=====dataBrokerScript==="+dataBrokerScript);
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
 			map.add("jsonUrl", deployDataObject.getUrlAttribute());
-			map.add("jsonScript", dataBrokerScript);
+			//map.add("jsonScript", dataBrokerScript);
 			map.add("jsonMapping", deployDataObject.getJsonMapping());
 			map.add("jsonPosition", deployDataObject.getJsonPosition());
 			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);

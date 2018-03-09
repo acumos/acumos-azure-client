@@ -51,14 +51,14 @@ import com.google.gson.JsonArray;
 public class ParseJSON {
 	
 	Logger log =LoggerFactory.getLogger(ParseJSON.class);
-	public  HashMap<String,String> parseJsonFile()throws  Exception{
-		log.debug("<----------Start parseJsonFile in ParseJSON--------------------------->");
+	public  HashMap<String,String> parseJsonFile(String jsonFileName)throws  Exception{
+		log.debug("<----------Start parseJsonFile in ParseJSON--------------------jsonFileName------->"+jsonFileName);
 		HashMap<String,String> imageMap=new HashMap<String,String>();
 		ArrayList<String> list=new ArrayList<String>();	
 		try
 		{
 		 
-        Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+        Object obj = new JSONParser().parse(new FileReader(jsonFileName));
         JSONObject jo = (JSONObject) obj;
         JSONArray nodes = (JSONArray) jo.get("nodes");
         if(nodes!=null && !nodes.isEmpty()){
@@ -113,14 +113,14 @@ public class ParseJSON {
          }
 	}
 	
-	public  Blueprint jsonFileToObject()throws  Exception{
-		log.debug("<----------Start jsonFileToObject in --------------------------->");
+	public  Blueprint jsonFileToObject(String jsonFileName)throws  Exception{
+		log.debug("<----------Start jsonFileToObject in -----------------jsonFileName---------->"+jsonFileName);
 		ArrayList<String> list=new ArrayList<String>();	
 		Blueprint blueprint=new Blueprint();
 		ObjectMapper mapper = new ObjectMapper();
 		try
 		{
-		Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+		Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 		
         JSONObject jo = (JSONObject) obj;
         String prettyJSONString = jo.toString();
@@ -352,8 +352,8 @@ public class ParseJSON {
 	
 	
 	
-public LinkedList<String> getSequenceFromJSON()throws  Exception{
-	log.debug("<----------Start getSequenceFromJSON in ParseJSON------------------->");
+public LinkedList<String> getSequenceFromJSON(String jsonFileName)throws  Exception{
+	log.debug("<----------Start getSequenceFromJSON in ParseJSON-----------jsonFileName-------->"+jsonFileName);
 		String contentString="";
 		HashMap<String,String> imageMap=new HashMap<String,String>();
 		ArrayList<String> list=new ArrayList<String>();	
@@ -361,7 +361,7 @@ public LinkedList<String> getSequenceFromJSON()throws  Exception{
 		try
 		{
 			NodeTree<String> root = new NodeTree<String>("BluePrintContainer");
-        Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+        Object obj = new JSONParser().parse(new FileReader(jsonFileName));
         JSONObject jo = (JSONObject) obj;
         JSONArray nodes = (JSONArray) jo.get("nodes");
         if(nodes!=null && !nodes.isEmpty()){
@@ -649,11 +649,11 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	   
    }*/
    
-   public boolean checkProbeIndicator()  throws  Exception {
+   public boolean checkProbeIndicator(String jsonFileName)  throws  Exception {
 	   log.debug("<----------Start checkProbeIndicator --------------------------->");
 	   boolean probeIndicator=true;
 	   try {
-			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 			JSONObject jo = (JSONObject) obj;
 			JSONArray probeIndicatorArr = (JSONArray) jo.get("probeIndicator");
 			log.debug("<----------probeIndicatorArr--------->"+probeIndicatorArr);
@@ -672,14 +672,14 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			
    }
 
-	public Blueprint jsonFileToObjectProbe()  throws  Exception {
-		 log.debug("<----------Start jsonFileToObjectProbe --------------------------->");
+	public Blueprint jsonFileToObjectProbe(String jsonFileName)  throws  Exception {
+		 log.debug("<----------Start jsonFileToObjectProbe -------------jsonFileName-------------->"+jsonFileName);
 		
 		ArrayList<String> list = new ArrayList<String>();
 		Blueprint blueprint = new Blueprint();
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 
 			JSONObject jo = (JSONObject) obj;
 			String prettyJSONString = jo.toString();
@@ -916,8 +916,8 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		return blueprint;
 	}
 
-	public HashMap<String, String> parseJsonFileProbe() throws Exception {
-		log.debug("<----------Start parseJsonFileProbe in ParseJSON--------------------------->");
+	public HashMap<String, String> parseJsonFileProbe(String jsonFileName) throws Exception {
+		log.debug("<----------Start parseJsonFileProbe in ParseJSON-----------------jsonFileName---------->"+jsonFileName);
 		HashMap<String,String> imageMap=new HashMap<String,String>();
 		ArrayList<String> list=new ArrayList<String>();	
 		try
@@ -959,7 +959,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
          }*/
 			
 			
-			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 			Iterator<Map.Entry> itr1 = null;
 			JSONObject jo = (JSONObject) obj;
 	        JSONArray nodes = (JSONArray) jo.get("nodes");
@@ -1002,14 +1002,14 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		return imageMap;	
 	}
 	
-	public HashMap<String, DeploymentBean> getNodeTypeContainerMap() throws Exception {
-		log.debug("<----------Start getNodeTypeContainerMap in ParseJSON--------------------------->");
+	public HashMap<String, DeploymentBean> getNodeTypeContainerMap(String jsonFileName) throws Exception {
+		log.debug("<----------Start getNodeTypeContainerMap in ParseJSON----------------jsonFileName----------->"+jsonFileName);
 		HashMap<String,DeploymentBean> imageMap=new HashMap<String,DeploymentBean>();
 		ArrayList<String> list=new ArrayList<String>();	
 		try
 		{
 		
-			Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 			Iterator<Map.Entry> itr1 = null;
 			JSONObject jo = (JSONObject) obj;
 	        JSONArray nodes = (JSONArray) jo.get("nodes");
@@ -1065,8 +1065,8 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	 * @throws Exception
 	 */
 
-	public LinkedList<String> getSequenceFromJSONProbe()  throws  Exception {
-		log.debug("<----------Start getSequenceFromJSONProbe in ParseJSON--------------------------->");
+	public LinkedList<String> getSequenceFromJSONProbe(String jsonFileName)  throws  Exception {
+		log.debug("<----------Start getSequenceFromJSONProbe in ParseJSON----------------jsonFileName----------->"+jsonFileName);
 		String contentString="";
 		HashMap<String,String> imageMap=new HashMap<String,String>();
 		ArrayList<String> list=new ArrayList<String>();	
@@ -1074,7 +1074,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		try
 		{
 		NodeTree<String> root = new NodeTree<String>("BluePrintContainer");
-        Object obj = new JSONParser().parse(new FileReader("blueprint.json"));
+        Object obj = new JSONParser().parse(new FileReader(jsonFileName));
         JSONObject jo = (JSONObject) obj;
         JSONArray nodes = (JSONArray) jo.get("nodes");
         if(nodes!=null && !nodes.isEmpty()){

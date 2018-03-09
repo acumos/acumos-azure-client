@@ -195,6 +195,7 @@ public class AzureServiceController extends AbstractController {
 		String uidNumStr="";
 		String dockerVMUserName="";
 		String dockerVMPassword="";
+		String jsonFileName="blueprint.json";
 		try {
 			UUID uidNumber = UUID.randomUUID();
 			uidNumStr=uidNumber.toString();
@@ -262,7 +263,7 @@ public class AzureServiceController extends AbstractController {
 			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
 			//sequence
 			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();*/
-			boolean probeIndicator=parseJson.checkProbeIndicator();
+			boolean probeIndicator=parseJson.checkProbeIndicator(jsonFileName);
 			Blueprint bluePrintProbe=null;
 			HashMap<String,String> imageMap=null;
 			HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
@@ -272,22 +273,22 @@ public class AzureServiceController extends AbstractController {
 			if(probeIndicator){
 				//-------------- New Probe Start ------------------- ***
 				//For new blueprint.json
-				 bluePrintProbe =parseJson.jsonFileToObjectProbe();
+				 bluePrintProbe =parseJson.jsonFileToObjectProbe(jsonFileName);
 				//how many images
-				imageMap=parseJson.parseJsonFileProbe();
+				imageMap=parseJson.parseJsonFileProbe(jsonFileName);
 				//Node Type and container Name in nodes
-				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap();
+				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(jsonFileName);
 				// images list
 				list=azureImpl.iterateImageMap(imageMap);
 				
 				//sequence
-				sequenceList=parseJson.getSequenceFromJSONProbe();
+				sequenceList=parseJson.getSequenceFromJSONProbe(jsonFileName);
 			}else{
 				//old code 
-				bluePrintProbe=parseJson.jsonFileToObject();
-				imageMap=parseJson.parseJsonFile();
+				bluePrintProbe=parseJson.jsonFileToObject(jsonFileName);
+				imageMap=parseJson.parseJsonFile(jsonFileName);
 				list=azureImpl.iterateImageMap(imageMap);
-				sequenceList=parseJson.getSequenceFromJSON();
+				sequenceList=parseJson.getSequenceFromJSON(jsonFileName);
 			}
 			
 			
