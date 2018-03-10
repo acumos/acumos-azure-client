@@ -39,6 +39,7 @@ import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
+import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPSolutionDeployment;
@@ -714,6 +715,7 @@ public class AzureCompositeSolution implements Runnable {
                      notification.setStart(startDate);
                      notification.setEnd(endDate);
                      CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+                     notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
                      MLNotification mLNotification = createNotification(notification);
                      logger.debug("=====mLNotification.getNotificationId()====="+mLNotification.getNotificationId());
                      client.addUserToNotification(mLNotification.getNotificationId(),userId);
