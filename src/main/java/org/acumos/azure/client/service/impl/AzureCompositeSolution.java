@@ -89,6 +89,7 @@ public class AzureCompositeSolution implements Runnable {
 	private String bluePrintName;
 	private String bluePrintUser;
 	private String bluePrintPass;
+	private String probeInternalPort;
 	private String probeName;
 	private String probeUser;
 	private String probePass;
@@ -111,7 +112,7 @@ public class AzureCompositeSolution implements Runnable {
 	
 
 	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
-			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeName,
+			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeInternalPort,String probeName,
 			String probeUser,String probePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
 			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,String bluePrintJsonStr) {
 	    this.azure = azure;
@@ -144,6 +145,7 @@ public class AzureCompositeSolution implements Runnable {
 	    this.probeName=probeName;
 	    this.probeUser=probeUser;
 	    this.probePass=probePass;
+	    this.probeInternalPort=probeInternalPort;
 	    
 	   }
 	public void run() {
@@ -177,6 +179,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<-------probeName-------->"+probeName);
 		logger.debug("<-------probeUser-------->"+probeUser);
 		logger.debug("<-------probePass-------->"+probePass);
+		logger.debug("<-------probeInternalPort-------->"+probeInternalPort);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
@@ -541,6 +544,8 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		logger.debug("====finalContainerName======: " + finalContainerName);
 			    		        		logger.debug("====imageCount======: " + imageCount);
 			    		        		logger.debug("====nodeTypeContainer======: " + nodeTypeContainer);
+			    		        		logger.debug("====containerInstanceprobe======: " + containerInstanceprobe);
+			    		        		logger.debug("<--Deploying--=====containerName==="+containerName);
 			    		        		if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
 			    		        			logger.debug("<--if Part--containerInstanceBluePrint--------->"+containerInstanceBluePrint+"=====containerName==="+containerName);
 			    		        			portNumber="8555";
@@ -549,20 +554,28 @@ public class AzureCompositeSolution implements Runnable {
 			            			        portNumberString=portNumber+":"+portNumber;
 			    		        		}else{
 			    		        			portNumber=portArr[count];
-			    		        			if(solutionPort!=null && !"".equals(solutionPort)){
-			    		        				portNumberString=portNumber+":"+solutionPort;
+			    		        			if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
+				    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
+			    		        				portNumberString=portNumber+":"+probeInternalPort;
 			    		        			}else{
-			    		        				portNumberString=portNumber+":"+portNumber;
+			    		        				
+				    		        			if(solutionPort!=null && !"".equals(solutionPort)){
+				    		        				portNumberString=portNumber+":"+solutionPort;
+				    		        			}else{
+				    		        				portNumberString=portNumber+":"+portNumber;
+				    		        			}
 			    		        			}
-			    		        			count++;
+			    		        			
 			    		        			
 			    		        		}
+			    		        		count++;
 			    		        		imageCount++;
 			    		        		dockerinfo.setIpAddress(azureVMName);
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
 		            		            dockerInfoList.add(dockerinfo);
 		            		            logger.debug("====portNumberString======: " + portNumberString);
+		            		            logger.debug("====containerName======: " + containerName);
 		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
 			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumberString);
@@ -629,14 +642,17 @@ public class AzureCompositeSolution implements Runnable {
 		  logger.debug("<-----dataBrokerPort---------->"+dataBrokerPort);
 		  //logger.debug("<-----dataBrokerScript---------->"+dataBrokerScript);
 		  // Added for probe
-		  if(dockerList != null){
-			  logger.debug("Inside probeContainerBeanList ==> ");
-			  putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
-			}
 		  
+		  // putBlueprint
 		 if(bluePrint!=null){
 			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
+		// putDockerInfo
+		 if(dockerList != null){
+			  logger.debug("Inside probeContainerBeanList ==> ");
+			  putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
+			}
+		 // configDB
 		 if(dataBrokerPort!=null &&  !"".equals(dataBrokerPort)){
 			 logger.debug("Inside putDataBrokerDetails ===========> ");
 			  putDataBrokerDetails(deployDataObject,urlDataBroker);
@@ -644,7 +660,7 @@ public class AzureCompositeSolution implements Runnable {
 		 
 		 // Added notification for probe code
 		 if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
-			 logger.debug("Probe indicator true. Starting generatenotircation===========>");
+			 logger.debug("Probe indicator true. Starting generatenotircation======deployDataObject.getUserId()=====>"+deployDataObject.getUserId());
 			 logger.debug("====probeIP===>"+probeIP+"===probePort=="+probePort);
 			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());
 		 }

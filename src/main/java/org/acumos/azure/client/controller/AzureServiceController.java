@@ -208,11 +208,13 @@ public class AzureServiceController extends AbstractController {
 			//probe
 			String probePrintImage=env.getProperty("probe.ImageName");
 			String probePrintName=env.getProperty("probe.name");
+			String probeInternalPort=env.getProperty("probe.internalPort");
 			String probUser=env.getProperty("docker.registry.probe.username");
 			String probePass=env.getProperty("docker.registry.probe.password");
 			
 			logger.debug("<------probePrintImage---------->"+probePrintImage);
 			logger.debug("<------probePrintName---------->"+probePrintName);
+			logger.debug("<------probeInternalPort---------->"+probeInternalPort);
 			logger.debug("<------probUser---------->"+probUser);
 			logger.debug("<------probePass---------->"+probePass);
 			
@@ -300,8 +302,8 @@ public class AzureServiceController extends AbstractController {
 
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
-					imageMap.put(probePrintImage, "probeContainer");
-					sequenceList=azureImpl.addProbeSequence(sequenceList,"probeContainer");
+					imageMap.put(probePrintImage, "Probe");
+					sequenceList=azureImpl.addProbeSequence(sequenceList,"Probe");
 				}
 			}
 			
@@ -319,7 +321,7 @@ public class AzureServiceController extends AbstractController {
 			if(azure!=null) {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
-                        env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
+                        env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
                         sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort,nodeTypeContainerMap,bluePrintJsonStr);
 
 	              Thread t = new Thread(compositeRunner);
