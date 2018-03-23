@@ -519,7 +519,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	if(nodeTypeContainerMap!=null && nodeTypeContainerMap.size() > 0 && nodeTypeContainerMap.get(finalContainerName)!=null){
 			    		            		DeploymentBean dBean=nodeTypeContainerMap.get(finalContainerName);
 			    		            		if(dBean!=null && dBean.getScript()!=null){
-			    		            			nodeTypeContainer=dBean.getScript();
+			    		            			nodeTypeContainer=dBean.getNodeType();
 			    		            		}
 			    		            		
 			    		            	}
@@ -573,7 +573,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		dockerinfo.setIpAddress(azureVMName);
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
-		            		            dockerInfoList.add(dockerinfo);
+		            		            
 		            		            logger.debug("====portNumberString======: " + portNumberString);
 		            		            logger.debug("====containerName======: " + containerName);
 		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
@@ -590,24 +590,33 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		deploymentBean.setAzureVMName(azureVMName);
 			    		        		deploymentBean.setContainerName(finalContainerName);
 			    		        		deploymentBean.setContainerPort(portNumber);
-			    		        		deploymentBean.setNodeType(nodeTypeContainer);
-			    		        		deploymentList.add(deploymentBean);
+			    		        		
+			    		        		
 			    		        		
 			    		        		
 			    		        		ContainerInfo containerInfo = new ContainerInfo();
 			    		        		containerInfo.setContainerName(finalContainerName);
 			    		        		containerInfo.setContainerIp(azureVMName);
 			    		        		containerInfo.setContainerPort(portNumber);
-			    		        		containerInfo.setNodeType(nodeTypeContainer);
+			    		        		
 			    		        		logger.debug("<--Before-Probe-containerInstanceprobe--------->"+containerInstanceprobe+"===containerName==="+containerName);
 			    		        		if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
 			    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
 			    		        			logger.debug("<--After-Probe-containerInstanceprobe--------->"+containerInstanceprobe+"===containerName==="+containerName);
-				    		        	   containerInfo.setNodeType("Probe");
+				    		        	   
 				    		        	   probeIP = azureVMIP;
 				    		        	   probePort = portNumber;
+				    		        	   containerInfo.setNodeType("Probe");
+				    		        	   dockerinfo.setNodeType("Probe");
+				    		        	   deploymentBean.setNodeType("Probe");
+			    		        		}else{
+			    		        			dockerinfo.setNodeType(nodeTypeContainer);
+			    		        			containerInfo.setNodeType(nodeTypeContainer);
+			    		        			deploymentBean.setNodeType(nodeTypeContainer);
+			    		        			
 			    		        		}
-
+			    		        		dockerInfoList.add(dockerinfo);
+			    		        		deploymentList.add(deploymentBean);
 			    		        		probeContainerBeanList.add(containerInfo);
 			    		        		azureContainerBeanList.add(containerBean);
 			    		            }
