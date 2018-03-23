@@ -37,8 +37,8 @@ public class DockerInfo implements Serializable {
 	@JsonProperty("port")
 	private String port = null;
 	
-	@JsonProperty("node_type")
-	private String nodeType = null;
+	/*@JsonProperty("node_type")
+	private String nodeType = null;*/
 
 	/**
 	 * Constructor class
@@ -51,12 +51,12 @@ public class DockerInfo implements Serializable {
 	 *            Port number
 	 */
 
-	public DockerInfo(String container, String ipAddress, String port,String nodeType) {
+	public DockerInfo(String container, String ipAddress, String port) {
 		super();
 		this.container = container;
 		this.ipAddress = ipAddress;
 		this.port = port;
-		this.nodeType = nodeType;
+		//this.nodeType = nodeType;
 	}
 
 	/**
@@ -67,13 +67,13 @@ public class DockerInfo implements Serializable {
 	}
     
 	
-	public String getNodeType() {
+	/*public String getNodeType() {
 		return nodeType;
 	}
 
 	public void setNodeType(String nodeType) {
 		this.nodeType = nodeType;
-	}
+	}*/
 
 	public String getContainer() {
 		return container;

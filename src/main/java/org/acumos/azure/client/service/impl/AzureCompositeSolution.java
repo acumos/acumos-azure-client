@@ -607,15 +607,15 @@ public class AzureCompositeSolution implements Runnable {
 				    		        	   probeIP = azureVMIP;
 				    		        	   probePort = portNumber;
 				    		        	   containerInfo.setNodeType("Probe");
-				    		        	   dockerinfo.setNodeType("Probe");
+				    		        	   //dockerinfo.setNodeType("Probe");
 				    		        	   deploymentBean.setNodeType("Probe");
 			    		        		}else{
 			    		        			if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer)){
-			    		        				dockerinfo.setNodeType(nodeTypeContainer);
+			    		        				//dockerinfo.setNodeType(nodeTypeContainer);
 				    		        			containerInfo.setNodeType(nodeTypeContainer);
 				    		        			deploymentBean.setNodeType(nodeTypeContainer);
 			    		        			}
-			    		        			dockerinfo.setNodeType("Default");
+			    		        			//dockerinfo.setNodeType("Default");
 			    		        			containerInfo.setNodeType("Default");
 			    		        			deploymentBean.setNodeType("Default");
 			    		        			
