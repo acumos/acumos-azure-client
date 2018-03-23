@@ -610,9 +610,14 @@ public class AzureCompositeSolution implements Runnable {
 				    		        	   dockerinfo.setNodeType("Probe");
 				    		        	   deploymentBean.setNodeType("Probe");
 			    		        		}else{
-			    		        			dockerinfo.setNodeType(nodeTypeContainer);
-			    		        			containerInfo.setNodeType(nodeTypeContainer);
-			    		        			deploymentBean.setNodeType(nodeTypeContainer);
+			    		        			if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer)){
+			    		        				dockerinfo.setNodeType(nodeTypeContainer);
+				    		        			containerInfo.setNodeType(nodeTypeContainer);
+				    		        			deploymentBean.setNodeType(nodeTypeContainer);
+			    		        			}
+			    		        			dockerinfo.setNodeType("Default");
+			    		        			containerInfo.setNodeType("Default");
+			    		        			deploymentBean.setNodeType("Default");
 			    		        			
 			    		        		}
 			    		        		dockerInfoList.add(dockerinfo);
