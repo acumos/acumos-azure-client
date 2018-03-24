@@ -605,8 +605,12 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			//JSONArray inputPorts = (JSONArray) jo.get("input_ports");
 			JSONArray trainingClients = (JSONArray) jo.get("training_clients");
 			
+			ArrayList<ProbeIndicator> list_of_pb_indicators = new ArrayList<ProbeIndicator>();
+			ProbeIndicator prbIndicator = new ProbeIndicator();
+			prbIndicator.setValue(probeIndicator);
+			list_of_pb_indicators.add(prbIndicator);
 			
-			blueprint.setProbeIndocator(probeIndicator);
+			blueprint.setProbeIndocator(list_of_pb_indicators);
 			blueprint.setName(name);
 			blueprint.setVersion(version);
 			Iterator<Map.Entry> itr1 = null;
