@@ -37,6 +37,7 @@ import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.DockerUtils;
+import org.acumos.azure.client.utils.ProbeIndicator;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
 import org.acumos.cds.MessageSeverityCode;
@@ -673,7 +674,15 @@ public class AzureCompositeSolution implements Runnable {
 			}
 		 
 		 // Added notification for probe code
-		 if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
+		 ArrayList<ProbeIndicator> probeIndicatorList = bluePrint.getProbeIndocator();
+		 ProbeIndicator prbIndicator = null;
+		 if(probeIndicatorList != null && probeIndicatorList.size() >0) {
+				prbIndicator = probeIndicatorList.get(0);
+		 }	
+		 
+		 
+		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
+		 if (bluePrint.getProbeIndocator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation======deployDataObject.getUserId()=====>"+deployDataObject.getUserId());
 			 logger.debug("====probeIP===>"+probeIP+"===probePort=="+probePort);
 			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());

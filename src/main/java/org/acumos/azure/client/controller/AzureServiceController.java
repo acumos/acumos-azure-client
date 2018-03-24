@@ -44,6 +44,7 @@ import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.ParseJSON;
+import org.acumos.azure.client.utils.ProbeIndicator;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -297,15 +298,29 @@ public class AzureServiceController extends AbstractController {
 			//-------------- New Probe Start ------------------- ***
 
 			logger.debug("<------bluePrintProbe.getProbeIndocator()---------->"+bluePrintProbe.getProbeIndocator());
-
-			if (bluePrintProbe.getProbeIndocator() != null && bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
+			
+			ArrayList<ProbeIndicator> probeIndicatorList = bluePrintProbe.getProbeIndocator();
+			ProbeIndicator prbIndicator = null;
+			if(probeIndicatorList != null && probeIndicatorList.size() >0) {
+				prbIndicator = probeIndicatorList.get(0);
+			}			
+		    if (bluePrintProbe.getProbeIndocator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True") ) {
 
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
 					imageMap.put(probePrintImage, "Probe");
 					sequenceList=azureImpl.addProbeSequence(sequenceList,"Probe");
 				}
-			}
+			}	
+
+			/*if (bluePrintProbe.getProbeIndocator() != null && bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
+
+				if (probePrintImage != null && !"".equals(probePrintImage)) {
+					list.add(probePrintImage);
+					imageMap.put(probePrintImage, "Probe");
+					sequenceList=azureImpl.addProbeSequence(sequenceList,"Probe");
+				}
+			}*/
 			
 			if (bluePrintImage != null && !"".equals(bluePrintImage)) {
 				list.add(bluePrintImage);
