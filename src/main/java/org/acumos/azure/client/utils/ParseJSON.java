@@ -221,6 +221,9 @@ public class ParseJSON {
 	private String getProbeIndicator(JSONObject jo) {
 		log.debug("<----------Start getProbeIndicator in ParseJSON------------------->");
 		JSONArray probeIndicator = (JSONArray) jo.get("probeIndicator");
+		if(probeIndicator == null){
+			probeIndicator = (JSONArray) jo.get("probeIndocator");
+		}		
 		Iterator itr = probeIndicator.iterator();
 		Iterator<Map.Entry> itr1=null;
 		String value = null;
@@ -563,7 +566,12 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			if(probeIndicatorArr!=null){
 				probeIndicator=true;
 			}else{
-				probeIndicator=false;
+				probeIndicatorArr  = (JSONArray) jo.get("probeIndocator");
+				if(probeIndicatorArr!=null) {
+				  probeIndicator=true;
+				} else {				
+				  probeIndicator=false;
+				}
 			}
 	   } catch (Exception e) {
 			log.error("<-In Exception-jsonFileToObjectProbe---->" + e.getMessage());
