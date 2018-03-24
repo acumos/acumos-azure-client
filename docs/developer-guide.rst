@@ -16,12 +16,10 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-===================
-Acumos Azure Client
-===================
+===================================
+Acumos Azure Client Developer Guide
+===================================
 
-.. toctree::
-       :maxdepth: 2
+The Acumos Azure Client is a Spring-Boot application that enables containerized models to be deployed on an Azure cloud.
 
-       release-notes
-       developer-guide
+Hmmmm.... this guide is a litte sparse on content. Feel free to join the team, find out what this component does, and update this guide. Contributions are always welcome!
