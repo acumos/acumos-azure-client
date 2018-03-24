@@ -1,0 +1,2 @@
+2018-03-24 16:04:43,223 ERROR [o.a.a.c.c.AzureServiceController] (main:) <-----Exception in compositeSolutionAzureDeployment------------>Null URL not permitted
+2018-03-24 16:04:43,233 ERROR [o.a.a.c.c.AzureServiceController] (main:) Null URL not permitted Returning... {"status":"FAILED"}

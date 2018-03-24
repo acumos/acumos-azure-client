@@ -1,0 +1,340 @@
+16:03:07.865|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===Start nexusArtifactClientTest========>
+16:03:08.055|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------start----nexusArtifactClient------------>
+16:03:10.380|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------End----nexusArtifactClient------------>
+16:03:10.387|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===Start iterateImageMapTest========>
+16:03:10.388|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <--Start-------iterateImageMap-------imageMap---->{NewAdder11=cognita-nexus01:8001/newadder1:1}
+16:03:10.400|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - NewAdder11 = cognita-nexus01:8001/newadder1:1
+16:03:10.401|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <--End-------iterateImageMap-------list---->[NewAdder11]
+16:03:10.401|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===End iterateImageMapTest========>
+16:03:10.406|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===Start getClientTest========>
+16:03:10.407|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===client=======>null
+16:03:10.407|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------start----getClient------------>
+16:03:10.885|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------End----getClient---------client--->org.acumos.cds.client.CommonDataServiceRestClientImpl@2c02cf78
+16:03:10.885|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===client========>org.acumos.cds.client.CommonDataServiceRestClientImpl@2c02cf78
+16:03:10.886|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - <===Start createDeploymentDataTest========>
+16:03:10.887|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - ------ Start getBluePrintNexus-----------------
+16:03:10.888|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------solutionId-----------4f87acda-6c25-4434-b562-7d7ebc265c8f
+16:03:10.890|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------revisionId-----------d451d02a-7c31-4bad-9b46-c418e1b114f8
+16:03:10.891|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------datasource-----------http://cognita-dev1-vm01-core:8003/ccds
+16:03:10.891|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------userName-----------ccds_client
+16:03:10.891|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------password-----------ccds_client
+16:03:10.891|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------nexusUrl-----------http://cognita-nexus01:8081/repository/repo_cognita_model_maven/
+16:03:10.892|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------nexusUserName-----------cognita_model_rw
+16:03:10.892|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------nexusPassword-----------not4you
+16:03:10.893|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------start----getClient------------>
+16:03:10.958|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------End----getClient---------client--->org.acumos.cds.client.CommonDataServiceRestClientImpl@609edb55
+16:03:11.020|AcumosONM|[main]| DEBUG| o.a.c.c.CommonDataServiceRestClientImpl - getSolutionRevisionArtifacts: uri http://cognita-dev1-vm01-core:8003/ccds/solution/4f87acda-6c25-4434-b562-7d7ebc265c8f/revision/d451d02a-7c31-4bad-9b46-c418e1b114f8/artifact
+16:03:54.963|AcumosONM|[main]| DEBUG| o.a.a.c.t.s.AzureSolutionServiceImplTest - Exception in getBluePrintNexusTestI/O error on GET request for "http://cognita-dev1-vm01-core:8003/ccds/solution/4f87acda-6c25-4434-b562-7d7ebc265c8f/revision/d451d02a-7c31-4bad-9b46-c418e1b114f8/artifact": Connect to cognita-dev1-vm01-core:8003 [cognita-dev1-vm01-core/104.239.207.44, cognita-dev1-vm01-core/198.105.244.130] failed: Connection timed out: connect; nested exception is org.apache.http.conn.HttpHostConnectException: Connect to cognita-dev1-vm01-core:8003 [cognita-dev1-vm01-core/104.239.207.44, cognita-dev1-vm01-core/198.105.244.130] failed: Connection timed out: connect
+16:03:55.567|AcumosONM|[main]| DEBUG| o.a.a.c.t.AzureServiceControllerTest - <===Start createDeploymentDataTest========>
+16:03:55.573|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <---------Start createDeploymentData ------------------------->
+16:03:55.573|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <---------dataSource-------->http://cognita-dev1-vm01-core:8002/ccds
+16:03:55.574|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dataUserName-------------->ccds_client
+16:03:55.575|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <--------dataPassword------------->ccds_client
+16:03:55.576|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <---------solutionId------------------->02eab846-2bd0-4cfe-8470-9fc69fa0d877
+16:03:55.578|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <--------solutionRevisionId-------------------->a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6
+16:03:55.578|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <------userId--------------->0505e537-ce79-4b1f-bf43-68d88933c36
+16:03:55.579|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <------uidNumber--------------->55d45e52-22da-499c-b185-31060009ea51
+16:03:55.580|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <------deploymentStatusCode--------------->DP
+16:03:55.743|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <---------azureDetails------------------------->{"containerName":null,"containerIp":"11.11.10.90","containerPort":"8557"}
+16:03:55.744|AcumosONM|[main]| DEBUG| o.a.c.c.CommonDataServiceRestClientImpl - createSolutionDeployment: uri http://cognita-dev1-vm01-core:8002/ccds/solution/02eab846-2bd0-4cfe-8470-9fc69fa0d877/revision/a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6/deploy
+16:04:38.594|AcumosONM|[main]| DEBUG| o.a.a.c.t.AzureServiceControllerTest - Error in junit test ofcreateDeploymentDataTest I/O error on POST request for "http://cognita-dev1-vm01-core:8002/ccds/solution/02eab846-2bd0-4cfe-8470-9fc69fa0d877/revision/a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6/deploy": Connect to cognita-dev1-vm01-core:8002 [cognita-dev1-vm01-core/198.105.254.130, cognita-dev1-vm01-core/104.239.207.44] failed: Connection timed out: connect; nested exception is org.apache.http.conn.HttpHostConnectException: Connect to cognita-dev1-vm01-core:8002 [cognita-dev1-vm01-core/198.105.254.130, cognita-dev1-vm01-core/104.239.207.44] failed: Connection timed out: connect
+16:04:38.600|AcumosONM|[main]| INFO | o.a.a.c.t.t.AzureContainerBeanTest - <---------Start-------testAzureContainerparameter-------------->
+16:04:38.604|AcumosONM|[main]| INFO | o.a.a.c.t.t.AzureContainerBeanTest - <---------End-------testAzureContainerparameter-------------->
+16:04:38.607|AcumosONM|[main]| INFO | o.a.a.c.t.t.AzureContainerBeanTest - <---------Start-------testAzureContainerparameter-------------->
+16:04:38.619|AcumosONM|[main]| INFO | o.a.a.c.t.t.AzureDeployDataObjectTest - <---------Start-------testAzureDeployDataObjectparameter-------------->
+16:04:38.638|AcumosONM|[main]| INFO | o.a.a.c.t.t.AzureDeployDataObjectTest - <---------Start-------singltonMapTestparameter-------------->
+16:04:38.657|AcumosONM|[main]| INFO | o.a.a.c.t.t.AzureDeployDataObjectTest - <---------End-------singltonMapTestparameter-------------->
+16:04:38.668|AcumosONM|[main]| INFO | o.a.a.c.test.util.AppPropertiesTest - <---------Start-------AppPropertiesTest-------------->
+16:04:38.675|AcumosONM|[main]| INFO | o.a.a.c.test.util.AppPropertiesTest - <---------End -------AppPropertiesTest-------------->
+16:04:38.678|AcumosONM|[main]| INFO | o.a.a.client.test.util.AzureBeanTest - <---------Start-------AzureBeanTestObjectparameter-------------->
+16:04:38.686|AcumosONM|[main]| INFO | o.a.a.client.test.util.AzureBeanTest - <---------End-------AzureBeanTestObjectparameter-------------->
+16:04:38.688|AcumosONM|[main]| INFO | o.a.a.client.test.util.BluePrintTest - <---------Start-------BluePrintTestObjectparameter-------------->
+16:04:38.701|AcumosONM|[main]| INFO | o.a.a.client.test.util.BluePrintTest - <---------End-------BluePrintTestObjectparameter-------------->
+16:04:38.703|AcumosONM|[main]| INFO | o.a.a.client.test.util.ComponentTest - <---------Start-------ComponentTest-------------->
+16:04:38.710|AcumosONM|[main]| INFO | o.a.a.client.test.util.ComponentTest - <---------End-------ComponentTest-------------->
+16:04:38.712|AcumosONM|[main]| INFO | o.a.a.c.test.util.DockerInfoListTest - <---------Start-------ComponentTest-------------->
+16:04:38.718|AcumosONM|[main]| INFO | o.a.a.c.test.util.DockerinfoTest - <---------Start-------ComponentTest-------------->
+16:04:38.724|AcumosONM|[main]| INFO | o.a.azure.client.test.util.NodeTest - <---------Start-------nodeTestObjectparameter-------------->
+16:04:38.728|AcumosONM|[main]| INFO | o.a.azure.client.test.util.NodeTest - <---------End-------nodeTestObjectparameter-------------->
+16:04:38.752|AcumosONM|[main]| INFO | o.a.a.c.t.u.OperationSignatureTest - <---------Start-------OperationSignatureTestparameter-------------->
+16:04:38.753|AcumosONM|[main]| INFO | o.a.a.c.t.u.OperationSignatureTest - <---------End-------OperationSignatureTestparameter-------------->
+16:04:38.760|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------getSequenceFromJSONTest-------------->
+16:04:38.777|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start getSequenceFromJSON in ParseJSON-----------jsonFileName-------->blueprint2.json
+16:04:38.870|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Second while
+16:04:38.871|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------------------key->image
+16:04:38.874|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start sequenceJsonParse in ParseJSON------------------->
+16:04:38.874|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------key value->operation_signature : {"operation":"multiply"}
+16:04:38.875|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----key value-->operation_signature : {"operation":"multiply"}
+16:04:38.875|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------key value->name : Multiplier1
+16:04:38.875|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.876|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.876|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----key value-->name : Multiplier1
+16:04:38.877|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End sequenceJsonParse in ParseJSON------------------->
+16:04:38.877|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------------------key->depends_on
+16:04:38.877|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.877|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.878|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Second while
+16:04:38.879|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------------------key->image
+16:04:38.879|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start sequenceJsonParse in ParseJSON------------------->
+16:04:38.879|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End sequenceJsonParse in ParseJSON------------------->
+16:04:38.880|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------------------key->depends_on
+16:04:38.880|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.880|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.881|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.881|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ========node.getData()=========Multiplier1
+16:04:38.882|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========Adder1
+16:04:38.882|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:38.882|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.883|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.883|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ========node.getData()=========Adder1
+16:04:38.884|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:38.884|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======Print==================================
+16:04:38.884|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -  BluePrintContainer
+16:04:38.888|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -   Adder1
+16:04:38.888|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -     Multiplier1
+16:04:38.889|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======Print=======================linkedList===========[Multiplier1, Adder1, BluePrintContainer]
+16:04:38.889|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start getSequenceFromJSON in ParseJSON--------------linkedList----->[Multiplier1, Adder1, BluePrintContainer]
+16:04:38.890|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------getSequenceFromJSONTest-------------->
+16:04:38.891|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------parseJsonFileTest-------------->
+16:04:38.891|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonFileToObject in -----------------jsonFileName---------->blueprint2.json
+16:04:38.895|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - input_operation_signatures-->
+16:04:38.896|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->operation : add
+16:04:38.897|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->1
+16:04:38.897|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->image : cognita-nexus01:8001/adder:2
+16:04:38.897|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonArrayParseObject in ParseJSON------------------->
+16:04:38.898|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======operation===========multiply
+16:04:38.899|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End jsonArrayParseObject in ParseJSON-------------listComponent------>[Component [name=Multiplier1, operationSignature=OperationSignature [operation=multiply]]]
+16:04:38.899|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->container_name : Adder1
+16:04:38.899|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->2
+16:04:38.900|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->image : cognita-nexus01:8001/multiplier:2
+16:04:38.900|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonArrayParseObject in ParseJSON------------------->
+16:04:38.900|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End jsonArrayParseObject in ParseJSON-------------listComponent------>[]
+16:04:38.901|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->container_name : Multiplier1
+16:04:38.949|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - blueprint==={"probeIndocator":null,"name":"AddMulti","version":"1.0.0","nodes":[{"container_name":"Adder1","image":"cognita-nexus01:8001/adder:2","node_type":null,"depends_on":[{"name":"Multiplier1","operation_signature":{"containerName":null,"operation":"multiply"}}]},{"container_name":"Multiplier1","image":"cognita-nexus01:8001/multiplier:2","node_type":null,"depends_on":[]}],"input_operation_signatures":[{"containerName":null,"operation":"add"}],"orchestrator":{"name":null,"version":null,"image":null},"probeIndicator":null}====Blueprint [name=AddMulti, version=1.0.0, nodes=[Node [containerName=Adder1, image=cognita-nexus01:8001/adder:2, dependsOn=[Component [name=Multiplier1, operationSignature=OperationSignature [operation=multiply]]]], Node [containerName=Multiplier1, image=cognita-nexus01:8001/multiplier:2, dependsOn=[]]], orchestrator=Orchestrator [name=null, version=null, image=null]]
+16:04:38.950|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End jsonFileToObject in ParseJSON---------------------list---->[]
+16:04:38.950|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------parseJsonFileTest-------------->
+16:04:38.952|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------parseJsonFileTest-------------->
+16:04:38.953|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start parseJsonFile in ParseJSON--------------------jsonFileName------->blueprint2.json
+16:04:38.955|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->1
+16:04:38.955|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -key->image --value-->cognita-nexus01:8001/adder:2
+16:04:38.956|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->operation_signature : {"operation":"multiply"}
+16:04:38.956|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->name : Multiplier1
+16:04:38.957|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -key->depends_on --value-->[{"operation_signature":{"operation":"multiply"},"name":"Multiplier1"}]
+16:04:38.958|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->2
+16:04:38.958|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -key->image --value-->cognita-nexus01:8001/multiplier:2
+16:04:38.959|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -key->depends_on --value-->[]
+16:04:38.959|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End parseJsonFile in ParseJSON---------------------imageMap---->{cognita-nexus01:8001/adder:2=Adder1, cognita-nexus01:8001/multiplier:2=Multiplier1}
+16:04:38.959|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------parseJsonFileTest-------------->
+16:04:38.961|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------getSequenceFromJSONProbeTest-------------->
+16:04:38.965|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start getSequenceFromJSONProbe in ParseJSON----------------jsonFileName----------->blueprint.json
+16:04:38.970|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Second while
+16:04:38.970|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->proto_uri
+16:04:38.971|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->image
+16:04:38.971|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->node_type
+16:04:38.972|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start sequenceJsonParseProbe in ParseJSON------------------->
+16:04:38.973|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - --------------key value->connected_to : [{"container_name":"Classifier1","operation_signature":{"operation_name":"doClassification"}}]
+16:04:38.973|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.974|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.974|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------key value-->connected_to : [{"container_name":"Classifier1","operation_signature":{"operation_name":"doClassification"}}]
+16:04:38.975|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - --------------key value->operation_signature : {"operation_name":"mapData","output_message_name":"ANY","input_message_name":"ANY"}
+16:04:38.975|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------key value-->operation_signature : {"operation_name":"mapData","output_message_name":"ANY","input_message_name":"ANY"}
+16:04:38.975|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End sequenceJsonParseProbe in ParseJSON------------------->
+16:04:38.975|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->operation_signature_list
+16:04:38.976|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.977|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.977|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Second while
+16:04:38.977|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->proto_uri
+16:04:38.978|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->image
+16:04:38.978|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->node_type
+16:04:38.978|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start sequenceJsonParseProbe in ParseJSON------------------->
+16:04:38.979|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - --------------key value->connected_to : [{"container_name":"AlarmGenerator1","operation_signature":{"operation_name":"searchAlarm"}}]
+16:04:38.979|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.981|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.982|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.983|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.983|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========SQLDataBroker1
+16:04:38.984|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.984|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:38.984|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End findDataInTree in ParseJSON------------------->
+16:04:38.985|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------key value-->connected_to : [{"container_name":"AlarmGenerator1","operation_signature":{"operation_name":"searchAlarm"}}]
+16:04:38.986|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - --------------key value->operation_signature : {"operation_name":"doClassification","output_message_name":"Classification","input_message_name":"Prediction_mapped"}
+16:04:38.986|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------key value-->operation_signature : {"operation_name":"doClassification","output_message_name":"Classification","input_message_name":"Prediction_mapped"}
+16:04:38.986|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End sequenceJsonParseProbe in ParseJSON------------------->
+16:04:38.987|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->operation_signature_list
+16:04:38.987|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.988|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.988|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.988|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ========node.getData()=========Classifier1
+16:04:38.989|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========SQLDataBroker1
+16:04:38.989|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:38.989|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.990|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.990|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ========node.getData()=========SQLDataBroker1
+16:04:38.991|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:38.991|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Second while
+16:04:38.991|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->proto_uri
+16:04:38.992|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->image
+16:04:38.992|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->node_type
+16:04:38.993|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start sequenceJsonParseProbe in ParseJSON------------------->
+16:04:38.994|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - --------------key value->connected_to : []
+16:04:38.994|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------key value-->connected_to : []
+16:04:38.994|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - --------------key value->operation_signature : {"operation_name":"searchAlarm","output_message_name":"AlarmList","input_message_name":"DataFrame"}
+16:04:38.994|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ------------key value-->operation_signature : {"operation_name":"searchAlarm","output_message_name":"AlarmList","input_message_name":"DataFrame"}
+16:04:38.994|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End sequenceJsonParseProbe in ParseJSON------------------->
+16:04:38.995|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -----------------key->operation_signature_list
+16:04:38.995|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.996|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.996|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.996|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.997|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ========node.getData()=========AlarmGenerator1
+16:04:38.998|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========Classifier1
+16:04:38.998|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========SQLDataBroker1
+16:04:38.999|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:38.999|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:38.999|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:39.000|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start findDataInTree in ParseJSON------------------->
+16:04:39.000|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ========node.getData()=========Classifier1
+16:04:39.000|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========SQLDataBroker1
+16:04:39.000|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - ======findDataInTree==node.getData()=========BluePrintContainer
+16:04:39.000|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======Print==================================
+16:04:39.001|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -  BluePrintContainer
+16:04:39.001|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -   SQLDataBroker1
+16:04:39.001|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -     Classifier1
+16:04:39.002|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON -         AlarmGenerator1
+16:04:39.002|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======Print=======================linkedList===========[AlarmGenerator1, Classifier1, SQLDataBroker1, BluePrintContainer]
+16:04:39.003|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End getSequenceFromJSONProbe in ParseJSON--------------------------->
+16:04:39.003|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------getSequenceFromJSONProbeTest-------------->
+16:04:39.004|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------parseJsonFileProbeTest-------------->
+16:04:39.005|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start parseJsonFileProbe in ParseJSON-----------------jsonFileName---------->blueprint.json
+16:04:39.007|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->1
+16:04:39.008|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->2
+16:04:39.008|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->3
+16:04:39.009|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End parseJsonFileProbe in ParseJSON---------------------imageMap---->{cognita-nexus01:8001/classifier:1=Classifier1, cognita-nexus01:8001/alarmgenerator:1=AlarmGenerator1, cognita-nexus01:8001/sqldatabroker:1=SQLDataBroker1}
+16:04:39.009|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------parseJsonFileProbeTest-------------->
+16:04:39.010|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------jsonFileToObjectProbeTest-------------->
+16:04:39.011|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonFileToObjectProbe -------------jsonFileName-------------->blueprint.json
+16:04:39.015|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start getProbeIndicator in ParseJSON------------------->
+16:04:39.016|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End getProbeIndicator in ParseJSON-------------value------>true
+16:04:39.017|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->1
+16:04:39.018|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->proto_uri : com/artifact/4bfb1844-3d41-4977-b484-df1b81856d90_TOSCAPROTOBUF/1/4bfb1844-3d41-4977-b484-df1b81856d90_TOSCAPROTOBUF-1.json
+16:04:39.018|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->image : cognita-nexus01:8001/sqldatabroker:1
+16:04:39.019|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->node_type : DataBroker
+16:04:39.019|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->container_name : SQLDataBroker1
+16:04:39.019|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonArrayParseObjectProb in ParseJSON------------------->
+16:04:39.022|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======operation===========doClassification
+16:04:39.023|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End jsonArrayParseObjectProb in ParseJSON------------------->
+16:04:39.023|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->2
+16:04:39.023|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->proto_uri : com/artifact/d4cc5d20-97f3-4f07-8bb0-273c50e981f8_TOSCAPROTOBUF/1/d4cc5d20-97f3-4f07-8bb0-273c50e981f8_TOSCAPROTOBUF-1.json
+16:04:39.024|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->image : cognita-nexus01:8001/classifier:1
+16:04:39.024|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->node_type : MLModel
+16:04:39.024|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->container_name : Classifier1
+16:04:39.025|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonArrayParseObjectProb in ParseJSON------------------->
+16:04:39.025|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======operation===========searchAlarm
+16:04:39.026|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End jsonArrayParseObjectProb in ParseJSON------------------->
+16:04:39.027|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->3
+16:04:39.027|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->proto_uri : com/artifact/3ae2d3e5-1389-4d37-b47b-72809448fdb6_TOSCAPROTOBUF/1/3ae2d3e5-1389-4d37-b47b-72809448fdb6_TOSCAPROTOBUF-1.json
+16:04:39.027|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->image : cognita-nexus01:8001/alarmgenerator:1
+16:04:39.027|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->node_type : MLModel
+16:04:39.028|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - -->container_name : AlarmGenerator1
+16:04:39.028|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonArrayParseObjectProb in ParseJSON------------------->
+16:04:39.029|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - =======operation===========searchAlarm
+16:04:39.029|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End jsonArrayParseObjectProb in ParseJSON------------------->
+16:04:39.047|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - blueprint==={"probeIndocator":[{"value":"true"}],"name":"Case6ProbeVal","version":"1","nodes":[{"container_name":"SQLDataBroker1","image":"cognita-nexus01:8001/sqldatabroker:1","node_type":"DataBroker","depends_on":[{"name":"Classifier1","operation_signature":{"containerName":null,"operation":"doClassification"}}]},{"container_name":"Classifier1","image":"cognita-nexus01:8001/classifier:1","node_type":"MLModel","depends_on":[{"name":"AlarmGenerator1","operation_signature":{"containerName":null,"operation":"searchAlarm"}}]},{"container_name":"AlarmGenerator1","image":"cognita-nexus01:8001/alarmgenerator:1","node_type":"MLModel","depends_on":[]}],"input_operation_signatures":[],"orchestrator":{"name":null,"version":null,"image":null},"probeIndicator":[{"value":"true"}]}====Blueprint [name=Case6ProbeVal, version=1, nodes=[Node [containerName=SQLDataBroker1, image=cognita-nexus01:8001/sqldatabroker:1, dependsOn=[Component [name=Classifier1, operationSignature=OperationSignature [operation=doClassification]]]], Node [containerName=Classifier1, image=cognita-nexus01:8001/classifier:1, dependsOn=[Component [name=AlarmGenerator1, operationSignature=OperationSignature [operation=searchAlarm]]]], Node [containerName=AlarmGenerator1, image=cognita-nexus01:8001/alarmgenerator:1, dependsOn=[]]], orchestrator=Orchestrator [name=null, version=null, image=null]]
+16:04:39.048|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start jsonFileToObjectProbe ------------------blueprint--------->Blueprint [name=Case6ProbeVal, version=1, nodes=[Node [containerName=SQLDataBroker1, image=cognita-nexus01:8001/sqldatabroker:1, dependsOn=[Component [name=Classifier1, operationSignature=OperationSignature [operation=doClassification]]]], Node [containerName=Classifier1, image=cognita-nexus01:8001/classifier:1, dependsOn=[Component [name=AlarmGenerator1, operationSignature=OperationSignature [operation=searchAlarm]]]], Node [containerName=AlarmGenerator1, image=cognita-nexus01:8001/alarmgenerator:1, dependsOn=[]]], orchestrator=Orchestrator [name=null, version=null, image=null]]
+16:04:39.048|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------jsonFileToObjectProbeTest-------------->
+16:04:39.050|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------Start-------nodeTypeContainerMapTest-------------->
+16:04:39.050|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------Start getNodeTypeContainerMap in ParseJSON----------------jsonFileName----------->blueprint.json
+16:04:39.053|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->1
+16:04:39.056|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <---container_name-->SQLDataBroker1--node_type--DataBroker--Script--null
+16:04:39.056|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->2
+16:04:39.056|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <---container_name-->Classifier1--node_type--MLModel--Script--null
+16:04:39.056|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - Nodes-->3
+16:04:39.057|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <---container_name-->AlarmGenerator1--node_type--MLModel--Script--null
+16:04:39.058|AcumosONM|[main]| DEBUG| o.a.azure.client.utils.ParseJSON - <----------End getNodeTypeContainerMap in ParseJSON---------------------imageMap---->{Classifier1=org.acumos.azure.client.transport.DeploymentBean@31c9bb2f, SQLDataBroker1=org.acumos.azure.client.transport.DeploymentBean@71e839ee, AlarmGenerator1=org.acumos.azure.client.transport.DeploymentBean@36a65069}
+16:04:39.058|AcumosONM|[main]| INFO | o.a.a.client.test.util.ParseJsonTest - <---------End-------nodeTypeContainerMapTest-------------->
+16:04:39.154|AcumosONM|[main]| INFO | o.a.a.c.t.AzureServiceControllerTest - =====400
+16:04:39.154|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------start----compositeSolutionAzureDeployment------------>
+16:04:39.220|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------probePrintImage---------->null
+16:04:39.221|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------probePrintName---------->null
+16:04:39.221|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------probeInternalPort---------->null
+16:04:39.221|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------probUser---------->null
+16:04:39.222|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------probePass---------->null
+16:04:39.223|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerRegistryname---------->null
+16:04:39.224|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMUserName---------->null
+16:04:39.224|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMPassword---------->null
+16:04:39.225|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMUserName---2------->dockerUser
+16:04:39.225|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMPassword-----2----->12NewPA$$w0rd!
+16:04:39.226|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------solutionPort---------->null
+16:04:39.227|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------authObject.getUrlAttribute()---------->null
+16:04:39.227|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <-----authObject.getJsonMapping()---------->null
+16:04:39.227|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <-----authObject.getJsonPosition()---------->null
+16:04:39.227|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------SolutionId---------->4f87acda-6c25-4434-b562-7d7ebc265c8f
+16:04:39.227|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------authObject.getSolutionRevisionId()---------->d451d02a-7c31-4bad-9b46-c418e1b114f8
+16:04:39.227|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------start----authorize in AzureServiceImpl------------>
+16:04:39.228|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl -  authentication parameters:: AzureDeployDataObject [client=c83923c9-73c4-43e2-a47d-2ab700ac9353, tenant=412141bb-9e53-4aed-8468-6868c832e618, key=eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=, subscriptionKey=81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a, rgName=Cognita-OAM, acrName=CognitaE6Reg, solutionId=4f87acda-6c25-4434-b562-7d7ebc265c8f, storageAccount=cognitae6storage, solutionRevisionId=d451d02a-7c31-4bad-9b46-c418e1b114f8, userId=7cd47ca4-1c5d-4cdc-909c-f7c17367b4d4]
+16:04:43.216|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - try getting some info : 81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a com.microsoft.azure.management.containerregistry.implementation.RegistriesImpl@50c73af4
+16:04:43.217|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - Azure AD Authorization Successful...
+16:04:43.217|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------End----authorize in AzureServiceImpl------------>
+16:04:43.217|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <---------Azure Authentication Complete----------->
+16:04:43.217|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - ------ Start getBluePrintNexus-----------------
+16:04:43.218|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------solutionId-----------4f87acda-6c25-4434-b562-7d7ebc265c8f
+16:04:43.218|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------revisionId-----------d451d02a-7c31-4bad-9b46-c418e1b114f8
+16:04:43.218|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------datasource-----------null
+16:04:43.219|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------userName-----------null
+16:04:43.219|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------password-----------null
+16:04:43.220|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------nexusUrl-----------null
+16:04:43.221|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------nexusUserName-----------null
+16:04:43.222|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - -------nexusPassword-----------null
+16:04:43.222|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------start----getClient------------>
+16:04:43.223|AcumosONM|[main]| ERROR| o.a.a.c.c.AzureServiceController - <-----Exception in compositeSolutionAzureDeployment------------>Null URL not permitted
+16:04:43.233|AcumosONM|[main]| ERROR| o.a.a.c.c.AzureServiceController - Null URL not permitted Returning... {"status":"FAILED"}
+16:04:43.255|AcumosONM|[main]| INFO | o.a.a.c.t.AzureServiceControllerTest - ==Test Status ===401
+16:04:43.259|AcumosONM|[main]| INFO | o.a.a.c.t.AzureServiceControllerTest - =====400
+16:04:43.259|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------start----singleImageAzureDeployment------------>
+16:04:43.261|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------solutionPort---------->null
+16:04:43.261|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMUserName---------->null
+16:04:43.262|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMPassword---------->null
+16:04:43.262|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMUserName---2------->dockerUser
+16:04:43.262|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerVMPassword-----2----->12NewPA$$w0rd!
+16:04:43.263|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------dockerRegistryname---------->null
+16:04:43.264|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <-------AcrName----->CognitaE6Reg
+16:04:43.264|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <--------Key---->eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=
+16:04:43.264|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <-------Imagetag----->cognita-nexus01:8001/newadder1:1
+16:04:43.269|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <-------RgName----->Cognita-OAM
+16:04:43.270|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <--------Client---->c83923c9-73c4-43e2-a47d-2ab700ac9353
+16:04:43.270|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <--------SubscriptionKey---->81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a
+16:04:43.271|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <---------StorageAccount--->cognitae6storage
+16:04:43.271|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <---------Tenant--->412141bb-9e53-4aed-8468-6868c832e618
+16:04:43.272|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------start----authorize in AzureServiceImpl------------>
+16:04:43.272|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl -  authentication parameters:: AzureDeployDataObject [client=c83923c9-73c4-43e2-a47d-2ab700ac9353, tenant=412141bb-9e53-4aed-8468-6868c832e618, key=eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=, subscriptionKey=81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a, rgName=Cognita-OAM, acrName=CognitaE6Reg, solutionId=02eab846-2bd0-4cfe-8470-9fc69fa0d877, storageAccount=cognitae6storage, solutionRevisionId=a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6, userId=0505e537-ce79-4b1f-bf43-68d88933c369]
+16:04:43.306|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - try getting some info : 81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a com.microsoft.azure.management.containerregistry.implementation.RegistriesImpl@1b60f2c
+16:04:43.307|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - Azure AD Authorization Successful...
+16:04:43.307|AcumosONM|[main]| DEBUG| o.a.a.c.s.impl.AzureServiceImpl - <------End----authorize in AzureServiceImpl------------>
+16:04:43.308|AcumosONM|[main]| DEBUG| o.a.a.c.c.AzureServiceController - <------End----singleImageAzureDeployment------------>{"UIDNumber":"8613afc2-8b96-41e7-82a9-13a4f56db194","status":"SUCCESS"}
+16:04:43.309|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-----------------AzureSimpleSolution-----Run Started-------------------------->
+16:04:43.309|AcumosONM|[main]| INFO | o.a.a.c.t.AzureServiceControllerTest - ==Test Status ===200
+16:04:43.310|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------azure-------->com.microsoft.azure.management.Azure@173b2cf4
+16:04:43.311|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------deployDataObject-------->AzureDeployDataObject [client=c83923c9-73c4-43e2-a47d-2ab700ac9353, tenant=412141bb-9e53-4aed-8468-6868c832e618, key=eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=, subscriptionKey=81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a, rgName=Cognita-OAM, acrName=CognitaE6Reg, solutionId=02eab846-2bd0-4cfe-8470-9fc69fa0d877, storageAccount=cognitae6storage, solutionRevisionId=a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6, userId=0505e537-ce79-4b1f-bf43-68d88933c369]
+16:04:43.312|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerContainerPrefix-------->null
+16:04:43.312|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerUserName-------->null
+16:04:43.312|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerPwd-------->null
+16:04:43.313|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------localEnvDockerHost-------->tcp://null:null
+16:04:43.313|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------localEnvDockerCertPath-------->null
+16:04:43.313|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------list-------->[cognita-nexus01:8001/newadder1:1]
+16:04:43.317|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------bluePrintName-------->null
+16:04:43.317|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------bluePrintUser-------->null
+16:04:43.318|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------bluePrintPass-------->null
+16:04:43.318|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------networkSecurityGroup-------->null
+16:04:43.318|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerRegistryName-------->null
+16:04:43.319|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------uidNumStr-------->8613afc2-8b96-41e7-82a9-13a4f56db194
+16:04:43.319|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dataSource-------->null
+16:04:43.320|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dataUserName-------->null
+16:04:43.320|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dataPassword-------->null
+16:04:43.321|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerVMUserName-------->dockerUser
+16:04:43.321|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerVMPassword-------->12NewPA$$w0rd!
+16:04:43.321|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------solutionPort-------->null
+16:04:43.322|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------solutionId-------->02eab846-2bd0-4cfe-8470-9fc69fa0d877
+16:04:43.324|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------solutionRevisionId-------->a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6
+16:04:43.325|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------userId-------->0505e537-ce79-4b1f-bf43-68d88933c369
+16:04:43.325|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerVMUserName----Trim---->dockerUser
+16:04:43.325|AcumosONM|[Thread-2]| DEBUG| o.a.a.c.s.impl.AzureSimpleSolution - <-------dockerVMPassword-----Trim--->12NewPA$$w0rd!
