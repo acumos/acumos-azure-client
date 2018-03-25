@@ -30,16 +30,16 @@ public class BluePrintTest {
 		List<Node> nodes=(List)new ArrayList<Node>();
 		
 		Blueprint blueprint=new Blueprint();
-		blueprint.setInputs(inputs);
+		//blueprint.setInputs(inputs);
 		blueprint.setName(name);
 		blueprint.setNodes(nodes);
-		blueprint.setOrchestrator(orchestrator);
+		//blueprint.setOrchestrator(orchestrator);
 		blueprint.setVersion(version);
 		
 		Assert.assertEquals(name, blueprint.getName());
-		Assert.assertEquals(inputs, blueprint.getInputs());
+		//Assert.assertEquals(inputs, blueprint.getInputs());
 		Assert.assertEquals(nodes, blueprint.getNodes());
-		Assert.assertEquals(orchestrator, blueprint.getOrchestrator());
+		//.assertEquals(orchestrator, blueprint.getOrchestrator());
 		Assert.assertEquals(version, blueprint.getVersion());
 		
 		logger.info("<---------End-------BluePrintTestObjectparameter-------------->");

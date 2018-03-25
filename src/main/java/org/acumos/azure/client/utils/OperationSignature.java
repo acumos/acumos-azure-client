@@ -26,48 +26,72 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OperationSignature implements Serializable {
 
-	private static final long serialVersionUID = -8176878378145971860L;
+	private final static long serialVersionUID = 832153494386063512L;
 
+	@JsonProperty("operation_name")
+	private String operationName = null;
+	@JsonProperty("input_message_name")
+	private String inputMessageName = null;
+	@JsonProperty("output_message_name")
+	private String outputMessageName = null;
+
+	/**
+	 * Standard POJO no-arg constructor
+	 */
 	public OperationSignature() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 
-	public OperationSignature(String operation) {
+	/**
+	 * Standard POJO constructor initialized with field
+	 * @param operationName
+	 *            This is the operation name
+	 * @param inputMessageName
+	 *            This is the input msg name
+	 * @param outputMessageName
+	 *            This is the output msg name
+	 */
+	public OperationSignature(String operationName, String inputMessageName, String outputMessageName) {
 		super();
-		this.operation = operation;
-	}
-	
-	public OperationSignature(String operation , String containerName) {
-		super();
-		this.operation = operation;
+		this.operationName = operationName;
+		this.inputMessageName = inputMessageName;
+		this.outputMessageName = outputMessageName;
 	}
 
-	@JsonProperty("containerName")
-	private String containerName = null;
-	
-	public String getContainerName() {
-		return containerName;
+	@JsonProperty("operation_name")
+	public String getOperationName() {
+		return operationName;
 	}
 
-	public void setContainerName(String containerName) {
-		this.containerName = containerName;
+	@JsonProperty("operation_name")
+	public void setOperationName(String operationName) {
+		this.operationName = operationName;
 	}
 
-	@JsonProperty("operation")
-	private String operation = null;
-
-	public String getOperation() {
-		return operation;
+	@JsonProperty("input_message_name")
+	public String getInputMessageName() {
+		return inputMessageName;
 	}
 
-	public void setOperation(String operation) {
-		this.operation = operation;
+	@JsonProperty("input_message_name")
+	public void setInputMessageName(String inputMessageName) {
+		this.inputMessageName = inputMessageName;
+	}
+
+	@JsonProperty("output_message_name")
+	public String getOutputMessageName() {
+		return outputMessageName;
+	}
+
+	@JsonProperty("output_message_name")
+	public void setOutputMessageName(String outputMessageName) {
+		this.outputMessageName = outputMessageName;
 	}
 
 	@Override
 	public String toString() {
-		return "OperationSignature [operation=" + operation + "]";
-	}
 
+		return "OperationSignature [operationName=" + operationName + ", inputMessageName=" + inputMessageName
+				+ ", outputMessageName=" + outputMessageName + "]";
+	}
 }

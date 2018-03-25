@@ -297,14 +297,14 @@ public class AzureServiceController extends AbstractController {
 			
 			//-------------- New Probe Start ------------------- ***
 
-			logger.debug("<------bluePrintProbe.getProbeIndocator()---------->"+bluePrintProbe.getProbeIndocator());
+			logger.debug("<------bluePrintProbe.getProbeIndocator()---------->"+bluePrintProbe.getProbeIndicator());
 			
-			ArrayList<ProbeIndicator> probeIndicatorList = bluePrintProbe.getProbeIndocator();
+			ArrayList<ProbeIndicator> probeIndicatorList = bluePrintProbe.getProbeIndicator();
 			ProbeIndicator prbIndicator = null;
 			if(probeIndicatorList != null && probeIndicatorList.size() >0) {
 				prbIndicator = probeIndicatorList.get(0);
 			}			
-		    if (bluePrintProbe.getProbeIndocator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True") ) {
+		    if (bluePrintProbe.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True") ) {
 
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);

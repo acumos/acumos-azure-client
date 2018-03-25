@@ -676,7 +676,7 @@ public class AzureCompositeSolution implements Runnable {
 			}
 		 
 		 // Added notification for probe code
-		 ArrayList<ProbeIndicator> probeIndicatorList = bluePrint.getProbeIndocator();
+		 ArrayList<ProbeIndicator> probeIndicatorList = bluePrint.getProbeIndicator();
 		 ProbeIndicator prbIndicator = null;
 		 if(probeIndicatorList != null && probeIndicatorList.size() >0) {
 				prbIndicator = probeIndicatorList.get(0);
@@ -684,7 +684,7 @@ public class AzureCompositeSolution implements Runnable {
 		 
 		 
 		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
-		 if (bluePrint.getProbeIndocator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
+		 if (bluePrint.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation======deployDataObject.getUserId()=====>"+deployDataObject.getUserId());
 			 logger.debug("====probeIP===>"+probeIP+"===probePort=="+probePort);
 			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());
