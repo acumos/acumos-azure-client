@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "0904ea66_426ad19d",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ConnectedTo.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "Please find time to add Acumos license header to all new code files",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a5ba4e20_5248b25a",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DataBroker.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "License",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "16180efc_bc55a2d2",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DataSource.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "License",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6b033f9f_24500d73",
+        "filename": "src/main/java/org/acumos/azure/client/utils/InputPort.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "License",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c047837c_9c3d2c48",
+        "filename": "src/main/java/org/acumos/azure/client/utils/MlModel.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "License",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e44b208_5bfdd97b",
+        "filename": "src/main/java/org/acumos/azure/client/utils/OperationSignatureList.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "License",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c5a6692c_2e2da7ce",
+        "filename": "src/main/java/org/acumos/azure/client/utils/TrainingClient.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-03-25T19:00:01Z",
+      "side": 1,
+      "message": "License",
+      "revId": "5e283a7c38d25615aa15c38bd831f46715fc1351",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
