@@ -554,12 +554,12 @@ public class AzureCompositeSolution implements Runnable {
 			            			        azureBean.setBluePrintPort(portNumber);
 			            			        portNumberString=portNumber+":"+portNumber;
 			    		        		}else{
-			    		        			portNumber=portArr[count];
+			    		        			portNumber=probeInternalPort;
 			    		        			if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
 				    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
 			    		        				portNumberString=probeInternalPort+":"+probeInternalPort;
 			    		        			}else{
-			    		        				
+			    		        				portNumber=portArr[count];
 				    		        			if(solutionPort!=null && !"".equals(solutionPort)){
 				    		        				portNumberString=portNumber+":"+solutionPort;
 				    		        			}else{
@@ -575,7 +575,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		dockerinfo.setIpAddress(azureVMName);
 		            		            dockerinfo.setPort(portNumber);
 		            		            dockerinfo.setContainer(finalContainerName);
-		            		            
+		            		            logger.debug("==azureVMName=====: " + azureVMName+"=====portNumber======"+portNumber+"===finalContainerName==="+finalContainerName);
 		            		            logger.debug("====portNumberString======: " + portNumberString);
 		            		            logger.debug("====containerName======: " + containerName);
 		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
