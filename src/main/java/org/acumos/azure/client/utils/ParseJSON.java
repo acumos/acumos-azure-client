@@ -607,7 +607,11 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			
 			ArrayList<ProbeIndicator> list_of_pb_indicators = new ArrayList<ProbeIndicator>();
 			ProbeIndicator prbIndicator = new ProbeIndicator();
-			prbIndicator.setValue(probeIndicator);
+			if(probeIndicator!=null){
+				prbIndicator.setValue(probeIndicator);
+			}else{
+				prbIndicator.setValue("");
+			}
 			list_of_pb_indicators.add(prbIndicator);
 			
 			blueprint.setProbeIndocator(list_of_pb_indicators);

@@ -557,7 +557,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			portNumber=portArr[count];
 			    		        			if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
 				    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
-			    		        				portNumberString=portNumber+":"+probeInternalPort;
+			    		        				portNumberString=probeInternalPort+":"+probeInternalPort;
 			    		        			}else{
 			    		        				
 				    		        			if(solutionPort!=null && !"".equals(solutionPort)){
@@ -565,11 +565,12 @@ public class AzureCompositeSolution implements Runnable {
 				    		        			}else{
 				    		        				portNumberString=portNumber+":"+portNumber;
 				    		        			}
+				    		        			count++;
 			    		        			}
 			    		        			
 			    		        			
 			    		        		}
-			    		        		count++;
+			    		        		
 			    		        		imageCount++;
 			    		        		dockerinfo.setIpAddress(azureVMName);
 		            		            dockerinfo.setPort(portNumber);
@@ -641,6 +642,7 @@ public class AzureCompositeSolution implements Runnable {
           
           String azureDetails=mapper.writeValueAsString(azureBean.getDockerinfolist());  
           setuidHashmapComposite(uidNumStr,azureDetails);
+          logger.debug("<================JSON FILE FROM DESIGN STUDIO=========>"+bluePrintJsonStr);
           logger.debug("azureDetails=============="+azureDetails);
           logger.debug("Dockerinfolist=============="+mapper.writeValueAsString(azureBean.getDockerinfolist()));
   		  logger.debug("bluePrint==================="+mapper.writeValueAsString(bluePrint));	

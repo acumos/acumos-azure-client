@@ -464,8 +464,17 @@ public class DockerUtils {
 
 			log.debug("====================start deploymentImageVM============1======");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-			String RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
-					+ "  " + repositoryName + " \n";
+			String RUN_IMAGE="";
+			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase("Probe")){
+				log.debug("=============Probe Condition======");
+				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
+						+ "  " + repositoryName + " \n";
+			}else{
+				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
+						+ "  " + repositoryName + " \n";
+				log.debug("=============Other Condition======");
+			}
+		    
 			log.debug("====output==========Start============4======================: RUN_IMAGE" + RUN_IMAGE);
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE_" + imageCount + ".sh",
