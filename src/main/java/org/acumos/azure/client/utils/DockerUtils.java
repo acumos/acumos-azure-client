@@ -427,7 +427,7 @@ public class DockerUtils {
 	 */
 	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPassword,
 			String registryServerUrl, String username, String password, String repositoryName,
-			String finalContainerName, int imageCount, String portNumber) {
+			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint) {
 		log.debug("====================start deploymentCompositeImageVM==================");
 		log.debug("====dockerHostIP======: " + dockerHostIP);
 		log.debug("====vmUserName======: " + vmUserName);
@@ -438,6 +438,7 @@ public class DockerUtils {
 		log.debug("====finalContainerName======: " + finalContainerName);
 		log.debug("====imageCount======: " + imageCount);
 		log.debug("====portNumber======: " + portNumber);
+		log.debug("====probeNexusEndPoint======: " + probeNexusEndPoint);
 		String portNumberString = portNumber;
 		log.debug("====portNumberString======: " + portNumberString);
 		SSHShell sshShell = null;
@@ -467,8 +468,12 @@ public class DockerUtils {
 			String RUN_IMAGE="";
 			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase("Probe")){
 				log.debug("=============Probe Condition======");
+				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
+						+ "  -e NEXUSENDPOINTURL='http://cognita-nexus01.eastus.cloudapp.azure.com:8081/repository/repo_cognita_model_maven' " + repositoryName + " \n";*/
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
-						+ "  " + repositoryName + " \n";
+						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
+				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
+						+ "  " + repositoryName + " \n";*/
 			}else{
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
 						+ "  " + repositoryName + " \n";

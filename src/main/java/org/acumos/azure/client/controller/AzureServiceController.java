@@ -210,6 +210,7 @@ public class AzureServiceController extends AbstractController {
 			String probePrintImage=env.getProperty("probe.ImageName");
 			String probePrintName=env.getProperty("probe.name");
 			String probeInternalPort=env.getProperty("probe.internalPort");
+			String probeNexusEndPoint=env.getProperty("probe.probeNexusEndPoint");
 			String probUser=env.getProperty("docker.registry.probe.username");
 			String probePass=env.getProperty("docker.registry.probe.password");
 			
@@ -218,6 +219,7 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------probeInternalPort---------->"+probeInternalPort);
 			logger.debug("<------probUser---------->"+probUser);
 			logger.debug("<------probePass---------->"+probePass);
+			logger.debug("<------probeNexusEndPoint---------->"+probeNexusEndPoint);
 			
 			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
 			//String dockerRegistryPort=env.getProperty("docker.registry.port");
@@ -337,7 +339,7 @@ public class AzureServiceController extends AbstractController {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
                         env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
-                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort,nodeTypeContainerMap,bluePrintJsonStr);
+                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint);
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();

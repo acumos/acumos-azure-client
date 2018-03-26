@@ -108,6 +108,7 @@ public class AzureCompositeSolution implements Runnable {
 	private String solutionPort;
 	private HashMap<String,DeploymentBean> nodeTypeContainerMap;
     private String bluePrintJsonStr;
+    private String probeNexusEndPoint;
 	
 	
 	
@@ -115,7 +116,8 @@ public class AzureCompositeSolution implements Runnable {
 	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeInternalPort,String probeName,
 			String probeUser,String probePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
-			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,String bluePrintJsonStr) {
+			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,
+			String bluePrintJsonStr, String probeNexusEndPoint) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -147,6 +149,7 @@ public class AzureCompositeSolution implements Runnable {
 	    this.probeUser=probeUser;
 	    this.probePass=probePass;
 	    this.probeInternalPort=probeInternalPort;
+	    this.probeNexusEndPoint=probeNexusEndPoint;
 	    
 	   }
 	public void run() {
@@ -181,6 +184,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<-------probeUser-------->"+probeUser);
 		logger.debug("<-------probePass-------->"+probePass);
 		logger.debug("<-------probeInternalPort-------->"+probeInternalPort);
+		logger.debug("<-------probeNexusEndPoint-------->"+probeNexusEndPoint);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
@@ -580,7 +584,7 @@ public class AzureCompositeSolution implements Runnable {
 		            		            logger.debug("====containerName======: " + containerName);
 		            		            logger.debug("====Start Deploying=====================repositoryName=======: "+repositoryName);
 			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
-			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumberString);
+			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,portNumberString,probeNexusEndPoint);
 			    		        		
 			    		        		AzureContainerBean containerBean=new AzureContainerBean();
 			    		        		containerBean.setContainerName(finalContainerName);
