@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8310d009_9a55df1a",
+        "filename": ".factorypath",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-04T12:13:45Z",
+      "side": 1,
+      "message": "This file should not be committed to git.",
+      "revId": "cbd8d3ac1a9da70c7ac3d9f11547f549af79e6d0",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
