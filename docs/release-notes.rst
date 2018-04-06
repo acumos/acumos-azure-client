@@ -20,7 +20,7 @@
 Acumos Azure Client Release Notes
 =================================
 
-Version 1.1.0, December 2017
+Version 1.86.0, March 2018
 ----------------------------
 
-First release of the Acumos Azure Client.
+Latest release of the Acumos Azure Client.

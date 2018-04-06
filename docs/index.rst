@@ -25,3 +25,4 @@ Acumos Azure Client
 
        release-notes
        developer-guide
+       user-guide
