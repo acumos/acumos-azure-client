@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "22a11b7e_a1e8d924",
+        "filename": "docs/release-notes.rst",
+        "patchSetId": 1
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-06T18:35:48Z",
+      "side": 1,
+      "message": "Please make these release notes cumulative - details about issues included in each one.",
+      "revId": "d09c724d31a8d5e5f01a7fc697a82ce5621b508e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
