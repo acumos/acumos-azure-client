@@ -41,6 +41,7 @@ import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AppProperties;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.Blueprint;
+import org.acumos.azure.client.utils.CommonUtil;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.ParseJSON;
@@ -87,6 +88,11 @@ public class AzureServiceController extends AbstractController {
 		String uidNumStr="";
 		String dockerVMUserName="";
 		String dockerVMPassword="";
+		String dataSource="";
+		String dataUserName="";
+		String dataPassword="";
+		String userId="";
+		CommonUtil commonUtil=new  CommonUtil();
 		try {
 			azureImpl.setEnvironment(env);
 			UUID uidNumber = UUID.randomUUID();
@@ -96,9 +102,9 @@ public class AzureServiceController extends AbstractController {
 			String bluePrintPass=env.getProperty("docker.registry.bluePrint.password");
 			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
 			//String dockerRegistryPort=env.getProperty("docker.registry.port");
-			String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
-			String dataUserName=env.getProperty("cmndatasvc.cmndatasvcuser");
-			String dataPassword=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
+			dataUserName=env.getProperty("cmndatasvc.cmndatasvcuser");
+			dataPassword=env.getProperty("cmndatasvc.cmndatasvcpwd");
 			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
 			String solutionPort=env.getProperty("docker.solutionPort");
@@ -158,9 +164,12 @@ public class AzureServiceController extends AbstractController {
             }
             if(auth.getUserId()!=null){
             	authObject.setUserId(auth.getUserId());
+            	userId=auth.getUserId();
             }
-            
+            logger.debug("<---------userId--->"+userId);
             Azure azure = azureImpl.authorize(authObject);
+            jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+            response.setStatus(200);
             /*if(azure!=null) {
             	azBean=azureImpl.pushSingleImage(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
 						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
@@ -173,13 +182,13 @@ public class AzureServiceController extends AbstractController {
             
             Thread t = new Thread(myRunnable);
             t.start();
-            jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
-            response.setStatus(200);
+            
 		}catch(Exception e){
 			logger.error("<-----Exception in singleImageAzureDeployment------------>"+e.getMessage());
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
 			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
+			commonUtil.generateNotification("Error in vm creation", userId, dataSource, dataUserName, dataPassword);
 			return jsonOutput.toString();
 		}
 		jsonOutput.put("UIDNumber", uidNumStr);

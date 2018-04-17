@@ -543,7 +543,9 @@ public class DockerUtils {
 
 			log.debug("====================start deploymentImageVM============1======");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-			String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:"+portNumberString+" "+ repositoryName + " \n";
+			//String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:"+portNumberString+" "+ repositoryName + " \n";
+			String RUN_IMAGE = "" + "docker run --name ContainerOne -d -p 0.0.0.0:" + portNumberString
+					+ "  " + repositoryName + " \n";
 			log.debug("====output==========Start============4======================: ");
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE.sh", ".azuredocker", true,

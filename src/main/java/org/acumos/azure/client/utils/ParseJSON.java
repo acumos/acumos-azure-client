@@ -952,7 +952,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					Node node = new Node();
 					itr1 = ((Map) itr3.next()).entrySet().iterator();
 					log.debug("Nodes-->" + ++nodeCount);
-					String containerName = null,nodeType  = null,script=null;
+					String containerName = null,nodeType  = null,script=null,protoUri=null;
 					DeploymentBean bean=new DeploymentBean();
 					while (itr1.hasNext()) {
 						Map.Entry pair = itr1.next();
@@ -969,6 +969,11 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 								if (key != null && key.equalsIgnoreCase("script")) {
 									script =(String)pair.getValue();
 									bean.setScript(script);
+								}
+								if (key != null && key.equalsIgnoreCase("proto_uri")) {
+									protoUri =(String)pair.getValue();
+									bean.setProtoUri(protoUri);
+									//bean.setScript(script);
 								}
 								
 							if(containerName!=null && nodeType!=null && !"".equals(containerName) && !"".equals(nodeType)){
@@ -1082,11 +1087,13 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		ParseJSON parseJson=new ParseJSON();
 		try{
 			ObjectMapper mapper = new ObjectMapper();
+		//HashMap<String,String> imageMap=parseJson.parseJsonFileProbe("blueprint_old.json");
 			Blueprint bluePrintProbe=parseJson.jsonFileToObjectProbe("blueprint.json");
 			System.out.println("======="+bluePrintProbe);
 			String blueprintJson=mapper.writeValueAsString(bluePrintProbe); 
 			System.out.println("<----blueprintJson---------->"+blueprintJson);
-		;
+			System.out.println("<----imageMap---------->"+parseJson.parseJsonFileProbe("blueprint.json"));
+		
 		}catch(Exception e){
 			e.printStackTrace();
 		}

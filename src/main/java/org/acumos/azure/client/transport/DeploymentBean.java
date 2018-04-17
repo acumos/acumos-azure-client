@@ -27,8 +27,16 @@ public class DeploymentBean {
 	private String containerName;
 	private String nodeType;
 	private String script;
+	private String protoUri;
 	
 	
+	
+	public String getProtoUri() {
+		return protoUri;
+	}
+	public void setProtoUri(String protoUri) {
+		this.protoUri = protoUri;
+	}
 	public String getScript() {
 		return script;
 	}

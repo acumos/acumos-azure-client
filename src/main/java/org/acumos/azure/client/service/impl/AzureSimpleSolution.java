@@ -32,6 +32,7 @@ import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
+import org.acumos.azure.client.utils.CommonUtil;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
@@ -133,7 +134,7 @@ public class AzureSimpleSolution implements Runnable {
 		logger.debug("<-------solutionId-------->" + deployDataObject.getSolutionId());
 		logger.debug("<-------solutionRevisionId-------->" + deployDataObject.getSolutionRevisionId());
 		logger.debug("<-------userId-------->" + deployDataObject.getUserId());
-
+		CommonUtil commonUtil=new  CommonUtil();
 		AzureBean azureBean = new AzureBean();
 		AzureContainerBean containerBean = new AzureContainerBean();
 		try {
@@ -353,20 +354,24 @@ public class AzureSimpleSolution implements Runnable {
 				logger.debug("<----vmPassword-------->" + vmPassword);
 				logger.debug("<----azureBean VM-------->" + azureBean.getAzureVMIP());
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
-				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
+				//logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + acrCredentials.passwords().get(0).value());
 				String portNumberString="8557"+":"+solutionPort;
 				DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),
 						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName,portNumberString);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
+				containerBean.setContainerName("ContainerOne");
+				commonUtil.generateNotification("VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(), dataSource, dataUserName, dataPassword);
 			}
+			
 			createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
 					deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 					deployDataObject.getUserId(), uidNumStr, "DP");
 		} catch (Exception e) {
 			logger.error("Error in AzureSimpleSolution===========" + e.getMessage());
 			try{
+				commonUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(), dataSource, dataUserName, dataPassword);
 				createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
 						deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 						deployDataObject.getUserId(), uidNumStr, "FA");
