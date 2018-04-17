@@ -363,7 +363,7 @@ public class AzureSimpleSolution implements Runnable {
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
 				containerBean.setContainerName("ContainerOne");
-				azureUtil.generateNotification("VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(),
+				azureUtil.generateNotification("Single Solution VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPassword);
 			}
 			createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,

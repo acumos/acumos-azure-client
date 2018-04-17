@@ -206,6 +206,11 @@ public class AzureServiceController extends AbstractController {
 		String dockerVMUserName="";
 		String dockerVMPassword="";
 		String jsonFileName="blueprint.json";
+		String dataSource="";
+		String userName="";
+		String password="";
+		String userId="";
+		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			UUID uidNumber = UUID.randomUUID();
 			uidNumStr=uidNumber.toString();
@@ -232,9 +237,9 @@ public class AzureServiceController extends AbstractController {
 			
 			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
 			//String dockerRegistryPort=env.getProperty("docker.registry.port");
-			String dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
-			String userName=env.getProperty("cmndatasvc.cmndatasvcuser");
-			String password=env.getProperty("cmndatasvc.cmndatasvcpwd");
+			dataSource=env.getProperty("cmndatasvc.cmndatasvcendpoinurl");
+			userName=env.getProperty("cmndatasvc.cmndatasvcuser");
+			password=env.getProperty("cmndatasvc.cmndatasvcpwd");
 			String nexusUrl=env.getProperty("nexus.url");
 			String nexusUserName=env.getProperty("nexus.username");
 			String nexusPassword=env.getProperty("nexus.password");
@@ -255,7 +260,8 @@ public class AzureServiceController extends AbstractController {
 				jsonOutput.put("status", APINames.AUTH_FAILED);
 				return jsonOutput.toString();
 			}
-           
+			userId=authObject.getUserId();
+			logger.debug("<------userId--------->"+userId);
             logger.debug("<------authObject.getUrlAttribute()---------->"+authObject.getUrlAttribute());
             logger.debug("<-----authObject.getJsonMapping()---------->"+authObject.getJsonMapping());
             logger.debug("<-----authObject.getJsonPosition()---------->"+authObject.getJsonPosition());
@@ -345,6 +351,7 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------imageMap-------------->"+imageMap);
 			logger.debug("<------sequenceList---------->"+sequenceList);
 			if(azure!=null) {
+				logger.debug("<------Calling New thread for composite solution--------->");
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
                         env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
@@ -352,44 +359,18 @@ public class AzureServiceController extends AbstractController {
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();
-				/*  azBean=azureImpl.pushCompositeImages(azure, authObject, env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
-						  env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"), false),
-						  null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryPort,imageMap,sequenceList,dockerRegistryname);*/
+				
 				  
-				  /*if(azBean!=null && azBean.getBluePrintMap()!=null){
-					  HashMap<String,String> hmap=new HashMap<String,String>();
-					  hmap=azBean.getBluePrintMap();
-				  }
-				  if(azBean!=null && azBean.getBluePrintMap()!=null){
-					  HashMap<String,String> hmap=new HashMap<String,String>();
-					  hmap=azBean.getBluePrintMap();
-				  }*/
-				  /*dockerInfoList=azBean.getDockerinfolist();
-				  vmIP=azBean.getAzureVMIP().trim();
-				  bluePrintPort=azBean.getBluePrintPort().trim();*/
-				  
-				  jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
 				  
 			}
-			
-			  /*logger.debug("Dockerinfolist=============="+mapper.writeValueAsString(azBean.getDockerinfolist()));
-			  logger.debug("bluePrint==================="+mapper.writeValueAsString(bluePrint));
-			 
-			    String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/putDockerInfo";  
-				String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/putBlueprint";
-				logger.debug("<-----urlDockerInfo---------->"+urlDockerInfo+"<----urlBluePrint----->"+urlBluePrint);
-			  if(azBean.getDockerinfolist()!=null){
-					azureImpl.putContainerDetails(azBean.getDockerinfolist(),urlDockerInfo);
-				}
-				if(bluePrint!=null){
-					azureImpl.putBluePrintDetails(bluePrint,urlBluePrint);
-				}*/
-				response.setStatus(200);	
+			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+			response.setStatus(200);	
 		}catch(Exception e){
 			logger.error("<-----Exception in compositeSolutionAzureDeployment------------>"+e.getMessage());
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
 			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
+			azureUtil.generateNotification("Error in vm creation", userId, dataSource, userName, password);
 			return jsonOutput.toString();
 		}
 		jsonOutput.put("UIDNumber", uidNumStr);

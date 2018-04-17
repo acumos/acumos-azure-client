@@ -33,6 +33,7 @@ import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
+import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
@@ -194,7 +195,7 @@ public class AzureCompositeSolution implements Runnable {
 		
 		String probeIP = null;
   	    String probePort = null;
-		
+  	    AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try{
 			logger.debug("<-------------start pushCompositeImage------------------------------>");
 		    if(dockerVMUserName!=null){
@@ -686,7 +687,10 @@ public class AzureCompositeSolution implements Runnable {
 				prbIndicator = probeIndicatorList.get(0);
 		 }	
 		 
-		 
+		 if(vmIP!=null && !"".equals(vmIP)){
+			 azureUtil.generateNotification("Composite Solution VM is created, IP is:"+vmIP, deployDataObject.getUserId(),
+						dataSource, dataUserName, dataPassword);
+		 }
 		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
 		 if (bluePrint.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation======deployDataObject.getUserId()=====>"+deployDataObject.getUserId());
@@ -697,7 +701,7 @@ public class AzureCompositeSolution implements Runnable {
 		
 		 if(azureContainerBeanList!=null){
        	  
-   			  logger.debug("Start saving data in database=============="); 
+   			logger.debug("Start saving data in database=============="); 
    			createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"DP");
        		  
@@ -705,6 +709,8 @@ public class AzureCompositeSolution implements Runnable {
 		}catch(Exception e){
 			logger.error("Error in AzureCompositeSolution===========" +e.getMessage());
 			try{
+				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
+						dataSource, dataUserName, dataPassword);
 				createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
 	   					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,"FA");
 			}catch(Exception ex){
