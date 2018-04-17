@@ -32,6 +32,7 @@ import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
+import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
@@ -135,6 +136,7 @@ public class AzureSimpleSolution implements Runnable {
 		logger.debug("<-------userId-------->" + deployDataObject.getUserId());
 
 		AzureBean azureBean = new AzureBean();
+		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		AzureContainerBean containerBean = new AzureContainerBean();
 		try {
 			if(dockerVMUserName!=null){
@@ -360,6 +362,9 @@ public class AzureSimpleSolution implements Runnable {
 						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName,portNumberString);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
+				containerBean.setContainerName("ContainerOne");
+				azureUtil.generateNotification("VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(),
+						dataSource, dataUserName, dataPassword);
 			}
 			createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
 					deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
@@ -367,6 +372,8 @@ public class AzureSimpleSolution implements Runnable {
 		} catch (Exception e) {
 			logger.error("Error in AzureSimpleSolution===========" + e.getMessage());
 			try{
+				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
+						dataSource, dataUserName, dataPassword);
 				createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
 						deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 						deployDataObject.getUserId(), uidNumStr, "FA");
