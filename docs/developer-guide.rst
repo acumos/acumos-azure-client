@@ -16,9 +16,9 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-==========================================
+====================================
 Acumos Azure Client Developers Guide
-==========================================
+====================================
 
 1. Introduction
 ---------------
@@ -67,41 +67,42 @@ Acumos provides deployment of model in Azure cloud :
   
 
 2. Model Deployment
--------------------------------
+-------------------
 
 **2.1 Single Solution**
 
  - azure/singleImageAzureDeployment
-~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **- Trigger**
 
 This API is used to deploy single solution in Azure cloud.
+Check with your Cloud Administrator for values to populate the request.
 
 **- Request**
 
 {
-"acrName": "CognitaE6Reg",
+"acrName": "<acr name>",
 
-"client": "c83923c9-73c4-43e2-a47d-2ab700ac9353",
+"client": "<client ID>",
 
-"imagetag": "cognita-nexus01:8001/newadder1:1",
+"imagetag": "<image tag>",
 
-"key": "eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=",
+"key": "<key>",
 
-"rgName": "Cognita-OAM",
+"rgName": "<rg name>",
 
-"solutionId": "02eab846-2bd0-4cfe-8470-9fc69fa0d877",
+"solutionId": "<your model solution id>",
 
-"solutionRevisionId": "a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6",
+"solutionRevisionId": "<your model solution revision id>",
 
-"storageAccount": "cognitae6storage",
+"storageAccount": "<storage account name>",
 
-"subscriptionKey": "81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a",
+"subscriptionKey": "<your subscription key>",
 
-"tenant": "412141bb-9e53-4aed-8468-6868c832e618",
+"tenant": "<your tenant ID>",
 
-"userId": "0505e537-ce79-4b1f-bf43-68d88933c369"
+"userId": "<your user ID>"
 
 }
 
@@ -114,41 +115,42 @@ This API is used to deploy single solution in Azure cloud.
 
 **2.2 Composite Solution**
 
-- azure/compositeSolutionAzureDeployment
-~~~~~~~~~~~~~~~~~~~~
+azure/compositeSolutionAzureDeployment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **- Trigger:**
 
     This API is used to deploy Composite solution in Azure cloud.
+    Check with your Cloud Administrator for values to populate the request.
 
 **- Request:**
 
   {
-  "acrName": "CognitaE6Reg",
+  "acrName": "<acr name>",
   
-  "client": "c83923c9-73c4-43e2-a47d-2ab700ac9353",
+  "client": "<client ID>",
   
   "jsonMapping": "testMapping",
   
   "jsonPosition": "testPosition",
   
-  "key": "eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=",
+  "key": "<key>",
   
-  "rgName": "Cognita-OAM",
+  "rgName": "<rg name>",
   
-  "solutionId": "b318f607-90a6-4a14-af4c-de6dad2244d0",
+  "solutionId": "<your model solution id>",
+
+  "solutionRevisionId": "<your model solution revision id>",
+
+ "storageAccount": "<storage account name>",
   
-  "solutionRevisionId": "1be01a3f-830b-413e-a280-fdd97246c8ab",
+  "subscriptionKey": "<your subscription key>",
   
-  "storageAccount": "cognitae6storage",
-  
-  "subscriptionKey": "81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a",
-  
-  "tenant": "412141bb-9e53-4aed-8468-6868c832e618",
+  "tenant": "<your tenant ID>",
   
   "urlAttribute": "testUrl",
   
-  "userId": "7cd47ca4-1c5d-4cdc-909c-f7c17367b4d4"
+  "userId": "<your user ID>"
   }
 
 **- Response:**
