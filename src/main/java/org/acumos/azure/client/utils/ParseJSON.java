@@ -764,55 +764,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			}
 			
 			
-			/**
-			 * 
-			 * old 
-			 * "nodes": [
-			    {
-			      "container_name": "Predictor-1",
-			      "image": "cognita-nexus01:8001/h2omodel_1110:1",
-			      "depends_on": [
-			        {
-			          "name": "Classifier-1",
-			          "operation_signature": "JSON representation of classify (Prediction) returns (Classification)"
-			        },
-			        {
-			          "name": "Classifier-2",
-			          "operation_signature": "JSON representation of operation signatures in Protbuf.json file"
-			        }
-			      ]
-			    }
-			 * 
-			 * new
-			 *  "nodes": [
-		    {
-		      "container_name": "Aggregator-1",
-		      "node_type": "DataMapper or MLModel or DataBroker or TrainingClient",
-		      "image": "url of the docker image of the named node in Nexus. Information consumed by deployer",
-		      "proto_uri": "url of the proto file of the ML Model, otherwise empty",
-		      "operation_signature_list": [
-		        {
-		          "operation_signature": {
-		            "operation_name": "aggregate",
-		            "input_message_name": "DataFrame - MC should send this message name to Probe along with proto_uri",
-		            "output_message_name": "DataFrames"
-		          },
-		          "connected_to": [
-		            {
-		              "container_name": "Predictor-1",
-		              "operation_signature": {
-		                "operation_name": "predict"
-		              }
-		            },
-		            {
-		              "container_name": "Predictor-2",
-		              "operation_signature": {
-		                "operation_name": "predict"
-		              }
-			 * 
-			 * 
-			 * 
-			 */
+			
 			JSONArray nodes = (JSONArray) jo.get("nodes");
 			ArrayList<Node> nodeList = new ArrayList<Node>();
 			if (nodes != null) {

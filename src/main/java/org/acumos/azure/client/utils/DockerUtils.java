@@ -146,7 +146,8 @@ public class DockerUtils {
 	 */
 	public static DockerClient createDockerClient(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, String localEnvDockerHost, String localEnvDockerCertPath,
-			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword)
+			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,
+			String dockerVMUserName,String dockerVMPassword,String subNet,String vnet)
 			throws Exception {
 		// final String envDockerHost = System.getenv("DOCKER_HOST");
 		final String envDockerHost = localEnvDockerHost;
@@ -162,7 +163,7 @@ public class DockerUtils {
 			// attempt to configure a Docker engine running inside a new Azure virtual
 			// machine
 			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, password, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subNet,vnet);
 		} else {
 			dockerHostUrl = envDockerHost;
 			log.debug("Using local settings to connect to a Docker service: " + dockerHostUrl);
@@ -280,7 +281,8 @@ public class DockerUtils {
 	 */
 	public static DockerClient fromNewDockerVM(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, AzureBean azureBean, String networkSecurityGroup,
-			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword) throws Exception {
+			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword,
+			String subNet,String vnet) throws Exception {
 		// final String dockerVMName = SdkContext.randomResourceName("dockervm", 15);
 		// final String publicIPDnsLabel = SdkContext.randomResourceName("pip", 10);
 		final String vnetName = SdkContext.randomResourceName("vnet", 24);
@@ -310,14 +312,15 @@ public class DockerUtils {
 		 * networkSecurityGroup: networkSecurityGroups) {
 		 * Utils.print(networkSecurityGroup); }
 		 */
-		String subNet = "Cognita-OAM-vsubnet";
+		
 		/*
 		 * Network network = azure.networks().define(vnetName) .withRegion(region)
 		 * .withNewResourceGroup(rgName) .withAddressSpace("135.197.0.0/16")
 		 * .defineSubnet(subNet) .withAddressPrefix("135.197.0.0/16") .attach()
 		 * .create();
 		 */
-		Network network = azure.networks().getByResourceGroup(rgName, "Cognita-OAM-vnet");
+		
+		Network network = azure.networks().getByResourceGroup(rgName, vnet);
 		// azure.networks().getr
 		log.debug("Created a virtual network: " + network.id());
 		log.debug("========Network created =======" + vnetName + "======subNet=====" + subNet);
@@ -468,8 +471,7 @@ public class DockerUtils {
 			String RUN_IMAGE="";
 			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase("Probe")){
 				log.debug("=============Probe Condition======");
-				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
-						+ "  -e NEXUSENDPOINTURL='http://cognita-nexus01.eastus.cloudapp.azure.com:8081/repository/repo_cognita_model_maven' " + repositoryName + " \n";*/
+				
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
 						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
 				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
@@ -715,11 +717,7 @@ public class DockerUtils {
 			 * log.info("====output==========Start============1======================: ");
 			 * sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword); String
 			 * Add_all_image = "" +
-			 * "docker login --username=CognitaE6Reg --password=\"1/uNV9wt=huAtW+yKMrycBHYLrigH=Mz\" cognitae6reg.azurecr.io \n"
-			 * +
-			 * "docker pull cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n"
-			 * ;
-			 * 
+			
 			 * log.info("====output==========Start============2======================: ");
 			 * sshShell.upload(new ByteArrayInputStream(Add_all_image.getBytes()),
 			 * "UPDATE_DOCKER.sh", ".azuredocker", true, "4095");
@@ -735,10 +733,7 @@ public class DockerUtils {
 			 * log.info("Exception in sleep======233333=================="); }
 			 * 
 			 * sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword); String
-			 * run_image = "" +
-			 * "docker run -d -p 0.0.0.0:8557:8557  cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n"
-			 * ; log.info("====output==========Start============4======================: ");
-			 * 
+			 
 			 * sshShell.upload(new ByteArrayInputStream(run_image.getBytes()),
 			 * "RUN_DOCKER_IMAGE.sh", ".azuredocker", true, "4095");
 			 * log.info("====output==========Start============5======================: ");
@@ -877,9 +872,7 @@ public class DockerUtils {
 	/**
 	 * Docker daemon config file allowing connections from any Docker client.
 	 */
-	public String DEFAULT_DOCKERD_CONFIG_TLS_DISABLED = "" + "[Service]\n" + "ExecStart=\n"
-			+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry cognita_model_rw:not4you@cognita-nexus01:8001 \n";
-
+	
 	/**
 	 * Bash script that creates a default unsecured Docker configuration file; must
 	 * be run on the Docker dockerHostUrl after the VM is provisioned.

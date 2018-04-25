@@ -43,7 +43,7 @@ public class NodeTest {
 		
 		OperationSignature operationSignature = new OperationSignature();
 		String containerName = "Adder1";
-	    String image = "cognita-nexus01:8001/newadder1:1";
+	    String image = "newadder1:1";
 	    Component component=new Component();
 	    component.setName("testName");
 		component.setOperationSignature(operationSignature);

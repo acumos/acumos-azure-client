@@ -49,7 +49,7 @@ public class SwaggerConfiguration {
 
 	private ApiInfo apiInfo() {
 		final String version = AzureClientServiceApplication.class.getPackage().getImplementationVersion();
-		ApiInfo apiInfo = new ApiInfo("Cognita Azure Client REST API", "Operations for Azure Deployment.", // description
+		ApiInfo apiInfo = new ApiInfo("Acumos Azure Client REST API", "Operations for Azure Deployment.", // description
 				version == null ? "version not available" : version, // version
 				"Terms of service", // TOS
 				new Contact("Acumos Team", // name

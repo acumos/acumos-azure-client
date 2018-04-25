@@ -32,7 +32,7 @@ public class OrchestratorTest {
 	public void OperationSignatureTestparameter(){
 		String name = "Adder";
 		String version = "1";
-		String image = "cognita-nexus01:8001/newadder1";
+		String image = "newadder1";
 		Orchestrator orch=new Orchestrator();
 		orch.setImage(image);
 		orch.setName(name);

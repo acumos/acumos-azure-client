@@ -110,6 +110,8 @@ public class AzureCompositeSolution implements Runnable {
 	private HashMap<String,DeploymentBean> nodeTypeContainerMap;
     private String bluePrintJsonStr;
     private String probeNexusEndPoint;
+    private String subnet;
+    private String vnet;
 	
 	
 	
@@ -118,7 +120,7 @@ public class AzureCompositeSolution implements Runnable {
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeInternalPort,String probeName,
 			String probeUser,String probePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
 			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,
-			String bluePrintJsonStr, String probeNexusEndPoint) {
+			String bluePrintJsonStr, String probeNexusEndPoint,String subnet,String vnet) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -151,6 +153,8 @@ public class AzureCompositeSolution implements Runnable {
 	    this.probePass=probePass;
 	    this.probeInternalPort=probeInternalPort;
 	    this.probeNexusEndPoint=probeNexusEndPoint;
+	    this.subnet=subnet;
+	    this.vnet=vnet;
 	    
 	   }
 	public void run() {
@@ -186,6 +190,8 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("<-------probePass-------->"+probePass);
 		logger.debug("<-------probeInternalPort-------->"+probeInternalPort);
 		logger.debug("<-------probeNexusEndPoint-------->"+probeNexusEndPoint);
+		logger.debug("<-------subnet-------->"+subnet);
+		logger.debug("<-------vnet-------->"+vnet);
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
@@ -284,7 +290,7 @@ public class AzureCompositeSolution implements Runnable {
 		            logger.debug("azureRegistry.loginServerUrl="+azureRegistry.loginServerUrl()+ ", acrCredentials.username "+ acrCredentials.username()+ ", acrCredentials.passwords" + acrCredentials.passwords().get(0).value());
 		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
-		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword);
+		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword,subnet,vnet);
 		            
 		            AuthConfig authConfig = new AuthConfig()
 		                    .withUsername(dockerUserName)
@@ -433,7 +439,7 @@ public class AzureCompositeSolution implements Runnable {
 		            logger.debug("<----Before Docker remoteDockerClient--------------------------->");
 		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
-		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword);
+		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword,subnet,vnet);
 		            logger.debug("<----After Docker remoteDockerClient--------------------------->");
 		            //=============================================================
 		            // Push the new Docker image to the Azure Container Registry

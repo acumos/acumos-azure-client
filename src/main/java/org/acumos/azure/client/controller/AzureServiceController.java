@@ -92,6 +92,8 @@ public class AzureServiceController extends AbstractController {
 		String dataUserName="";
 		String dataPassword="";
 		String userId="";
+		String subnet="";
+		String vnet="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			azureImpl.setEnvironment(env);
@@ -108,6 +110,8 @@ public class AzureServiceController extends AbstractController {
 			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
 			String solutionPort=env.getProperty("docker.solutionPort");
+			subnet=env.getProperty("docker.subnet");
+			vnet=env.getProperty("docker.vnet");
 			logger.debug("<------solutionPort---------->"+solutionPort);
 			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
 			logger.debug("<------dockerVMPassword---------->"+dockerVMPassword);
@@ -115,6 +119,8 @@ public class AzureServiceController extends AbstractController {
 			dockerVMPassword="12NewPA$$w0rd!";	
 			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
 			logger.debug("<------dockerVMPassword-----2----->"+dockerVMPassword);
+			logger.debug("<---subnet----->"+subnet);
+			logger.debug("<---vnet------->"+vnet);
 			/*
 			String nexusUrl=env.getProperty("nexus.url");
 			String nexusUserName=env.getProperty("nexus.username");
@@ -178,7 +184,7 @@ public class AzureServiceController extends AbstractController {
             AzureSimpleSolution myRunnable = new AzureSimpleSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
             		env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"),false),
             				null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryname,uidNumStr,dataSource,dataUserName,dataPassword,
-            				dockerVMUserName,dockerVMPassword,solutionPort);
+            				dockerVMUserName,dockerVMPassword,solutionPort,subnet,vnet);
             
             Thread t = new Thread(myRunnable);
             t.start();
@@ -210,6 +216,8 @@ public class AzureServiceController extends AbstractController {
 		String userName="";
 		String password="";
 		String userId="";
+		String subnet="";
+		String vnet="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			UUID uidNumber = UUID.randomUUID();
@@ -255,6 +263,11 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------dockerVMPassword-----2----->"+dockerVMPassword);
 			String solutionPort=env.getProperty("docker.solutionPort");
 			logger.debug("<------solutionPort---------->"+solutionPort);
+			subnet=env.getProperty("docker.subnet");
+			vnet=env.getProperty("docker.vnet");
+			
+			logger.debug("<---subnet----->"+subnet);
+			logger.debug("<---vnet------->"+vnet);
 			if (authObject == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);
@@ -355,7 +368,8 @@ public class AzureServiceController extends AbstractController {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
                         env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
-                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint);
+                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,
+                        solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint,subnet,vnet);
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();
