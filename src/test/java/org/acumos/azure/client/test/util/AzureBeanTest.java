@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import org.acumos.azure.client.test.transport.AzureDeployDataObjectTest;
 import org.acumos.azure.client.utils.AzureBean;
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,22 +39,18 @@ public class AzureBeanTest {
 		 DockerInfoList dockerinfolist = new DockerInfoList();
 		 HashMap<String, String> bluePrintMap = new HashMap<String, String>();
 		 bluePrintMap.put("test", "test");
-		 
-		 String bluePrintIp = "11.11.10.90";
-		 String bluePrintPort = "8556";
-		 String azureVMIP = "11.11.10.90";
 		 AzureBean azbean=new AzureBean();
-		 azbean.setAzureVMIP(azureVMIP);
-		 azbean.setBluePrintIp(bluePrintIp);
+		 azbean.setAzureVMIP(AzureClientConstants.TEST_AZUREVMIP);
+		 azbean.setBluePrintIp(AzureClientConstants.TEST_BLUEPRINTIP);
 		 azbean.setBluePrintMap(bluePrintMap);
-		 azbean.setBluePrintPort(bluePrintPort);
+		 azbean.setBluePrintPort(AzureClientConstants.TEST_BLUEPRINTPORT);
 		 azbean.setDockerinfolist(dockerinfolist);
 		 
 	    Assert.assertEquals(dockerinfolist, azbean.getDockerinfolist());
 		Assert.assertEquals(bluePrintMap, azbean.getBluePrintMap());
-		Assert.assertEquals(bluePrintIp, azbean.getBluePrintIp());
-		Assert.assertEquals(bluePrintPort, azbean.getBluePrintPort());
-		Assert.assertEquals(azureVMIP, azbean.getAzureVMIP());
+		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINTIP, azbean.getBluePrintIp());
+		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINTPORT, azbean.getBluePrintPort());
+		Assert.assertEquals(AzureClientConstants.TEST_AZUREVMIP, azbean.getAzureVMIP());
 		logger.info("<---------End-------AzureBeanTestObjectparameter-------------->");
 	}
 

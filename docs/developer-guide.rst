@@ -16,9 +16,9 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-==========================================
+====================================
 Acumos Azure Client Developers Guide
-==========================================
+====================================
 
 1. Introduction
 ---------------
@@ -67,43 +67,53 @@ Acumos provides deployment of model in Azure cloud :
   
 
 2. Model Deployment
--------------------------------
+-------------------
+
+    1. **TenantID** The ID of the AAD (Azure Active Directory)  in which  application is created.
+    2. **Application ID** The ID for  application  during  registrations in Azure Active Directory
+    3. **Subscription Key** Subscription grants access to  Azure services and to the Azure Platform Management Portal
+    4. **Resource Group**  Resource groups provide a way to monitor, control access, provision and manage billing for collections of assets that are required to run an application, or used by a client or company department
+    5. **Acr Name** Same as ApplicationID
+    6. **Storage Account** An Azure storage account provides a unique namespace to store and access Azure Storage data objects. All objects in a storage account are billed together as a group
+    7. **Secret key**  Client Secret key for a web application registered with Azure Active Directory .
+
 
 **2.1 Single Solution**
 
- - azure/singleImageAzureDeployment
-~~~~~~~~~~~~~~~
+azure/singleImageAzureDeployment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **- Trigger**
 
 This API is used to deploy single solution in Azure cloud.
+Check with your Cloud Administrator for values to populate the request.
 
 **- Request**
 
-{
-"acrName": "CognitaE6Reg",
-
-"client": "c83923c9-73c4-43e2-a47d-2ab700ac9353",
-
-"imagetag": "cognita-nexus01:8001/newadder1:1",
-
-"key": "eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=",
-
-"rgName": "Cognita-OAM",
-
-"solutionId": "02eab846-2bd0-4cfe-8470-9fc69fa0d877",
-
-"solutionRevisionId": "a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6",
-
-"storageAccount": "cognitae6storage",
-
-"subscriptionKey": "81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a",
-
-"tenant": "412141bb-9e53-4aed-8468-6868c832e618",
-
-"userId": "0505e537-ce79-4b1f-bf43-68d88933c369"
-
-}
+    {
+    "acrName": "<acr name>",
+    
+    "client": "<client ID>",
+    
+    "imagetag": "<image tag>",
+    
+    "key": "<key>",
+    
+    "rgName": "<rg name>",
+    
+    "solutionId": "<your model solution id>",
+    
+    "solutionRevisionId": "<your model solution revision id>",
+    
+    "storageAccount": "<storage account name>",
+    
+    "subscriptionKey": "<your subscription key>",
+    
+    "tenant": "<your tenant ID>",
+    
+    "userId": "<your user ID>"
+    
+    }
 
 **- Response**
 
@@ -114,41 +124,42 @@ This API is used to deploy single solution in Azure cloud.
 
 **2.2 Composite Solution**
 
-- azure/compositeSolutionAzureDeployment
-~~~~~~~~~~~~~~~~~~~~
+azure/compositeSolutionAzureDeployment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **- Trigger:**
 
     This API is used to deploy Composite solution in Azure cloud.
+    Check with your Cloud Administrator for values to populate the request.
 
 **- Request:**
 
   {
-  "acrName": "CognitaE6Reg",
+  "acrName": "<acr name>",
   
-  "client": "c83923c9-73c4-43e2-a47d-2ab700ac9353",
+  "client": "<client ID>",
   
   "jsonMapping": "testMapping",
   
   "jsonPosition": "testPosition",
   
-  "key": "eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=",
+  "key": "<key>",
   
-  "rgName": "Cognita-OAM",
+  "rgName": "<rg name>",
   
-  "solutionId": "b318f607-90a6-4a14-af4c-de6dad2244d0",
+  "solutionId": "<your model solution id>",
+
+  "solutionRevisionId": "<your model solution revision id>",
+
+ "storageAccount": "<storage account name>",
   
-  "solutionRevisionId": "1be01a3f-830b-413e-a280-fdd97246c8ab",
+  "subscriptionKey": "<your subscription key>",
   
-  "storageAccount": "cognitae6storage",
-  
-  "subscriptionKey": "81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a",
-  
-  "tenant": "412141bb-9e53-4aed-8468-6868c832e618",
+  "tenant": "<your tenant ID>",
   
   "urlAttribute": "testUrl",
   
-  "userId": "7cd47ca4-1c5d-4cdc-909c-f7c17367b4d4"
+  "userId": "<your user ID>"
   }
 
 **- Response:**

@@ -19,6 +19,7 @@
  */
 package org.acumos.azure.client.test.util;
 
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,16 +35,13 @@ public class DockerinfoTest {
 	@Test	
 	public void dockerinfoTestparameter(){
 		logger.info("<---------Start-------ComponentTest-------------->");
-		String container = "Adder1";
-        String ipAddress ="10.21.13.63";
-        String port = "8557";
         DockerInfo dockerInfo=new DockerInfo();
-        dockerInfo.setContainer(container);
-        dockerInfo.setIpAddress(ipAddress);
-        dockerInfo.setPort(port);
-        Assert.assertEquals(container, dockerInfo.getContainer());
-        Assert.assertEquals(ipAddress, dockerInfo.getIpAddress());
-        Assert.assertEquals(port, dockerInfo.getPort());
+        dockerInfo.setContainer(AzureClientConstants.TEST_COMPONENT_NAME);
+        dockerInfo.setIpAddress(AzureClientConstants.TEST_IP_ADDER);
+        dockerInfo.setPort(AzureClientConstants.TEST_PORT);
+        Assert.assertEquals(AzureClientConstants.TEST_COMPONENT_NAME, dockerInfo.getContainer());
+        Assert.assertEquals(AzureClientConstants.TEST_IP_ADDER, dockerInfo.getIpAddress());
+        Assert.assertEquals(AzureClientConstants.TEST_PORT, dockerInfo.getPort());
 
 	}
 

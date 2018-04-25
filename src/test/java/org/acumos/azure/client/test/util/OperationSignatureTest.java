@@ -31,10 +31,6 @@ public class OperationSignatureTest {
 	@Test	
 	public void OperationSignatureTestparameter(){
 		logger.info("<---------Start-------OperationSignatureTestparameter-------------->");
-		String operation="Add";
-		OperationSignature opr=new OperationSignature();
-		//opr.setOperation(operation);
-		//Assert.assertEquals(operation, opr.getOperation());
 		logger.info("<---------End-------OperationSignatureTestparameter-------------->");
 	}
 }

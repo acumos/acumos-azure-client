@@ -29,6 +29,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayOutputStream;
 
 import org.acumos.azure.client.api.APINames;
 import org.acumos.azure.client.service.impl.AzureCompositeSolution;
@@ -40,8 +41,10 @@ import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AppProperties;
 import org.acumos.azure.client.utils.AzureBean;
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.azure.client.utils.Blueprint;
+import org.acumos.azure.client.utils.DataBrokerBean;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.ParseJSON;
@@ -92,6 +95,10 @@ public class AzureServiceController extends AbstractController {
 		String dataUserName="";
 		String dataPassword="";
 		String userId="";
+		String subnet="";
+		String vnet="";
+		String replaceChar="";
+		String replaceWithChar="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			azureImpl.setEnvironment(env);
@@ -107,28 +114,20 @@ public class AzureServiceController extends AbstractController {
 			dataPassword=env.getProperty("cmndatasvc.cmndatasvcpwd");
 			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
+			replaceChar=env.getProperty("docker.replaceChar");
+			replaceWithChar=env.getProperty("docker.replaceWithChar");
+			dockerVMPassword=azureUtil.replaceCharStr(dockerVMPassword,replaceChar,replaceWithChar);
 			String solutionPort=env.getProperty("docker.solutionPort");
+			subnet=env.getProperty("docker.subnet");
+			vnet=env.getProperty("docker.vnet");
 			logger.debug("<------solutionPort---------->"+solutionPort);
-			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
-			logger.debug("<------dockerVMPassword---------->"+dockerVMPassword);
-			dockerVMUserName="dockerUser";
-			dockerVMPassword="12NewPA$$w0rd!";	
-			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
-			logger.debug("<------dockerVMPassword-----2----->"+dockerVMPassword);
+			logger.debug("<---subnet----->"+subnet);
+			logger.debug("<---vnet------->"+vnet);
 			/*
 			String nexusUrl=env.getProperty("nexus.url");
 			String nexusUserName=env.getProperty("nexus.username");
 			String nexusPassword=env.getProperty("nexus.password");*/
 			String dockerRegistryname=env.getProperty("docker.registry.name");
-			logger.debug("<------dockerRegistryname---------->"+dockerRegistryname);
-            logger.debug("<-------AcrName----->"+auth.getAcrName());
-    		logger.debug("<--------Key---->"+auth.getKey());
-    		logger.debug("<-------Imagetag----->"+auth.getImagetag());
-    		logger.debug("<-------RgName----->"+auth.getRgName());
-    		logger.debug("<--------Client---->"+auth.getClient());
-    		logger.debug("<--------SubscriptionKey---->"+auth.getSubscriptionKey());
-    		logger.debug("<---------StorageAccount--->"+auth.getStorageAccount());
-    		logger.debug("<---------Tenant--->"+auth.getTenant());
             AzureDeployDataObject authObject=new AzureDeployDataObject();
             ArrayList<String> list=new ArrayList<String>();
             list.add(auth.getImagetag());
@@ -178,16 +177,16 @@ public class AzureServiceController extends AbstractController {
             AzureSimpleSolution myRunnable = new AzureSimpleSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"), env.getProperty("docker.registry.username"),
             		env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), env.getProperty("docker.port"),false),
             				null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryname,uidNumStr,dataSource,dataUserName,dataPassword,
-            				dockerVMUserName,dockerVMPassword,solutionPort);
+            				dockerVMUserName,dockerVMPassword,solutionPort,subnet,vnet);
             
             Thread t = new Thread(myRunnable);
             t.start();
             
 		}catch(Exception e){
-			logger.error("<-----Exception in singleImageAzureDeployment------------>"+e.getMessage());
+			
+			logger.error("<----Exception in method singleImageAzureDeployment of AzureServiceController----------->"+e.getMessage());
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
-			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
 			azureUtil.generateNotification("Error in vm creation", userId, dataSource, dataUserName, dataPassword);
 			return jsonOutput.toString();
 		}
@@ -205,11 +204,15 @@ public class AzureServiceController extends AbstractController {
 		String uidNumStr="";
 		String dockerVMUserName="";
 		String dockerVMPassword="";
-		String jsonFileName="blueprint.json";
 		String dataSource="";
 		String userName="";
 		String password="";
 		String userId="";
+		String subnet="";
+		String vnet="";
+		String replaceChar="";
+		String replaceWithChar="";
+		String jsonFileName=AzureClientConstants.JSON_FILE_NAME;
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			UUID uidNumber = UUID.randomUUID();
@@ -231,9 +234,7 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------probePrintImage---------->"+probePrintImage);
 			logger.debug("<------probePrintName---------->"+probePrintName);
 			logger.debug("<------probeInternalPort---------->"+probeInternalPort);
-			logger.debug("<------probUser---------->"+probUser);
-			logger.debug("<------probePass---------->"+probePass);
-			logger.debug("<------probeNexusEndPoint---------->"+probeNexusEndPoint);
+			
 			
 			String networkSecurityGroup=env.getProperty("docker.registry.networkgroupName");
 			//String dockerRegistryPort=env.getProperty("docker.registry.port");
@@ -244,17 +245,17 @@ public class AzureServiceController extends AbstractController {
 			String nexusUserName=env.getProperty("nexus.username");
 			String nexusPassword=env.getProperty("nexus.password");
 			String dockerRegistryname=env.getProperty("docker.registry.name");
-			logger.debug("<------dockerRegistryname---------->"+dockerRegistryname);
 			dockerVMUserName=env.getProperty("docker.dockerVMUserName");
 			dockerVMPassword=env.getProperty("docker.dockerVMPassword");
-			logger.debug("<------dockerVMUserName---------->"+dockerVMUserName);
-			logger.debug("<------dockerVMPassword---------->"+dockerVMPassword);
-			dockerVMUserName="dockerUser";
-			dockerVMPassword="12NewPA$$w0rd!";	
-			logger.debug("<------dockerVMUserName---2------->"+dockerVMUserName);
-			logger.debug("<------dockerVMPassword-----2----->"+dockerVMPassword);
+			replaceChar=env.getProperty("docker.replaceChar");
+			replaceWithChar=env.getProperty("docker.replaceWithChar");
+			dockerVMPassword=azureUtil.replaceCharStr(dockerVMPassword,replaceChar,replaceWithChar);
 			String solutionPort=env.getProperty("docker.solutionPort");
 			logger.debug("<------solutionPort---------->"+solutionPort);
+			subnet=env.getProperty("docker.subnet");
+			vnet=env.getProperty("docker.vnet");
+			logger.debug("<---subnet----->"+subnet);
+			logger.debug("<---vnet------->"+vnet);
 			if (authObject == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);
@@ -274,41 +275,63 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("<------bluePrintJsonStr---------->"+bluePrintJsonStr);
 			ParseJSON parseJson=new ParseJSON();
 			
-			// Commented from 246 to 252 on 22-Feb-18 to support support probe.
-			
-			/*Blueprint bluePrint=parseJson.jsonFileToObject();
-			//how many images
-			HashMap<String,String> imageMap=parseJson.parseJsonFile();
-			// images list
-			ArrayList<String> list=azureImpl.iterateImageMap(imageMap);
-			//sequence
-			LinkedList<String> sequenceList=parseJson.getSequenceFromJSON();*/
 			boolean probeIndicator=parseJson.checkProbeIndicator(jsonFileName);
 			Blueprint bluePrintProbe=null;
 			HashMap<String,String> imageMap=null;
 			HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
 			ArrayList<String> list=null;
 			LinkedList<String> sequenceList=null;
+			DataBrokerBean dataBrokerBean=null;
 			logger.debug("<------probeIndicator---------->"+probeIndicator);
 			if(probeIndicator){
 				//-------------- New Probe Start ------------------- ***
 				//For new blueprint.json
-				 bluePrintProbe =parseJson.jsonFileToObjectProbe(jsonFileName);
+				 //bluePrintProbe =parseJson.jsonFileToObjectProbe(jsonFileName);
 				//how many images
 				imageMap=parseJson.parseJsonFileProbe(jsonFileName);
 				//Node Type and container Name in nodes
 				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(jsonFileName);
 				// images list
 				list=azureImpl.iterateImageMap(imageMap);
+				dataBrokerBean=parseJson.getDataBrokerContainer(jsonFileName);
+				if(dataBrokerBean!=null){
+					if(dataBrokerBean!=null){
+						ByteArrayOutputStream byteArrayOutputStream=azureUtil.getNexusUrlFile(nexusUrl, nexusUserName, nexusPassword, dataBrokerBean.getProtobufFile());
+						logger.debug("<------byteArrayOutputStream---------->"+byteArrayOutputStream);
+						if(byteArrayOutputStream!=null){
+							dataBrokerBean.setProtobufFile(byteArrayOutputStream.toString());
+						}else{
+							dataBrokerBean.setProtobufFile("");
+							
+						}
+						
+					 }
+				}
+				//For new blueprint.json
+				 bluePrintProbe =parseJson.jsonFileToObjectProbe(jsonFileName,dataBrokerBean);
 				
 				//sequence
 				sequenceList=parseJson.getSequenceFromJSONProbe(jsonFileName);
 			}else{
 				//old code 
-				bluePrintProbe=parseJson.jsonFileToObject(jsonFileName);
 				imageMap=parseJson.parseJsonFile(jsonFileName);
 				list=azureImpl.iterateImageMap(imageMap);
 				sequenceList=parseJson.getSequenceFromJSON(jsonFileName);
+				dataBrokerBean=parseJson.getDataBrokerContainer(jsonFileName);
+				if(dataBrokerBean!=null){
+					if(dataBrokerBean!=null){
+						ByteArrayOutputStream byteArrayOutputStream=azureUtil.getNexusUrlFile(nexusUrl, nexusUserName, nexusPassword, dataBrokerBean.getProtobufFile());
+						logger.debug("<------byteArrayOutputStream---------->"+byteArrayOutputStream);
+						if(byteArrayOutputStream!=null){
+							dataBrokerBean.setProtobufFile(byteArrayOutputStream.toString());
+						}else{
+							dataBrokerBean.setProtobufFile("");
+							
+						}
+						
+					 }
+				}
+				bluePrintProbe=parseJson.jsonFileToObject(jsonFileName,dataBrokerBean);
 			}
 			
 			
@@ -325,23 +348,14 @@ public class AzureServiceController extends AbstractController {
 
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
-					imageMap.put(probePrintImage, "Probe");
-					sequenceList=azureImpl.addProbeSequence(sequenceList,"Probe");
+					imageMap.put(probePrintImage, AzureClientConstants.PROBE_CONTAINER_NAME);
+					sequenceList=azureImpl.addProbeSequence(sequenceList,AzureClientConstants.PROBE_CONTAINER_NAME);
 				}
 			}	
 
-			/*if (bluePrintProbe.getProbeIndocator() != null && bluePrintProbe.getProbeIndocator().equalsIgnoreCase("True") ) {
-
-				if (probePrintImage != null && !"".equals(probePrintImage)) {
-					list.add(probePrintImage);
-					imageMap.put(probePrintImage, "Probe");
-					sequenceList=azureImpl.addProbeSequence(sequenceList,"Probe");
-				}
-			}*/
-			
 			if (bluePrintImage != null && !"".equals(bluePrintImage)) {
 				list.add(bluePrintImage);
-				imageMap.put(bluePrintImage, "BluePrintContainer");
+				imageMap.put(bluePrintImage, AzureClientConstants.BLUEPRINT_CONTAINER);
 			}
 			
 						
@@ -355,7 +369,8 @@ public class AzureServiceController extends AbstractController {
 				AzureCompositeSolution compositeRunner =new AzureCompositeSolution(azure,authObject,env.getProperty("docker.containerNamePrefix"),env.getProperty("docker.registry.username"),
                         env.getProperty("docker.registry.password"),dockerHosttoUrl(env.getProperty("docker.host"), 
                         env.getProperty("docker.port"), false),null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,imageMap,
-                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint);
+                        sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,
+                        solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint,subnet,vnet,dataBrokerBean);
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();
@@ -366,10 +381,9 @@ public class AzureServiceController extends AbstractController {
 			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
 			response.setStatus(200);	
 		}catch(Exception e){
-			logger.error("<-----Exception in compositeSolutionAzureDeployment------------>"+e.getMessage());
+			logger.error("<----Exception in method compositeSolutionAzureDeployment of AzureServiceController----------->"+e.getMessage());
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
-			logger.error(e.getMessage() + " Returning... " + jsonOutput.toString());
 			azureUtil.generateNotification("Error in vm creation", userId, dataSource, userName, password);
 			return jsonOutput.toString();
 		}

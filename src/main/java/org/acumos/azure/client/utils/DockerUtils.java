@@ -146,7 +146,8 @@ public class DockerUtils {
 	 */
 	public static DockerClient createDockerClient(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, String localEnvDockerHost, String localEnvDockerCertPath,
-			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword)
+			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,
+			String dockerVMUserName,String dockerVMPassword,String subNet,String vnet)
 			throws Exception {
 		// final String envDockerHost = System.getenv("DOCKER_HOST");
 		final String envDockerHost = localEnvDockerHost;
@@ -154,15 +155,13 @@ public class DockerUtils {
 		String dockerHostUrl;
 		DockerClient dockerClient;
 		dockerPort = dockerRegistryPort;
-		log.debug("====createDockerClient====networkSecurityGroup======" + networkSecurityGroup
-				+ "====dockerRegistryPort=======" + dockerRegistryPort + "===dockerPort=" + dockerPort);
 		if (envDockerHost == null || envDockerHost.isEmpty()) {
 			// Could not find a Docker environment; presume that there is no local Docker
 			// engine running and
 			// attempt to configure a Docker engine running inside a new Azure virtual
 			// machine
 			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, password, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subNet,vnet);
 		} else {
 			dockerHostUrl = envDockerHost;
 			log.debug("Using local settings to connect to a Docker service: " + dockerHostUrl);
@@ -186,15 +185,6 @@ public class DockerUtils {
 
 			dockerClient = DockerClientBuilder.getInstance(dockerClientConfig).build();
 			log.debug("List Docker host info");
-			/*
-			 * System.out.println("\tFound Docker version: " +
-			 * dockerClient.versionCmd().exec().toString());
-			 * System.out.println("\tFound Docker info: " +
-			 * dockerClient.infoCmd().exec().toString()); log.info("List Docker host info");
-			 * log.info("\tFound Docker version: " +
-			 * dockerClient.versionCmd().exec().toString());
-			 * log.info("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
-			 */
 		}
 
 		return dockerClient;
@@ -280,22 +270,18 @@ public class DockerUtils {
 	 */
 	public static DockerClient fromNewDockerVM(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, AzureBean azureBean, String networkSecurityGroup,
-			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword) throws Exception {
+			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword,
+			String subNet,String vnet) throws Exception {
 		// final String dockerVMName = SdkContext.randomResourceName("dockervm", 15);
 		// final String publicIPDnsLabel = SdkContext.randomResourceName("pip", 10);
 		final String vnetName = SdkContext.randomResourceName("vnet", 24);
 		final String frontEndNSGName = SdkContext.randomResourceName("fensg", 24);
 		final String networkInterfaceName1 = SdkContext.randomResourceName("nic1", 24);
 		final String publicIPAddressLeafDNS1 = SdkContext.randomResourceName("pip1", 24);
-		//final String vmUserName = "dockerUser";
-		//final String vmPassword = "12NewPA$$w0rd!";
 		final String vmUserName=dockerVMUserName;
 		final String vmPassword=dockerVMPassword;
 
-		log.debug("========frontEndNSGName======" + frontEndNSGName + "====vnetName=======" + vnetName);
-		log.debug("========networkSecurityGroup======" + networkSecurityGroup + "====dockerRegistryPort======="
-				+ dockerRegistryPort);
-		log.debug("vmUserName===="+vmUserName+"===vmPassword=="+vmPassword);
+		
 		// Could not find a Docker environment; presume that there is no local Docker
 		// engine running and
 		// attempt to configure a Docker engine running inside a new Azure virtual
@@ -304,23 +290,11 @@ public class DockerUtils {
 		log.debug("Creating a virtual network ...");
 
 		log.debug("Walking through network security groups");
-		/*
-		 * List<NetworkSecurityGroup> networkSecurityGroups =
-		 * azure.networkSecurityGroups().list(); for (NetworkSecurityGroup
-		 * networkSecurityGroup: networkSecurityGroups) {
-		 * Utils.print(networkSecurityGroup); }
-		 */
-		String subNet = "Cognita-OAM-vsubnet";
-		/*
-		 * Network network = azure.networks().define(vnetName) .withRegion(region)
-		 * .withNewResourceGroup(rgName) .withAddressSpace("135.197.0.0/16")
-		 * .defineSubnet(subNet) .withAddressPrefix("135.197.0.0/16") .attach()
-		 * .create();
-		 */
-		Network network = azure.networks().getByResourceGroup(rgName, "Cognita-OAM-vnet");
-		// azure.networks().getr
+		
+		
+		Network network = azure.networks().getByResourceGroup(rgName, vnet);
 		log.debug("Created a virtual network: " + network.id());
-		log.debug("========Network created =======" + vnetName + "======subNet=====" + subNet);
+		
 		Utils.print(network);
 		log.debug("Creating a security group for the front end - allows SSH and HTTP");
 		NetworkSecurityGroup frontEndNSG = azure.networkSecurityGroups().getByResourceGroup(rgName,
@@ -339,15 +313,7 @@ public class DockerUtils {
 		/****************** End code for resourceGroup ********************/
 		log.debug("Creating an Azure virtual machine running Docker");
 		Date t1 = new Date();
-		/*
-		 * VirtualMachine dockerVM = azure.virtualMachines().define(dockerVMName)
-		 * .withRegion(region) .withExistingResourceGroup(rgName)
-		 * .withNewPrimaryNetwork("10.0.0.0/28") .withPrimaryPrivateIPAddressDynamic()
-		 * .withNewPrimaryPublicIPAddress(publicIPDnsLabel)
-		 * .withPopularLinuxImage(KnownLinuxVirtualMachineImage.UBUNTU_SERVER_16_04_LTS)
-		 * .withRootUsername(vmUserName) .withRootPassword(vmPassword)
-		 * .withSize(VirtualMachineSizeTypes.STANDARD_D2_V2) .create();
-		 */
+		
 
 		VirtualMachine dockerVM = azure.virtualMachines().define(frontEndNSGName).withRegion(region)
 				.withExistingResourceGroup(rgName).withExistingPrimaryNetworkInterface(networkInterface1)
@@ -385,16 +351,7 @@ public class DockerUtils {
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,
 				password, dockerRegistryName);
-		/*
-		 * System.out.println("List Docker host info");
-		 * System.out.println("\tFound Docker version: " +
-		 * dockerClient.versionCmd().exec().toString());
-		 * System.out.println("\tFound Docker info: " +
-		 * dockerClient.infoCmd().exec().toString()); log.info("List Docker host info");
-		 * log.info("\tFound Docker version: " +
-		 * dockerClient.versionCmd().exec().toString());
-		 * log.info("\tFound Docker info: " + dockerClient.infoCmd().exec().toString());
-		 */
+		
 		log.debug("dockerHostIP=====" + dockerHostIP);
 
 		return dockerClient;
@@ -430,10 +387,6 @@ public class DockerUtils {
 			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint) {
 		log.debug("====================start deploymentCompositeImageVM==================");
 		log.debug("====dockerHostIP======: " + dockerHostIP);
-		log.debug("====vmUserName======: " + vmUserName);
-		log.debug("====registryServerUrl======: " + registryServerUrl);
-		log.debug("====username======: " + username);
-		log.debug("====password======: " + password);
 		log.debug("====repositoryName======: " + repositoryName);
 		log.debug("====finalContainerName======: " + finalContainerName);
 		log.debug("====imageCount======: " + imageCount);
@@ -460,7 +413,7 @@ public class DockerUtils {
 			try {
 				Thread.sleep(30000);
 			} catch (Exception e) {
-				log.error("Exception in sleep======1===================");
+				log.error("<----Exception in method deploymentCompositeImageVM of DockerUtils----------->"+e.getMessage());
 			}
 
 			log.debug("====================start deploymentImageVM============1======");
@@ -468,8 +421,7 @@ public class DockerUtils {
 			String RUN_IMAGE="";
 			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase("Probe")){
 				log.debug("=============Probe Condition======");
-				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
-						+ "  -e NEXUSENDPOINTURL='http://cognita-nexus01.eastus.cloudapp.azure.com:8081/repository/repo_cognita_model_maven' " + repositoryName + " \n";*/
+				
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
 						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
 				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
@@ -491,14 +443,11 @@ public class DockerUtils {
 			log.debug("====output==========Start============5==================output3====: " + output3);
 			Thread.sleep(30000);
 		} catch (JSchException jSchException) {
-
-			log.error("JSchException======" + jSchException.getMessage());
+			log.error("<----JSchException in method deploymentCompositeImageVM of DockerUtils---->"+jSchException.getMessage());
 		} catch (IOException ioException) {
-
-			log.error("IOException======" + ioException.getMessage());
+			log.error("<----IoException in method deploymentCompositeImageVM of DockerUtils---->"+ioException.getMessage());
 		} catch (Exception exception) {
-
-			log.error("Exception======" + exception.getMessage());
+			log.error("<----Exception in method deploymentCompositeImageVM of DockerUtils---->"+exception.getMessage());
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -513,10 +462,7 @@ public class DockerUtils {
 	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPassword,
 			String registryServerUrl, String username, String password, String repositoryName,String portNumberString) {
 		log.debug("====dockerHostIP======: " + dockerHostIP);
-		log.debug("====vmUserName======: " + vmUserName);
 		log.debug("====registryServerUrl======: " + registryServerUrl);
-		log.debug("====username======: " + username);
-		log.debug("====password======: " + password);
 		log.debug("====repositoryName======: " + repositoryName);
 		log.debug("====portNumberString======: " + portNumberString);
 		log.debug("====================start deploymentImageVM==================");
@@ -538,7 +484,7 @@ public class DockerUtils {
 			try {
 				Thread.sleep(30000);
 			} catch (Exception e) {
-				log.error("Exception in sleep======1===================");
+				log.error("<----Exception in method deploymentImageVM of DockerUtils---->"+e.getMessage());
 			}
 
 			log.debug("====================start deploymentImageVM============1======");
@@ -554,14 +500,11 @@ public class DockerUtils {
 			log.debug("====output==========Start============5==================output3====: " + output3);
 
 		} catch (JSchException jSchException) {
-
-			log.error("JSchException======" + jSchException.getMessage());
+			log.error("<----JSchException in method deploymentImageVM of DockerUtils---->"+jSchException.getMessage());
 		} catch (IOException ioException) {
-
-			log.error("IOException======" + ioException.getMessage());
+			log.error("<----IoException in method deploymentImageVM of DockerUtils---->"+ioException.getMessage());
 		} catch (Exception exception) {
-
-			log.error("Exception======" + exception.getMessage());
+			log.error("<----Exception in method deploymentImageVM of DockerUtils---->"+exception.getMessage());
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -591,21 +534,6 @@ public class DockerUtils {
 			sshShell.upload(new ByteArrayInputStream(INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.getBytes()),
 					"INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", ".azuredocker", true, "4095");
 
-			/*
-			 * sshShell.upload(new
-			 * ByteArrayInputStream(CREATE_OPENSSL_TLS_CERTS_FOR_UBUNTU.replaceAll(
-			 * "HOST_IP", dockerHostIP).getBytes()),
-			 * "CREATE_OPENSSL_TLS_CERTS_FOR_UBUNTU.sh", ".azuredocker", true, "4095");
-			 * sshShell.upload(new
-			 * ByteArrayInputStream(INSTALL_DOCKER_TLS_CERTS_FOR_UBUNTU.getBytes()),
-			 * "INSTALL_DOCKER_TLS_CERTS_FOR_UBUNTU.sh", ".azuredocker", true, "4095");
-			 * sshShell.upload(new
-			 * ByteArrayInputStream(DEFAULT_DOCKERD_CONFIG_TLS_ENABLED.getBytes()),
-			 * "dockerd_tls.config", ".azuredocker", true, "4095"); sshShell.upload(new
-			 * ByteArrayInputStream(CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED.getBytes()),
-			 * "CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED.sh", ".azuredocker", true, "4095");
-			 * 
-			 */
 			dockerConfig_diabled = "" + "[Service]\n" + "ExecStart=\n"
 					+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry "
 					+ dockerRegistryName + " \n";
@@ -617,14 +545,11 @@ public class DockerUtils {
 					"CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", ".azuredocker", true, "4095");
 			log.debug("====dockerConfig_diabled====2===: " + dockerConfig_diabled);
 		} catch (JSchException jSchException) {
-			log.debug("JSchException========== "+jSchException.getMessage());
-			log.error(jSchException.getMessage());
+			log.error("<----JSchException in method installDocker of DockerUtils--Docker setup scripts-->"+jSchException.getMessage());
 		} catch (IOException ioException) {
-			log.debug("IOException=========="+ioException.getMessage());
-			log.error(ioException.getMessage());
+			log.error("<----IoException in method installDocker of DockerUtils--Docker setup scripts-->"+ioException.getMessage());
 		} catch (Exception exception) {
-			log.debug("Exception ========="+exception.getMessage());
-			log.error(exception.getMessage());
+			log.error("<----Exception in method installDocker of DockerUtils---Docker setup scripts->"+exception.getMessage());
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -641,50 +566,21 @@ public class DockerUtils {
 			try {
 				Thread.sleep(30000);
 			} catch (Exception e) {
-				log.debug("Exception in sleep======1===================");
+				log.error("<--Exception in method installDocker of DockerUtils---------->"+e.getMessage());
 			}
 			log.debug(output);
 			log.debug("====output=======: " + output);
 		} catch (JSchException jSchException) {
-			log.debug("JSchException============"+jSchException.getMessage());
+			log.error("<----JSchException in method installDocker of DockerUtils--install Docker host-->"+jSchException.getMessage());
 		} catch (IOException ioException) {
-			log.debug("IOException=========="+ioException.getMessage());
+			log.error("<----IoException in method installDocker of DockerUtils--install Docker host-->"+ioException.getMessage());
 		} catch (Exception exception) {
-			log.debug("Exception=========="+exception.getMessage());
+			log.error("<----Exception in method installDocker of DockerUtils---install Docker host->"+exception.getMessage());
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
 			}
 		}
-
-		/*
-		 * try { System.out.println("Trying to create OPENSSL certificates"); sshShell =
-		 * SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-		 * 
-		 * String output = sshShell.
-		 * executeCommand("bash -c ~/.azuredocker/CREATE_OPENSSL_TLS_CERTS_FOR_UBUNTU.sh"
-		 * , true, true); System.out.println(output); } catch (JSchException
-		 * jSchException) { System.out.println(jSchException.getMessage()); } catch
-		 * (IOException ioException) { System.out.println(ioException.getMessage()); }
-		 * catch (Exception exception) { System.out.println(exception.getMessage()); }
-		 * finally { if (sshShell != null) { sshShell.close(); } }
-		 * 
-		 * try { System.out.println("Trying to install TLS certificates"); sshShell =
-		 * SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-		 * 
-		 * String output = sshShell.
-		 * executeCommand("bash -c ~/.azuredocker/INSTALL_DOCKER_TLS_CERTS_FOR_UBUNTU.sh"
-		 * , true, true); System.out.println(output);
-		 * System.out.println("Download Docker client TLS certificates from: " +
-		 * dockerHostIP); keyPemContent = sshShell.download("key.pem",
-		 * ".azuredocker/tls", true); certPemContent = sshShell.download("cert.pem",
-		 * ".azuredocker/tls", true); caPemContent = sshShell.download("ca.pem",
-		 * ".azuredocker/tls", true); } catch (JSchException jSchException) {
-		 * System.out.println(jSchException.getMessage()); } catch (IOException
-		 * ioException) { System.out.println(ioException.getMessage()); } catch
-		 * (Exception exception) { System.out.println(exception.getMessage()); } finally
-		 * { if (sshShell != null) { sshShell.close(); } }
-		 */
 		String dockerHostPort = "80";
 		try {
 			log.debug("Trying to setup Docker config: " + dockerHostIP);
@@ -697,66 +593,21 @@ public class DockerUtils {
 			try {
 				Thread.sleep(30000);
 			} catch (Exception e) {
-				log.debug("Exception in sleep======2===================");
+				log.error("<----Exception in method installDocker of DockerUtils---------->"+e.getMessage());
 			}
 			log.debug(output);
 			log.debug("====output==========1==================================: " + output);
 
 			dockerHostTlsEnabled = false;
 
-			// Setup Docker daemon to allow connection from authorized Docker clients only
-			// String output = sshShell.executeCommand("bash -c
-			// ~/.azuredocker/CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED.sh", true, true);
-			// System.out.println(output);
-			// String dockerHostPort = "2376"; // Default Docker port when secured
-			// connection is enabled
-			// dockerHostTlsEnabled = true;
-			/*
-			 * log.info("====output==========Start============1======================: ");
-			 * sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword); String
-			 * Add_all_image = "" +
-			 * "docker login --username=CognitaE6Reg --password=\"1/uNV9wt=huAtW+yKMrycBHYLrigH=Mz\" cognitae6reg.azurecr.io \n"
-			 * +
-			 * "docker pull cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n"
-			 * ;
-			 * 
-			 * log.info("====output==========Start============2======================: ");
-			 * sshShell.upload(new ByteArrayInputStream(Add_all_image.getBytes()),
-			 * "UPDATE_DOCKER.sh", ".azuredocker", true, "4095");
-			 * log.info("====output==========Start============3======================: ");
-			 * 
-			 * sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-			 * 
-			 * String output2 = sshShell
-			 * .executeCommand("bash -c ~/.azuredocker/UPDATE_DOCKER.sh", true, true);
-			 * 
-			 * 
-			 * try{ Thread.sleep(40000); }catch(Exception e){
-			 * log.info("Exception in sleep======233333=================="); }
-			 * 
-			 * sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword); String
-			 * run_image = "" +
-			 * "docker run -d -p 0.0.0.0:8557:8557  cognitae6reg.azurecr.io/samples/cognita-e6e1514394217790_1:1.0.0-SNAPSHOT \n"
-			 * ; log.info("====output==========Start============4======================: ");
-			 * 
-			 * sshShell.upload(new ByteArrayInputStream(run_image.getBytes()),
-			 * "RUN_DOCKER_IMAGE.sh", ".azuredocker", true, "4095");
-			 * log.info("====output==========Start============5======================: ");
-			 * 
-			 * sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-			 * 
-			 * String output3 = sshShell
-			 * .executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);
-			 */
-
 			log.debug("====dockerHostUrl============================================: ");
 		} catch (JSchException jSchException) {
-			log.debug("JSchException========="+jSchException.getMessage());
+			log.error("<----JSchException in method installDocker of DockerUtils--setup Docker config-->"+jSchException.getMessage());
 		} catch (IOException ioException) {
-			log.debug("IOException=========="+ioException.getMessage());
+			log.error("<----IoException in method installDocker of DockerUtils--setup Docker config-->"+ioException.getMessage());
 		} catch (Exception exception) {
-			log.debug("Exception==========="+exception.getMessage());
-		} finally {
+			log.error("<----Exception in method installDocker of DockerUtils---setup Docker config-->"+exception.getMessage());
+		}  finally {
 			if (sshShell != null) {
 				sshShell.close();
 			}
@@ -772,10 +623,6 @@ public class DockerUtils {
 					caPemContent, keyPemContent, certPemContent);
 		} else {
 			log.debug("====dockerHostTlsEnabled============3================================: " + dockerHostTlsEnabled);
-			log.debug("=================username==========: " + username);
-			log.debug("=================password==========: " + password);
-			log.debug("=================dockerHostUrl==========: " + dockerHostUrl);
-			log.debug("=================registryServerUrl==========: " + registryServerUrl);
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
 		}
 		log.debug("====dockerClientConfig============3================================: " + dockerClientConfig);
@@ -783,7 +630,7 @@ public class DockerUtils {
 		try {
 			Thread.sleep(30000);
 		} catch (Exception e) {
-			log.debug("Exception in sleep=========================");
+			log.error("<----Exception in method installDocker of DockerUtils----------------->"+e.getMessage());
 		}
 		return dockerClient;
 	}
@@ -877,9 +724,7 @@ public class DockerUtils {
 	/**
 	 * Docker daemon config file allowing connections from any Docker client.
 	 */
-	public String DEFAULT_DOCKERD_CONFIG_TLS_DISABLED = "" + "[Service]\n" + "ExecStart=\n"
-			+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry cognita_model_rw:not4you@cognita-nexus01:8001 \n";
-
+	
 	/**
 	 * Bash script that creates a default unsecured Docker configuration file; must
 	 * be run on the Docker dockerHostUrl after the VM is provisioned.

@@ -26,8 +26,11 @@ import org.acumos.azure.client.transport.MLNotification;
 import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPNotification;
+import org.acumos.nexus.client.NexusArtifactClient;
+import org.acumos.nexus.client.RepositoryLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.io.ByteArrayOutputStream;
 
 public class AzureCommonUtil {
 	Logger logger = LoggerFactory.getLogger(AzureCommonUtil.class);
@@ -37,13 +40,6 @@ public class AzureCommonUtil {
 	 * @param notificationId
 	 * @param userId
 	 */
-	/*public void addNotificationUser(String notificationId, String userId) {
-        logger.debug("addNotificationUser");
-    	CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
-    	client.addUserToNotification(notificationId,userId);
-     }*/
-	
-	
 	/**
 	 * 
 	 * @param mlpNotification
@@ -83,7 +79,7 @@ public class AzureCommonUtil {
                      client.addUserToNotification(mLNotification.getNotificationId(),userId);
              }
          } catch (Exception e) {
-                         logger.error("Exception Occurred while getNotifications", e);
+        	 logger.error("<----Exception in method generateNotification of AzureCommonUtil----------->"+e.getMessage());
          }
          logger.debug("End===generateNotification============"); 
 	 }
@@ -91,4 +87,43 @@ public class AzureCommonUtil {
 			CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
 			return client;
 		}
+	 public NexusArtifactClient nexusArtifactClientDetails(String nexusUrl, String nexusUserName,String nexusPassword) {
+			logger.debug("<------start----nexusArtifactClientDetails------------>");
+			RepositoryLocation repositoryLocation = new RepositoryLocation();
+			repositoryLocation.setId("1");
+			repositoryLocation.setUrl(nexusUrl);
+			repositoryLocation.setUsername(nexusUserName);
+			repositoryLocation.setPassword(nexusPassword);
+			NexusArtifactClient nexusArtifactClient = new NexusArtifactClient(repositoryLocation);
+			logger.debug("<------End----nexusArtifactClientDetails------------>");
+			return nexusArtifactClient;
+	}
+	 public ByteArrayOutputStream getNexusUrlFile(String nexusUrl, String nexusUserName,String nexusPassword,String nexusURI) {
+			logger.debug("<------start----getNexusUrlFile------------>");
+			ByteArrayOutputStream byteArrayOutputStream=null;
+			try
+			{
+				NexusArtifactClient nexusArtifactClient=nexusArtifactClientDetails(nexusUrl, 
+						nexusUserName, nexusPassword);
+				 byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
+				 logger.debug("<------byteArrayOutputStream------>"+byteArrayOutputStream);
+			}catch (Exception e) {
+				 logger.error("<----Exception in method getNexusUrlFile of AzureCommonUtil----------->"+e.getMessage());
+      }
+			logger.debug("<------End----getNexusUrlFile------------>");
+			return byteArrayOutputStream;
+	}
+	 
+   public String replaceCharStr(String commonStr,String replaceChar,String replaceWithChar){
+	   logger.debug("<------start----replaceCharStr------------>");
+	   String finalStr="";
+	   if(commonStr!=null && !"".equals(commonStr) && replaceChar!=null && !"".equals(replaceChar)
+			   && replaceWithChar!=null && !"".equalsIgnoreCase(replaceWithChar)){
+		   finalStr = commonStr.replace(replaceChar, replaceWithChar);
+	   }else{
+		   finalStr=commonStr; 
+	   }
+	   logger.debug("<------start----replaceCharStr------finalStr------>"+finalStr);
+	   return finalStr;
+   }
 }
