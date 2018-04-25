@@ -22,6 +22,7 @@ package org.acumos.azure.client.test.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Component;
 import org.acumos.azure.client.utils.Node;
 import org.acumos.azure.client.utils.OperationSignature;
@@ -40,23 +41,11 @@ public class NodeTest {
 	@Test	
 	public void nodeTestObjectparameter(){
 		logger.info("<---------Start-------nodeTestObjectparameter-------------->");
-		
-		OperationSignature operationSignature = new OperationSignature();
-		String containerName = "Adder1";
-	    String image = "cognita-nexus01:8001/newadder1:1";
-	    Component component=new Component();
-	    component.setName("testName");
-		component.setOperationSignature(operationSignature);
-	   
-	    List<Component> dependsOn = new ArrayList<Component>();
-	    dependsOn.add(component);
 	    Node node =new Node();
-	    node.setContainerName(containerName);
-	    //node.setDependsOn(dependsOn);
-	    node.setImage(image);
-	    Assert.assertEquals(containerName, node.getContainerName());
-	    Assert.assertEquals(image, node.getImage());
-	    //Assert.assertEquals(dependsOn, node.getDependsOn());
+	    node.setContainerName(AzureClientConstants.TEST_CONTAINER_NAME_ADDER);
+	    node.setImage(AzureClientConstants.TEST_IMAGE);
+	    Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, node.getContainerName());
+	    Assert.assertEquals(AzureClientConstants.TEST_IMAGE, node.getImage());
 		
 	    logger.info("<---------End-------nodeTestObjectparameter-------------->");
    

@@ -25,6 +25,7 @@ import java.util.List;
 
 import org.acumos.azure.client.testcontroller.AzureServiceControllerTest;
 import org.acumos.azure.client.transport.AzureContainerBean;
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -36,16 +37,14 @@ public class AzureContainerBeanTest {
 	@Test	
 	public void testAzureContainerparameter(){
 		logger.info("<---------Start-------testAzureContainerparameter-------------->");
-		String containerName="Adder1";
-		String containerIp="11.11.10.90";	
-		String containerPort="8557";
+		
 		AzureContainerBean containerBean=new AzureContainerBean();
-		containerBean.setContainerIp(containerIp);
-		containerBean.setContainerName(containerName);
-		containerBean.setContainerPort(containerPort);
-		Assert.assertEquals(containerName, containerBean.getContainerName());
-		Assert.assertEquals(containerIp, containerBean.getContainerIp());
-		Assert.assertEquals(containerPort, containerBean.getContainerPort());
+		containerBean.setContainerIp(AzureClientConstants.TEST_IP_ADDER);
+		containerBean.setContainerName(AzureClientConstants.TEST_CONTAINER_NAME_ADDER);
+		containerBean.setContainerPort(AzureClientConstants.TEST_PORT_ADDER);
+		Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, containerBean.getContainerName());
+		Assert.assertEquals(AzureClientConstants.TEST_IP_ADDER, containerBean.getContainerIp());
+		Assert.assertEquals(AzureClientConstants.TEST_PORT_ADDER, containerBean.getContainerPort());
 		logger.info("<---------End-------testAzureContainerparameter-------------->");
 	}
 

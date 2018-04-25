@@ -20,6 +20,7 @@
 package org.acumos.azure.client.test.util;
 
 import org.acumos.azure.client.utils.AppProperties;
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -33,16 +34,14 @@ public class AppPropertiesTest {
 		@Test	
 		public void appPropertiesTestparameter(){
 			logger.info("<---------Start-------AppPropertiesTest-------------->");
-			String host="8557";
-			 String port="10.21.13.63";
-			 String config="config";
+			 
 			 AppProperties app=new AppProperties();
-			 app.setHost(host);
-			 app.setConfig(config);
-			 app.setPort(port);
-			 Assert.assertEquals(host, app.getHost());
-			 Assert.assertEquals(config, app.getConfig());
-			 Assert.assertEquals(port, app.getPort());
+			 app.setHost(AzureClientConstants.TEST_HOST);
+			 app.setConfig(AzureClientConstants.TEST_CONFIG);
+			 app.setPort(AzureClientConstants.TEST_PORT);
+			 Assert.assertEquals(AzureClientConstants.TEST_HOST, app.getHost());
+			 Assert.assertEquals(AzureClientConstants.TEST_CONFIG, app.getConfig());
+			 Assert.assertEquals(AzureClientConstants.TEST_PORT, app.getPort());
 			logger.info("<---------End -------AppPropertiesTest-------------->");
 		}
 }

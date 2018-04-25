@@ -27,6 +27,17 @@ public class DeploymentBean {
 	private String containerName;
 	private String nodeType;
 	private String script;
+    private String dataBrokerType;
+	
+	
+	
+	
+	public String getDataBrokerType() {
+		return dataBrokerType;
+	}
+	public void setDataBrokerType(String dataBrokerType) {
+		this.dataBrokerType = dataBrokerType;
+	}
 	
 	
 	public String getScript() {

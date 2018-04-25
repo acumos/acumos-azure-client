@@ -19,6 +19,7 @@
  */
 package org.acumos.azure.client.test.util;
 
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Orchestrator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,15 +31,13 @@ public class OrchestratorTest {
 	private static Logger logger = LoggerFactory.getLogger(OrchestratorTest.class);
 	@Test	
 	public void OperationSignatureTestparameter(){
-		String name = "Adder";
-		String version = "1";
-		String image = "cognita-nexus01:8001/newadder1";
+		
 		Orchestrator orch=new Orchestrator();
-		orch.setImage(image);
-		orch.setName(name);
-		orch.setVersion(version);
-		Assert.assertEquals(name, orch.getName());
-		Assert.assertEquals(version, orch.getVersion());
-		Assert.assertEquals(image, orch.getImage());
+		orch.setImage(AzureClientConstants.TEST_IMAGE);
+		orch.setName(AzureClientConstants.TEST_CONTAINER_NAME_ADDER);
+		orch.setVersion(AzureClientConstants.TEST_VERSION);
+		Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, orch.getName());
+		Assert.assertEquals(AzureClientConstants.TEST_VERSION, orch.getVersion());
+		Assert.assertEquals(AzureClientConstants.TEST_IMAGE, orch.getImage());
 	}
 }

@@ -17,32 +17,60 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.azure.client.test.util;
+package org.acumos.azure.client.utils;
 
-import org.acumos.azure.client.utils.AzureClientConstants;
-import org.acumos.azure.client.utils.DockerInfo;
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.Serializable;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class DockerinfoTest {
-	
-	
-	private static Logger logger = LoggerFactory.getLogger(DockerinfoTest.class);
-	@Test	
-	public void dockerinfoTestparameter(){
-		logger.info("<---------Start-------ComponentTest-------------->");
-        DockerInfo dockerInfo=new DockerInfo();
-        dockerInfo.setContainer(AzureClientConstants.TEST_COMPONENT_NAME);
-        dockerInfo.setIpAddress(AzureClientConstants.TEST_IP_ADDER);
-        dockerInfo.setPort(AzureClientConstants.TEST_PORT);
-        Assert.assertEquals(AzureClientConstants.TEST_COMPONENT_NAME, dockerInfo.getContainer());
-        Assert.assertEquals(AzureClientConstants.TEST_IP_ADDER, dockerInfo.getIpAddress());
-        Assert.assertEquals(AzureClientConstants.TEST_PORT, dockerInfo.getPort());
+/**
+ * Representation of Operation Signature list of a Node. IMPORTANT: This itself
+ * is NOT an Arraylist.
+ */
 
+public class TypeAndRoleHierarchyList implements Serializable {
+		
+	private static final long serialVersionUID = -1227554249122436608L;
+
+	@JsonProperty("name")
+	private String name = null;	
+
+	@JsonProperty("role")
+    private String role = null;
+	
+	public TypeAndRoleHierarchyList(String name, String role) {
+		super();
+		this.name = name;
+		this.role = role;
+	}
+	public TypeAndRoleHierarchyList(){
+		super();
 	}
 
+    public String getName ()
+    {
+        return name;
+    }
+
+    public void setName (String name)
+    {
+        this.name = name;
+    }
+
+    public String getRole ()
+    {
+        return role;
+    }
+
+    public void setRole (String role)
+    {
+        this.role = role;
+    }
+
+    @Override
+    public String toString()
+    {
+        return "ClassPojo [name = "+name+", role = "+role+"]";
+    }	   
+	
 }

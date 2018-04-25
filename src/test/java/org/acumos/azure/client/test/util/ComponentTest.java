@@ -21,6 +21,7 @@ package org.acumos.azure.client.test.util;
 
 
 
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Component;
 import org.acumos.azure.client.utils.OperationSignature;
 import org.junit.Assert;
@@ -35,11 +36,10 @@ public class ComponentTest {
 	public void ComponentTestObjectparameter(){
 		logger.info("<---------Start-------ComponentTest-------------->");
 		Component component=new Component();
-		String name = "Component";
 		OperationSignature operationSignature = new OperationSignature();
-		component.setName(name);
+		component.setName(AzureClientConstants.TEST_COMPONENT_NAME);
 		component.setOperationSignature(operationSignature);
-		Assert.assertEquals(name, component.getName());
+		Assert.assertEquals(AzureClientConstants.TEST_COMPONENT_NAME, component.getName());
 		Assert.assertEquals(operationSignature, component.getOperationSignature());
 		logger.info("<---------End-------ComponentTest-------------->");
 	}

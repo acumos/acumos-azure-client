@@ -17,20 +17,47 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
-package org.acumos.azure.client.test.util;
+package org.acumos.azure.client.utils;
 
-import org.acumos.azure.client.utils.OperationSignature;
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.io.Serializable;
 
-public class OperationSignatureTest {
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-	private static Logger logger = LoggerFactory.getLogger(OperationSignatureTest.class);
-	@Test	
-	public void OperationSignatureTestparameter(){
-		logger.info("<---------Start-------OperationSignatureTestparameter-------------->");
-		logger.info("<---------End-------OperationSignatureTestparameter-------------->");
+/**
+ * Representation of Operation Signature list of a Node. IMPORTANT: This itself
+ * is NOT an Arraylist.
+ */
+
+public class MapOutputs implements Serializable {
+		
+	private static final long serialVersionUID = -7858319983007754812L;
+	
+	@JsonProperty("output_field")
+	private OutputField outputField = null;
+	
+	public MapOutputs(OutputField outputField) {
+		super();
+		this.outputField = outputField;
 	}
+	
+	public MapOutputs(){
+		super();
+	}
+	
+	public OutputField getOutputField() {
+		return outputField;
+	}
+
+
+	public void setOutputField(OutputField outputField) {
+		this.outputField = outputField;
+	}
+   
+
+    @Override
+    public String toString()
+    {
+        return "ClassPojo [outputField = "+outputField+"]";
+    }
+	
 }
