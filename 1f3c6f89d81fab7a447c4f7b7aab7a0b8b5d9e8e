@@ -1,0 +1,142 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d0b8500b_2f65080c",
+        "filename": "blueprint.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-26T16:00:55Z",
+      "side": 1,
+      "message": "out of curiosity, why is there a reference to a specific container? this looks like it has very instance-specific values. Does this content refer to a model that is automatically installed when the acumos platform is installed?",
+      "range": {
+        "startLine": 1,
+        "startChar": 64,
+        "endLine": 1,
+        "endChar": 100
+      },
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0e488b1a_fd1b2a32",
+        "filename": "src/main/java/org/acumos/azure/client/SwaggerConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-26T16:00:55Z",
+      "side": 1,
+      "message": "is this a legitimate email address?",
+      "range": {
+        "startLine": 57,
+        "startChar": 7,
+        "endLine": 57,
+        "endChar": 25
+      },
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9a4b8833_812fde14",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 119,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-26T16:00:55Z",
+      "side": 1,
+      "message": "is this a real password? and why is it hard-coded?",
+      "range": {
+        "startLine": 119,
+        "startChar": 21,
+        "endLine": 119,
+        "endChar": 35
+      },
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "44dd6240_15d83bc9",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-26T16:00:55Z",
+      "side": 1,
+      "message": "is this a real password? why is this hard-coded and not configurable? same for dockerVMUsername",
+      "range": {
+        "startLine": 261,
+        "startChar": 21,
+        "endLine": 261,
+        "endChar": 35
+      },
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "90e00d2f_662306ac",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 164,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-26T16:00:55Z",
+      "side": 1,
+      "message": "Question - why is this here? portArr[] is defined but doesn\u0027t appear to be used anywhere",
+      "range": {
+        "startLine": 164,
+        "startChar": 3,
+        "endLine": 164,
+        "endChar": 105
+      },
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca25c99f_5118687a",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 293,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-26T16:00:55Z",
+      "side": 1,
+      "message": "please remove these",
+      "range": {
+        "startLine": 292,
+        "startChar": 1,
+        "endLine": 293,
+        "endChar": 47
+      },
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
