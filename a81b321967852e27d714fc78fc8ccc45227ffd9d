@@ -1,0 +1,123 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "d2021d04_1a8531ae",
+        "filename": "src/main/java/org/acumos/azure/client/SwaggerConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "I think you need to say, \"to be determined\" on the email address until the project has a general-purpose address.",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2a5507ab_dae9992a",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "Aimee flagged this already, why is a password hardcoded, and not in configuration?",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d2db6d36_3614bb74",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b97bd0ca_8570b0e9",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "No.  Log exceptions like this:\n\nlogger.error(\"Method name failed\", ex);",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1fbd787d_1fbeb24b",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 392,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "Don\u0027t use printStackTrace, use the logger",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "799f81f8_6e30ea32",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 286,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "please remove code, don\u0027t comment out",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "add35b2b_7b9bb4b8",
+        "filename": "src/test/java/org/acumos/azure/client/testcontroller/AzureServiceControllerTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-27T13:20:08Z",
+      "side": 1,
+      "message": "These should be constants at the head of this test class, not repeated in every test",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
