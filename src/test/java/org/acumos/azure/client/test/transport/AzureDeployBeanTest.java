@@ -38,10 +38,10 @@ public class AzureDeployBeanTest {
 	@Test	
 	public void testAzureDeployBeanTestparameter(){
 		logger.info("<---------Start-------testAzureContainerparameter-------------->");
-		 String client="c83923c9-73c4-43e2-a47d-2ab700ac";
-		 String tenant="412141bb-9e53-4aed-8468-6868c832e618";
-		 String key="eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO";
-		 String subscriptionKey="81f6511d-7cc6-48f1-a0d1-d30f65fdbe1";
+		 String client="testclient";
+		 String tenant="testtenant";
+		 String key="testkey";
+		 String subscriptionKey="testsubscriptionKey";
 		 String rgName="testrg";
 		 String acrName="testacr";
 		 String storageAccount="teste6";
@@ -51,15 +51,15 @@ public class AzureDeployBeanTest {
 		 String userId="0505e537-ce79-4b1f-bf43";
 		AzureDeployBean azBean=new AzureDeployBean();
 		azBean.setAcrName("testacr");
-		azBean.setClient("c83923c9-73c4-43e2-a47d-2ab700ac");
+		azBean.setClient("testclient");
 		azBean.setImagetag("newadder");
-		azBean.setKey("eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO");
+		azBean.setKey("testkey");
 		azBean.setRgName("testrg");
 		azBean.setSolutionId("02eab846-2bd0-4cfe-8470-9fc69");
 		azBean.setSolutionRevisionId("a9e68bc6-f4b4-41c6-ae8e-");
 		azBean.setStorageAccount("teste6");
-		azBean.setSubscriptionKey("81f6511d-7cc6-48f1-a0d1-d30f65fdbe1");
-		azBean.setTenant("412141bb-9e53-4aed-8468-6868c832e618");
+		azBean.setSubscriptionKey("testsubscriptionKey");
+		azBean.setTenant("testtenant");
 		azBean.setUserId("0505e537-ce79-4b1f-bf43");
 		
 		Assert.assertEquals(client, azBean.getClient());

@@ -1,3 +1,7 @@
+/*
+it is sample file for testing purpose. 
+No Container and images are used during azure deployment
+*/
 {
   "name": "AddMulti",
   "version": "1.0.0",

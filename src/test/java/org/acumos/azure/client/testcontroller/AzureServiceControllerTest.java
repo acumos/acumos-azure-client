@@ -86,17 +86,17 @@ public class AzureServiceControllerTest {
 		String result = "";
 		try {
 			AzureDeployBean azBean=new AzureDeployBean();
-			azBean.setAcrName("testE6Reg");
-			azBean.setClient("c83923c9-73c4-43e2-a47d-2ab700ac9353");
+			azBean.setAcrName("testAcr");
+			azBean.setClient("testclient");
 			azBean.setImagetag("newadder1:1");
-			azBean.setKey("eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=");
+			azBean.setKey("test key");
 			azBean.setRgName("test-OAM");
-			azBean.setSolutionId("02eab846-2bd0-4cfe-8470-9fc69fa0d877");
-			azBean.setSolutionRevisionId("a9e68bc6-f4b4-41c6-ae8e-4e97ec3916a6");
+			azBean.setSolutionId("testSolutionId");
+			azBean.setSolutionRevisionId("testRevision");
 			azBean.setStorageAccount("teststorage");
-			azBean.setSubscriptionKey("81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a");
-			azBean.setTenant("412141bb-9e53-4aed-8468-6868c832e618");
-			azBean.setUserId("0505e537-ce79-4b1f-bf43-68d88933c369");
+			azBean.setSubscriptionKey("testSubscribtionId");
+			azBean.setTenant("testtenat");
+			azBean.setUserId("testUser");
 			
 			response.setStatus(400);
 			logger.info("====="+response.getStatus());
@@ -112,17 +112,17 @@ public class AzureServiceControllerTest {
 			String result = "";
 			try {
 				AzureDeployDataObject azBean=new AzureDeployDataObject();
-				azBean.setAcrName("testE6Reg");
-				azBean.setClient("c83923c9-73c4-43e2-a47d-2ab700ac9353");
+				azBean.setAcrName("testAcr");
+				azBean.setClient("testclient");
 				
-				azBean.setKey("eN0TksgjTtrzeRHR5vQmvdIFEjkPjuHO/dpvw6CXwpc=");
+				azBean.setKey("test key");
 				azBean.setRgName("test-OAM");
-				azBean.setSolutionId("4f87acda-6c25-4434-b562-7d7ebc265c8f");
-				azBean.setSolutionRevisionId("d451d02a-7c31-4bad-9b46-c418e1b114f8");
+				azBean.setSolutionId("testSolutionId");
+				azBean.setSolutionRevisionId("testRevision");
 				azBean.setStorageAccount("teststorage");
-				azBean.setSubscriptionKey("81f6511d-7cc6-48f1-a0d1-d30f65fdbe1a");
-				azBean.setTenant("412141bb-9e53-4aed-8468-6868c832e618");
-				azBean.setUserId("7cd47ca4-1c5d-4cdc-909c-f7c17367b4d4");
+				azBean.setSubscriptionKey("testSubscribtionId");
+				azBean.setTenant("testtenat");
+				azBean.setUserId("testUser");
 				
 				response.setStatus(400);
 				logger.info("====="+response.getStatus());

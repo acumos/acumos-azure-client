@@ -80,13 +80,14 @@ public class AzureSimpleSolution implements Runnable {
 	private String solutionPort;
 	private String subnet;
 	private String vnet;
+	private String singleSolutionPort;
 
 	public AzureSimpleSolution(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix,
 			String dockerUserName, String dockerPwd, String localEnvDockerHost, String localEnvDockerCertPath,
 			ArrayList<String> list, String bluePrintName, String bluePrintUser, String bluePrintPass,
 			String networkSecurityGroup, String dockerRegistryName, String uidNumStr, String dataSource,
 			String dataUserName, String dataPassword, String dockerVMUserName, String dockerVMPassword,String solutionPort,
-			String subnet,String vnet) {
+			String subnet,String vnet,String singleSolutionPort) {
 		this.azure = azure;
 		this.deployDataObject = deployDataObject;
 		this.dockerContainerPrefix = dockerContainerPrefix;
@@ -110,6 +111,7 @@ public class AzureSimpleSolution implements Runnable {
 		this.solutionPort = solutionPort;
 		this.subnet = subnet;
 		this.vnet = vnet;
+		this.singleSolutionPort = singleSolutionPort;
 
 	}
 
@@ -141,6 +143,7 @@ public class AzureSimpleSolution implements Runnable {
 		logger.debug("<-------solutionId-------->" + deployDataObject.getSolutionId());
 		logger.debug("<-------solutionRevisionId-------->" + deployDataObject.getSolutionRevisionId());
 		logger.debug("<-------userId-------->" + deployDataObject.getUserId());
+		logger.debug("<-------singleSolutionPort------->" + singleSolutionPort);
 
 		AzureBean azureBean = new AzureBean();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
@@ -161,7 +164,6 @@ public class AzureSimpleSolution implements Runnable {
 																			// client id
 			String servicePrincipalSecret = deployDataObject.getKey(); // and corresponding secret
 
-			String portArr[] = { "8556", "8557", "8558", "8559", "8560", "8561", "8562", "8563", "8564", "8565" };
 			if (servicePrincipalClientId.isEmpty() || servicePrincipalSecret.isEmpty()) {
 				String envSecondaryServicePrincipal = System.getenv("AZURE_AUTH_LOCATION_2");
 
@@ -364,11 +366,11 @@ public class AzureSimpleSolution implements Runnable {
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + azureRegistry.loginServerUrl());
 				logger.debug("<----azureBean VM-------->" + acrCredentials.passwords().get(0).value());
-				String portNumberString="8557"+":"+solutionPort;
+				String portNumberString=singleSolutionPort+":"+solutionPort;
 				DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),
 						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName,portNumberString);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
-				containerBean.setContainerPort("8557");
+				containerBean.setContainerPort(singleSolutionPort);
 				containerBean.setContainerName("ContainerOne");
 				azureUtil.generateNotification("Single Solution VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPassword);
@@ -389,7 +391,7 @@ public class AzureSimpleSolution implements Runnable {
 			}
 			e.printStackTrace();
 		}
-		String vmDetail = azureBean.getAzureVMIP() + "#8557";
+		String vmDetail = azureBean.getAzureVMIP() + "#singleSolutionPort";
 		setuidHashmap(uidNumStr, vmDetail);
 		logger.debug("<---------------AzureSimpleSolution-------Run End-------------------------->");
 		// code in the other thread, can reference "var" variable

@@ -537,8 +537,6 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	}
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
 			    		            	String azureVMName=azureBean.getAzureVMName();
-			    		            	//final String vmUserName="dockerUser";
-			    		        		//final String vmPassword="12NewPA$$w0rd!";
 			    		        		final String vmUserName=dockerVMUserName;
 			    		        		final String vmPassword=dockerVMPassword;
 			    		        		String repositoryName="";

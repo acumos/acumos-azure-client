@@ -53,8 +53,8 @@ public class SwaggerConfiguration {
 				version == null ? "version not available" : version, // version
 				"Terms of service", // TOS
 				new Contact("Acumos Team", // name
-						"https://acumos.org/to-be-determined", // URL
-						"contact@acumos.org"), // email
+						"https://acumos.org", // URL
+						"devteam@acumos.org"), // email
 				"Apache 2.0", // License
 				"https://www.apache.org/licenses/LICENSE-2.0"); // License URL
 		return apiInfo;
