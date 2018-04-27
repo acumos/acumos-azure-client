@@ -2,6 +2,52 @@
   "comments": [
     {
       "key": {
+        "uuid": "39d93d10_3de87ee7",
+        "filename": "blueprint.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-27T15:14:11Z",
+      "side": 1,
+      "message": "Thank you for adding this explanation",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 3,
+        "endChar": 56
+      },
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2649c151_75fa0ed8",
+        "filename": "blueprint2.json",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-27T15:14:11Z",
+      "side": 1,
+      "message": "Thank you for adding this explanation!",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 2
+      },
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2021d04_1a8531ae",
         "filename": "src/main/java/org/acumos/azure/client/SwaggerConfiguration.java",
         "patchSetId": 1
@@ -13,6 +59,24 @@
       "writtenOn": "2018-04-27T13:20:08Z",
       "side": 1,
       "message": "I think you need to say, \"to be determined\" on the email address until the project has a general-purpose address.",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "193383de_d8fc32f7",
+        "filename": "src/main/java/org/acumos/azure/client/SwaggerConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-27T15:14:11Z",
+      "side": 1,
+      "message": "Is this email address instance specific?",
+      "parentUuid": "d2021d04_1a8531ae",
       "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
@@ -36,6 +100,29 @@
     },
     {
       "key": {
+        "uuid": "b93aab7d_9c25981e",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-27T15:14:11Z",
+      "side": 1,
+      "message": "If this is hard-coded because some characters are getting stipped out when retrieving this from the docker-compose.yaml, perhaps either determine why the characters are being stripped out and fix accordingly, OR use a different password in the docker-compose.yml",
+      "range": {
+        "startLine": 120,
+        "startChar": 38,
+        "endLine": 120,
+        "endChar": 119
+      },
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "d2db6d36_3614bb74",
         "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
         "patchSetId": 1
@@ -53,6 +140,29 @@
     },
     {
       "key": {
+        "uuid": "db886cfa_f4265255",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 262,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-27T15:14:11Z",
+      "side": 1,
+      "message": "Please see my comment for line 120",
+      "range": {
+        "startLine": 262,
+        "startChar": 38,
+        "endLine": 262,
+        "endChar": 119
+      },
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b97bd0ca_8570b0e9",
         "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
         "patchSetId": 1
@@ -64,6 +174,24 @@
       "writtenOn": "2018-04-27T13:20:08Z",
       "side": 1,
       "message": "No.  Log exceptions like this:\n\nlogger.error(\"Method name failed\", ex);",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "c2be8646_af217dd4",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 390,
+      "author": {
+        "id": 94
+      },
+      "writtenOn": "2018-04-27T15:14:11Z",
+      "side": 1,
+      "message": "The code is using org.slf4j logging - should it be using EELF?",
+      "parentUuid": "b97bd0ca_8570b0e9",
       "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
