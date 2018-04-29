@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "8777d988_27628be7",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 551,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-29T18:32:57Z",
+      "side": 0,
+      "message": "This password should NOT be logged because log content is exposed to the world at LF and many other places.",
+      "revId": "1f3c6f89d81fab7a447c4f7b7aab7a0b8b5d9e8e",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}

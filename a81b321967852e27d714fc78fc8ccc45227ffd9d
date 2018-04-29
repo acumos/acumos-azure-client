@@ -163,6 +163,40 @@
     },
     {
       "key": {
+        "uuid": "51e20837_cd775bd0",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-29T18:32:57Z",
+      "side": 1,
+      "message": "Do not log the password",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d685b8df_ef9ab17e",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-29T18:32:57Z",
+      "side": 1,
+      "message": "Do not log the password",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b97bd0ca_8570b0e9",
         "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
         "patchSetId": 1
@@ -226,6 +260,23 @@
       "writtenOn": "2018-04-27T13:20:08Z",
       "side": 1,
       "message": "please remove code, don\u0027t comment out",
+      "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ac60bc37_532bec37",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-04-29T18:32:57Z",
+      "side": 1,
+      "message": "Do not log passwords",
       "revId": "a81b321967852e27d714fc78fc8ccc45227ffd9d",
       "serverId": "655300a2-7a56-4504-9153-881edd907bea",
       "unresolved": false
