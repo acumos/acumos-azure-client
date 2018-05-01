@@ -1,0 +1,1285 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "be790d77_c4f6d8da",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AbstractController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why make a copy of a constant?  Please remove",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "015b47c2_1ca7cb6b",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why are these properties hardcoded strings? They should be constants",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "534ff390_6338ff80",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove, don\u0027t comment out",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4e4ed374_474e776e",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment out",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "11bb2cca_be6506a9",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 173,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove, don\u0027t comment out",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ffa06c24_23eca23b",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 229,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Please amend to be constants not hardcoded strings",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1bfb6027_6d20575d",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Please remove \u003c----- visual chaff",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8420f278_e9106f1d",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 243,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Should be constants not hardcoded strings",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "eaa83779_529ae79f",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 384,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Please change to log an exception the correct way:\n\nlogger.error(\"methodName failed\", e);",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2bcbc0c_c0271377",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 391,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Does this jsonOutput have any credentials?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "571b2f9f_72249469",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix indentation",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cc4e85ff_7d16326f",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Manny methods in this class trap and discard exceptions.  That is totally incorrect.  Must let them bubble up.",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "99be96ec_a8d57517",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 171,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove visual chaff \u003c----- and -----\u003e",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6a366836_3bd82063",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "How can you HARDCODE the Azure region?  What happens to the Acumos Dev challenge if we get space on the US_WEST region?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "fec3ff87_f91d18db",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 239,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Do not debug log the ssh private key!",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7e3f24c_6d93997b",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 298,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5724279e_46babdca",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 312,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "216cc053_c4d3506e",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why make a copy of a constant?  Please clean.",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bbf6b9aa_247e86c1",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 489,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove the visual chaff \u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d\u003d",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8b0ea845_60c88594",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 657,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Please revise to the correct way to log an exception:\n\nlogger.error(\"methodName failed\", e);",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "faab3c68_4636c3c7",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 664,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "252cdc1a_40d40456",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 721,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "6ca5e918_9eb6b184",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 770,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d07bf1a_d88a7826",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 793,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "80898f03_2affc05d",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove visual chaff \u003c\u003c--------  ------  ------  \u003e\u003e\u003e\u003e\u003e\u003e\u003e\u003e\u003e\u003e\u003e",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9be15ae7_473af572",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 141,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "FIX.  Must not hardcode US_EAST",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dcc75813_0c0e87a0",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "What in heavens are these ports??",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e81744a5_7ca669df",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 207,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca1e2356_dfa75a0e",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 223,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d660ae7d_03e334ab",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 273,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why is a sleep necessary?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "58dde360_55cbd56d",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 344,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Correct way to log exception:\n\nlogger.error(\"methodName failed\", e);\n\nAnd this catches THEN DISCARDS which is probably wrong.  Should let the exceptions bubble up.",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3628b7b7_14439ef3",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 352,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5f83410d_dc9cc903",
+        "filename": "src/main/java/org/acumos/azure/client/transport/AzureDeployDataObject.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 235,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment out",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "abcaa45d_115e6fc7",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "What host is this?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f1334dc0_0f2962d0",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why are solution and revision IDs entered as code constants?  They vary on every system.",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cd205b8d_f9370723",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 116,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "This is not a host it\u0027s a port",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "250e9268_d6ecbdb7",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "This is not a port it\u0027s an host",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d516d114_a05f3bf2",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "This should be config, not a Java constant",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a0cebe63_1e6adff1",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureCommonUtil.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 111,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix exception logging:\n\nlogger.error(\"methodName\", e);",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f14e1dd2_a1f10ad7",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 152,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "f2b7c9c1_40350d6b",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 414,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why a crazy long sleep?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e6c82d94_3b005b61",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "After this exception the code just continues??  That cannot be right.",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a1b9bfae_4cd13c4f",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 427,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove don\u0027t comment out",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9f494432_f4701e1f",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 432,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "remove visual chaff",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "71bbfd74_6b074216",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "No need to catch exceptions separately if you\u0027re just going to discard them",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "698fe3f9_bc6c1524",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 485,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why long sleep?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b80be1c2_5ac03f10",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "See above",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ca22fbf8_2d688a3a",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 552,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "See above",
+      "range": {
+        "startLine": 552,
+        "startChar": 13,
+        "endLine": 552,
+        "endChar": 14
+      },
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9d03c9ac_2783484a",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 578,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "See above",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9ac4f65f_d086f1fb",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 594,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Why sleep so long?",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "0d8cd326_2faa8bd9",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 609,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "See above",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9d8b19db_5e8f09fb",
+        "filename": "src/main/java/org/acumos/azure/client/utils/InputField.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix indentation",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "622b6f0b_d5fe555a",
+        "filename": "src/main/java/org/acumos/azure/client/utils/MapInputs.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "calling super is not required in a no-arg ctor\n\npls fix indentation",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2535194a_c8e51de5",
+        "filename": "src/main/java/org/acumos/azure/client/utils/MapOutputs.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Calling super is not required here pls fix indentation",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b990715b_6c2fc093",
+        "filename": "src/main/java/org/acumos/azure/client/utils/MapOutputs.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix name",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "ff6072f7_e5e61296",
+        "filename": "src/main/java/org/acumos/azure/client/utils/OutputField.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 52,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Not needed",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "777bfda8_506e4df0",
+        "filename": "src/main/java/org/acumos/azure/client/utils/OutputField.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix name",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4c350b92_a1992de3",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 195,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Should be a constant, not hardcoded",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1e264288_be651908",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 198,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "78a54d8a_c7c5a213",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 199,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d192cc74_274e8041",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 201,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "747c192f_3393d519",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 453,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix exception logging:\n\nlog.error(\"methodName\", e);",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3f55cfab_a3713565",
+        "filename": "src/main/java/org/acumos/azure/client/utils/TypeAndRoleHierarchyList.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Fix name",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "1061d92b_b1474c78",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/AppPropertiesTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 36,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Remove visual chaff \u003c\u003c------ --------- ------------- ---- \u003e",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "01aecd1d_41f1d9dd",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/OperationSignatureTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Finish test or remove entirely",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d97d80f8_67c5cadf",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "These tests are not helping - ALL failures are discarded",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2dfd0ae6_45a70bbe",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "No do NOT trap exceptions in tests.  If they fail, then Junit must know",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "9c5a3feb_833545eb",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 58,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Do NOT trap exceptions in tests",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cbf7067e_3e1c2a8c",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "aaaf9925_0c4310d9",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 90,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "b24451c7_b1f6f51a",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 109,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "06261472_d2c0b0c8",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdc4be6d_320e8365",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7c8b5898_13fe6066",
+        "filename": "src/test/java/org/acumos/azure/client/testcontroller/AzureServiceControllerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Do not try/catch, let the test fail if it fails",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "bf8f6665_c4fc6f71",
+        "filename": "src/test/java/org/acumos/azure/client/testcontroller/AzureServiceControllerTest.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 115,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-01T13:21:48Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "207719bd8125de3c3c6132f0e071c4426951ffd3",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
