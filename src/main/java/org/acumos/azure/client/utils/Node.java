@@ -46,6 +46,9 @@ public class Node implements Serializable {
 	private MappingTable mappingTable = null;
 	@JsonProperty("data_sources")
 	private List<DataSource> dataSources = null;
+	
+	@JsonProperty("data_broker_map")
+	private DataBrokerMap dataBrokerMap;
 
 	/**
 	 * Standard POJO no-arg constructor
@@ -77,7 +80,7 @@ public class Node implements Serializable {
 	 */
 	public Node(String container, String nodeType, String image, String protoUri,
 			ArrayList<OperationSignatureList> operationSignatureList, String script, MappingTable mappingTable,
-			List<DataSource> dataSources) {
+			List<DataSource> dataSources,DataBrokerMap dataBrokerMap) {
 		super();
 		this.container = container;
 		this.nodeType = nodeType;
@@ -87,6 +90,7 @@ public class Node implements Serializable {
 		this.script = script;
 		this.mappingTable = mappingTable;
 		this.dataSources = dataSources;
+		this.dataBrokerMap = dataBrokerMap;
 	}
 
 	@JsonProperty("container_name")
@@ -167,6 +171,15 @@ public class Node implements Serializable {
 	@JsonProperty("data_sources")
 	public void setDataSources(List<DataSource> dataSources) {
 		this.dataSources = dataSources;
+	}
+	@JsonProperty("data_broker_map")
+	public DataBrokerMap getDataBrokerMap() {
+		return dataBrokerMap;
+	}
+
+	@JsonProperty("data_broker_map")
+	public void setDataBrokerMap(DataBrokerMap dataBrokerMap) {
+		this.dataBrokerMap = dataBrokerMap;
 	}
 
 	@Override

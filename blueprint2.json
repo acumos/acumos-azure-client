@@ -9,7 +9,7 @@
   "nodes": [
     {
       "container_name": "Adder1",
-      "image": "cognita-nexus01:8001/adder:2",
+      "image": "adder:2",
       "depends_on": [
         {
           "name": "Multiplier1",
@@ -21,7 +21,7 @@
     },
     {
       "container_name": "Multiplier1",
-      "image": "cognita-nexus01:8001/multiplier:2",
+      "image": "multiplier:2",
       "depends_on": []
     }
   ]

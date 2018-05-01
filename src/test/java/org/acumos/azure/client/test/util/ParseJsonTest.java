@@ -25,11 +25,15 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.acumos.azure.client.transport.DeploymentBean;
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Blueprint;
+import org.acumos.azure.client.utils.DataBrokerBean;
 import org.acumos.azure.client.utils.ParseJSON;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ParseJsonTest {
 	
@@ -40,7 +44,7 @@ public class ParseJsonTest {
 		try{
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		imageMap=parse.parseJsonFile("blueprint2.json");
+		imageMap=parse.parseJsonFile(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE);
 		assertNotNull(imageMap);
 		}catch(Exception e){
 			logger.debug("Exception in parseJsonFileTest"+e.getMessage());
@@ -55,7 +59,8 @@ public class ParseJsonTest {
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
 		Blueprint blueprint=null;
-		blueprint=parse.jsonFileToObject("blueprint2.json");
+		DataBrokerBean dataBrokerbean=parse.getDataBrokerContainer(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE);
+		blueprint=parse.jsonFileToObject(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE,dataBrokerbean);
 		assertNotNull(blueprint);
 		}catch(Exception e){
 			logger.debug("Exception in jsonFileToObjectTest"+e.getMessage());
@@ -71,7 +76,7 @@ public class ParseJsonTest {
 		ParseJSON parse=new ParseJSON();
 		
 		LinkedList<String> linkedList=null;
-		linkedList=parse.getSequenceFromJSON("blueprint2.json");
+		linkedList=parse.getSequenceFromJSON(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE);
 		assertNotNull(linkedList);
 		}catch(Exception e){
 			logger.debug("Exception in jsonFileToObjectTest"+e.getMessage());
@@ -85,8 +90,12 @@ public class ParseJsonTest {
 		try{
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
+		ObjectMapper mapper = new ObjectMapper();
 		Blueprint blueprint=null;
-		blueprint=parse.jsonFileToObjectProbe("blueprint.json");
+		DataBrokerBean dataBrokerbean=parse.getDataBrokerContainer(AzureClientConstants.TEST_BLUEPRINT_FILE);
+		blueprint=parse.jsonFileToObjectProbe(AzureClientConstants.TEST_BLUEPRINT_FILE,dataBrokerbean);
+		String blueprintJson=mapper.writeValueAsString(blueprint); 
+		logger.debug("<----blueprintJson---------->"+blueprintJson);
 		assertNotNull(blueprint);
 		}catch(Exception e){
 			logger.debug("Exception in jsonFileToObjectProbeTest"+e.getMessage());
@@ -100,7 +109,7 @@ public class ParseJsonTest {
 		try{
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		imageMap=parse.parseJsonFileProbe("blueprint.json");
+		imageMap=parse.parseJsonFileProbe(AzureClientConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(imageMap);
 		}catch(Exception e){
 			logger.debug("Exception in parseJsonFileProbeTest"+e.getMessage());
@@ -116,7 +125,7 @@ public class ParseJsonTest {
 		ParseJSON parse=new ParseJSON();
 		
 		LinkedList<String> linkedList=null;
-		linkedList=parse.getSequenceFromJSONProbe("blueprint.json");
+		linkedList=parse.getSequenceFromJSONProbe(AzureClientConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(linkedList);
 		}catch(Exception e){
 			logger.debug("Exception in getSequenceFromJSONProbeTest"+e.getMessage());
@@ -130,12 +139,30 @@ public class ParseJsonTest {
 		try{
 		HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
 		ParseJSON parse=new ParseJSON();
-		nodeTypeContainerMap=parse.getNodeTypeContainerMap("blueprint.json");
+		nodeTypeContainerMap=parse.getNodeTypeContainerMap(AzureClientConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(nodeTypeContainerMap);
 		}catch(Exception e){
 			logger.debug("Exception in nodeTypeContainerMapTest"+e.getMessage());
 		}
 		logger.info("<---------End-------nodeTypeContainerMapTest-------------->");
+	}
+	
+	@Test
+	public void getDataBrokerContainerTest(){
+		logger.info("<---------Start-------getDataBrokerContainerTest-------------->");
+		try{
+		DataBrokerBean	dataBrokerbean=null;	
+		HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
+		ParseJSON parse=new ParseJSON();
+		ObjectMapper mapper = new ObjectMapper();
+		dataBrokerbean=parse.getDataBrokerContainer(AzureClientConstants.TEST_BLUEPRINT_FILE);
+		String dataBrokerbeanjson=mapper.writeValueAsString(dataBrokerbean); 
+		System.out.println("<----dataBrokerbeanjson---------->"+dataBrokerbeanjson);
+		assertNotNull(dataBrokerbean);
+		}catch(Exception e){
+			logger.debug("Exception in nodeTypeContainerMapTest"+e.getMessage());
+		}
+		logger.info("<---------End-------getDataBrokerContainerTest-------------->");
 	}
 	
 }

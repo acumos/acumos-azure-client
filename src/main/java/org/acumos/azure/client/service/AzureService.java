@@ -39,34 +39,4 @@ public interface AzureService {
 	 * Authorize with microsoft Azure active directory
 	 */
 	Azure authorize(AzureDeployDataObject authObject);
-
-	/*
-	 * Push/Deploy the image to application
-	 */
-
-	/*
-	 * boolean pushImage(Azure azure, String clientId, String secret, String rgName,
-	 * String acrName,String solutionId,String imagetag) throws IOException,
-	 * Exception;
-	 */
-
-	/*
-	 * Push/Deploy the image to application
-	 */
-
-	/*AzureBean pushImage(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
-			String localEnvDockerHost, String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-			String networkSecurityGroup,String dockerRegistryPort,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName) throws IOException, Exception;
-	
-	AzureBean pushSingleImage(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
-			String localEnvDockerHost, String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-			String networkSecurityGroup,String dockerRegistryPort,String dockerRegistryName) throws IOException, Exception;
-	
-	AzureBean pushCompositeImages(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix, String dockerUserName, String dockerPwd, 
-			String localEnvDockerHost, String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,
-			String networkSecurityGroup,String dockerRegistryPort,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName) throws IOException, Exception;
-	*/
-	/*public void putContainerDetails(DockerInfoList  dockerList,String apiUrl);
-	public void putBluePrintDetails(Blueprint  bluePrint,String apiUrl);*/
-	
 }

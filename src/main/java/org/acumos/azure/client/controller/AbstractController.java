@@ -20,11 +20,13 @@
 
 package org.acumos.azure.client.controller;
 
+import org.acumos.azure.client.utils.AzureClientConstants;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractController {
 
-	protected static final String APPLICATION_JSON = "application/json";
+	protected static final String APPLICATION_JSON = AzureClientConstants.APPLICATION_JSON;
 
 	protected final ObjectMapper mapper;
 
