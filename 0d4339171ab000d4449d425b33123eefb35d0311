@@ -1,0 +1,191 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "7ae53c11_d3002263",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AbstractController.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "please drop this copy of a constant",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "dac3af79_5096033e",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 725,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Please just re-throw instead of creating a new generic exception:\n\n     throw e;",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "a49f9545_9e334342",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 775,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "00490a94_21f18892",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 799,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "2922cf6e_439f90ce",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 821,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3401a477_6cad21b4",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 847,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Ditto",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "24e162c3_4f14ee27",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSimpleSolution.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Please move to config, I have commented on this several times, US_EAST is **NOT** the only region in Azure\n\nhttps://azure.github.io/azure-sdk-for-java/com/microsoft/azure/management/resources/fluentcore/arm/Region.html",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7ceaeeb3_bac3f4b4",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 138,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Suggest moving these to a new class AzureClientTestConstants in src/test/resources area",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "51519f95_d2c5338c",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureCommonUtil.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Please use just this:\n\n   throw e;",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e7b30b87_dddd1020",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 474,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Why a hard-coded sleep of 30 seconds?  What if the task needs longer?  What if it ends sooner?  This is strange practice.",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "d6b6fdb5_b3f0b138",
+        "filename": "src/test/java/org/acumos/azure/client/test/transport/AzureContainerBeanTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-02T18:24:40Z",
+      "side": 1,
+      "message": "Thank you for removing the visual chaff",
+      "revId": "0d4339171ab000d4449d425b33123eefb35d0311",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
