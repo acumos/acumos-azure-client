@@ -33,10 +33,10 @@ public class SingltonMapTest {
 	
 	@Test	
 	public void singltonMapTestparameter(){
-		logger.info("<---------Start-------singltonMapTestparameter-------------->");
+		logger.info("singltonMapTestparameter Start");
 		HashMap hmap=SingletonMapClass.getInstance();
 		Assert.assertEquals(hmap, SingletonMapClass.getInstance());
-		logger.info("<---------End-------singltonMapTestparameter-------------->");
+		logger.info("singltonMapTestparameter End");
 	}
 
 }

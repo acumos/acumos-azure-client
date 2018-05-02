@@ -33,7 +33,7 @@ public class AppPropertiesTest {
 	 private static Logger logger = LoggerFactory.getLogger(AppPropertiesTest.class);
 		@Test	
 		public void appPropertiesTestparameter(){
-			logger.info("<---------Start-------AppPropertiesTest-------------->");
+			logger.info("AppPropertiesTest Start");
 			 
 			 AppProperties app=new AppProperties();
 			 app.setHost(AzureClientConstants.TEST_HOST);
@@ -42,6 +42,6 @@ public class AppPropertiesTest {
 			 Assert.assertEquals(AzureClientConstants.TEST_HOST, app.getHost());
 			 Assert.assertEquals(AzureClientConstants.TEST_CONFIG, app.getConfig());
 			 Assert.assertEquals(AzureClientConstants.TEST_PORT, app.getPort());
-			logger.info("<---------End -------AppPropertiesTest-------------->");
+			 logger.info("AppPropertiesTest End");
 		}
 }

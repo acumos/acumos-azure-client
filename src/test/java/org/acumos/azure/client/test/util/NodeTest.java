@@ -40,14 +40,14 @@ public class NodeTest {
 	private static Logger logger = LoggerFactory.getLogger(NodeTest.class);
 	@Test	
 	public void nodeTestObjectparameter(){
-		logger.info("<---------Start-------nodeTestObjectparameter-------------->");
+		logger.info("nodeTestObjectparameter Start");
 	    Node node =new Node();
 	    node.setContainerName(AzureClientConstants.TEST_CONTAINER_NAME_ADDER);
 	    node.setImage(AzureClientConstants.TEST_IMAGE);
 	    Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, node.getContainerName());
 	    Assert.assertEquals(AzureClientConstants.TEST_IMAGE, node.getImage());
 		
-	    logger.info("<---------End-------nodeTestObjectparameter-------------->");
+	    logger.info("nodeTestObjectparameter End");
    
 	}
 }

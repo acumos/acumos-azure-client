@@ -59,7 +59,7 @@ public class AzureCommonUtil {
 	  * @param msg
 	  * @param userId
 	  */
-	 public void generateNotification(String msg, String userId,String dataSource,String dataUserName,String dataPassword) {
+	 public void generateNotification(String msg, String userId,String dataSource,String dataUserName,String dataPassword)throws Exception {
 		 logger.debug("Start===generateNotification============");
 		 logger.debug("=====userId====="+userId+"==msg==="+msg);
          MLPNotification notification = new MLPNotification();
@@ -79,7 +79,8 @@ public class AzureCommonUtil {
                      client.addUserToNotification(mLNotification.getNotificationId(),userId);
              }
          } catch (Exception e) {
-        	 logger.error("<----Exception in method generateNotification of AzureCommonUtil----------->"+e.getMessage());
+        	 logger.error("generateNotification failed", e);
+        	 throw new Exception(e.getMessage());
          }
          logger.debug("End===generateNotification============"); 
 	 }
@@ -98,7 +99,7 @@ public class AzureCommonUtil {
 			logger.debug("<------End----nexusArtifactClientDetails------------>");
 			return nexusArtifactClient;
 	}
-	 public ByteArrayOutputStream getNexusUrlFile(String nexusUrl, String nexusUserName,String nexusPassword,String nexusURI) {
+	 public ByteArrayOutputStream getNexusUrlFile(String nexusUrl, String nexusUserName,String nexusPassword,String nexusURI)throws Exception {
 			logger.debug("<------start----getNexusUrlFile------------>");
 			ByteArrayOutputStream byteArrayOutputStream=null;
 			try
@@ -108,22 +109,28 @@ public class AzureCommonUtil {
 				 byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
 				 logger.debug("<------byteArrayOutputStream------>"+byteArrayOutputStream);
 			}catch (Exception e) {
-				 logger.error("<----Exception in method getNexusUrlFile of AzureCommonUtil----------->"+e.getMessage());
+				 logger.error("getNexusUrlFile failed", e);
+				 throw new Exception(e.getMessage());
       }
 			logger.debug("<------End----getNexusUrlFile------------>");
 			return byteArrayOutputStream;
 	}
 	 
-   public String replaceCharStr(String commonStr,String replaceChar,String replaceWithChar){
+   public String replaceCharStr(String commonStr,String replaceChar,String ignorDoller){
 	   logger.debug("<------start----replaceCharStr------------>");
 	   String finalStr="";
-	   if(commonStr!=null && !"".equals(commonStr) && replaceChar!=null && !"".equals(replaceChar)
-			   && replaceWithChar!=null && !"".equalsIgnoreCase(replaceWithChar)){
-		   finalStr = commonStr.replace(replaceChar, replaceWithChar);
+	   if(ignorDoller!=null && ignorDoller.equalsIgnoreCase("TRUE")){
+		   if(commonStr!=null && !"".equals(commonStr) && replaceChar!=null && !"".equals(replaceChar)){
+			   finalStr = commonStr.replace(replaceChar, AzureClientConstants.SPECIAL_CHAR_PROP);
+		   }else{
+			   finalStr=commonStr; 
+		   }
 	   }else{
 		   finalStr=commonStr; 
 	   }
+	  
 	   logger.debug("<------start----replaceCharStr------finalStr------>"+finalStr);
 	   return finalStr;
    }
+   
 }

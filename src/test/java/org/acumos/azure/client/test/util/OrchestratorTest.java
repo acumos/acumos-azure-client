@@ -31,7 +31,7 @@ public class OrchestratorTest {
 	private static Logger logger = LoggerFactory.getLogger(OrchestratorTest.class);
 	@Test	
 	public void OperationSignatureTestparameter(){
-		
+		logger.info("OperationSignatureTestparameter Start");
 		Orchestrator orch=new Orchestrator();
 		orch.setImage(AzureClientConstants.TEST_IMAGE);
 		orch.setName(AzureClientConstants.TEST_CONTAINER_NAME_ADDER);
@@ -39,5 +39,6 @@ public class OrchestratorTest {
 		Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, orch.getName());
 		Assert.assertEquals(AzureClientConstants.TEST_VERSION, orch.getVersion());
 		Assert.assertEquals(AzureClientConstants.TEST_IMAGE, orch.getImage());
+		logger.info("OperationSignatureTestparameter End");
 	}
 }
