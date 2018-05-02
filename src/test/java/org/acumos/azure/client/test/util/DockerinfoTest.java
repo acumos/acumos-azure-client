@@ -19,7 +19,6 @@
  */
 package org.acumos.azure.client.test.util;
 
-import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.junit.Assert;
 import org.junit.Test;
@@ -34,14 +33,15 @@ public class DockerinfoTest {
 	private static Logger logger = LoggerFactory.getLogger(DockerinfoTest.class);
 	@Test	
 	public void dockerinfoTestparameter(){
-		logger.info("<---------Start-------ComponentTest-------------->");
+		logger.info("ComponentTest Start");
         DockerInfo dockerInfo=new DockerInfo();
-        dockerInfo.setContainer(AzureClientConstants.TEST_COMPONENT_NAME);
-        dockerInfo.setIpAddress(AzureClientConstants.TEST_IP_ADDER);
-        dockerInfo.setPort(AzureClientConstants.TEST_PORT);
-        Assert.assertEquals(AzureClientConstants.TEST_COMPONENT_NAME, dockerInfo.getContainer());
-        Assert.assertEquals(AzureClientConstants.TEST_IP_ADDER, dockerInfo.getIpAddress());
-        Assert.assertEquals(AzureClientConstants.TEST_PORT, dockerInfo.getPort());
+        dockerInfo.setContainer(AzureClientTestConstants.TEST_COMPONENT_NAME);
+        dockerInfo.setIpAddress(AzureClientTestConstants.TEST_IP_ADDER);
+        dockerInfo.setPort(AzureClientTestConstants.TEST_PORT);
+        Assert.assertEquals(AzureClientTestConstants.TEST_COMPONENT_NAME, dockerInfo.getContainer());
+        Assert.assertEquals(AzureClientTestConstants.TEST_IP_ADDER, dockerInfo.getIpAddress());
+        Assert.assertEquals(AzureClientTestConstants.TEST_PORT, dockerInfo.getPort());
+        logger.info("ComponentTest End");
 
 	}
 

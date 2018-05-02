@@ -24,10 +24,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.acumos.azure.client.testcontroller.AzureServiceControllerTest;
+import org.acumos.azure.client.test.util.AzureClientTestConstants;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployBean;
-import org.acumos.azure.client.utils.AzureClientConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -38,30 +37,31 @@ public class AzureDeployBeanTest {
 	private static Logger logger = LoggerFactory.getLogger(AzureContainerBeanTest.class);
 	@Test	
 	public void testAzureDeployBeanTestparameter(){
-		logger.info("<---------Start-------testAzureContainerparameter-------------->");
+		logger.info("testAzureContainerparameter Start");
 		AzureDeployBean azBean=new AzureDeployBean();
-		azBean.setAcrName(AzureClientConstants.TEST_ACR_NAME);
-		azBean.setClient(AzureClientConstants.TEST_CLIENT);
-		azBean.setImagetag(AzureClientConstants.TEST_IMAGETAG);
-		azBean.setKey(AzureClientConstants.TEST_KEY);
-		azBean.setRgName(AzureClientConstants.TEST_RG_NAME);
-		azBean.setSolutionId(AzureClientConstants.TEST_SOLUTION_ID);
-		azBean.setSolutionRevisionId(AzureClientConstants.TEST_SOLUTIONREVISION_ID);
-		azBean.setStorageAccount(AzureClientConstants.TEST_STORAGE_ACCOUNT);
-		azBean.setSubscriptionKey(AzureClientConstants.TEST_SUBSCRIPTION_KEY);
-		azBean.setTenant(AzureClientConstants.TEST_TENANT);
-		azBean.setUserId(AzureClientConstants.TEST_USER_ID);
+		azBean.setAcrName(AzureClientTestConstants.TEST_ACR_NAME);
+		azBean.setClient(AzureClientTestConstants.TEST_CLIENT);
+		azBean.setImagetag(AzureClientTestConstants.TEST_IMAGETAG);
+		azBean.setKey(AzureClientTestConstants.TEST_KEY);
+		azBean.setRgName(AzureClientTestConstants.TEST_RG_NAME);
+		azBean.setSolutionId(AzureClientTestConstants.TEST_SOLUTION_ID);
+		azBean.setSolutionRevisionId(AzureClientTestConstants.TEST_SOLUTIONREVISION_ID);
+		azBean.setStorageAccount(AzureClientTestConstants.TEST_STORAGE_ACCOUNT);
+		azBean.setSubscriptionKey(AzureClientTestConstants.TEST_SUBSCRIPTION_KEY);
+		azBean.setTenant(AzureClientTestConstants.TEST_TENANT);
+		azBean.setUserId(AzureClientTestConstants.TEST_USER_ID);
 		
-		Assert.assertEquals(AzureClientConstants.TEST_CLIENT, azBean.getClient());
-		Assert.assertEquals(AzureClientConstants.TEST_TENANT, azBean.getTenant());
-		Assert.assertEquals(AzureClientConstants.TEST_KEY, azBean.getKey());
-		Assert.assertEquals(AzureClientConstants.TEST_SUBSCRIPTION_KEY, azBean.getSubscriptionKey());
-		Assert.assertEquals(AzureClientConstants.TEST_RG_NAME, azBean.getRgName());
-		Assert.assertEquals(AzureClientConstants.TEST_ACR_NAME, azBean.getAcrName());
-		Assert.assertEquals(AzureClientConstants.TEST_STORAGE_ACCOUNT, azBean.getStorageAccount());
-		Assert.assertEquals(AzureClientConstants.TEST_IMAGETAG, azBean.getImagetag());
-		Assert.assertEquals(AzureClientConstants.TEST_SOLUTION_ID, azBean.getSolutionId());
-		Assert.assertEquals(AzureClientConstants.TEST_USER_ID, azBean.getUserId());
+		Assert.assertEquals(AzureClientTestConstants.TEST_CLIENT, azBean.getClient());
+		Assert.assertEquals(AzureClientTestConstants.TEST_TENANT, azBean.getTenant());
+		Assert.assertEquals(AzureClientTestConstants.TEST_KEY, azBean.getKey());
+		Assert.assertEquals(AzureClientTestConstants.TEST_SUBSCRIPTION_KEY, azBean.getSubscriptionKey());
+		Assert.assertEquals(AzureClientTestConstants.TEST_RG_NAME, azBean.getRgName());
+		Assert.assertEquals(AzureClientTestConstants.TEST_ACR_NAME, azBean.getAcrName());
+		Assert.assertEquals(AzureClientTestConstants.TEST_STORAGE_ACCOUNT, azBean.getStorageAccount());
+		Assert.assertEquals(AzureClientTestConstants.TEST_IMAGETAG, azBean.getImagetag());
+		Assert.assertEquals(AzureClientTestConstants.TEST_SOLUTION_ID, azBean.getSolutionId());
+		Assert.assertEquals(AzureClientTestConstants.TEST_USER_ID, azBean.getUserId());
+		logger.info("testAzureContainerparameter End");
 	}
 
 }

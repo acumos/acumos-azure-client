@@ -21,7 +21,7 @@ package org.acumos.azure.client.utils;
 
 public final class AzureClientConstants {
 	
-	public static final String APPLICATION_JSON= "application/json";
+	public static final String APPLICATION_JSON="application/json";
 	public static final String BLUEPRINT_CONTAINER_NAME= "BluePrintContainer";
 	public static final String PROBE_CONTAINER_NAME= "Probe";
 	public static final String JSON_FILE_NAME= "blueprint.json";
@@ -98,34 +98,43 @@ public final class AzureClientConstants {
 	public static final String TYPE_AND_ROLE_HIERARCHY_LIST="type_and_role_hierarchy_list";
 	public static final String ROLE="role";
 	public static final String VM_CREATION_ERROR="role";
-	/* JUnit Test Constants*/
-	public static final String TEST_CONTAINER_NAME_ADDER="Adder1";
-	public static final String TEST_IP_ADDER="11.11.10.90";
-	public static final String TEST_PORT_ADDER="8557";
-	public static final String TEST_CLIENT="testclient";
-	public static final String TEST_TENANT="testtenant";
-	public static final String TEST_KEY="testkey";
-	public static final String TEST_SUBSCRIPTION_KEY="testsubscriptionKey";
-	public static final String TEST_RG_NAME="testrg";
-	public static final String TEST_ACR_NAME="testacr";
-	public static final String TEST_STORAGE_ACCOUNT="teste6";
-	public static final String TEST_IMAGETAG="newadder";
-	public static final String TEST_SOLUTION_ID="02eab846-2bd0-4cfe-8470-9fc69";
-	public static final String TEST_SOLUTIONREVISION_ID="a9e68bc6-f4b4-41c6-ae8e";
-	public static final String TEST_USER_ID="0505e537-ce79-4b1f-bf43";
-	public static final String TEST_HOST="8557";
-	public static final String TEST_PORT="10.21.13.63";
-	public static final String TEST_CONFIG="config";
-	public static final String TEST_BLUEPRINTIP = "11.11.10.90";
-	public static final String TEST_BLUEPRINTPORT = "8556";
-	public static final String TEST_AZUREVMIP = "11.11.10.90";
-	public static final String TEST_BLUEPRINT_NAME = "bluePrint";
-	public static final String TEST_BLUEPRINT_VERSION = "1";
-	public static final String TEST_IMAGE = "newadder1:1";
-	public static final String TEST_COMPONENT_NAME = "testName";
-	public static final String TEST_VERSION = "1";
-	public static final String TEST_BLUEPRINT_FILE = "blueprint.json";
-	public static final String TEST_BLUEPRINT_OLD_FILE = "blueprint2.json";
+	
+	public static final String BLUEPRINT_NAME_PROP="blueprint.name";
+	public static final String REGISTRY_BLUEPRINT_USERNAME_PROP="docker.registry.bluePrint.username";
+	public static final String REGISTRY_BLUEPRINT_PASSWORD_PROP="docker.registry.bluePrint.password";
+	public static final String REGISTRY_NETWORKGROUPNAME_PROP="docker.registry.networkgroupName";
+	public static final String REGISTRY_PORT_PROP="docker.registry.port";
+	public static final String CMNDATASVC_CMNDATASVCENDPOINURL_PROP="cmndatasvc.cmndatasvcendpoinurl";
+	public static final String CMNDATASVC_CMNDATASVCUSER_PROP="cmndatasvc.cmndatasvcuser";
+	public static final String CMNDATASVC_CMNDATASVCPWD_PROP="cmndatasvc.cmndatasvcpwd";
+	public static final String DOCKERVMUSERNAME_PROP="docker.dockerVMUserName";
+	public static final String DOCKERVMPASSWORD_PROP="docker.dockerVMPassword";
+	public static final String REPLACECHAR_PROP="docker.replaceChar";
+	public static final String IGNORE_DOLLER_PROP="docker.ignordoller";
+	public static final String SPECIAL_CHAR_PROP="$";
+	public static final String SOLUTIONPORT_PROP="docker.solutionPort";
+	public static final String SUBNET_PROP="docker.subnet";
+	public static final String VNET_PROP="docker.vnet";
+	public static final String SLEEPTIME_FIRST="sleepTimeFirst";
+	public static final String SLEEPTIME_SECOND="docker.sleepTimeSecond";
+	public static final String REGISTRY_NAME_PROP="docker.registry.name";
+	public static final String CONTAINERNAMEPREFIX_PROP="docker.containerNamePrefix";
+	public static final String REGISTRY_USERNAME_PROP="docker.registry.username";
+	public static final String REGISTRY_PASSWORD_PROP="docker.registry.password";
+	public static final String HOST_PROP="docker.host";
+	public static final String PORT_PROP="docker.port";
+	public static final String BLUEPRINT_IMAGENAME_PROP="blueprint.ImageName";
+	public static final String PROBE_IMAGENAME_PROP="probe.ImageName";
+	public static final String PROBE_NAME_PROP="probe.name";
+	public static final String PROBE_INTERNALPORT_PROP="probe.internalPort";
+	public static final String PROBE_PROBENEXUSENDPOINT_PROP="probe.probeNexusEndPoint";
+	public static final String DOCKER_REGISTRY_PROBE_USERNAME_PROP="docker.registry.probe.username";
+	public static final String DOCKER_REGISTRY_PROBE_PASSWORD_PROP="docker.registry.probe.password";
+	public static final String NEXUS_URL_PROP="nexus.url";
+	public static final String NEXUS_USERNAME_PROP="nexus.username";
+	public static final String NEXUS_PASSWORD_PROP="nexus.password";
+	
+	
 	
 
 }

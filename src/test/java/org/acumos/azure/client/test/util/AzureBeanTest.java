@@ -23,7 +23,6 @@ import java.util.HashMap;
 
 import org.acumos.azure.client.test.transport.AzureDeployDataObjectTest;
 import org.acumos.azure.client.utils.AzureBean;
-import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.DockerInfoList;
 import org.junit.Assert;
 import org.junit.Test;
@@ -35,23 +34,23 @@ public class AzureBeanTest {
 	private static Logger logger = LoggerFactory.getLogger(AzureBeanTest.class);
 	@Test	
 	public void AzureBeanTestObjectparameter(){
-		logger.info("<---------Start-------AzureBeanTestObjectparameter-------------->");
+		logger.info("AzureBeanTestObjectparameter Start");
 		 DockerInfoList dockerinfolist = new DockerInfoList();
 		 HashMap<String, String> bluePrintMap = new HashMap<String, String>();
 		 bluePrintMap.put("test", "test");
 		 AzureBean azbean=new AzureBean();
-		 azbean.setAzureVMIP(AzureClientConstants.TEST_AZUREVMIP);
-		 azbean.setBluePrintIp(AzureClientConstants.TEST_BLUEPRINTIP);
+		 azbean.setAzureVMIP(AzureClientTestConstants.TEST_AZUREVMIP);
+		 azbean.setBluePrintIp(AzureClientTestConstants.TEST_BLUEPRINTIP);
 		 azbean.setBluePrintMap(bluePrintMap);
-		 azbean.setBluePrintPort(AzureClientConstants.TEST_BLUEPRINTPORT);
+		 azbean.setBluePrintPort(AzureClientTestConstants.TEST_BLUEPRINTPORT);
 		 azbean.setDockerinfolist(dockerinfolist);
 		 
 	    Assert.assertEquals(dockerinfolist, azbean.getDockerinfolist());
 		Assert.assertEquals(bluePrintMap, azbean.getBluePrintMap());
-		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINTIP, azbean.getBluePrintIp());
-		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINTPORT, azbean.getBluePrintPort());
-		Assert.assertEquals(AzureClientConstants.TEST_AZUREVMIP, azbean.getAzureVMIP());
-		logger.info("<---------End-------AzureBeanTestObjectparameter-------------->");
+		Assert.assertEquals(AzureClientTestConstants.TEST_BLUEPRINTIP, azbean.getBluePrintIp());
+		Assert.assertEquals(AzureClientTestConstants.TEST_BLUEPRINTPORT, azbean.getBluePrintPort());
+		Assert.assertEquals(AzureClientTestConstants.TEST_AZUREVMIP, azbean.getAzureVMIP());
+		logger.info("AzureBeanTestObjectparameter End");
 	}
 
 }

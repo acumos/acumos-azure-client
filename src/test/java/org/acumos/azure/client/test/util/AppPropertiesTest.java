@@ -20,7 +20,6 @@
 package org.acumos.azure.client.test.util;
 
 import org.acumos.azure.client.utils.AppProperties;
-import org.acumos.azure.client.utils.AzureClientConstants;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -33,15 +32,15 @@ public class AppPropertiesTest {
 	 private static Logger logger = LoggerFactory.getLogger(AppPropertiesTest.class);
 		@Test	
 		public void appPropertiesTestparameter(){
-			logger.info("<---------Start-------AppPropertiesTest-------------->");
+			logger.info("AppPropertiesTest Start");
 			 
 			 AppProperties app=new AppProperties();
-			 app.setHost(AzureClientConstants.TEST_HOST);
-			 app.setConfig(AzureClientConstants.TEST_CONFIG);
-			 app.setPort(AzureClientConstants.TEST_PORT);
-			 Assert.assertEquals(AzureClientConstants.TEST_HOST, app.getHost());
-			 Assert.assertEquals(AzureClientConstants.TEST_CONFIG, app.getConfig());
-			 Assert.assertEquals(AzureClientConstants.TEST_PORT, app.getPort());
-			logger.info("<---------End -------AppPropertiesTest-------------->");
+			 app.setHost(AzureClientTestConstants.TEST_HOST);
+			 app.setConfig(AzureClientTestConstants.TEST_CONFIG);
+			 app.setPort(AzureClientTestConstants.TEST_PORT);
+			 Assert.assertEquals(AzureClientTestConstants.TEST_HOST, app.getHost());
+			 Assert.assertEquals(AzureClientTestConstants.TEST_CONFIG, app.getConfig());
+			 Assert.assertEquals(AzureClientTestConstants.TEST_PORT, app.getPort());
+			 logger.info("AppPropertiesTest End");
 		}
 }

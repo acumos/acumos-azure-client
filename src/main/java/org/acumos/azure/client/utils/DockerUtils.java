@@ -101,6 +101,7 @@ public class DockerUtils {
 				sslConfig.keyStorePassword("docker");
 				sslConfig.trustStore(CertificateUtils.createTrustStore(caPem));
 			} catch (Exception e) {
+				log.error("DockerSSLConfig failed", e);
 				throw new DockerClientException(e.getMessage(), e);
 			}
 		}
@@ -147,7 +148,7 @@ public class DockerUtils {
 	public static DockerClient createDockerClient(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, String localEnvDockerHost, String localEnvDockerCertPath,
 			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,
-			String dockerVMUserName,String dockerVMPassword,String subNet,String vnet)
+			String dockerVMUserName,String dockerVMPassword,String subNet,String vnet,int sleepTimeFirstInt)
 			throws Exception {
 		// final String envDockerHost = System.getenv("DOCKER_HOST");
 		final String envDockerHost = localEnvDockerHost;
@@ -161,7 +162,7 @@ public class DockerUtils {
 			// attempt to configure a Docker engine running inside a new Azure virtual
 			// machine
 			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, password, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subNet,vnet);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subNet,vnet,sleepTimeFirstInt);
 		} else {
 			dockerHostUrl = envDockerHost;
 			log.debug("Using local settings to connect to a Docker service: " + dockerHostUrl);
@@ -271,7 +272,7 @@ public class DockerUtils {
 	public static DockerClient fromNewDockerVM(Azure azure, String rgName, Region region, String registryServerUrl,
 			String username, String password, AzureBean azureBean, String networkSecurityGroup,
 			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword,
-			String subNet,String vnet) throws Exception {
+			String subNet,String vnet,int sleepTimeFirstInt) throws Exception {
 		// final String dockerVMName = SdkContext.randomResourceName("dockervm", 15);
 		// final String publicIPDnsLabel = SdkContext.randomResourceName("pip", 10);
 		final String vnetName = SdkContext.randomResourceName("vnet", 24);
@@ -288,7 +289,7 @@ public class DockerUtils {
 		// machine
 		/****************** Start code for resourceGroup *******************/
 		log.debug("Creating a virtual network ...");
-
+		log.debug("sleepTimeFirstInt "+sleepTimeFirstInt);       
 		log.debug("Walking through network security groups");
 		
 		
@@ -299,7 +300,7 @@ public class DockerUtils {
 		log.debug("Creating a security group for the front end - allows SSH and HTTP");
 		NetworkSecurityGroup frontEndNSG = azure.networkSecurityGroups().getByResourceGroup(rgName,
 				networkSecurityGroup);
-		log.debug("====================Created NetworkSecurityGroup============");
+		log.debug("Created NetworkSecurityGroup ");
 
 		NetworkInterface networkInterface1 = azure.networkInterfaces().define(networkInterfaceName1).withRegion(region)
 				.withExistingResourceGroup(rgName).withExistingPrimaryNetwork(network).withSubnet(subNet)
@@ -307,7 +308,7 @@ public class DockerUtils {
 				.withIPForwarding().withExistingNetworkSecurityGroup(frontEndNSG).create();
 
 		log.debug("Created network interface for the front end");
-		log.debug("====================Created NetworkInterface============");
+		log.debug(" Created NetworkInterface ");
 		Utils.print(networkInterface1);
 
 		/****************** End code for resourceGroup ********************/
@@ -322,14 +323,10 @@ public class DockerUtils {
 				.withSize(VirtualMachineSizeTypes.STANDARD_D2_V2).create();
 
 		log.debug(azure.publicIPAddresses().list()
-				+ "====================Created VirtualMachine====1===NetworkSecurityGroup====="
+				+ " Created VirtualMachine NetworkSecurityGroup "
 				+ dockerVM.getPrimaryNetworkInterface().getNetworkSecurityGroup().id());
-		log.debug("====================Created VirtualMachine===2====NetworkSecurityGroup====="
+		log.debug(" Created VirtualMachine NetworkSecurityGroup "
 				+ dockerVM.getPrimaryNetworkInterface().getNetworkSecurityGroup().key());
-		log.debug("====================Created VirtualMachine====3===NetworkSecurityGroup====="
-				+ dockerVM.getPrimaryNetworkInterface().getNetworkSecurityGroup().name());
-		log.debug("====================Created VirtualMachine=====4==NetworkSecurityGroup====="
-				+ dockerVM.getPrimaryNetworkInterface().getNetworkSecurityGroup().resourceGroupName());
 		log.debug("Walking through network security groups");
 
 		Date t2 = new Date();
@@ -342,17 +339,17 @@ public class DockerUtils {
 		String dockerHostIP = publicIp.ipAddress();
 		String vmName=publicIp.name();
 		
-		log.debug(dockerVM.computerName()+"=Name==== dockerHostIP=====" + dockerHostIP + "========vmName========" + vmName);
+		log.debug(dockerVM.computerName()+"dockerHostIP " + dockerHostIP + " vmName " + vmName);
 		if (azureBean != null && dockerHostIP != null && !"".equals(dockerHostIP)) {
-			log.debug("=====Setting dockerHostIP=====" + dockerHostIP);
+			log.debug(" Setting dockerHostIP " + dockerHostIP);
 			azureBean.setAzureVMIP(dockerHostIP);
 			azureBean.setAzureVMName(dockerVM.computerName());
 		}
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,
-				password, dockerRegistryName);
+				password, dockerRegistryName,sleepTimeFirstInt);
 		
-		log.debug("dockerHostIP=====" + dockerHostIP);
+		log.debug("dockerHostIP " + dockerHostIP);
 
 		return dockerClient;
 	}
@@ -384,55 +381,49 @@ public class DockerUtils {
 	 */
 	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPassword,
 			String registryServerUrl, String username, String password, String repositoryName,
-			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint) {
-		log.debug("====================start deploymentCompositeImageVM==================");
-		log.debug("====dockerHostIP======: " + dockerHostIP);
-		log.debug("====repositoryName======: " + repositoryName);
-		log.debug("====finalContainerName======: " + finalContainerName);
-		log.debug("====imageCount======: " + imageCount);
-		log.debug("====portNumber======: " + portNumber);
-		log.debug("====probeNexusEndPoint======: " + probeNexusEndPoint);
+			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint,int sleepTimeFirstInt) {
+		log.debug("deploymentCompositeImageVM Start");
+		log.debug("dockerHostIP " + dockerHostIP);
+		log.debug("repositoryName " + repositoryName);
+		log.debug("finalContainerName " + finalContainerName);
+		log.debug("imageCount " + imageCount);
+		log.debug("portNumber " + portNumber);
+		log.debug("probeNexusEndPoint " + probeNexusEndPoint);
 		String portNumberString = portNumber;
-		log.debug("====portNumberString======: " + portNumberString);
+		log.debug("portNumberString " + portNumberString);
+		log.debug("sleepTimeFirstInt " + sleepTimeFirstInt);
 		SSHShell sshShell = null;
 		try {
 
 			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + password + " "
 					+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
-			log.debug("====start deploymentImageVM===========2===================PULL_IMAGE===: " + PULL_IMAGE);
+			log.debug("start deploymentImageVM PULL_IMAGE  " + PULL_IMAGE);
 
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()), "PULL_IMAGE_" + imageCount + ".sh",
 					".azuredocker", true, "4095");
-			log.debug("====start deploymentImageVM===========3======================: ");
+			log.debug("start deploymentImageVM  ");
 
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE_" + imageCount + ".sh", true,
 					true);
-			log.debug("====start deploymentImageVM===========3===========output2===========: " + output2);
-			try {
-				Thread.sleep(30000);
-			} catch (Exception e) {
-				log.error("<----Exception in method deploymentCompositeImageVM of DockerUtils----------->"+e.getMessage());
-			}
-
-			log.debug("====================start deploymentImageVM============1======");
+			log.debug("start deploymentImageVM output2  " + output2);
+			 Thread.sleep(sleepTimeFirstInt);
+			log.debug(" start deploymentImageVM ");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			String RUN_IMAGE="";
 			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase("Probe")){
-				log.debug("=============Probe Condition======");
+				log.debug("Probe Condition");
 				
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
 						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
-				/*RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
-						+ "  " + repositoryName + " \n";*/
 			}else{
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
 						+ "  " + repositoryName + " \n";
-				log.debug("=============Other Condition======");
+				log.debug("Other Condition");
 			}
 		    
-			log.debug("====output==========Start============4======================: RUN_IMAGE" + RUN_IMAGE);
+			log.debug("RUN_IMAGE" + RUN_IMAGE);
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE_" + imageCount + ".sh",
 					".azuredocker", true, "4095");
@@ -440,14 +431,14 @@ public class DockerUtils {
 
 			String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE_" + imageCount + ".sh",
 					true, true);
-			log.debug("====output==========Start============5==================output3====: " + output3);
-			Thread.sleep(30000);
+			log.debug("output3" + output3);
+			Thread.sleep(sleepTimeFirstInt);
 		} catch (JSchException jSchException) {
-			log.error("<----JSchException in method deploymentCompositeImageVM of DockerUtils---->"+jSchException.getMessage());
+			log.error("deploymentCompositeImageVM failed", jSchException);
 		} catch (IOException ioException) {
-			log.error("<----IoException in method deploymentCompositeImageVM of DockerUtils---->"+ioException.getMessage());
+			log.error("deploymentCompositeImageVM failed", ioException);
 		} catch (Exception exception) {
-			log.error("<----Exception in method deploymentCompositeImageVM of DockerUtils---->"+exception.getMessage());
+			log.error("deploymentCompositeImageVM failed", exception);
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -455,68 +446,65 @@ public class DockerUtils {
 			}
 		}
 
-		log.debug("====================End deploymentCompositeImageVM==================");
+		log.debug("deploymentCompositeImageVM End");
 		return "success";
 	}
 
 	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password, String repositoryName,String portNumberString) {
-		log.debug("====dockerHostIP======: " + dockerHostIP);
-		log.debug("====registryServerUrl======: " + registryServerUrl);
-		log.debug("====repositoryName======: " + repositoryName);
-		log.debug("====portNumberString======: " + portNumberString);
-		log.debug("====================start deploymentImageVM==================");
+			String registryServerUrl, String username, String password, String repositoryName,
+			String portNumberString,int sleepTimeFirstInt) {
+		log.debug("dockerHostIP " + dockerHostIP);
+		log.debug("registryServerUrl " + registryServerUrl);
+		log.debug("repositoryName " + repositoryName);
+		log.debug("portNumberString " + portNumberString);
+		log.debug("sleepTimeFirstInt " + sleepTimeFirstInt);
+		log.debug("start deploymentImageVM ");
 		SSHShell sshShell = null;
 		try {
 
 			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + password + " "
 					+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
-			log.debug("====start deploymentImageVM===========2===================PULL_IMAGE===: " + PULL_IMAGE);
+			log.debug(" start deploymentImageVM PULL_IMAGE " + PULL_IMAGE);
 
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()), "PULL_IMAGE.sh", ".azuredocker", true,
 					"4095");
-			log.debug("====start deploymentImageVM===========3======================: ");
+			log.debug(" start deploymentImageVM  ");
 
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE.sh", true, true);
-			log.debug("====start deploymentImageVM===========3===========output2===========: " + output2);
-			try {
-				Thread.sleep(30000);
-			} catch (Exception e) {
-				log.error("<----Exception in method deploymentImageVM of DockerUtils---->"+e.getMessage());
-			}
-
-			log.debug("====================start deploymentImageVM============1======");
+			log.debug("deploymentImageVM output2 " + output2);
+			Thread.sleep(sleepTimeFirstInt);
+			log.debug("start deploymentImageVM ");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:"+portNumberString+" "+ repositoryName + " \n";
-			log.debug("====output==========Start============4======================: ");
+			log.debug("RUN_IMAGE Complete ");
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE.sh", ".azuredocker", true,
 					"4095");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 
 			String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);
-			log.debug("====output==========Start============5==================output3====: " + output3);
+			log.debug("output3: " + output3);
 
 		} catch (JSchException jSchException) {
-			log.error("<----JSchException in method deploymentImageVM of DockerUtils---->"+jSchException.getMessage());
+			log.error("deploymentImageVM failed", jSchException);
 		} catch (IOException ioException) {
-			log.error("<----IoException in method deploymentImageVM of DockerUtils---->"+ioException.getMessage());
+			log.error("deploymentImageVM failed", ioException);
 		} catch (Exception exception) {
-			log.error("<----Exception in method deploymentImageVM of DockerUtils---->"+exception.getMessage());
+			log.error("deploymentImageVM failed", exception);
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
 				sshShell = null;
 			}
 		}
-		log.debug("====================End deploymentImageVM==================");
+		log.debug(" deploymentImageVM End");
 		return "sucess";
 	}
 
 	public static DockerClient installDocker(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password, String dockerRegistryNameVal) {
+			String registryServerUrl, String username, String password, String dockerRegistryNameVal, int sleepTimeFirstInt) {
 		String keyPemContent = ""; // it stores the content of the key.pem certificate file
 		String certPemContent = ""; // it stores the content of the cert.pem certificate file
 		String caPemContent = ""; // it stores the content of the ca.pem certificate file
@@ -540,16 +528,16 @@ public class DockerUtils {
 
 			sshShell.upload(new ByteArrayInputStream(dockerConfig_diabled.getBytes()), "dockerd_notls.config",
 					".azuredocker", true, "4095");
-			log.debug("====dockerConfig_diabled=======: " + dockerConfig_diabled);
+			log.debug("dockerConfig_diabled " + dockerConfig_diabled);
 			sshShell.upload(new ByteArrayInputStream(CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.getBytes()),
 					"CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", ".azuredocker", true, "4095");
-			log.debug("====dockerConfig_diabled====2===: " + dockerConfig_diabled);
+			log.debug("dockerConfig_diabled " + dockerConfig_diabled);
 		} catch (JSchException jSchException) {
-			log.error("<----JSchException in method installDocker of DockerUtils--Docker setup scripts-->"+jSchException.getMessage());
+			log.error("installDocker failed", jSchException);
 		} catch (IOException ioException) {
-			log.error("<----IoException in method installDocker of DockerUtils--Docker setup scripts-->"+ioException.getMessage());
+			log.error("installDocker failed", ioException);
 		} catch (Exception exception) {
-			log.error("<----Exception in method installDocker of DockerUtils---Docker setup scripts->"+exception.getMessage());
+			log.error("installDocker failed", exception);
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -563,19 +551,15 @@ public class DockerUtils {
 
 			String output = sshShell
 					.executeCommand("bash -c ~/.azuredocker/INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", true, true);
-			try {
-				Thread.sleep(30000);
-			} catch (Exception e) {
-				log.error("<--Exception in method installDocker of DockerUtils---------->"+e.getMessage());
-			}
+			Thread.sleep(sleepTimeFirstInt);
 			log.debug(output);
-			log.debug("====output=======: " + output);
+			log.debug("output " + output);
 		} catch (JSchException jSchException) {
-			log.error("<----JSchException in method installDocker of DockerUtils--install Docker host-->"+jSchException.getMessage());
+			log.error("installDocker failed ", jSchException);
 		} catch (IOException ioException) {
-			log.error("<----IoException in method installDocker of DockerUtils--install Docker host-->"+ioException.getMessage());
+			log.error("installDocker failed", ioException);
 		} catch (Exception exception) {
-			log.error("<----Exception in method installDocker of DockerUtils---install Docker host->"+exception.getMessage());
+			log.error("installDocker failed", exception);
 		} finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -586,27 +570,24 @@ public class DockerUtils {
 			log.debug("Trying to setup Docker config: " + dockerHostIP);
 			log.debug("Trying to setup Docker config: " + dockerHostIP);
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
-			log.debug("====sshShell==========Enter==================================: ");
+			log.debug("Enter in ssh shell ");
 			// // Setup Docker daemon to allow connection from any Docker clients
 			String output = sshShell
 					.executeCommand("bash -c ~/.azuredocker/CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", true, true);
-			try {
-				Thread.sleep(30000);
-			} catch (Exception e) {
-				log.error("<----Exception in method installDocker of DockerUtils---------->"+e.getMessage());
-			}
+			Thread.sleep(sleepTimeFirstInt);
+			
 			log.debug(output);
-			log.debug("====output==========1==================================: " + output);
+			log.debug("output " + output);
 
 			dockerHostTlsEnabled = false;
 
-			log.debug("====dockerHostUrl============================================: ");
+			log.debug("dockerHostUrl ");
 		} catch (JSchException jSchException) {
-			log.error("<----JSchException in method installDocker of DockerUtils--setup Docker config-->"+jSchException.getMessage());
+			log.error("installDocker failed", jSchException);
 		} catch (IOException ioException) {
-			log.error("<----IoException in method installDocker of DockerUtils--setup Docker config-->"+ioException.getMessage());
+			log.error("installDocker failed", ioException);
 		} catch (Exception exception) {
-			log.error("<----Exception in method installDocker of DockerUtils---setup Docker config-->"+exception.getMessage());
+			log.error("installDocker failed", exception);
 		}  finally {
 			if (sshShell != null) {
 				sshShell.close();
@@ -614,23 +595,22 @@ public class DockerUtils {
 		}
 		dockerHostUrl = "tcp://" + dockerHostIP + ":" + dockerHostPort;
 		dockerHostTlsEnabled = false;
-		log.debug(dockerHostUrl + "====dockerHostTlsEnabled============================================: "
-				+ dockerHostTlsEnabled);
+		log.debug(dockerHostUrl + "dockerHostTlsEnabled "+ dockerHostTlsEnabled);
 		DockerClientConfig dockerClientConfig;
 		if (dockerHostTlsEnabled) {
-			log.debug("====dockerHostTlsEnabled============2================================: " + dockerHostTlsEnabled);
+			log.debug("dockerHostTlsEnabled " + dockerHostTlsEnabled);
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password,
 					caPemContent, keyPemContent, certPemContent);
 		} else {
-			log.debug("====dockerHostTlsEnabled============3================================: " + dockerHostTlsEnabled);
+			log.debug("dockerHostTlsEnabled " + dockerHostTlsEnabled);
 			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
 		}
-		log.debug("====dockerClientConfig============3================================: " + dockerClientConfig);
+		log.debug("dockerClientConfig " + dockerClientConfig);
 		DockerClient dockerClient = DockerClientBuilder.getInstance(dockerClientConfig).build();
 		try {
-			Thread.sleep(30000);
+			Thread.sleep(sleepTimeFirstInt);
 		} catch (Exception e) {
-			log.error("<----Exception in method installDocker of DockerUtils----------------->"+e.getMessage());
+			log.error("sleep  failed", e);
 		}
 		return dockerClient;
 	}
