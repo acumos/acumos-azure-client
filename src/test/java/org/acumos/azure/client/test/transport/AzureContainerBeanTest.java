@@ -23,7 +23,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.acumos.azure.client.testcontroller.AzureServiceControllerTest;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
 import org.junit.Assert;
