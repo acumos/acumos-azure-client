@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 import org.acumos.azure.client.transport.DeploymentBean;
-import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DataBrokerBean;
 import org.acumos.azure.client.utils.ParseJSON;
@@ -39,130 +38,96 @@ public class ParseJsonTest {
 	
 	private static Logger logger = LoggerFactory.getLogger(ParseJsonTest.class);
 	@Test	
-	public void parseJsonFileTest(){
-		logger.info("<---------Start-------parseJsonFileTest-------------->");
-		try{
+	public void parseJsonFileTest()throws Exception{
+		logger.info("parseJsonFileTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		imageMap=parse.parseJsonFile(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE);
+		imageMap=parse.parseJsonFile(AzureClientTestConstants.TEST_BLUEPRINT_OLD_FILE);
 		assertNotNull(imageMap);
-		}catch(Exception e){
-			logger.debug("Exception in parseJsonFileTest"+e.getMessage());
-		}
-		logger.info("<---------End-------parseJsonFileTest-------------->");
+		logger.info("parseJsonFileTest End");
 	}
    
 	@Test	
-	public void jsonFileToObjectTest(){
-		logger.info("<---------Start-------parseJsonFileTest-------------->");
-		try{
+	public void jsonFileToObjectTest()throws Exception{
+		logger.info("jsonFileToObjectTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
 		Blueprint blueprint=null;
-		DataBrokerBean dataBrokerbean=parse.getDataBrokerContainer(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE);
-		blueprint=parse.jsonFileToObject(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE,dataBrokerbean);
+		DataBrokerBean dataBrokerbean=parse.getDataBrokerContainer(AzureClientTestConstants.TEST_BLUEPRINT_OLD_FILE);
+		blueprint=parse.jsonFileToObject(AzureClientTestConstants.TEST_BLUEPRINT_OLD_FILE,dataBrokerbean);
 		assertNotNull(blueprint);
-		}catch(Exception e){
-			logger.debug("Exception in jsonFileToObjectTest"+e.getMessage());
-		}
-		logger.info("<---------End-------parseJsonFileTest-------------->");
+		logger.info("jsonFileToObjectTest End");
 	}
 	
 	@Test	
-	public void getSequenceFromJSONTest(){
-		logger.info("<---------Start-------getSequenceFromJSONTest-------------->");
-		try{
+	public void getSequenceFromJSONTest()throws Exception{
+		logger.info("getSequenceFromJSONTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		
 		LinkedList<String> linkedList=null;
-		linkedList=parse.getSequenceFromJSON(AzureClientConstants.TEST_BLUEPRINT_OLD_FILE);
+		linkedList=parse.getSequenceFromJSON(AzureClientTestConstants.TEST_BLUEPRINT_OLD_FILE);
 		assertNotNull(linkedList);
-		}catch(Exception e){
-			logger.debug("Exception in jsonFileToObjectTest"+e.getMessage());
-		}
-		logger.info("<---------End-------getSequenceFromJSONTest-------------->");
+		logger.info("getSequenceFromJSONTest End");
 	}
 	
 	@Test	
-	public void jsonFileToObjectProbeTest(){
-		logger.info("<---------Start-------jsonFileToObjectProbeTest-------------->");
-		try{
+	public void jsonFileToObjectProbeTest()throws Exception{
+		logger.info("jsonFileToObjectProbeTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
 		ObjectMapper mapper = new ObjectMapper();
 		Blueprint blueprint=null;
-		DataBrokerBean dataBrokerbean=parse.getDataBrokerContainer(AzureClientConstants.TEST_BLUEPRINT_FILE);
-		blueprint=parse.jsonFileToObjectProbe(AzureClientConstants.TEST_BLUEPRINT_FILE,dataBrokerbean);
+		DataBrokerBean dataBrokerbean=parse.getDataBrokerContainer(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
+		blueprint=parse.jsonFileToObjectProbe(AzureClientTestConstants.TEST_BLUEPRINT_FILE,dataBrokerbean);
 		String blueprintJson=mapper.writeValueAsString(blueprint); 
-		logger.debug("<----blueprintJson---------->"+blueprintJson);
+		logger.debug("blueprintJson "+blueprintJson);
 		assertNotNull(blueprint);
-		}catch(Exception e){
-			logger.debug("Exception in jsonFileToObjectProbeTest"+e.getMessage());
-		}
-		logger.info("<---------End-------jsonFileToObjectProbeTest-------------->");
+		logger.info("jsonFileToObjectProbeTest End");
 	}
 	
 	@Test
-	public void parseJsonFileProbeTest(){
-		logger.info("<---------Start-------parseJsonFileProbeTest-------------->");
-		try{
+	public void parseJsonFileProbeTest()throws Exception{
+		logger.info("parseJsonFileProbeTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		imageMap=parse.parseJsonFileProbe(AzureClientConstants.TEST_BLUEPRINT_FILE);
+		imageMap=parse.parseJsonFileProbe(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(imageMap);
-		}catch(Exception e){
-			logger.debug("Exception in parseJsonFileProbeTest"+e.getMessage());
-		}
-		logger.info("<---------End-------parseJsonFileProbeTest-------------->");
+		logger.info("parseJsonFileProbeTest End");
 	}
 	
 	@Test	
-	public void getSequenceFromJSONProbeTest(){
-		logger.info("<---------Start-------getSequenceFromJSONProbeTest-------------->");
-		try{
+	public void getSequenceFromJSONProbeTest()throws Exception{
+		logger.info("getSequenceFromJSONProbeTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		
 		LinkedList<String> linkedList=null;
-		linkedList=parse.getSequenceFromJSONProbe(AzureClientConstants.TEST_BLUEPRINT_FILE);
+		linkedList=parse.getSequenceFromJSONProbe(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(linkedList);
-		}catch(Exception e){
-			logger.debug("Exception in getSequenceFromJSONProbeTest"+e.getMessage());
-		}
-		logger.info("<---------End-------getSequenceFromJSONProbeTest-------------->");
+		logger.info("getSequenceFromJSONProbeTest End");
 	}
 	
 	@Test
-	public void nodeTypeContainerMapTest(){
-		logger.info("<---------Start-------nodeTypeContainerMapTest-------------->");
-		try{
+	public void nodeTypeContainerMapTest()throws Exception{
+		logger.info("nodeTypeContainerMapTest Start");
 		HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
 		ParseJSON parse=new ParseJSON();
-		nodeTypeContainerMap=parse.getNodeTypeContainerMap(AzureClientConstants.TEST_BLUEPRINT_FILE);
+		nodeTypeContainerMap=parse.getNodeTypeContainerMap(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(nodeTypeContainerMap);
-		}catch(Exception e){
-			logger.debug("Exception in nodeTypeContainerMapTest"+e.getMessage());
-		}
-		logger.info("<---------End-------nodeTypeContainerMapTest-------------->");
+		logger.info("nodeTypeContainerMapTest End");
 	}
 	
 	@Test
-	public void getDataBrokerContainerTest(){
-		logger.info("<---------Start-------getDataBrokerContainerTest-------------->");
-		try{
+	public void getDataBrokerContainerTest()throws Exception{
+		logger.info("nodeTypeContainerMapTest Start");
 		DataBrokerBean	dataBrokerbean=null;	
 		HashMap<String,DeploymentBean> nodeTypeContainerMap=null;
 		ParseJSON parse=new ParseJSON();
 		ObjectMapper mapper = new ObjectMapper();
-		dataBrokerbean=parse.getDataBrokerContainer(AzureClientConstants.TEST_BLUEPRINT_FILE);
+		dataBrokerbean=parse.getDataBrokerContainer(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
 		String dataBrokerbeanjson=mapper.writeValueAsString(dataBrokerbean); 
-		System.out.println("<----dataBrokerbeanjson---------->"+dataBrokerbeanjson);
+		System.out.println("dataBrokerbeanjson "+dataBrokerbeanjson);
 		assertNotNull(dataBrokerbean);
-		}catch(Exception e){
-			logger.debug("Exception in nodeTypeContainerMapTest"+e.getMessage());
-		}
-		logger.info("<---------End-------getDataBrokerContainerTest-------------->");
+		logger.info("nodeTypeContainerMapTest End");
 	}
 	
 }

@@ -19,7 +19,6 @@
  */
 package org.acumos.azure.client.test.util;
 
-import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Orchestrator;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,13 +30,14 @@ public class OrchestratorTest {
 	private static Logger logger = LoggerFactory.getLogger(OrchestratorTest.class);
 	@Test	
 	public void OperationSignatureTestparameter(){
-		
+		logger.info("OperationSignatureTestparameter Start");
 		Orchestrator orch=new Orchestrator();
-		orch.setImage(AzureClientConstants.TEST_IMAGE);
-		orch.setName(AzureClientConstants.TEST_CONTAINER_NAME_ADDER);
-		orch.setVersion(AzureClientConstants.TEST_VERSION);
-		Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, orch.getName());
-		Assert.assertEquals(AzureClientConstants.TEST_VERSION, orch.getVersion());
-		Assert.assertEquals(AzureClientConstants.TEST_IMAGE, orch.getImage());
+		orch.setImage(AzureClientTestConstants.TEST_IMAGE);
+		orch.setName(AzureClientTestConstants.TEST_CONTAINER_NAME_ADDER);
+		orch.setVersion(AzureClientTestConstants.TEST_VERSION);
+		Assert.assertEquals(AzureClientTestConstants.TEST_CONTAINER_NAME_ADDER, orch.getName());
+		Assert.assertEquals(AzureClientTestConstants.TEST_VERSION, orch.getVersion());
+		Assert.assertEquals(AzureClientTestConstants.TEST_IMAGE, orch.getImage());
+		logger.info("OperationSignatureTestparameter End");
 	}
 }
