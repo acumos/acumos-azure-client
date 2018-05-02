@@ -36,7 +36,7 @@ public class AzureContainerBeanTest {
 	
 	@Test	
 	public void testAzureContainerparameter(){
-		logger.info("<---------Start-------testAzureContainerparameter-------------->");
+		logger.info("testAzureContainerparameter Start");
 		
 		AzureContainerBean containerBean=new AzureContainerBean();
 		containerBean.setContainerIp(AzureClientConstants.TEST_IP_ADDER);
@@ -45,7 +45,7 @@ public class AzureContainerBeanTest {
 		Assert.assertEquals(AzureClientConstants.TEST_CONTAINER_NAME_ADDER, containerBean.getContainerName());
 		Assert.assertEquals(AzureClientConstants.TEST_IP_ADDER, containerBean.getContainerIp());
 		Assert.assertEquals(AzureClientConstants.TEST_PORT_ADDER, containerBean.getContainerPort());
-		logger.info("<---------End-------testAzureContainerparameter-------------->");
+		logger.info("testAzureContainerparameter End");
 	}
 
 }

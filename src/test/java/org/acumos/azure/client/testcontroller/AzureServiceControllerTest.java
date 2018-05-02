@@ -83,9 +83,9 @@ public class AzureServiceControllerTest {
 	AzureServiceController azureController=new AzureServiceController();*/
 	
 	@Test
-	public void singleImageAzureDeploymentTest() {
-		String result = "";
-		try {
+	public void singleImageAzureDeploymentTest()throws Exception {
+		    String result = "";
+		    logger.info("singleImageAzureDeploymentTest Start");
 			AzureDeployBean azBean=new AzureDeployBean();
 			
 			azBean.setAcrName(AzureClientConstants.TEST_ACR_NAME);
@@ -101,18 +101,17 @@ public class AzureServiceControllerTest {
 			azBean.setUserId(AzureClientConstants.TEST_USER_ID);
 			
 			response.setStatus(400);
-			logger.info("====="+response.getStatus());
+			logger.info("Status"+response.getStatus());
 			when(azureController.singleImageAzureDeployment(request,azBean,response)).thenReturn("{\"UIDNumber\":\"\",\"status\":\"SUCCESS\"}");
-			logger.info("==Test Status ==="+response.getStatus());
+			logger.info("Test Status "+response.getStatus());
 			Assert.assertEquals(200, response.getStatus());
-		}catch (Exception e) {
-			logger.info("failed tot execute the above test case of singleImageAzureDeploymentTest"+e.getMessage());
-		}
+			logger.info("singleImageAzureDeploymentTest End");
+		
 	}	
 		@Test
-		public void compositeImageAzureDeploymentTest() {
-			String result = "";
-			try {
+		public void compositeImageAzureDeploymentTest() throws Exception{
+			    logger.info("compositeImageAzureDeploymentTest Start");
+			    String result = "";
 				AzureDeployDataObject azBean=new AzureDeployDataObject();
 				azBean.setAcrName(AzureClientConstants.TEST_ACR_NAME);
 				azBean.setClient(AzureClientConstants.TEST_CLIENT);
@@ -126,25 +125,12 @@ public class AzureServiceControllerTest {
 				azBean.setUserId(AzureClientConstants.TEST_USER_ID);
 				
 				response.setStatus(400);
-				logger.info("====="+response.getStatus());
+				logger.info("Status "+response.getStatus());
 				when(azureController.compositeSolutionAzureDeployment(request,azBean,response)).thenReturn("{\"UIDNumber\":\"\",\"status\":\"SUCCESS\"}");
-				logger.info("==Test Status ==="+response.getStatus());
-				//Assert.assertEquals(200, response.getStatus());
-			}catch (Exception e) {
-				logger.info("failed tot execute the above test case of singleImageAzureDeploymentTest"+e.getMessage());
-			}
-			
-		
+				logger.info("Test Status "+response.getStatus());
+				logger.info("compositeImageAzureDeploymentTest End");
 	}
 		
-		@Test
-		public void getUIDDetailsTest() {
-			String result = "";
-			/*try {
-				
-			}catch (Exception e) {
-				logger.info("failed tot execute the above test case of singleImageAzureDeploymentTest"+e.getMessage());
-			}*/
-			}
+		
 
 }

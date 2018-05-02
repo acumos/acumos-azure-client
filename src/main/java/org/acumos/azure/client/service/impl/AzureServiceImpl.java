@@ -38,6 +38,7 @@ import java.util.Map;
 import org.acumos.azure.client.service.AzureService;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.utils.AzureBean;
+import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
@@ -87,26 +88,26 @@ public class AzureServiceImpl implements AzureService {
 	}
 	
 	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
-		logger.debug("<------start----getClient------------>");
+		logger.debug("getClient start");
 		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
-		logger.debug("<------End----getClient---------client--->"+client);
+		logger.debug("getClient End");
 		return client;
 	}
 	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName,String nexusPassword) {
-		logger.debug("<------start----nexusArtifactClient------------>");
+		logger.debug("nexusArtifactClient start");
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
 		repositoryLocation.setUrl(nexusUrl);
 		repositoryLocation.setUsername(nexusUserName);
 		repositoryLocation.setPassword(nexusPassword);
 		NexusArtifactClient nexusArtifactClient = new NexusArtifactClient(repositoryLocation);
-		logger.debug("<------End----nexusArtifactClient------------>");
+		logger.debug("nexusArtifactClient End");
 		return nexusArtifactClient;
 	}
 	@Override
 	public Azure authorize(AzureDeployDataObject authObject) {
 		// TODO Auto-generated method stub
-		logger.debug("<------start----authorize in AzureServiceImpl------------>");
+		logger.debug("authorize in AzureServiceImpl start");
 		logger.debug(" authentication parameters:: "+ authObject.toString() );
 		
 		ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(
@@ -115,14 +116,15 @@ public class AzureServiceImpl implements AzureService {
 		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC)
 				.authenticate(credentials)
 				.withSubscription(authObject.getSubscriptionKey());
-		logger.debug("try getting some info : " + azure.subscriptionId() + " " + azure.containerRegistries());
-		logger.debug("Azure AD Authorization Successful...");
-		logger.debug("<------End----authorize in AzureServiceImpl------------>");
+		logger.debug("try getting some info " + azure.subscriptionId() + " " + azure.containerRegistries());
+		logger.debug("Azure AD Authorization Successful");
+		logger.debug("authorize in AzureServiceImpl End");
 		return azure;
 	}
 	
 	public ArrayList<String> iterateImageMap(HashMap<String,String> imageMap){
-		logger.debug("<--Start-------iterateImageMap-------imageMap---->"+imageMap);
+		logger.debug("iterateImageMap ");
+		logger.debug("imageMap "+imageMap);
 		ArrayList<String> list=new ArrayList<String>();
 		 Iterator it = imageMap.entrySet().iterator();
 		    while (it.hasNext()) {
@@ -132,19 +134,19 @@ public class AzureServiceImpl implements AzureService {
 		        	list.add((String)pair.getKey());
 		        }
 		    }
-		logger.debug("<--End-------iterateImageMap-------list---->"+list);
+		logger.debug("list "+list);    
+		logger.debug(" iterateImageMap End ");
 		return list;
 	}
 	public String getBluePrintNexus(String solutionId, String revisionId,String datasource,String userName,String password,
 			String nexusUrl,String nexusUserName,String nexusPassword) throws  Exception{
-		  logger.debug("------ Start getBluePrintNexus-----------------");
-		  logger.debug("-------solutionId-----------"+solutionId);
-		  logger.debug("-------revisionId-----------"+revisionId);
+		  logger.debug(" getBluePrintNexus Start");
+		  logger.debug("solutionId "+solutionId);
+		  logger.debug("revisionId "+revisionId);
 		  List<MLPSolutionRevision> mlpSolutionRevisionList;
 		  String solutionRevisionId = revisionId;
 		  List<MLPArtifact> mlpArtifactList;
 		  String nexusURI = "";
-		  String artifactType="BP";
 		  String bluePrintStr="";
 		  ByteArrayOutputStream byteArrayOutputStream = null;
 		  CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,password);
@@ -153,36 +155,36 @@ public class AzureServiceImpl implements AzureService {
 				mlpArtifactList = cmnDataService.getSolutionRevisionArtifacts(solutionId, solutionRevisionId);
 				if (null != mlpArtifactList && !mlpArtifactList.isEmpty()) {
 					nexusURI = mlpArtifactList.stream()
-							.filter(mlpArt -> mlpArt.getArtifactTypeCode().equalsIgnoreCase(artifactType)).findFirst()
+							.filter(mlpArt -> mlpArt.getArtifactTypeCode().equalsIgnoreCase(AzureClientConstants.ARTIFACT_TYPE_BLUEPRINT)).findFirst()
 							.get().getUri();
-					logger.debug("------ Nexus URI : " + nexusURI + " -------");
+					logger.debug(" Nexus URI : " + nexusURI );
 					if (null != nexusURI) {
 						NexusArtifactClient nexusArtifactClient=nexusArtifactClient(nexusUrl,nexusUserName,nexusPassword);
-						File f = new File("blueprint.json");
+						File f = new File(AzureClientConstants.JSON_FILE_NAME);
 						if(f.exists() && !f.isDirectory()) { 
 						    f.delete();
 						}
 						byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
-						logger.debug("------- byteArrayOutputStream ---blueprint.json-------"+byteArrayOutputStream.toString());
-						OutputStream outputStream = new FileOutputStream("blueprint.json"); 
+						logger.debug(" byteArrayOutputStream "+byteArrayOutputStream.toString());
+						OutputStream outputStream = new FileOutputStream(AzureClientConstants.JSON_FILE_NAME); 
 						byteArrayOutputStream.writeTo(outputStream);
 						bluePrintStr=byteArrayOutputStream.toString();
 					}
 				}
 			}	
-			File file = new File("blueprint.json");
+			File file = new File(AzureClientConstants.JSON_FILE_NAME);
 			if(!file.exists()){
-				 throw  new Exception("blueprint.json file is not exist");
+				 throw  new Exception(AzureClientConstants.JSON_FILE_NAME+" file is not exist");
 			}
-			logger.debug("------ End getBluePrintNexus-----------------");	
+			logger.debug("getBluePrintNexus End");	
 		return bluePrintStr;	
 	  }
 	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String password)throws  Exception{
-			logger.debug("------- getSolutionRevisions() : Start ----------");
+			logger.debug("getSolutionRevisions Start");
 			List<MLPSolutionRevision> solRevisionsList = null;
 			CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,password);
 			solRevisionsList = cmnDataService.getSolutionRevisions(solutionId);
-			logger.debug("------- getSolutionRevisions() : End ----------");
+			logger.debug("getSolutionRevisions End ");
 			return solRevisionsList;
 		}
 	  public LinkedList<String> getSequence(HashMap<String,String> hmap){
@@ -194,18 +196,18 @@ public class AzureServiceImpl implements AzureService {
 	        	String containerName=(String)pair.getKey();
 	        	sequenceList.add((String)pair.getValue());
 	        }
-	        logger.debug("======sequenceList=============="+sequenceList);
+	        logger.debug("sequenceList "+sequenceList);
 	        return sequenceList;
 		}
 	  public LinkedList<String> addProbeSequence(LinkedList<String> sequenceList,String probeContainerName){
-		  logger.debug("Start===addProbeSequence============");
-		  logger.debug("====probeContainerName==="+probeContainerName+"====sequenceList====="+sequenceList);
+		  logger.debug("addProbeSequence Start");
+		  logger.debug("probeContainerName "+probeContainerName+"sequenceList "+sequenceList);
 		  if(sequenceList!=null && sequenceList.size() > 0 && probeContainerName!=null && !"".equals(probeContainerName)){
 			  int length=sequenceList.size();
-			  logger.debug("length============"+length);
+			  logger.debug("length "+length);
 			  sequenceList.add((length-1), probeContainerName); 
 			}
-		  logger.debug("End====addProbeSequence==============="+sequenceList);
+		  logger.debug("addProbeSequence End"+sequenceList);
 		  return sequenceList;
 	  }
 }

@@ -19,6 +19,13 @@
  */
 package org.acumos.azure.client.test.util;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
+import org.acumos.azure.client.service.impl.AzureCompositeSolution;
+import org.acumos.azure.client.service.impl.AzureSimpleSolution;
+import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.utils.OperationSignature;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,7 +37,8 @@ public class OperationSignatureTest {
 	private static Logger logger = LoggerFactory.getLogger(OperationSignatureTest.class);
 	@Test	
 	public void OperationSignatureTestparameter(){
-		logger.info("<---------Start-------OperationSignatureTestparameter-------------->");
-		logger.info("<---------End-------OperationSignatureTestparameter-------------->");
+		logger.info("OperationSignatureTestparameter Start");
+		
+		logger.info("OperationSignatureTestparameter End");
 	}
 }

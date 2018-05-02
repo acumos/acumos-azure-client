@@ -33,7 +33,7 @@ public class AzureDeployDataObjectTest {
 	private static Logger logger = LoggerFactory.getLogger(AzureDeployDataObjectTest.class);
 	@Test	
 	public void testAzureDeployDataObjectparameter(){
-		logger.info("<---------Start-------testAzureDeployDataObjectparameter-------------->");
+		logger.info("testAzureDeployDataObjectparameter Start");
 		 
 		 AzureDeployDataObject azBean=new AzureDeployDataObject();
 		
@@ -57,6 +57,7 @@ public class AzureDeployDataObjectTest {
 		Assert.assertEquals(AzureClientConstants.TEST_STORAGE_ACCOUNT, azBean.getStorageAccount());
 		Assert.assertEquals(AzureClientConstants.TEST_SOLUTION_ID, azBean.getSolutionId());
 		Assert.assertEquals(AzureClientConstants.TEST_USER_ID, azBean.getUserId());
+		logger.info("testAzureDeployDataObjectparameter End");
 		
 	}
 

@@ -38,7 +38,7 @@ public class AzureDeployBeanTest {
 	private static Logger logger = LoggerFactory.getLogger(AzureContainerBeanTest.class);
 	@Test	
 	public void testAzureDeployBeanTestparameter(){
-		logger.info("<---------Start-------testAzureContainerparameter-------------->");
+		logger.info("testAzureContainerparameter Start");
 		AzureDeployBean azBean=new AzureDeployBean();
 		azBean.setAcrName(AzureClientConstants.TEST_ACR_NAME);
 		azBean.setClient(AzureClientConstants.TEST_CLIENT);
@@ -62,6 +62,7 @@ public class AzureDeployBeanTest {
 		Assert.assertEquals(AzureClientConstants.TEST_IMAGETAG, azBean.getImagetag());
 		Assert.assertEquals(AzureClientConstants.TEST_SOLUTION_ID, azBean.getSolutionId());
 		Assert.assertEquals(AzureClientConstants.TEST_USER_ID, azBean.getUserId());
+		logger.info("testAzureContainerparameter End");
 	}
 
 }

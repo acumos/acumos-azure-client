@@ -26,7 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public abstract class AbstractController {
 
-	protected static final String APPLICATION_JSON = AzureClientConstants.APPLICATION_JSON;
+	protected static final String APPLICATION_JSON = "application/json";
 
 	protected final ObjectMapper mapper;
 

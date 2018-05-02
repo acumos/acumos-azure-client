@@ -35,7 +35,7 @@ public class AzureBeanTest {
 	private static Logger logger = LoggerFactory.getLogger(AzureBeanTest.class);
 	@Test	
 	public void AzureBeanTestObjectparameter(){
-		logger.info("<---------Start-------AzureBeanTestObjectparameter-------------->");
+		logger.info("AzureBeanTestObjectparameter Start");
 		 DockerInfoList dockerinfolist = new DockerInfoList();
 		 HashMap<String, String> bluePrintMap = new HashMap<String, String>();
 		 bluePrintMap.put("test", "test");
@@ -51,7 +51,7 @@ public class AzureBeanTest {
 		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINTIP, azbean.getBluePrintIp());
 		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINTPORT, azbean.getBluePrintPort());
 		Assert.assertEquals(AzureClientConstants.TEST_AZUREVMIP, azbean.getAzureVMIP());
-		logger.info("<---------End-------AzureBeanTestObjectparameter-------------->");
+		logger.info("AzureBeanTestObjectparameter End");
 	}
 
 }

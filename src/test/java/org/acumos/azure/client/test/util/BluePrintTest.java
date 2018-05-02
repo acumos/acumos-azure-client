@@ -37,7 +37,7 @@ public class BluePrintTest {
 	private static Logger logger = LoggerFactory.getLogger(BluePrintTest.class);
 	@Test	
 	public void BluePrintTestObjectparameter(){
-		logger.info("<---------Start-------BluePrintTestObjectparameter-------------->");
+		logger.info("BluePrintTestObjectparameter Start");
 		
         List<OperationSignature> inputs=(List)new ArrayList<OperationSignature>();
 		Orchestrator orchestrator=new Orchestrator();
@@ -52,7 +52,7 @@ public class BluePrintTest {
 		Assert.assertEquals(nodes, blueprint.getNodes());
 		Assert.assertEquals(AzureClientConstants.TEST_BLUEPRINT_VERSION, blueprint.getVersion());
 		
-		logger.info("<---------End-------BluePrintTestObjectparameter-------------->");
+		logger.info("BluePrintTestObjectparameter End");
 	}
 
 }
