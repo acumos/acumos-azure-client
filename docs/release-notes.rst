@@ -20,7 +20,8 @@
 Acumos Azure Client Release Notes
 =================================
 
-Version 1.86.0, March 2018
+Version 1.96.0, May 2018
 ----------------------------
 
-Latest release of the Acumos Azure Client.
+* Success/ Failure message is not displaying on the UI after VM created or timeout (ACUMOS-676)
+* acumos-azure-client contains cognita-specific code (ACUMOS-689)
