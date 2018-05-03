@@ -83,6 +83,10 @@ public class AzureSimpleSolution implements Runnable {
 	private String vnet;
 	private String sleepTimeFirst;
 	private String sleepTimeSecond;
+	private String nexusRegistyUserName;
+	private String nexusRegistyPwd;
+	private String nexusRegistyName;
+	private String otherRegistyName;
 	
 	public AzureSimpleSolution(){
 		
@@ -93,7 +97,8 @@ public class AzureSimpleSolution implements Runnable {
 			ArrayList<String> list, String bluePrintName, String bluePrintUser, String bluePrintPass,
 			String networkSecurityGroup, String dockerRegistryName, String uidNumStr, String dataSource,
 			String dataUserName, String dataPassword, String dockerVMUserName, String dockerVMPassword,String solutionPort,
-			String subnet,String vnet,String sleepTimeFirst,String sleepTimeSecond) {
+			String subnet,String vnet,String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPwd,
+			String nexusRegistyName,String otherRegistyName) {
 		this.azure = azure;
 		this.deployDataObject = deployDataObject;
 		this.dockerContainerPrefix = dockerContainerPrefix;
@@ -119,6 +124,10 @@ public class AzureSimpleSolution implements Runnable {
 		this.vnet = vnet;
 		this.sleepTimeFirst = sleepTimeFirst;
 		this.sleepTimeSecond = sleepTimeSecond;
+		this.nexusRegistyUserName = nexusRegistyUserName;
+		this.nexusRegistyPwd = nexusRegistyPwd;
+		this.nexusRegistyName = nexusRegistyName;
+		this.otherRegistyName = otherRegistyName;
 
 	}
 
@@ -137,6 +146,8 @@ public class AzureSimpleSolution implements Runnable {
 		logger.debug("userId " + deployDataObject.getUserId());
 		logger.debug("sleepTimeFirst " + sleepTimeFirst);
 		logger.debug("sleepTimeSecond " + sleepTimeSecond);
+		logger.debug("nexusRegistyName "+nexusRegistyName);
+		logger.debug("otherRegistyName "+otherRegistyName);
         
 		AzureBean azureBean = new AzureBean();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
@@ -208,13 +219,24 @@ public class AzureSimpleSolution implements Runnable {
 					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subnet,vnet,sleepTimeFirstInt);
 
 			AuthConfig authConfig = new AuthConfig().withUsername(dockerUserName).withPassword(dockerPwd);
+			AuthConfig authConfigNexus = new AuthConfig().withUsername(nexusRegistyUserName).withPassword(nexusRegistyPwd);
 			logger.debug("Start pulling images from nexus::::::::");
 			Iterator itr = list.iterator();
 			while (itr.hasNext()) {
 				String imageName = (String) itr.next();
-				dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
-						// .withTag(dockerImageTag)
-						.exec(new PullImageResultCallback()).awaitSuccess();
+				logger.debug("imageName "+imageName);
+				if(azureUtil.getRepositryStatus(imageName, nexusRegistyName)){
+					logger.debug("In nexus username ");
+					dockerClient.pullImageCmd(imageName).withAuthConfig(authConfigNexus)
+					// .withTag(dockerImageTag)
+					.exec(new PullImageResultCallback()).awaitSuccess();
+				}else{
+					logger.debug("In other username ");
+					dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
+					// .withTag(dockerImageTag)
+					.exec(new PullImageResultCallback()).awaitSuccess();
+				}
+				
 				Thread.sleep(sleepTimeFirstInt);
 			}
 
