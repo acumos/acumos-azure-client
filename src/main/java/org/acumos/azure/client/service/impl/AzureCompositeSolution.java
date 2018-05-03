@@ -117,6 +117,10 @@ public class AzureCompositeSolution implements Runnable {
     private DataBrokerBean dataBrokerBean;
     private String sleepTimeFirst;
 	private String sleepTimeSecond;
+	private String nexusRegistyUserName;
+	private String nexusRegistyPwd;
+	private String nexusRegistyName;
+	private String otherRegistyName;
 	
     public AzureCompositeSolution(){
     	
@@ -127,7 +131,8 @@ public class AzureCompositeSolution implements Runnable {
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeInternalPort,String probeName,
 			String probeUser,String probePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
 			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,
-			String bluePrintJsonStr, String probeNexusEndPoint,String subnet,String vnet,DataBrokerBean dataBrokerBean,String sleepTimeFirst,String sleepTimeSecond) {
+			String bluePrintJsonStr, String probeNexusEndPoint,String subnet,String vnet,DataBrokerBean dataBrokerBean,
+			String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPwd,String nexusRegistyName,String otherRegistyName) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -165,6 +170,10 @@ public class AzureCompositeSolution implements Runnable {
 	    this.dataBrokerBean=dataBrokerBean;
 	    this.sleepTimeFirst = sleepTimeFirst;
 		this.sleepTimeSecond = sleepTimeSecond;
+		this.nexusRegistyUserName = nexusRegistyUserName;
+		this.nexusRegistyPwd = nexusRegistyPwd;
+		this.nexusRegistyName = nexusRegistyName;
+		this.otherRegistyName = otherRegistyName;
 	    
 	   }
 	public void run() {
@@ -185,6 +194,8 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("probeNexusEndPoint "+probeNexusEndPoint);
 		logger.debug("sleepTimeFirst " + sleepTimeFirst);
 		logger.debug("sleepTimeSecond " + sleepTimeSecond);
+		logger.debug("nexusRegistyName "+nexusRegistyName);
+		logger.debug("otherRegistyName "+otherRegistyName);
 		
 		
 		AzureBean azureBean=new AzureBean();
@@ -291,6 +302,10 @@ public class AzureCompositeSolution implements Runnable {
 		            AuthConfig authConfigProb = new AuthConfig()
 		                    .withUsername(probeUser)
 		                    .withPassword(probePass);
+		            
+		            AuthConfig authConfigNexus = new AuthConfig()
+		                    .withUsername(nexusRegistyUserName)
+		                    .withPassword(nexusRegistyPwd);
 	
 		            //=============================================================
 		            // Pull a temp image from public Docker repo and create a temporary container from that image
@@ -316,11 +331,22 @@ public class AzureCompositeSolution implements Runnable {
 		                    .awaitSuccess();
 		            		
 		            	}else{
+		            	
 		            	logger.debug("image name in run else "+imageName);
-		            	dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
-	                    //.withTag(dockerImageTag)
-	                    .exec(new PullImageResultCallback())
-	                    .awaitSuccess();
+                        if(azureUtil.getRepositryStatus(imageName, nexusRegistyName)){
+                        	logger.debug("Repository Nexus");
+                        	dockerClient.pullImageCmd(imageName).withAuthConfig(authConfigNexus)
+    	                    //.withTag(dockerImageTag)
+    	                    .exec(new PullImageResultCallback())
+    	                    .awaitSuccess();
+		            	 }else{
+		            		 logger.debug("other Registry");
+		            		 dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
+			                    //.withTag(dockerImageTag)
+			                    .exec(new PullImageResultCallback())
+			                    .awaitSuccess();
+		            	  }
+		            	
 		            	}
 		            	Thread.sleep(sleepTimeSecondInt);
 		            }

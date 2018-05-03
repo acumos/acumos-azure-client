@@ -101,6 +101,10 @@ public class AzureServiceController extends AbstractController {
 		String ignorDoller="";
 		String sleepTimeFirst="";
 		String sleepTimeSecond="";
+		String nexusRegistyUserName="";
+		String nexusRegistyPwd="";
+		String nexusRegistyName="";
+		String otherRegistyName="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			azureImpl.setEnvironment(env);
@@ -123,6 +127,12 @@ public class AzureServiceController extends AbstractController {
 			vnet=env.getProperty(AzureClientConstants.VNET_PROP);
 			sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
 			sleepTimeSecond=env.getProperty(AzureClientConstants.SLEEPTIME_SECOND);
+			nexusRegistyUserName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_USERNAME);
+			nexusRegistyPwd=env.getProperty(AzureClientConstants.NEXUS_REGISTY_PWD);
+			nexusRegistyName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_NAME);
+			otherRegistyName=env.getProperty(AzureClientConstants.OTHER_REGISTY_NAME);
+			logger.debug("nexusRegistyName "+nexusRegistyName);
+			logger.debug("otherRegistyName "+otherRegistyName);
 			logger.debug("solutionPort "+solutionPort);
 			logger.debug("subnet "+subnet);
 			logger.debug("vnet "+vnet);
@@ -171,7 +181,8 @@ public class AzureServiceController extends AbstractController {
             		env.getProperty(AzureClientConstants.REGISTRY_USERNAME_PROP),env.getProperty(AzureClientConstants.REGISTRY_PASSWORD_PROP),
             		dockerHosttoUrl(env.getProperty(AzureClientConstants.HOST_PROP), env.getProperty(AzureClientConstants.PORT_PROP),false),
             		null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryname,uidNumStr,dataSource,dataUserName,
-            		dataPassword,dockerVMUserName,dockerVMPassword,solutionPort,subnet,vnet,sleepTimeFirst,sleepTimeSecond);
+            		dataPassword,dockerVMUserName,dockerVMPassword,solutionPort,subnet,vnet,sleepTimeFirst,
+            		sleepTimeSecond,nexusRegistyUserName,nexusRegistyPwd,nexusRegistyName,otherRegistyName);
             
             Thread t = new Thread(myRunnable);
             t.start();
@@ -208,6 +219,10 @@ public class AzureServiceController extends AbstractController {
 		String ignorDoller="";
 		String sleepTimeFirst="";
 		String sleepTimeSecond="";
+		String nexusRegistyUserName="";
+		String nexusRegistyPwd="";
+		String nexusRegistyName="";
+		String otherRegistyName="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			UUID uidNumber = UUID.randomUUID();
@@ -245,6 +260,12 @@ public class AzureServiceController extends AbstractController {
 			vnet=env.getProperty(AzureClientConstants.VNET_PROP);
 			sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
 			sleepTimeSecond=env.getProperty(AzureClientConstants.SLEEPTIME_SECOND);
+			nexusRegistyUserName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_USERNAME);
+			nexusRegistyPwd=env.getProperty(AzureClientConstants.NEXUS_REGISTY_PWD);
+			nexusRegistyName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_NAME);
+			otherRegistyName=env.getProperty(AzureClientConstants.OTHER_REGISTY_NAME);
+			logger.debug("nexusRegistyName "+nexusRegistyName);
+			logger.debug("otherRegistyName "+otherRegistyName);
 			logger.debug("subnet "+subnet);
 			logger.debug("vnet "+vnet);
 			logger.debug("sleepTimeFirst "+sleepTimeFirst);
@@ -359,7 +380,8 @@ public class AzureServiceController extends AbstractController {
                         env.getProperty(AzureClientConstants.REGISTRY_PASSWORD_PROP),dockerHosttoUrl(env.getProperty(AzureClientConstants.HOST_PROP),env.getProperty(AzureClientConstants.PORT_PROP), false),
                         null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,
                         imageMap,sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,
-                        solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint,subnet,vnet,dataBrokerBean,sleepTimeFirst,sleepTimeSecond);
+                        solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint,subnet,vnet,dataBrokerBean,
+                        sleepTimeFirst,sleepTimeSecond,nexusRegistyUserName,nexusRegistyPwd,nexusRegistyName,otherRegistyName);
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();

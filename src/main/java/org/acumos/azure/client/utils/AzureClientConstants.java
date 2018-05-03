@@ -115,7 +115,7 @@ public final class AzureClientConstants {
 	public static final String SOLUTIONPORT_PROP="docker.solutionPort";
 	public static final String SUBNET_PROP="docker.subnet";
 	public static final String VNET_PROP="docker.vnet";
-	public static final String SLEEPTIME_FIRST="sleepTimeFirst";
+	public static final String SLEEPTIME_FIRST="docker.sleepTimeFirst";
 	public static final String SLEEPTIME_SECOND="docker.sleepTimeSecond";
 	public static final String REGISTRY_NAME_PROP="docker.registry.name";
 	public static final String CONTAINERNAMEPREFIX_PROP="docker.containerNamePrefix";
@@ -133,6 +133,10 @@ public final class AzureClientConstants {
 	public static final String NEXUS_URL_PROP="nexus.url";
 	public static final String NEXUS_USERNAME_PROP="nexus.username";
 	public static final String NEXUS_PASSWORD_PROP="nexus.password";
+	public static final String NEXUS_REGISTY_USERNAME="docker.nexusRegistyUserName";
+	public static final String NEXUS_REGISTY_PWD="docker.nexusRegistyPwd";
+	public static final String NEXUS_REGISTY_NAME="docker.nexusRegistyName";
+	public static final String OTHER_REGISTY_NAME="docker.otherRegistyName";
 	
 	
 	
