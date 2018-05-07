@@ -236,20 +236,23 @@ public class ParseJSON {
 	 */
 	private String getProbeIndicator(JSONObject jo) {
 		log.debug("getProbeIndicator Start");
+		String value = null;
 		JSONArray probeIndicator = (JSONArray) jo.get(AzureClientConstants.PROBE_INDICATOR);
 		if(probeIndicator == null){
 			probeIndicator = (JSONArray) jo.get(AzureClientConstants.PROBE_INDOCATOR);
-		}		
-		Iterator itr = probeIndicator.iterator();
-		Iterator<Map.Entry> itr1=null;
-		String value = null;
-		 while (itr.hasNext()) {
-			 itr1 = ((Map) itr.next()).entrySet().iterator();
-	            while (itr1.hasNext()) {
-	                Map.Entry pair = itr1.next();
-	                value = (String)pair.getValue();
-	            }
-		 }
+		}
+		if(probeIndicator!=null){
+			Iterator itr = probeIndicator.iterator();
+			Iterator<Map.Entry> itr1=null;
+			
+			 while (itr.hasNext()) {
+				 itr1 = ((Map) itr.next()).entrySet().iterator();
+		            while (itr1.hasNext()) {
+		                Map.Entry pair = itr1.next();
+		                value = (String)pair.getValue();
+		            }
+			 }
+		} 
 	   log.debug("value "+value);	 
 	   log.debug("getProbeIndicator End");
 	  return value;	

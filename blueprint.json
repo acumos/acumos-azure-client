@@ -125,7 +125,7 @@
       "image": "empty - there is a well know url for each Data Broker type that is known to the Deployer My_CSV_File_Data_Broker",
       "proto_uri": "com/artifact/cpm2/1/cpm2-1.proto",
       "data_broker_map": {
-        "data_broker_type": "CSV_File",
+        "data_broker_type": "csv",
         "map_inputs": [
           {
             "input_field": {

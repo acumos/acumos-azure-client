@@ -82,7 +82,7 @@ public final class AzureClientConstants {
 	public static final String DATA_BROKER_TYPE="data_broker_type";
 	public static final String DEFAULT="Default";
 	public static final String DATA_BROKER="DataBroker";
-	public static final String CSV_FILE_NAME="CSV_File";
+	public static final String CSV_FILE_NAME="csv";
 	public static final String TARGET_SYSTEM_URL="target_system_url";
 	public static final String LOCAL_SYSTEM_DATA_FILE_PATH="local_system_data_file_path";
 	public static final String FIRST_ROW="first_row";
