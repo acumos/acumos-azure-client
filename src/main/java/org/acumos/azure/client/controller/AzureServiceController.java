@@ -298,6 +298,7 @@ public class AzureServiceController extends AbstractController {
 			DataBrokerBean dataBrokerBean=null;
 			logger.debug("probeIndicator "+probeIndicator);
 			if(probeIndicator){
+				
 				imageMap=parseJson.parseJsonFileProbe(AzureClientConstants.JSON_FILE_NAME);
 				//Node Type and container Name in nodes
 				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);

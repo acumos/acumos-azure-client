@@ -146,6 +146,12 @@ public class ParseJSON {
 	             }
 	           }
         }
+        
+        ArrayList<ProbeIndicator> list_of_pb_indicators = new ArrayList<ProbeIndicator>();
+		ProbeIndicator prbIndicator = new ProbeIndicator();
+		prbIndicator.setValue("false");
+		list_of_pb_indicators.add(prbIndicator);
+		blueprint.setProbeIndicator(list_of_pb_indicators);
        
         JSONArray inputPorts = (JSONArray) jo.get(AzureClientConstants.INPUT_PORTS);
 		ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
