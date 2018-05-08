@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "889a325a_db9acee9",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 253,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-08T20:33:53Z",
+      "side": 1,
+      "message": "See below.",
+      "revId": "012488caddcd49d0785f4cfe3ae5c772228d176a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "674cdf8a_08ff7ec2",
+        "filename": "src/main/java/org/acumos/azure/client/utils/ParseJSON.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 642,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-08T20:33:53Z",
+      "side": 1,
+      "message": "Working too hard.  Just do this to rethrow:\n\n    throw e;",
+      "revId": "012488caddcd49d0785f4cfe3ae5c772228d176a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3ab9ac9c_74e41231",
+        "filename": "src/test/java/org/acumos/azure/client/test/util/ParseJsonTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 139,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-05-08T20:33:53Z",
+      "side": 1,
+      "message": "These assertions are too weak.  Need to test the content of the indicator, not just that it\u0027s not null.",
+      "revId": "012488caddcd49d0785f4cfe3ae5c772228d176a",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
