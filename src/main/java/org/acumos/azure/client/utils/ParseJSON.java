@@ -146,78 +146,106 @@ public class ParseJSON {
 	             }
 	           }
         }
-        
-        JSONArray inputOperation = (JSONArray) jo.get(AzureClientConstants.INPUT_OPERATION_SIGNATURES);
-        ArrayList<OperationSignature> operationList=new ArrayList<OperationSignature>();
-        if(inputOperation!=null){
-        	log.debug("input_operation_signatures ");
-	        Iterator itr2 = inputOperation.iterator();
-	        while (itr2.hasNext()) 
-	        {
-	        	OperationSignature operationSignature=new OperationSignature();
-	            itr1 = ((Map) itr2.next()).entrySet().iterator();
-	            while (itr1.hasNext()) {
-	                Map.Entry pair = itr1.next();
-	                String key=(String)pair.getKey();
-	                String value=(String)pair.getValue();
-	                log.debug("-->"+pair.getKey() + " : " + pair.getValue());
-	                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.OPERATION)){
-	                	operationSignature.setOperationName(value);
-	                }
-	               
-	            }
-	            operationList.add(operationSignature);
-	        }
-        }
+       
+        JSONArray inputPorts = (JSONArray) jo.get(AzureClientConstants.INPUT_PORTS);
+		ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
+		List<InputPort> inputPortList=null;
+		if (inputPorts != null) {
+			inputPortList=new ArrayList<InputPort>();
+			log.debug("input ports");
+			
+			Iterator itr2 = inputPorts.iterator();
+			while (itr2.hasNext()) {
+				InputPort inputPortObj=new InputPort();
+				OperationSignature operationSignature = new OperationSignature();
+				itr1 = ((Map) itr2.next()).entrySet().iterator();
+				while (itr1.hasNext()) {
+					Map.Entry pair = itr1.next();
+					String key = (String) pair.getKey();
+					log.debug("-->" + pair.getKey() + " : " + pair.getValue());
+					if (key != null && key.equalsIgnoreCase(AzureClientConstants.OPERATION_SIGNATURE)) {
+						JSONObject jsonObject = (JSONObject) pair.getValue();
+						String operationName =(String) jsonObject.get(AzureClientConstants.OPERATION_NAME);
+						operationSignature.setOperationName(operationName);
+						inputPortObj.setOperationSignature(operationSignature);
+					}
+					if (key != null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)) {
+						inputPortObj.setContainerName((String) pair.getValue());
+					}
+					
+				}
+				inputPortList.add(inputPortObj);
+			}
+			
+		}
+		if(inputPorts!=null && inputPorts.size() > 0){
+			blueprint.setInputPorts(inputPortList);
+		}
         JSONArray nodes = (JSONArray) jo.get(AzureClientConstants.NODES);
         ArrayList<Node> nodeList=new ArrayList<Node>();
-        if(nodes!=null ){
-        	Iterator itr3 = nodes.iterator();
-        	int nodeCount=0; 
-	        while (itr3.hasNext()) 
-	        {
-	        	Node node=new Node();
-	            itr1 = ((Map) itr3.next()).entrySet().iterator();
-	            log.debug("Nodes "+ ++nodeCount);
-	            while (itr1.hasNext()) {
-	                Map.Entry pair = itr1.next();
-	                String key=(String)pair.getKey();
-	                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.DEPENDS_ON)){
-	                	if(pair.getValue()!=null){
-	                		ArrayList<Component> listComponent=jsonArrayParseObject(pair.getValue());
-	                	}
-	                }else{
-	                	log.debug("-->"+pair.getKey() + " : " + pair.getValue());
-	                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)){
-	                	node.setContainerName((String)pair.getValue());
-	                  }
-	                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.IMAGE)){
-	                	node.setImage((String)pair.getValue());
-	                  }
-	              //Data Broker code
-					JSONObject dataBrokerObject=null;
-					if(key != null && key.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_MAP)){
-                    	 dataBrokerObject = (JSONObject)pair.getValue();
-                    	 if(dataBrokerObject!=null  ){
-                    		 if(dataBrokerObject.get(AzureClientConstants.DATA_BROKER_TYPE)!=null){
-                    			 String dataBrokerType=(String)dataBrokerObject.get(AzureClientConstants.DATA_BROKER_TYPE);
-                    			 log.debug("dataBrokerType "+dataBrokerType);
-                    			 if(dataBrokerType!=null && dataBrokerType.equalsIgnoreCase(AzureClientConstants.CSV_FILE_NAME)){
-                    				 if(dataBrokerBean!=null){
-                    					 node.setDataBrokerMap(dataBrokerBean.getDataBrokerMap()); 
-                    				 }
-                    			 }
-                    			 
-                    		 }
-                    	 } 
-					}
-					//End
-	                }
-	            }
-	            nodeList.add(node);
-	        }
-	         
-        }
+        if (nodes != null) {
+			Iterator itr3 = nodes.iterator();
+			int nodeCount = 0;
+			while (itr3.hasNext()) {
+				Node node = new Node();
+				ArrayList<OperationSignatureList> operSigList = new ArrayList<OperationSignatureList>();
+				OperationSignatureList obpListObject=new OperationSignatureList();
+				operSigList.add(obpListObject);
+				itr1 = ((Map) itr3.next()).entrySet().iterator();
+				log.debug("Nodes " + ++nodeCount);
+				while (itr1.hasNext()) {
+					Map.Entry pair = itr1.next();
+				   if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+						String key = (String) pair.getKey();
+						if(key != null && key.equalsIgnoreCase(AzureClientConstants.OPERATION_SIGNATURE_LIST)) {
+							
+							if (pair.getValue() != null) {
+								operSigList = jsonArrayParseObjectProb(pair.getValue(),operSigList);
+								
+								log.debug("operSigList " + operSigList);
+							}
+							
+						
+					  }else {
+							log.debug(" key " + pair.getKey() + " : " + pair.getValue());
+							if (key != null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)) {
+								node.setContainerName((String) pair.getValue());
+							}
+							if (key != null && key.equalsIgnoreCase(AzureClientConstants.IMAGE)) {
+								node.setImage((String) pair.getValue());
+							}
+							
+							if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
+								node.setNodeType((String)pair.getValue());
+							}
+							if(key != null && key.equalsIgnoreCase(AzureClientConstants.PROTO_URI)) {
+								node.setProtoUri((String)pair.getValue());
+							}
+							JSONObject dataBrokerObject=null;
+							if(key != null && key.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_MAP)){
+		                    	 dataBrokerObject = (JSONObject)pair.getValue();
+		                    	 if(dataBrokerObject!=null  ){
+		                    		 if(dataBrokerObject.get(AzureClientConstants.DATA_BROKER_TYPE)!=null){
+		                    			 String dataBrokerType=(String)dataBrokerObject.get(AzureClientConstants.DATA_BROKER_TYPE);
+		                    			 log.debug("dataBrokerType "+dataBrokerType);
+		                    			 if(dataBrokerType!=null && dataBrokerType.equalsIgnoreCase(AzureClientConstants.CSV_FILE_NAME)){
+		                    				 if(dataBrokerBean!=null){
+		                    					 node.setDataBrokerMap(dataBrokerBean.getDataBrokerMap()); 
+		                    				 }
+		                    			 }
+		                    			 
+		                    		 }
+		                    	 } 
+							}
+							
+						}
+				 }	
+				}
+				node.setOperationSignatureList(operSigList);
+				nodeList.add(node);
+			}
+
+		}
         blueprint.setNodes(nodeList);
         log.debug("blueprint "+ mapper.writeValueAsString(blueprint)+" "+blueprint.toString());
 		}catch(Exception e){
@@ -583,29 +611,39 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
    
    public boolean checkProbeIndicator(String jsonFileName)  throws  Exception {
 	   log.debug("checkProbeIndicator Start");
-	   boolean probeIndicator=true;
+	   boolean probeIndicatorValue=false;
+	   String value=null;
 	   try {
 			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
 			JSONObject jo = (JSONObject) obj;
-			JSONArray probeIndicatorArr = (JSONArray) jo.get(AzureClientConstants.PROBE_INDICATOR);
-			log.debug("probeIndicatorArr "+probeIndicatorArr);
-			if(probeIndicatorArr!=null){
-				probeIndicator=true;
-			}else{
-				probeIndicatorArr  = (JSONArray) jo.get(AzureClientConstants.PROBE_INDOCATOR);
-				if(probeIndicatorArr!=null) {
-				  probeIndicator=true;
-				} else {				
-				  probeIndicator=false;
-				}
+			JSONArray probeIndicator = (JSONArray) jo.get(AzureClientConstants.PROBE_INDICATOR);
+			if(probeIndicator == null){
+				probeIndicator = (JSONArray) jo.get(AzureClientConstants.PROBE_INDOCATOR);
 			}
+			if(probeIndicator!=null){
+				Iterator itr = probeIndicator.iterator();
+				Iterator<Map.Entry> itr1=null;
+				
+				 while (itr.hasNext()) {
+					 itr1 = ((Map) itr.next()).entrySet().iterator();
+			            while (itr1.hasNext()) {
+			                Map.Entry pair = itr1.next();
+			                value = (String)pair.getValue();
+			            }
+				 }
+			} 
+			if(value!=null && value.equalsIgnoreCase("True")) {
+				probeIndicatorValue=true;
+			   } else {				
+				   probeIndicatorValue=false;
+			  }	
 	   } catch (Exception e) {
 		    log.error("checkProbeIndicator failed", e);
 			throw new Exception(e.getMessage());
 		}
-	   log.debug("probeIndicator "+probeIndicator);
+	   log.debug("probeIndicator "+probeIndicatorValue);
 	   log.debug("checkProbeIndicator End");
-	   return probeIndicator;
+	   return probeIndicatorValue;
 			
    }
 

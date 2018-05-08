@@ -207,7 +207,7 @@
   ],
   "probeIndicator": [
     {
-      "value": "True or False"
+      "value": "false"
     }
   ],
   "training_clients": [

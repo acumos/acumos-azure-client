@@ -319,14 +319,16 @@ public class AzureServiceController extends AbstractController {
 				}
 				//For new blueprint.json
 				 bluePrintProbe =parseJson.jsonFileToObjectProbe(AzureClientConstants.JSON_FILE_NAME,dataBrokerBean);
-				
 				//sequence
 				sequenceList=parseJson.getSequenceFromJSONProbe(AzureClientConstants.JSON_FILE_NAME);
 			}else{
+				
 				//old code 
 				imageMap=parseJson.parseJsonFile(AzureClientConstants.JSON_FILE_NAME);
+				//Node Type and container Name in nodes
+				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);
 				list=azureImpl.iterateImageMap(imageMap);
-				sequenceList=parseJson.getSequenceFromJSON(AzureClientConstants.JSON_FILE_NAME);
+				sequenceList=parseJson.getSequenceFromJSONProbe(AzureClientConstants.JSON_FILE_NAME);
 				dataBrokerBean=parseJson.getDataBrokerContainer(AzureClientConstants.JSON_FILE_NAME);
 				if(dataBrokerBean!=null){
 					if(dataBrokerBean!=null){

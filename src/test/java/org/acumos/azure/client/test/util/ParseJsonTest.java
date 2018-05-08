@@ -61,13 +61,13 @@ public class ParseJsonTest {
 		assertNotNull(blueprint);
 		logger.info("jsonFileToObjectTest End");
 	}
-	
 	@Test	
 	public void getSequenceFromJSONTest()throws Exception{
 		logger.info("getSequenceFromJSONTest Start");
 		ParseJSON parse=new ParseJSON();
 		LinkedList<String> linkedList=null;
 		linkedList=parse.getSequenceFromJSON(AzureClientTestConstants.TEST_BLUEPRINT_OLD_FILE);
+		logger.info("getSequenceFromJSONTest linkedList "+linkedList);
 		assertNotNull(linkedList);
 		logger.info("getSequenceFromJSONTest End");
 	}
@@ -96,7 +96,6 @@ public class ParseJsonTest {
 		assertNotNull(imageMap);
 		logger.info("parseJsonFileProbeTest End");
 	}
-	
 	@Test	
 	public void getSequenceFromJSONProbeTest()throws Exception{
 		logger.info("getSequenceFromJSONProbeTest Start");
@@ -104,6 +103,7 @@ public class ParseJsonTest {
 		ParseJSON parse=new ParseJSON();
 		LinkedList<String> linkedList=null;
 		linkedList=parse.getSequenceFromJSONProbe(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
+		logger.info("getSequenceFromJSONProbeTest linkedList "+linkedList);
 		assertNotNull(linkedList);
 		logger.info("getSequenceFromJSONProbeTest End");
 	}
@@ -130,5 +130,13 @@ public class ParseJsonTest {
 		assertNotNull(dataBrokerbean);
 		logger.info("nodeTypeContainerMapTest End");
 	}
-	
+	@Test
+	public void checkProbeIndicatorTest()throws Exception{
+		logger.info("nodeTypeContainerMapTest Start");
+		boolean probeIdicator=false;
+		ParseJSON parse=new ParseJSON();
+		 probeIdicator=parse.checkProbeIndicator(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
+		assertNotNull(probeIdicator);
+		logger.info("nodeTypeContainerMapTest End");
+	}
 }
