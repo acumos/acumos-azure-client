@@ -796,7 +796,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		return blueprint;
 	}
 
-	public HashMap<String, String> parseJsonFileProbe(String jsonFileName) throws Exception {
+	public HashMap<String, String> parseJsonFileImageMap(String jsonFileName) throws Exception {
 		log.debug("parseJsonFileProbe Start");
 		log.debug("jsonFileName "+jsonFileName);
 		HashMap<String,String> imageMap=new HashMap<String,String>();
@@ -925,7 +925,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	 * @throws Exception
 	 */
 
-	public LinkedList<String> getSequenceFromJSONProbe(String jsonFileName)  throws  Exception {
+	public LinkedList<String> getSequenceListFromJSON(String jsonFileName)  throws  Exception {
 		log.debug("getSequenceFromJSONProbe Start");
 		log.debug("jsonFileName "+jsonFileName);
 		String contentString="";

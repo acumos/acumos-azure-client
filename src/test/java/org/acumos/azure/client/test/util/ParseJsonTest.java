@@ -88,24 +88,24 @@ public class ParseJsonTest {
 	}
 	
 	@Test
-	public void parseJsonFileProbeTest()throws Exception{
-		logger.info("parseJsonFileProbeTest Start");
+	public void parseJsonFileImageMapTest()throws Exception{
+		logger.info("parseJsonFileImageMapTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
-		imageMap=parse.parseJsonFileProbe(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
+		imageMap=parse.parseJsonFileImageMap(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(imageMap);
-		logger.info("parseJsonFileProbeTest End");
+		logger.info("parseJsonFileImageMapTest End");
 	}
 	@Test	
-	public void getSequenceFromJSONProbeTest()throws Exception{
-		logger.info("getSequenceFromJSONProbeTest Start");
+	public void getSequenceListFromJSONTest()throws Exception{
+		logger.info("getSequenceListFromJSONTest Start");
 		HashMap<String,String> imageMap=null;
 		ParseJSON parse=new ParseJSON();
 		LinkedList<String> linkedList=null;
-		linkedList=parse.getSequenceFromJSONProbe(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
-		logger.info("getSequenceFromJSONProbeTest linkedList "+linkedList);
+		linkedList=parse.getSequenceListFromJSON(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
+		logger.info("getSequenceListFromJSONTest linkedList "+linkedList);
 		assertNotNull(linkedList);
-		logger.info("getSequenceFromJSONProbeTest End");
+		logger.info("getSequenceListFromJSONTest End");
 	}
 	
 	@Test
