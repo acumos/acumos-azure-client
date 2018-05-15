@@ -594,15 +594,19 @@ public class AzureCompositeSolution implements Runnable {
 				    		        	   containerInfo.setNodeType(AzureClientConstants.PROBE_NODE_TYPE);
 				    		        	   deploymentBean.setNodeType(AzureClientConstants.PROBE_NODE_TYPE);
 			    		        		}else{
+			    		        			logger.debug("nodeTypeContainer start for setting " + nodeTypeContainer+" nodeTypeName "+nodeTypeName);
 			    		        			if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer)){
 				    		        			containerInfo.setNodeType(nodeTypeContainer);
 				    		        			deploymentBean.setNodeType(nodeTypeContainer);
 				    		        			deploymentBean.setDataBrokerType(nodeTypeName);
-			    		        			}
+			    		        			}else{
 			    		        			containerInfo.setNodeType(AzureClientConstants.DEFAULT_NODE_TYPE);
 			    		        			deploymentBean.setNodeType(AzureClientConstants.DEFAULT_NODE_TYPE);
+			    		        			deploymentBean.setDataBrokerType("");
+			    		        			}
 			    		        			
 			    		        		}
+			    		        		logger.debug("deploymentBean " + deploymentBean.getNodeType()+" nodeTypeName "+deploymentBean.getDataBrokerType());
 			    		        		dockerInfoList.add(dockerinfo);
 			    		        		deploymentList.add(deploymentBean);
 			    		        		probeContainerBeanList.add(containerInfo);
