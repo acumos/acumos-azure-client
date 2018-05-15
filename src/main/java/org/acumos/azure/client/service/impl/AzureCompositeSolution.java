@@ -504,10 +504,12 @@ public class AzureCompositeSolution implements Runnable {
 			    		            		continue;
 			    		            	}
 			    		            	String nodeTypeContainer="";
+			    		            	String nodeTypeName="";
 			    		            	if(nodeTypeContainerMap!=null && nodeTypeContainerMap.size() > 0 && nodeTypeContainerMap.get(finalContainerName)!=null){
 			    		            		DeploymentBean dBean=nodeTypeContainerMap.get(finalContainerName);
-			    		            		if(dBean!=null && dBean.getScript()!=null){
+			    		            		if(dBean!=null){
 			    		            			nodeTypeContainer=dBean.getNodeType();
+			    		            			nodeTypeName=dBean.getDataBrokerType();
 			    		            		}
 			    		            		
 			    		            	}
@@ -524,6 +526,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		logger.debug("finalContainerName " + finalContainerName);
 			    		        		logger.debug("imageCount " + imageCount);
 			    		        		logger.debug("nodeTypeContainer " + nodeTypeContainer);
+			    		        		logger.debug("nodeTypeName " + nodeTypeName);
 			    		        		logger.debug("containerInstanceprobe " + containerInstanceprobe);
 			    		        		logger.debug("Deploying containerName "+containerName);
 			    		        		if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
@@ -594,6 +597,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer)){
 				    		        			containerInfo.setNodeType(nodeTypeContainer);
 				    		        			deploymentBean.setNodeType(nodeTypeContainer);
+				    		        			deploymentBean.setDataBrokerType(nodeTypeName);
 			    		        			}
 			    		        			containerInfo.setNodeType(AzureClientConstants.DEFAULT_NODE_TYPE);
 			    		        			deploymentBean.setNodeType(AzureClientConstants.DEFAULT_NODE_TYPE);
@@ -937,7 +941,7 @@ public class AzureCompositeSolution implements Runnable {
 				logger.debug("bean.NodeType() "+bean.getNodeType());
 				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
 				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
-						&& bean.getDataBrokerType()!=null && bean.getDataBrokerType().equalsIgnoreCase("CSV_File")){
+						&& bean.getDataBrokerType()!=null && bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
 					dataBrokerPort=bean.getContainerPort();
 				}
 			}

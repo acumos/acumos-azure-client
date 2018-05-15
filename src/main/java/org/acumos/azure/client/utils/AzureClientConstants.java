@@ -39,7 +39,7 @@ public final class AzureClientConstants {
 	public static final String DATABROKER_NAME= "DataBroker";
 	public static final String DEPLOYMENT_PROCESS= "DP";
 	public static final String DEPLOYMENT_FAILED= "FA";
-	public static final String DATA_BROKER_CSV_FILE= "CSV_File";
+	public static final String DATA_BROKER_CSV_FILE= "csv";
 	public static final String ARTIFACT_TYPE_BLUEPRINT= "BP";
 	public static final String HTTP_PROPERTY= "https.protocols";
 	public static final String HTTP_PROPERTY_VALUE= "TLSv1";
