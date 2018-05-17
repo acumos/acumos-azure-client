@@ -423,7 +423,7 @@ public class DockerUtils {
 				log.debug("Other Condition");
 			}
 		    
-			log.debug("RUN_IMAGE" + RUN_IMAGE);
+			log.debug("RUN_IMAGE " + RUN_IMAGE);
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE_" + imageCount + ".sh",
 					".azuredocker", true, "4095");

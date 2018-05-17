@@ -121,6 +121,8 @@ public class AzureCompositeSolution implements Runnable {
 	private String nexusRegistyPwd;
 	private String nexusRegistyName;
 	private String otherRegistyName;
+	private String exposeDataBrokerPort;
+	private String internalDataBrokerPort;
 	
     public AzureCompositeSolution(){
     	
@@ -132,7 +134,8 @@ public class AzureCompositeSolution implements Runnable {
 			String probeUser,String probePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
 			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,
 			String bluePrintJsonStr, String probeNexusEndPoint,String subnet,String vnet,DataBrokerBean dataBrokerBean,
-			String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPwd,String nexusRegistyName,String otherRegistyName) {
+			String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPwd,String nexusRegistyName,
+			String otherRegistyName,String exposeDataBrokerPort,String internalDataBrokerPort) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
@@ -174,6 +177,8 @@ public class AzureCompositeSolution implements Runnable {
 		this.nexusRegistyPwd = nexusRegistyPwd;
 		this.nexusRegistyName = nexusRegistyName;
 		this.otherRegistyName = otherRegistyName;
+		this.exposeDataBrokerPort = exposeDataBrokerPort;
+		this.internalDataBrokerPort = internalDataBrokerPort;
 	    
 	   }
 	public void run() {
@@ -196,6 +201,8 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("sleepTimeSecond " + sleepTimeSecond);
 		logger.debug("nexusRegistyName "+nexusRegistyName);
 		logger.debug("otherRegistyName "+otherRegistyName);
+		logger.debug("exposeDataBrokerPort "+exposeDataBrokerPort);
+		logger.debug("internalDataBrokerPort "+internalDataBrokerPort);
 		
 		
 		AzureBean azureBean=new AzureBean();
@@ -230,7 +237,7 @@ public class AzureCompositeSolution implements Runnable {
 	        logger.debug("list "+list);
 	        logger.debug("sequenceList "+sequenceList);
 	        logger.debug("bluePrintName "+bluePrintName);
-	        String portArr[]={"8556","8557","8558","8559","8560","8561","8562","8563","8564","8565"};
+	        String portArr[]={"8557","8558","8559","8560","8561","8562","8563","8564","8565","8566"};
             if(list!=null && list.size() > 0){
             	
      	            //=============================================================
@@ -540,6 +547,10 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
 				    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
 			    		        				portNumberString=probeInternalPort+":"+probeInternalPort;
+			    		        			}else if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer) && nodeTypeContainer.equalsIgnoreCase(AzureClientConstants.DATABROKER_NAME)
+			    		        					&& nodeTypeName!=null && !"".equals(nodeTypeName) && nodeTypeName.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
+			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;	
+			    		        				
 			    		        			}else{
 			    		        				portNumber=portArr[count];
 				    		        			if(solutionPort!=null && !"".equals(solutionPort)){

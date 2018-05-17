@@ -137,6 +137,8 @@ public final class AzureClientConstants {
 	public static final String NEXUS_REGISTY_PWD="docker.nexusRegistyPwd";
 	public static final String NEXUS_REGISTY_NAME="docker.nexusRegistyName";
 	public static final String OTHER_REGISTY_NAME="docker.otherRegistyName";
+	public static final String EXPOSE_DATABROKER_PORT="docker.exposeDataBrokerPort";
+	public static final String INTERNAL_DATABROKER_PORT="docker.internalDataBrokerPort";
 	
 	
 	

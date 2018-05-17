@@ -223,6 +223,8 @@ public class AzureServiceController extends AbstractController {
 		String nexusRegistyPwd="";
 		String nexusRegistyName="";
 		String otherRegistyName="";
+		String exposeDataBrokerPort="";
+		String internalDataBrokerPort="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			UUID uidNumber = UUID.randomUUID();
@@ -264,6 +266,10 @@ public class AzureServiceController extends AbstractController {
 			nexusRegistyPwd=env.getProperty(AzureClientConstants.NEXUS_REGISTY_PWD);
 			nexusRegistyName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_NAME);
 			otherRegistyName=env.getProperty(AzureClientConstants.OTHER_REGISTY_NAME);
+			exposeDataBrokerPort=env.getProperty(AzureClientConstants.EXPOSE_DATABROKER_PORT);
+			internalDataBrokerPort=env.getProperty(AzureClientConstants.INTERNAL_DATABROKER_PORT);
+			logger.debug("exposeDataBrokerPort "+exposeDataBrokerPort);
+			logger.debug("internalDataBrokerPort "+internalDataBrokerPort);
 			logger.debug("nexusRegistyName "+nexusRegistyName);
 			logger.debug("otherRegistyName "+otherRegistyName);
 			logger.debug("subnet "+subnet);
@@ -384,7 +390,7 @@ public class AzureServiceController extends AbstractController {
                         null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,
                         imageMap,sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,
                         solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint,subnet,vnet,dataBrokerBean,
-                        sleepTimeFirst,sleepTimeSecond,nexusRegistyUserName,nexusRegistyPwd,nexusRegistyName,otherRegistyName);
+                        sleepTimeFirst,sleepTimeSecond,nexusRegistyUserName,nexusRegistyPwd,nexusRegistyName,otherRegistyName,exposeDataBrokerPort,internalDataBrokerPort);
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();
