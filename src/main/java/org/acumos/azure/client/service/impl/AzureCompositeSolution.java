@@ -549,7 +549,8 @@ public class AzureCompositeSolution implements Runnable {
 			    		        				portNumberString=probeInternalPort+":"+probeInternalPort;
 			    		        			}else if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer) && nodeTypeContainer.equalsIgnoreCase(AzureClientConstants.DATABROKER_NAME)
 			    		        					&& nodeTypeName!=null && !"".equals(nodeTypeName) && nodeTypeName.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
-			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;	
+			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;
+			    		        				portNumber=exposeDataBrokerPort;
 			    		        				
 			    		        			}else{
 			    		        				portNumber=portArr[count];
