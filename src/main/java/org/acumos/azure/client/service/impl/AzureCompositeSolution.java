@@ -664,7 +664,12 @@ public class AzureCompositeSolution implements Runnable {
 		  logger.debug("urlDataBroker "+urlDataBroker);
 		  logger.debug("dataBrokerPort "+dataBrokerPort);
 		  // Added for probe
-		  // putBlueprint
+		  
+		  if(csvDataBrokerPort!=null && !"".equalsIgnoreCase(csvDataBrokerPort)){
+			  logger.debug("Inside csv Data Broker ConfigDB  "); 
+			  callCsvConfigDB(deployDataObject,csvDataBrokerUrl,dataBrokerBean);
+			 }
+		// putBlueprint
 		 if(bluePrint!=null){
 			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
 		  }
@@ -678,10 +683,7 @@ public class AzureCompositeSolution implements Runnable {
 			 logger.debug("Inside putDataBrokerDetails ");
 			  putDataBrokerDetails(deployDataObject,urlDataBroker);
 			}
-		 if(csvDataBrokerPort!=null && !"".equalsIgnoreCase(csvDataBrokerPort)){
-			 logger.debug("Inside csv Data Broker ConfigDB  "); 
-			 callCsvConfigDB(deployDataObject,csvDataBrokerUrl,dataBrokerBean);
-		 }
+		
 		 
 		 // Added notification for probe code
 		 ArrayList<ProbeIndicator> probeIndicatorList = bluePrint.getProbeIndicator();
