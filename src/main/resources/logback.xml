@@ -24,7 +24,7 @@
             <fileNamePattern>logback_example_debug.log.%d{yyyy-MM-dd}.gz</fileNamePattern>
         </rollingPolicy>
         <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-            <level>DEBUG</level>
+            <level>${log_level}</level>
         </filter>
         <encoder>
              <pattern>%d{HH:mm:ss.SSS}|%contextName|[%thread]| %-5level| %logger{36} - %msg%n</pattern>
