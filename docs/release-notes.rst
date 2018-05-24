@@ -20,6 +20,10 @@
 Acumos Azure Client Release Notes
 =================================
 
+Version 1.2.4, May 24 th 2018
+----------------------------
+* Enable log level in the azure-client component from Docker (ACUMOS-921)
+
 Version 1.96.0, May 2018
 ----------------------------
 
