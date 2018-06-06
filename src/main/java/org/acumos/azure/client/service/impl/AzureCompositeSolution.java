@@ -671,7 +671,7 @@ public class AzureCompositeSolution implements Runnable {
 			 }
 		// putBlueprint
 		 if(bluePrint!=null){
-			 putBluePrintDetailsJSON(bluePrint,urlBluePrint);
+			 putBluePrintDetailsJSON(bluePrintJsonStr,urlBluePrint);
 		  }
 		// putDockerInfo
 		 if(dockerList != null){
@@ -856,15 +856,14 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("putContainerDetailsJSON  End");
 	}
 	
-	public void putBluePrintDetailsJSON(Blueprint  bluePrint,String apiUrl)throws Exception{
+	public void putBluePrintDetailsJSON(String  blueprintJson,String apiUrl)throws Exception{
 		logger.debug("putBluePrintDetailsJSON Start");
 		try {
-			logger.debug("bluePrint "+bluePrint.toString()+"apiUrl "+apiUrl);
+			logger.debug("apiUrl "+apiUrl);
 			final String url = apiUrl;
 			ObjectMapper mapper = new ObjectMapper();
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
-			String blueprintJson=mapper.writeValueAsString(bluePrint); 
 			logger.debug("blueprintJson "+blueprintJson);
 			RestTemplate restTemplate = new RestTemplate();
 		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
