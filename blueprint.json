@@ -18,7 +18,7 @@
   "nodes": [
     {
       "container_name": "Aggregator-1",
-      "node_type": "DataMapper or MLModel or DataBroker or TrainingClient",
+      "node_type": "DataMapper or MLModel or DataBroker or TrainingClient or Splitter or Collator",
       "image": "url of the docker image of the named node in Nexus. Information consumed by deployer Aggregator-1",
       "proto_uri": "url of the proto file of the ML Model, otherwise empty",
       "operation_signature_list": [
@@ -31,12 +31,6 @@
           "connected_to": [
             {
               "container_name": "Predictor-1",
-              "operation_signature": {
-                "operation_name": "predict"
-              }
-            },
-            {
-              "container_name": "Predictor-2",
               "operation_signature": {
                 "operation_name": "predict"
               }
@@ -63,12 +57,6 @@
               "operation_signature": {
                 "operation_name": "classify"
               }
-            },
-            {
-              "container_name": "Classifier-2",
-              "operation_signature": {
-                "operation_name": "classify"
-              }
             }
           ]
         }
@@ -92,21 +80,15 @@
               "operation_signature": {
                 "operation_name": "generate_alarms"
               }
-            },
-            {
-              "container_name": "Alarm Generator-2",
-              "operation_signature": {
-                "operation_name": "generate_alarms"
-              }
             }
           ]
         }
       ]
     },
     {
-      "container_name": "Alarm Generator-1",
+      "container_name": "Alarm Generator-123",
       "node_type": "MLModel",
-      "image": "url of the docker image of the named node Alarm Generator-1",
+      "image": "url of the docker image of the named node Alarm Generator-123",
       "proto_uri": "url of the proto file of the ML Model, otherwise empty",
       "operation_signature_list": [
         {
@@ -120,12 +102,116 @@
       ]
     },
     {
+      "container_name": "Splitter-1",
+      "node_type": "Splitter",
+      "image": "should be empty because this node type is no deployable - so no image is provided Splitter-1",
+      "proto_uri": "should be empty",
+      "operation_signature_list": [
+        {
+          "operation_signature": {
+            "operation_name": "split",
+            "input_message_name": "name of message at Splitter input port - MC should NOT send this message name to Probe nor the proto_uri ",
+            "output_message_name": "ANY"
+          },
+          "connected_to": [
+            {
+              "container_name": "Adder-1",
+              "operation_signature": {
+                "operation_name": "add"
+              }
+            },
+            {
+              "container_name": "Substractor-1",
+              "operation_signature": {
+                "operation_name": "substract"
+              }
+            },
+            {
+              "container_name": "Multiplier-1",
+              "operation_signature": {
+                "operation_name": "substract"
+              }
+            }
+          ]
+        }
+      ],
+      "splitter_map": {
+        "splitter_type": "Copy -based or Parameter-based - For Copy based splitting  map_inputs and map_outputs are not populated",
+        "input_message_signature": "json representation of input message signature - required for parameter based splitting",
+        "map_inputs": [
+          {
+            "input_field": {
+              "parameter_name": "parameter name in Source Protobuf file. A source may provide multiple parameters in its op signature for parameter based splitting",
+              "other_attributes": "incomplete - will be populated for future parameter based splitting Sprint"
+            }
+          }
+        ],
+        "map_outputs": [
+          {
+            "output_field": {
+              "target_name": "name of model that consumes the message from the collator output port",
+              "other_attributes": "incomplete - will be populated for future parameter based splitting Sprint"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "container_name": "Collator-1",
+      "node_type": "Collator",
+      "image": "should be empty because this node type is not deployable - so no image is provided Collator-1",
+      "proto_uri": "should be empty",
+      "operation_signature_list": [
+        {
+          "operation_signature": {
+            "operation_name": "collate",
+            "input_message_name": "ANY - MC should NOT send this message name to Probe nor the proto_uri",
+            "output_message_name": "name of the message at collator output port"
+          },
+          "connected_to": [
+            {
+              "container_name": "Aggregator-123",
+              "operation_signature": {
+                "operation_name": "aggregate"
+              }
+            }
+          ]
+        }
+      ],
+      "collator_map": {
+        "collator_type": "Array-based or Parameter-based - For Array based collation map_inputs and map_outputs are not populated",
+        "output_message_signature": "json representation of output message signature - required for parameter based collation",
+        "map_inputs": [
+          {
+            "input_field": {
+              "source_name": "name of model that provides message to collator input port",
+              "parameter_name": "parameter name in Source Protobuf file. A source may provide multiple parameters for parameter based collation",
+              "parameter_type": "name of parameter type aka message signature in Source Protobuf file",
+              "parameter_tag": "parameter tag number in Source Protobuf file",
+              "mapped_to_field": "tag number of the field in the target message side, empty if it is not yet mapped",
+              "error_indicator": "True or False"
+            }
+          }
+        ],
+        "map_outputs": [
+          {
+            "output_field": {
+              "parameter_tag": "tag number of the field in the target message side",
+              "parameter_name": "parameter name in Target Protobuf file",
+              "parameter_type": "name of parameter type aka message signature in Target Protobuf file",
+              "parameter_rule": "Required or Optional or Repeated"
+            }
+          }
+        ]
+      }
+    },
+    {
       "container_name": "My_CSV_File_Data_Broker",
       "node_type": "DataBroker",
       "image": "empty - there is a well know url for each Data Broker type that is known to the Deployer My_CSV_File_Data_Broker",
-      "proto_uri": "com/artifact/cpm2/1/cpm2-1.proto",
+      "proto_uri": "For a DataBroker type node, the Proto URI of the Protobuf File of the Model to which the DB output port is connected.MP - Portal will send this to Data Broker via /configDB",
       "data_broker_map": {
-        "data_broker_type": "csv",
+        "data_broker_type": "CSV",
         "map_inputs": [
           {
             "input_field": {
@@ -207,7 +293,7 @@
   ],
   "probeIndicator": [
     {
-      "value": "false"
+      "value": "True or False"
     }
   ],
   "training_clients": [

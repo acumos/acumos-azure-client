@@ -199,6 +199,7 @@ public class ParseJSON {
 				operSigList.add(obpListObject);
 				itr1 = ((Map) itr3.next()).entrySet().iterator();
 				log.debug("Nodes " + ++nodeCount);
+				String nodeType="";
 				while (itr1.hasNext()) {
 					Map.Entry pair = itr1.next();
 				   if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
@@ -223,6 +224,7 @@ public class ParseJSON {
 							
 							if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
 								node.setNodeType((String)pair.getValue());
+								nodeType=(String)pair.getValue();
 							}
 							if(key != null && key.equalsIgnoreCase(AzureClientConstants.PROTO_URI)) {
 								node.setProtoUri((String)pair.getValue());
@@ -248,7 +250,9 @@ public class ParseJSON {
 				 }	
 				}
 				node.setOperationSignatureList(operSigList);
-				nodeList.add(node);
+				if(!nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+				   nodeList.add(node);
+				} 
 			}
 
 		}
@@ -732,6 +736,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					operSigList.add(obpListObject);
 					itr1 = ((Map) itr3.next()).entrySet().iterator();
 					log.debug("Nodes " + ++nodeCount);
+					String nodeType="";
 					while (itr1.hasNext()) {
 						Map.Entry pair = itr1.next();
 					   if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
@@ -756,6 +761,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 								
 								if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
 									node.setNodeType((String)pair.getValue());
+									nodeType=(String)pair.getValue();
 								}
 								if(key != null && key.equalsIgnoreCase(AzureClientConstants.PROTO_URI)) {
 									node.setProtoUri((String)pair.getValue());
@@ -781,7 +787,9 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					 }	
 					}
 					node.setOperationSignatureList(operSigList);
-					nodeList.add(node);
+					 if(!nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+					     nodeList.add(node);
+					 }
 				}
 
 			}
@@ -816,6 +824,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					itr1 = ((Map) itr3.next()).entrySet().iterator();
 					log.debug("Nodes" + ++nodeCount);
 					String containerName = null,imageName  = null;
+					String nodeType="";
 					while (itr1.hasNext()) {
 						
 						Map.Entry pair = itr1.next();
@@ -824,15 +833,18 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 							if (key != null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)) {
 									containerName =(String)pair.getValue();
 								}
-								if (key != null && key.equalsIgnoreCase(AzureClientConstants.IMAGE)) {
-									imageName =(String)pair.getValue();
-								}
-								
-							if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
-			                	imageMap.put(imageName, containerName);
+							if (key != null && key.equalsIgnoreCase(AzureClientConstants.IMAGE)) {
+								imageName =(String)pair.getValue();
+							}
+							if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
+			                	nodeType=(String)pair.getValue();
 			                }
 					  }	
 					}
+					if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)
+							&& !nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+	                	imageMap.put(imageName, containerName);
+	                }
 			
 				}
 			}
@@ -896,14 +908,16 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 								}
 								
 								
-							if(containerName!=null && nodeType!=null && !"".equals(containerName) && !"".equals(nodeType)){
-								if(bean.getDataBrokerType() == null){
-									bean.setDataBrokerType(AzureClientConstants.DEFAULT);
-								}
-			                	imageMap.put(containerName,bean);
-			                }
+							
 					  }	
 					}
+					if(containerName!=null && nodeType!=null && !"".equals(containerName) && !"".equals(nodeType)
+							&& !nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+						if(bean.getDataBrokerType() == null){
+							bean.setDataBrokerType(AzureClientConstants.DEFAULT);
+						}
+	                	imageMap.put(containerName,bean);
+	                }
 					log.debug("container_name "+bean.getContainerName()+" node_type "+bean.getNodeType()+
 							" Script"+bean.getScript()+" DataBrokerType "+bean.getDataBrokerType());
 			
@@ -947,19 +961,21 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	        	Iterator<Map.Entry> itr5 = itr4;
 	        	String containerName="";
 	        	String imageName="";
-	        	
 	        	String contName="test";
 	        	NodeTree<String> testNode=new NodeTree<String>(contName);
 	        	log.debug("Second while");
+	        	String nodeType="";
 	            while (itr4.hasNext()) {
 	                Map.Entry pair = itr4.next();
-	                if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
-	                	
+	                if(pair!=null && pair.getKey()!=null && pair.getValue()!=null 
+	                		&& !nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+	                	log.debug("key "+pair.getKey()+" nodeType"+nodeType);
 		                String key=(String)pair.getKey();
 		                String val=(String)pair.getValue().toString();
 		                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.OPERATION_SIGNATURE_LIST)){
 		                	sequenceJsonParseProbe(pair.getValue(),testNode,root);
-		                }if(key!=null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)){
+		                }
+		                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)){
 		                	containerName=val;
 		                	contName=val;
 		                }else{
@@ -969,27 +985,34 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		                	imageName=val;
 		                	list.add(val);
 		                 }
+		                if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
+		                	nodeType=val;
+		                }
 		                if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)){
 		                	imageMap.put(imageName, containerName);
 		                }
 		             } 
 	            }
-	            testNode.setData(contName);
-	            NodeTree<String> searchNode=findDataInTree(root, contName);
-	            if(searchNode!=null){
-	            	NodeTree<String> parent=searchNode.getParent();
-	            	String parentData=parent.getData();
-	            	if (parent != null) {
-	    				int index = parent.getChildren().indexOf(searchNode);
-	    				parent.getChildren().remove(searchNode);
-	    			 }
-	            	NodeTree<String> parrentNode=findDataInTree(root, parentData);
-	            	if(parrentNode!=null){
-	            		parrentNode.addChild(testNode);
-	            	}
-	            }else{
-	            	root.addChild(testNode);
-	            }
+	            log.debug(" nodeType Before Adding"+nodeType);
+	            if(!nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+	            	log.debug(" nodeType After Adding"+nodeType);
+		            testNode.setData(contName);
+		            NodeTree<String> searchNode=findDataInTree(root, contName);
+		            if(searchNode!=null){
+		            	NodeTree<String> parent=searchNode.getParent();
+		            	String parentData=parent.getData();
+		            	if (parent != null) {
+		    				int index = parent.getChildren().indexOf(searchNode);
+		    				parent.getChildren().remove(searchNode);
+		    			 }
+		            	NodeTree<String> parrentNode=findDataInTree(root, parentData);
+		            	if(parrentNode!=null){
+		            		parrentNode.addChild(testNode);
+		            	}
+		            }else{
+		            	root.addChild(testNode);
+		            }
+	          }  
 	        }
          }
         printTree(root, " ",linkedList);
@@ -1227,6 +1250,21 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		return dataBrokerBean;	
 	}
 	
-	
+	public boolean getSplitterAndCollator(Iterator<Map.Entry> itr4){
+		boolean splitterAndCollator=false;
+		while (itr4.hasNext()) {
+            Map.Entry pair = itr4.next();
+            if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+            	String key=(String)pair.getKey();
+                String val=(String)pair.getValue().toString();
+            	if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
+            		if(val!=null && (val.equalsIgnoreCase("Collator") || val.equalsIgnoreCase("Splitter"))){
+            			splitterAndCollator=true;
+            		}
+            	}
+            }
+		}   
+		return splitterAndCollator;
+	}
 	
 }
