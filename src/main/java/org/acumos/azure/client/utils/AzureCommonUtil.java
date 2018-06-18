@@ -35,15 +35,14 @@ import java.io.ByteArrayOutputStream;
 public class AzureCommonUtil {
 	Logger logger = LoggerFactory.getLogger(AzureCommonUtil.class);
 	
+	
 	/**
 	 * 
-	 * @param notificationId
-	 * @param userId
-	 */
-	/**
-	 * 
-	 * @param mlpNotification
-	 * @return
+	 * @param mlpNotification notification Details 
+	 * @param dataSource datasource name 
+	 *  @param dataUserName Username Data
+	 * @param dataPassword Password Data
+	 * @return mlNotification notification bean
 	 */
 	 public org.acumos.azure.client.transport.MLNotification createNotification(MLPNotification mlpNotification,String dataSource,
 			 String dataUserName,String dataPassword) {
@@ -56,8 +55,11 @@ public class AzureCommonUtil {
 	 
 	/**
 	  * 
-	  * @param msg
-	  * @param userId
+	  * @param msg notification message 
+	  * @param userId Unique Id of user
+	  * @param dataUserName UserName of Database
+	  * @param dataPassword Password of database
+	  * @throws Exception  if fail to create notification
 	  */
 	 public void generateNotification(String msg, String userId,String dataSource,String dataUserName,String dataPassword)throws Exception {
 		 logger.debug("generateNotification Start");

@@ -28,9 +28,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.Security;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
+import org.acumos.azure.client.transport.TransportBean;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
 import org.slf4j.Logger;
@@ -141,6 +144,11 @@ public class DockerUtils {
 	 *            docker registry port
 	 * @param dockerRegistryName
 	 *            docker registyr name
+	 *  @param dockerVMUserName  docker vm username
+	 *  @param dockerVMPassword  docker vm password
+	 *  @param subNet     subnet details
+	 *  @param vnet       vnet details 
+	 *  @param sleepTimeFirstInt   Thread sleep time    
 	 * @return an instance of DockerClient
 	 * @throws Exception
 	 *             exception thrown
@@ -265,6 +273,11 @@ public class DockerUtils {
 	 *            docker registry port
 	 * @param dockerRegistryName
 	 *            docker registry name
+	 *  @param dockerVMUserName  docker vm username
+	 *  @param dockerVMPassword  docker vm password
+	 *  @param subNet     subnet details
+	 *  @param vnet       vnet details 
+	 *  @param sleepTimeFirstInt   Thread sleep time 
 	 * @return an instance of DockerClient
 	 * @throws Exception
 	 *             exception thrown
@@ -360,28 +373,47 @@ public class DockerUtils {
 	 * @param dockerHostIP
 	 *            - address (IP) of the Docker host machine
 	 * @param vmUserName
-	 *            - user name to connect with to the Docker host machine
+	 *            - vm user name
 	 * @param vmPassword
 	 *            - password to connect with to the Docker host machine
-	 * @param registryServerUrl
-	 *            - address of the private container registry
-	 * @param username
-	 *            - user name to connect with to the private container registry
-	 * @param password
-	 *            - password to connect with to the private container registry
-	 * @param repositoryName
-	 *            repository name
-	 * @param finalContainerName
-	 *            container name
-	 * @param imageCount
-	 *            image count
-	 * @param portNumber
-	 *            port number
-	 * @return an instance of DockerClient
+	 * @param tbean
+	 *            transport bean
+	 * 
 	 */
+	public static void protoFileVM(String dockerHostIP, String vmUserName, String vmPassword,TransportBean tbean){
+		SSHShell sshShell = null;
+		try{
+			
+		sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+		String createFolderScript = sshShell.executeCommand("sudo mkdir -p "+tbean.getNginxMapFolder()+" ", true,true);
+		log.debug("createFolderScript  " + createFolderScript);
+		Iterator protoItr = tbean.getProtoMap().entrySet().iterator();
+	    while (protoItr.hasNext()) {
+	        Map.Entry protoPair = (Map.Entry)protoItr.next();
+	        if(protoPair!=null && protoPair.getKey()!=null && protoPair.getValue()!=null){
+	        	log.debug(protoPair.getKey() + " = " + protoPair.getValue());
+	        	String protoFilePathName=(String)protoPair.getKey();
+	        	String protoDetails=(String)protoPair.getValue();
+	        	int index = protoFilePathName.lastIndexOf("\\");
+	        	String protoFileName=protoFilePathName.substring(index-1);
+	        	String protoUriFolder= protoFilePathName.substring(0,index);
+	        	String copyFolderName=tbean.getNginxMapFolder()+"/"+protoUriFolder;
+	        	log.debug("protoFileName "+protoFileName);
+	        	log.debug("protoUriFolder "+protoUriFolder);
+	        	log.debug("copyFolderName "+copyFolderName);
+	        	createFolderScript = sshShell.executeCommand("sudo mkdir -p "+copyFolderName+" ", true,true);
+	    		log.debug("createFolderScript folder " + createFolderScript);
+	        	sshShell.upload(new ByteArrayInputStream(protoDetails.getBytes()), protoFileName,
+	        			copyFolderName, true, "4095");
+	        }
+	    }
+		}catch(Exception e){
+			log.error("protoFileVM failed", e);
+		}
+	}
 	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPassword,
 			String registryServerUrl, String username, String password, String repositoryName,
-			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint,int sleepTimeFirstInt) {
+			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint,int sleepTimeFirstInt,TransportBean tbean) {
 		log.debug("deploymentCompositeImageVM Start");
 		log.debug("dockerHostIP " + dockerHostIP);
 		log.debug("repositoryName " + repositoryName);
@@ -412,11 +444,15 @@ public class DockerUtils {
 			log.debug(" start deploymentImageVM ");
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 			String RUN_IMAGE="";
-			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase("Probe")){
+			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)){
 				log.debug("Probe Condition");
 				
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
 						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
+			}else if(finalContainerName!=null && finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
+				
+				RUN_IMAGE = "" + "docker run --name "+finalContainerName+" -v "+tbean.getNginxMapFolder()+":"+tbean.getNginxWebFolder()+":ro  -d -p 0.0.0.0:" + portNumberString
+						+ "  " + repositoryName + " \n";
 			}else{
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
 						+ "  " + repositoryName + " \n";
