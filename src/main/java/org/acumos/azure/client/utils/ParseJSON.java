@@ -1267,4 +1267,72 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		return splitterAndCollator;
 	}
 	
+	public HashMap<String, String> getProtoDetails(String jsonFileName) throws Exception {
+		log.debug("getProtoDetails Start");
+		log.debug("jsonFileName "+jsonFileName);
+		HashMap<String,String> imageMap=new HashMap<String,String>();
+		ArrayList<String> list=new ArrayList<String>();	
+		try
+		{
+			Object obj = new JSONParser().parse(new FileReader(jsonFileName));
+			Iterator<Map.Entry> itr1 = null;
+			JSONObject jo = (JSONObject) obj;
+	        JSONArray nodes = (JSONArray) jo.get(AzureClientConstants.NODES);
+	        ArrayList<Node> nodeList = new ArrayList<Node>();
+			if (nodes != null) {
+				Iterator itr3 = nodes.iterator();
+				int nodeCount = 0;
+				while (itr3.hasNext()) {
+					Node node = new Node();
+					itr1 = ((Map) itr3.next()).entrySet().iterator();
+					log.debug("Nodes" + ++nodeCount);
+					String containerName = null,imageName  = null, protoUri=null,protoUriFile=null,protoUriFolder=null;;
+					String nodeType="";
+					while (itr1.hasNext()) {
+						
+						Map.Entry pair = itr1.next();
+						if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
+							String key = (String) pair.getKey();
+							if (key != null && key.equalsIgnoreCase(AzureClientConstants.CONTAINER_NAME)) {
+									containerName =(String)pair.getValue();
+								}
+							if (key != null && key.equalsIgnoreCase(AzureClientConstants.IMAGE)) {
+								imageName =(String)pair.getValue();
+							}
+							if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
+			                	nodeType=(String)pair.getValue();
+			                }
+							if(key != null && key.equalsIgnoreCase(AzureClientConstants.PROTO_URI)) {
+								protoUri=(String)pair.getValue();
+			                }
+					   }	
+					}
+					if(containerName!=null && protoUri!=null && !"".equals(containerName) && !"".equals(protoUri)
+							&& !nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+						
+	                	imageMap.put(containerName, protoUri);
+	                }
+			
+				}
+			}
+			
+		}catch(Exception e){
+			log.error("getProtoDetails failed", e);
+    	    throw new Exception(e.getMessage());
+       }
+		log.debug("imageMap "+imageMap);
+		log.debug(" getProtoDetails End");
+		return imageMap;	
+	}
+	public static void main(String[] args) {
+		String fullPath = "C:\\Hello\\AnotherFolder\\The File Name.PDF";
+		int index = fullPath.lastIndexOf("\\");
+		String fileName = fullPath.substring(0,index);
+		System.out.println(fileName);
+		String filenameWithPath = "C:/temp/hello.xls";
+		String[] tokens = filenameWithPath.split("[\\\\|/]");
+		String filename2 = tokens[tokens.length - 2];
+		
+		System.out.println(filename2+" "+System.getProperty("line.separator"));
+	}
 }

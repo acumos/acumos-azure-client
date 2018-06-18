@@ -199,15 +199,15 @@ public class AzureServiceImpl implements AzureService {
 	        logger.debug("sequenceList "+sequenceList);
 	        return sequenceList;
 		}
-	  public LinkedList<String> addProbeSequence(LinkedList<String> sequenceList,String probeContainerName){
-		  logger.debug("addProbeSequence Start");
-		  logger.debug("probeContainerName "+probeContainerName+"sequenceList "+sequenceList);
-		  if(sequenceList!=null && sequenceList.size() > 0 && probeContainerName!=null && !"".equals(probeContainerName)){
+	  public LinkedList<String> addContainerSequence(LinkedList<String> sequenceList,String containerName){
+		  logger.debug("addContainerSequence Start");
+		  logger.debug("probeContainerName "+containerName+"sequenceList "+sequenceList);
+		  if(sequenceList!=null && sequenceList.size() > 0 && containerName!=null && !"".equals(containerName)){
 			  int length=sequenceList.size();
 			  logger.debug("length "+length);
-			  sequenceList.add((length-1), probeContainerName); 
+			  sequenceList.add((length-1), containerName); 
 			}
-		  logger.debug("addProbeSequence End"+sequenceList);
+		  logger.debug("addContainerSequence End"+sequenceList);
 		  return sequenceList;
 	  }
 }

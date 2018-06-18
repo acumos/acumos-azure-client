@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -39,6 +40,7 @@ import org.acumos.azure.client.transport.AzureDeployBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.SingletonMapClass;
+import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AppProperties;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
@@ -225,7 +227,10 @@ public class AzureServiceController extends AbstractController {
 		String otherRegistyName="";
 		String exposeDataBrokerPort="";
 		String internalDataBrokerPort="";
+		String nginxMapFolder="";
+		String nginxWebFolder="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
+		TransportBean tbean=new TransportBean();
 		try {
 			UUID uidNumber = UUID.randomUUID();
 			uidNumStr=uidNumber.toString();
@@ -268,6 +273,9 @@ public class AzureServiceController extends AbstractController {
 			otherRegistyName=env.getProperty(AzureClientConstants.OTHER_REGISTY_NAME);
 			exposeDataBrokerPort=env.getProperty(AzureClientConstants.EXPOSE_DATABROKER_PORT);
 			internalDataBrokerPort=env.getProperty(AzureClientConstants.INTERNAL_DATABROKER_PORT);
+			
+			nginxMapFolder=env.getProperty(AzureClientConstants.NGINX_MAPFOLDER);
+			nginxWebFolder=env.getProperty(AzureClientConstants.NGINX_WEBFOLDER);
 			logger.debug("exposeDataBrokerPort "+exposeDataBrokerPort);
 			logger.debug("internalDataBrokerPort "+internalDataBrokerPort);
 			logger.debug("nexusRegistyName "+nexusRegistyName);
@@ -276,6 +284,8 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("vnet "+vnet);
 			logger.debug("sleepTimeFirst "+sleepTimeFirst);
 			logger.debug("sleepTimeSecond "+sleepTimeSecond);
+			logger.debug("nginxMapFolder "+nginxMapFolder);
+			logger.debug("nginxWebFolder "+nginxWebFolder);
 			if (authObject == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);
@@ -302,6 +312,7 @@ public class AzureServiceController extends AbstractController {
 			ArrayList<String> list=null;
 			LinkedList<String> sequenceList=null;
 			DataBrokerBean dataBrokerBean=null;
+			Map<String,String> protoContainerMap=null;
 			logger.debug("probeIndicator "+probeIndicator);
 			if(probeIndicator){
 				
@@ -310,6 +321,8 @@ public class AzureServiceController extends AbstractController {
 				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);
 				// images list
 				list=azureImpl.iterateImageMap(imageMap);
+				//proto files
+				tbean.setProtoContainerMap(parseJson.getProtoDetails(AzureClientConstants.JSON_FILE_NAME));
 				dataBrokerBean=parseJson.getDataBrokerContainer(AzureClientConstants.JSON_FILE_NAME);
 				if(dataBrokerBean!=null){
 					if(dataBrokerBean!=null){
@@ -336,6 +349,7 @@ public class AzureServiceController extends AbstractController {
 				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);
 				list=azureImpl.iterateImageMap(imageMap);
 				sequenceList=parseJson.getSequenceListFromJSON(AzureClientConstants.JSON_FILE_NAME);
+				//proto files
 				dataBrokerBean=parseJson.getDataBrokerContainer(AzureClientConstants.JSON_FILE_NAME);
 				if(dataBrokerBean!=null){
 					if(dataBrokerBean!=null){
@@ -364,11 +378,13 @@ public class AzureServiceController extends AbstractController {
 				prbIndicator = probeIndicatorList.get(0);
 			}			
 		    if (bluePrintProbe.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True") ) {
-
+		    	list.add(AzureClientConstants.NGINX_IMAGE);
+				imageMap.put(AzureClientConstants.NGINX_IMAGE, AzureClientConstants.NGINX_CONTAINER);
+				sequenceList=azureImpl.addContainerSequence(sequenceList,AzureClientConstants.NGINX_CONTAINER);
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
 					imageMap.put(probePrintImage, AzureClientConstants.PROBE_CONTAINER_NAME);
-					sequenceList=azureImpl.addProbeSequence(sequenceList,AzureClientConstants.PROBE_CONTAINER_NAME);
+					sequenceList=azureImpl.addContainerSequence(sequenceList,AzureClientConstants.PROBE_CONTAINER_NAME);
 				}
 			}	
 
@@ -376,8 +392,12 @@ public class AzureServiceController extends AbstractController {
 				list.add(bluePrintImage);
 				imageMap.put(bluePrintImage, AzureClientConstants.BLUEPRINT_CONTAINER);
 			}
-			
-						
+			//set velues in bean
+			tbean.setNexusUrl(nexusUrl);
+			tbean.setNexusUserName(nexusUserName);	
+			tbean.setNexusPassword(nexusPassword);
+			tbean.setNginxMapFolder(nginxMapFolder);
+			tbean.setNginxWebFolder(nginxWebFolder);
 			//put condition to get probe
 			
 			logger.debug("list "+list);
@@ -390,7 +410,7 @@ public class AzureServiceController extends AbstractController {
                         null,list,bluePrintName,bluePrintUser,bluePrintPass,probeInternalPort,probePrintName,probUser,probePass,networkSecurityGroup,
                         imageMap,sequenceList,dockerRegistryname,bluePrintProbe,uidNumStr,dataSource,userName,password,dockerVMUserName,dockerVMPassword,
                         solutionPort,nodeTypeContainerMap,bluePrintJsonStr,probeNexusEndPoint,subnet,vnet,dataBrokerBean,
-                        sleepTimeFirst,sleepTimeSecond,nexusRegistyUserName,nexusRegistyPwd,nexusRegistyName,otherRegistyName,exposeDataBrokerPort,internalDataBrokerPort);
+                        sleepTimeFirst,sleepTimeSecond,nexusRegistyUserName,nexusRegistyPwd,nexusRegistyName,otherRegistyName,exposeDataBrokerPort,internalDataBrokerPort,tbean);
 
 	              Thread t = new Thread(compositeRunner);
                    t.start();

@@ -139,8 +139,8 @@ public final class AzureClientConstants {
 	public static final String OTHER_REGISTY_NAME="docker.otherRegistyName";
 	public static final String EXPOSE_DATABROKER_PORT="docker.exposeDataBrokerPort";
 	public static final String INTERNAL_DATABROKER_PORT="docker.internalDataBrokerPort";
-	
-	
-	
-
+	public static final String NGINX_CONTAINER="Nginx";
+	public static final String NGINX_IMAGE="nginx";
+	public static final String NGINX_MAPFOLDER="docker.nginxMapFolder";
+	public static final String NGINX_WEBFOLDER="docker.nginxWebFolder";
 }
