@@ -1,0 +1,96 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "c371d9f5_3c3df2a8",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-21T18:51:59Z",
+      "side": 1,
+      "message": "Is this the correct life cycle for this project?",
+      "range": {
+        "startLine": 5,
+        "startChar": 18,
+        "endLine": 5,
+        "endChar": 28
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "cdb5c6ec_54a8ff73",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-21T18:51:59Z",
+      "side": 1,
+      "message": "project lead to be confirmed by the team",
+      "range": {
+        "startLine": 6,
+        "startChar": 0,
+        "endLine": 6,
+        "endChar": 12
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "3cf56f01_6674758b",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-21T18:51:59Z",
+      "side": 1,
+      "message": "Agenda link needs to be updated",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e85d5334_d1af79f3",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 56,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-21T18:51:59Z",
+      "side": 1,
+      "message": "Couldn\u0027t find the timezone for Vineet",
+      "range": {
+        "startLine": 56,
+        "startChar": 16,
+        "endLine": 56,
+        "endChar": 18
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
