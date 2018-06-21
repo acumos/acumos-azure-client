@@ -30,8 +30,27 @@ public class TransportBean {
 	private Map<String,String> protoMap;
 	private String nginxWebFolder;
 	private String nginxMapFolder;
+	private String nginxImageName;
+	private String nginxInternalPort;
+	
 	
    
+	public String getNginxInternalPort() {
+		return nginxInternalPort;
+	}
+
+	public void setNginxInternalPort(String nginxInternalPort) {
+		this.nginxInternalPort = nginxInternalPort;
+	}
+
+	public String getNginxImageName() {
+		return nginxImageName;
+	}
+
+	public void setNginxImageName(String nginxImageName) {
+		this.nginxImageName = nginxImageName;
+	}
+
 	public String getNginxWebFolder() {
 		return nginxWebFolder;
 	}

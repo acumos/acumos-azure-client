@@ -229,6 +229,8 @@ public class AzureServiceController extends AbstractController {
 		String internalDataBrokerPort="";
 		String nginxMapFolder="";
 		String nginxWebFolder="";
+		String nginxImageName="";
+		String nginxInternalPort="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		TransportBean tbean=new TransportBean();
 		try {
@@ -276,6 +278,10 @@ public class AzureServiceController extends AbstractController {
 			
 			nginxMapFolder=env.getProperty(AzureClientConstants.NGINX_MAPFOLDER);
 			nginxWebFolder=env.getProperty(AzureClientConstants.NGINX_WEBFOLDER);
+			nginxImageName=env.getProperty(AzureClientConstants.NGINX_IMAGENAME);
+			nginxInternalPort=env.getProperty(AzureClientConstants.NGINX_INTERNALPORT);
+			logger.debug("nginxInternalPort "+nginxInternalPort);
+			logger.debug("nginxImageName "+nginxImageName);
 			logger.debug("exposeDataBrokerPort "+exposeDataBrokerPort);
 			logger.debug("internalDataBrokerPort "+internalDataBrokerPort);
 			logger.debug("nexusRegistyName "+nexusRegistyName);
@@ -378,8 +384,8 @@ public class AzureServiceController extends AbstractController {
 				prbIndicator = probeIndicatorList.get(0);
 			}			
 		    if (bluePrintProbe.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True") ) {
-		    	list.add(AzureClientConstants.NGINX_IMAGE);
-				imageMap.put(AzureClientConstants.NGINX_IMAGE, AzureClientConstants.NGINX_CONTAINER);
+		    	list.add(nginxImageName);
+				imageMap.put(nginxImageName, AzureClientConstants.NGINX_CONTAINER);
 				sequenceList=azureImpl.addContainerSequence(sequenceList,AzureClientConstants.NGINX_CONTAINER);
 				if (probePrintImage != null && !"".equals(probePrintImage)) {
 					list.add(probePrintImage);
@@ -398,6 +404,8 @@ public class AzureServiceController extends AbstractController {
 			tbean.setNexusPassword(nexusPassword);
 			tbean.setNginxMapFolder(nginxMapFolder);
 			tbean.setNginxWebFolder(nginxWebFolder);
+			tbean.setNginxImageName(nginxImageName);
+			tbean.setNginxInternalPort(nginxInternalPort);
 			//put condition to get probe
 			
 			logger.debug("list "+list);
