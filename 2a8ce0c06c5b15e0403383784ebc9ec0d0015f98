@@ -1,0 +1,107 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f6905856_3abf4d4f",
+        "filename": "src/main/java/org/acumos/azure/client/controller/AzureServiceController.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 283,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-21T11:39:54Z",
+      "side": 1,
+      "message": "Please use the logger format feature in SLF4j:\n\n    logger.debug(\"my explanation for parameter 1 {}\", parameter1);",
+      "range": {
+        "startLine": 283,
+        "startChar": 17,
+        "endLine": 283,
+        "endChar": 34
+      },
+      "revId": "2a8ce0c06c5b15e0403383784ebc9ec0d0015f98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "4072150b_9686d96d",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 212,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-21T11:39:54Z",
+      "side": 1,
+      "message": "See comment about SLF4J logger format feature",
+      "revId": "2a8ce0c06c5b15e0403383784ebc9ec0d0015f98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "5ccefa2a_2ef9dd7e",
+        "filename": "src/main/java/org/acumos/azure/client/transport/TransportBean.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-21T11:39:54Z",
+      "side": 1,
+      "message": "This is such a generic name.   It does not help the reader understand what\u0027s going on. Can you make it more specific? What is transported here?  Is this deployment info?",
+      "range": {
+        "startLine": 24,
+        "startChar": 13,
+        "endLine": 24,
+        "endChar": 26
+      },
+      "revId": "2a8ce0c06c5b15e0403383784ebc9ec0d0015f98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "8d2d31f5_cf96bae9",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-21T11:39:54Z",
+      "side": 1,
+      "message": "Thank you for defining and using constants!",
+      "revId": "2a8ce0c06c5b15e0403383784ebc9ec0d0015f98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "128162ed_79379a72",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 395,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-21T11:39:54Z",
+      "side": 1,
+      "message": "see comments about LF4J usage",
+      "range": {
+        "startLine": 395,
+        "startChar": 14,
+        "endLine": 395,
+        "endChar": 19
+      },
+      "revId": "2a8ce0c06c5b15e0403383784ebc9ec0d0015f98",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
