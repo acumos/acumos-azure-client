@@ -380,10 +380,11 @@ public class DockerUtils {
 	 *            transport bean
 	 * 
 	 */
-	public static void protoFileVM(String dockerHostIP, String vmUserName, String vmPassword,TransportBean tbean){
+	public static void protoFileVM(String dockerHostIP, String vmUserName, String vmPassword,TransportBean tbean)
+			throws Exception{
 		SSHShell sshShell = null;
+		log.debug("protoFileVM Start");
 		try{
-			
 		sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
 		String createFolderScript = sshShell.executeCommand("sudo mkdir -p "+tbean.getNginxMapFolder()+" ", true,true);
 		log.debug("createFolderScript  " + createFolderScript);
@@ -391,11 +392,11 @@ public class DockerUtils {
 	    while (protoItr.hasNext()) {
 	        Map.Entry protoPair = (Map.Entry)protoItr.next();
 	        if(protoPair!=null && protoPair.getKey()!=null && protoPair.getValue()!=null){
-	        	log.debug(protoPair.getKey() + " = " + protoPair.getValue());
+	        	log.debug(protoPair.getKey() + " keyAndValue " + protoPair.getValue());
 	        	String protoFilePathName=(String)protoPair.getKey();
 	        	String protoDetails=(String)protoPair.getValue();
-	        	int index = protoFilePathName.lastIndexOf("\\");
-	        	String protoFileName=protoFilePathName.substring(index-1);
+	        	int index = protoFilePathName.lastIndexOf("/");
+	        	String protoFileName=protoFilePathName.substring(index+1);
 	        	String protoUriFolder= protoFilePathName.substring(0,index);
 	        	String copyFolderName=tbean.getNginxMapFolder()+"/"+protoUriFolder;
 	        	log.debug("protoFileName "+protoFileName);
@@ -409,7 +410,9 @@ public class DockerUtils {
 	    }
 		}catch(Exception e){
 			log.error("protoFileVM failed", e);
+			throw e;
 		}
+		log.debug("protoFileVM End");
 	}
 	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPassword,
 			String registryServerUrl, String username, String password, String repositoryName,

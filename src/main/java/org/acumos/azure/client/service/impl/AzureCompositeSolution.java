@@ -209,6 +209,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("ProtoContainerMap "+tbean.getProtoContainerMap());
 		logger.debug("NginxMapFolder "+tbean.getNginxMapFolder());
 		logger.debug("NginxWebFolder "+tbean.getNginxWebFolder());
+		logger.debug("NginxInternalPort "+tbean.getNginxInternalPort());
 		
 		AzureBean azureBean=new AzureBean();
 		ObjectMapper mapper = new ObjectMapper();
@@ -368,7 +369,8 @@ public class AzureCompositeSolution implements Runnable {
     	                    //.withTag(dockerImageTag)
     	                    .exec(new PullImageResultCallback())
     	                    .awaitSuccess();
-                        }else if(imageName!=null && imageName.equalsIgnoreCase(AzureClientConstants.NGINX_IMAGE)){
+                        }else if(imageName!=null && imageName.contains(AzureClientConstants.NGINX_IMAGE)){
+                        	logger.debug("Nginx images "+imageName);
                         	 dockerClient.pullImageCmd(imageName)
 			                    .exec(new PullImageResultCallback())
 			                    .awaitSuccess();
@@ -581,7 +583,10 @@ public class AzureCompositeSolution implements Runnable {
 			    		        					&& nodeTypeName!=null && !"".equals(nodeTypeName) && nodeTypeName.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
 			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;
 			    		        				portNumber=exposeDataBrokerPort;
-			    		        				
+			    		        			}else if(finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
+			    		        				portNumber=portArr[count];
+			    		        				portNumberString=portNumber+":"+tbean.getNginxInternalPort();
+			    		        				count++;
 			    		        			}else{
 			    		        				portNumber=portArr[count];
 				    		        			if(solutionPort!=null && !"".equals(solutionPort)){
