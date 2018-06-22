@@ -71,6 +71,30 @@
     },
     {
       "key": {
+        "uuid": "55424d14_5072be1d",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-22T22:08:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1844e4c4_80d98f6b",
+      "range": {
+        "startLine": 6,
+        "startChar": 14,
+        "endLine": 6,
+        "endChar": 45
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3cf56f01_6674758b",
         "filename": "INFO.yaml",
         "patchSetId": 1
@@ -118,6 +142,30 @@
     },
     {
       "key": {
+        "uuid": "9fbda056_9f0045b4",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-22T22:08:02Z",
+      "side": 1,
+      "message": "yes... this link is ok",
+      "parentUuid": "3ca0d405_4e11d53c",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 16
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "db7475ab_01c619a8",
         "filename": "INFO.yaml",
         "patchSetId": 1
@@ -129,6 +177,30 @@
       "writtenOn": "2018-06-22T17:11:51Z",
       "side": 1,
       "message": "Question - why is this in UTC? Acumos doesn\u0027t use UTC - most everything is based US Eastern time... so UTC time will change when US Eastern time changes.",
+      "range": {
+        "startLine": 32,
+        "startChar": 6,
+        "endLine": 32,
+        "endChar": 23
+      },
+      "revId": "978a4b5e76b26527b982fa0a6b6fb6086691cf51",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "39f7007c_5e26f545",
+        "filename": "INFO.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 85
+      },
+      "writtenOn": "2018-06-22T22:08:02Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db7475ab_01c619a8",
       "range": {
         "startLine": 32,
         "startChar": 6,
