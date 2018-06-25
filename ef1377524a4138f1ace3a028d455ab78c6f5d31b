@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "1ae71dc7_a014e7ab",
+        "filename": "src/main/java/org/acumos/azure/client/utils/AzureClientConstants.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-25T11:47:35Z",
+      "side": 1,
+      "message": "Why is a path hard-coded in Java? I think this should be a configuration value instead.",
+      "range": {
+        "startLine": 148,
+        "startChar": 46,
+        "endLine": 148,
+        "endChar": 50
+      },
+      "revId": "ef1377524a4138f1ace3a028d455ab78c6f5d31b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "02fa7b19_0e6a4034",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 411,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-25T11:47:35Z",
+      "side": 1,
+      "message": "This should be read from configuration data, not a java constant.\n\nIt\u0027s very risky to assume a trailing slash is present.  Instead check for the trailing slash, and add it if not.",
+      "range": {
+        "startLine": 411,
+        "startChar": 89,
+        "endLine": 411,
+        "endChar": 104
+      },
+      "revId": "ef1377524a4138f1ace3a028d455ab78c6f5d31b",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
