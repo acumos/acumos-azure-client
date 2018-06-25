@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "43c5bdb5_76290c1c",
+        "filename": "src/main/java/org/acumos/azure/client/utils/DockerUtils.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 404,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-25T13:00:56Z",
+      "side": 1,
+      "message": "Maybe it would be appropriate to log the azure data folder value here also?",
+      "revId": "5435db64bb1e1c3cd96b7eaccea16014c9c92532",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
