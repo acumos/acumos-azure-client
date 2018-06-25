@@ -231,6 +231,7 @@ public class AzureServiceController extends AbstractController {
 		String nginxWebFolder="";
 		String nginxImageName="";
 		String nginxInternalPort="";
+		String azureDataFiles="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		TransportBean tbean=new TransportBean();
 		try {
@@ -275,11 +276,12 @@ public class AzureServiceController extends AbstractController {
 			otherRegistyName=env.getProperty(AzureClientConstants.OTHER_REGISTY_NAME);
 			exposeDataBrokerPort=env.getProperty(AzureClientConstants.EXPOSE_DATABROKER_PORT);
 			internalDataBrokerPort=env.getProperty(AzureClientConstants.INTERNAL_DATABROKER_PORT);
-			
 			nginxMapFolder=env.getProperty(AzureClientConstants.NGINX_MAPFOLDER);
 			nginxWebFolder=env.getProperty(AzureClientConstants.NGINX_WEBFOLDER);
 			nginxImageName=env.getProperty(AzureClientConstants.NGINX_IMAGENAME);
 			nginxInternalPort=env.getProperty(AzureClientConstants.NGINX_INTERNALPORT);
+			azureDataFiles=env.getProperty(AzureClientConstants.DATAFILE_FOLDER);
+			logger.debug("azureDataFiles "+azureDataFiles);
 			logger.debug("nginxInternalPort "+nginxInternalPort);
 			logger.debug("nginxImageName "+nginxImageName);
 			logger.debug("exposeDataBrokerPort "+exposeDataBrokerPort);
@@ -406,6 +408,7 @@ public class AzureServiceController extends AbstractController {
 			tbean.setNginxWebFolder(nginxWebFolder);
 			tbean.setNginxImageName(nginxImageName);
 			tbean.setNginxInternalPort(nginxInternalPort);
+			tbean.setAzureDataFiles(azureDataFiles);
 			//put condition to get probe
 			
 			logger.debug("list "+list);

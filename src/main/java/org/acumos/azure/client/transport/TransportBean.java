@@ -32,9 +32,18 @@ public class TransportBean {
 	private String nginxMapFolder;
 	private String nginxImageName;
 	private String nginxInternalPort;
+	private String azureDataFiles;
 	
 	
    
+	public String getAzureDataFiles() {
+		return azureDataFiles;
+	}
+
+	public void setAzureDataFiles(String azureDataFiles) {
+		this.azureDataFiles = azureDataFiles;
+	}
+
 	public String getNginxInternalPort() {
 		return nginxInternalPort;
 	}

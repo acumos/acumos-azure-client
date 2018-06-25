@@ -404,8 +404,12 @@ public class DockerUtils {
 	        	log.debug("copyFolderName "+copyFolderName);
 	        	createFolderScript = sshShell.executeCommand("sudo mkdir -p "+copyFolderName+" ", true,true);
 	    		log.debug("createFolderScript folder " + createFolderScript);
-	        	sshShell.upload(new ByteArrayInputStream(protoDetails.getBytes()), protoFileName,
-	        			copyFolderName, true, "4095");
+	    		
+	    		sshShell.upload(new ByteArrayInputStream(protoDetails.getBytes()), protoFileName,
+	        			"AzureDataFiles", true, "4095");
+	        	log.debug("File uploaded in AzureDataFiles folder " );
+	        	String copyScript = sshShell.executeCommand("sudo cp -R "+tbean.getAzureDataFiles()+"/"+protoFileName+" "+ copyFolderName, true,true);
+	        	log.debug("copy file in folder finish"+copyScript);
 	        }
 	    }
 		}catch(Exception e){
