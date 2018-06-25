@@ -145,5 +145,6 @@ public final class AzureClientConstants {
 	public static final String NGINX_WEBFOLDER="docker.nginxWebFolder";
 	public static final String NGINX_IMAGENAME="docker.nginxImageName";
 	public static final String NGINX_INTERNALPORT="docker.nginxInternalPort";
+	public static final String DATAFILE_FOLDER="docker.azureDataFiles";
 	
 }
