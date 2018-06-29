@@ -33,9 +33,26 @@ public class TransportBean {
 	private String nginxImageName;
 	private String nginxInternalPort;
 	private String azureDataFiles;
+	private String nginxPort;
+	private String vmIP;
 	
 	
-   
+	public String getVmIP() {
+		return vmIP;
+	}
+
+	public void setVmIP(String vmIP) {
+		this.vmIP = vmIP;
+	}
+
+	public String getNginxPort() {
+		return nginxPort;
+	}
+
+	public void setNginxPort(String nginxPort) {
+		this.nginxPort = nginxPort;
+	}
+
 	public String getAzureDataFiles() {
 		return azureDataFiles;
 	}

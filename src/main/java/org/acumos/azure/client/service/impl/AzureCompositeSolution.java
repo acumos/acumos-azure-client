@@ -568,6 +568,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		logger.debug("nodeTypeName " + nodeTypeName);
 			    		        		logger.debug("containerInstanceprobe " + containerInstanceprobe);
 			    		        		logger.debug("Deploying containerName "+containerName);
+			    		        		tbean.setVmIP(azureVMIP);
 			    		        		if(containerInstanceBluePrint!=null && containerInstanceBluePrint.equalsIgnoreCase(containerName)){
 			    		        			logger.debug("if Part of containerInstanceBluePrint "+containerInstanceBluePrint+" containerName "+containerName);
 			    		        			portNumber="8555";
@@ -579,6 +580,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
 				    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
 			    		        				portNumberString=probeInternalPort+":"+probeInternalPort;
+			    		        				probeNexusEndPoint="http://"+azureVMIP+":"+tbean.getNginxPort();
 			    		        			}else if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer) && nodeTypeContainer.equalsIgnoreCase(AzureClientConstants.DATABROKER_NAME)
 			    		        					&& nodeTypeName!=null && !"".equals(nodeTypeName) && nodeTypeName.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
 			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;
@@ -586,6 +588,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			}else if(finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
 			    		        				portNumber=portArr[count];
 			    		        				portNumberString=portNumber+":"+tbean.getNginxInternalPort();
+			    		        				tbean.setNginxPort(portNumber);
 			    		        				count++;
 			    		        			}else{
 			    		        				portNumber=portArr[count];

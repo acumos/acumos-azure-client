@@ -453,17 +453,17 @@ public class DockerUtils {
 			String RUN_IMAGE="";
 			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)){
 				log.debug("Probe Condition");
-				
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
 						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
 			}else if(finalContainerName!=null && finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
-				
+				log.debug("nginx Condition");
 				RUN_IMAGE = "" + "docker run --name "+finalContainerName+" -v "+tbean.getNginxMapFolder()+":"+tbean.getNginxWebFolder()+":ro  -d -p 0.0.0.0:" + portNumberString
 						+ "  " + repositoryName + " \n";
 			}else{
+				log.debug("Other Condition");
 				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
 						+ "  " + repositoryName + " \n";
-				log.debug("Other Condition");
+				
 			}
 		    
 			log.debug("RUN_IMAGE " + RUN_IMAGE);
