@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "17f845ca_54d41e52",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureCompositeSolution.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 583,
+      "author": {
+        "id": 4
+      },
+      "writtenOn": "2018-06-29T13:46:47Z",
+      "side": 1,
+      "message": "I\u0027m concerned here about using an external IP address instead of an internal docker name. It\u0027s really not a good idea to expose the NGINX container for the world.  The only user is the probe, and it\u0027s already within the VM.",
+      "range": {
+        "startLine": 583,
+        "startChar": 0,
+        "endLine": 583,
+        "endChar": 85
+      },
+      "revId": "3fc59216394419cf05292d30030955795f533453",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
