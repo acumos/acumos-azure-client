@@ -19,6 +19,9 @@
 =================================
 Acumos Azure Client Release Notes
 =================================
+Version 1.2.8, July 7 th 2018
+----------------------------
+* Fix the issues with Blueprint and Probe end points required for Model Connector (ACUMOS-659)
 
 Version 1.2.4, May 24 th 2018
 ----------------------------
