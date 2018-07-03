@@ -580,7 +580,7 @@ public class AzureCompositeSolution implements Runnable {
 			    		        			if(containerInstanceprobe != null && !containerInstanceprobe.equals("") && containerName!=null 
 				    		        				&& containerInstanceprobe.equalsIgnoreCase(containerName)) {
 			    		        				portNumberString=probeInternalPort+":"+probeInternalPort;
-			    		        				probeNexusEndPoint="http://"+azureVMIP+":"+tbean.getNginxPort();
+			    		        				probeNexusEndPoint="http://"+azureVMName+":"+tbean.getNginxPort();
 			    		        			}else if(nodeTypeContainer!=null && !"".equals(nodeTypeContainer) && nodeTypeContainer.equalsIgnoreCase(AzureClientConstants.DATABROKER_NAME)
 			    		        					&& nodeTypeName!=null && !"".equals(nodeTypeName) && nodeTypeName.equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
 			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;
