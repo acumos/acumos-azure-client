@@ -19,7 +19,12 @@
 =================================
 Acumos Azure Client Release Notes
 =================================
-Version 1.2.8, July 7 th 2018
+
+Version 1.2.9, July 7 th 2018
+-----------------------------
+* CDS 1.15.3 Upgrade and Library fixes (ACUMOS-659)
+
+Version 1.2.8, July 3 rd 2018
 ----------------------------
 * Fix the issues with Blueprint and Probe end points required for Model Connector (ACUMOS-659)
 
