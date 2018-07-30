@@ -387,7 +387,7 @@ public class AzureSimpleSolution implements Runnable {
 
 	
 	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String password) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password,null);
 		return client;
 	}
 

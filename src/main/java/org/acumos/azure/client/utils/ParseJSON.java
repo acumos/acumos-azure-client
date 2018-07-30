@@ -604,12 +604,6 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 	  node.getChildren().forEach(each ->  printTree(each, (appender + appender),linkedList));
 	  
  }	
- public static CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
-		ICommonDataServiceRestClient client1 = CommonDataServiceRestClientImpl.getInstance(datasource, userName, password);
-		return client;
-	}
-   
    public boolean checkProbeIndicator(String jsonFileName)  throws  Exception {
 	   log.debug("checkProbeIndicator Start");
 	   boolean probeIndicatorValue=false;

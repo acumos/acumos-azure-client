@@ -87,7 +87,7 @@ public class AzureCommonUtil {
          logger.debug("generateNotification End"); 
 	 }
 	 public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
-			CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+			CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password,null);
 			return client;
 		}
 	 public NexusArtifactClient nexusArtifactClientDetails(String nexusUrl, String nexusUserName,String nexusPassword) {

@@ -89,7 +89,7 @@ public class AzureServiceImpl implements AzureService {
 	
 	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
 		logger.debug("getClient start");
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password);
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password,null);
 		logger.debug("getClient End");
 		return client;
 	}
