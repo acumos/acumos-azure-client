@@ -30,7 +30,7 @@ public class DataBrokerBean {
 	private String userName=null;
 	
 	@JsonProperty("password")
-	private String password=null;
+	private String UserPd=null;
 	
 	@JsonProperty("host")
 	private String host=null;
@@ -57,12 +57,14 @@ public class DataBrokerBean {
 		this.userName = userName;
 	}
 
-	public String getPassword() {
-		return password;
+	
+
+	public String getUserPd() {
+		return UserPd;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
+	public void setUserPd(String userPd) {
+		UserPd = userPd;
 	}
 
 	public String getHost() {

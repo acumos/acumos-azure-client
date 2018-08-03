@@ -20,6 +20,8 @@
 
 package org.acumos.azure.client.transport;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AzureDeployDataObject {
 
 	private String client;
@@ -30,8 +32,6 @@ public class AzureDeployDataObject {
 	private String acrName;
 	private String solutionId;
 	private String storageAccount;
-	//private String solutionVersion;
-	/*private String imagetag;*/
 	private String solutionRevisionId;
 	private String userId;
 	private String urlAttribute;
@@ -39,7 +39,8 @@ public class AzureDeployDataObject {
 	private String jsonMapping;
 	
 	private String username;
-	private String password;
+	@JsonProperty("password")
+	private String userPd;
 	private String host;
 	private String port;
 	
@@ -209,13 +210,7 @@ public class AzureDeployDataObject {
 		this.username = username;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
+	
 
 	public String getHost() {
 		return host;
@@ -234,20 +229,15 @@ public class AzureDeployDataObject {
 	}
 	
 	
-	/*public String getSolutionVersion() {
-		return solutionVersion;
+	
+
+	public String getUserPd() {
+		return userPd;
 	}
 
-	public void setSolutionVersion(String solutionVersion) {
-		this.solutionVersion = solutionVersion;
-	}*/
-
-	/*public String getImagetag() {
-		return imagetag;
+	public void setUserPd(String userPd) {
+		this.userPd = userPd;
 	}
-	public void setImagetag(String imagetag) {
-		this.imagetag = imagetag;
-	}*/
 
 	@Override
 	public String toString() {

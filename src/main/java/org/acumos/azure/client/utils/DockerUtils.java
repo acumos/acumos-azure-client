@@ -130,8 +130,8 @@ public class DockerUtils {
 	 *            - address of the private container registry
 	 * @param username
 	 *            - user name to connect with to the private container registry
-	 * @param password
-	 *            - password to connect with to the private container registry
+	 * @param acrPd
+	 *            - acrPd to connect with to the private container registry
 	 * @param localEnvDockerHost
 	 *            local docker host
 	 * @param localEnvDockerCertPath
@@ -145,7 +145,7 @@ public class DockerUtils {
 	 * @param dockerRegistryName
 	 *            docker registyr name
 	 *  @param dockerVMUserName  docker vm username
-	 *  @param dockerVMPassword  docker vm password
+	 *  @param dockerVMPd  docker vm pd
 	 *  @param subNet     subnet details
 	 *  @param vnet       vnet details 
 	 *  @param sleepTimeFirstInt   Thread sleep time    
@@ -154,9 +154,9 @@ public class DockerUtils {
 	 *             exception thrown
 	 */
 	public static DockerClient createDockerClient(Azure azure, String rgName, Region region, String registryServerUrl,
-			String username, String password, String localEnvDockerHost, String localEnvDockerCertPath,
+			String username, String acrPd, String localEnvDockerHost, String localEnvDockerCertPath,
 			AzureBean azureBean, String networkSecurityGroup, String dockerRegistryPort, String dockerRegistryName,
-			String dockerVMUserName,String dockerVMPassword,String subNet,String vnet,int sleepTimeFirstInt)
+			String dockerVMUserName,String dockerVMPd,String subNet,String vnet,int sleepTimeFirstInt)
 			throws Exception {
 		// final String envDockerHost = System.getenv("DOCKER_HOST");
 		final String envDockerHost = localEnvDockerHost;
@@ -169,8 +169,8 @@ public class DockerUtils {
 			// engine running and
 			// attempt to configure a Docker engine running inside a new Azure virtual
 			// machine
-			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, password, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subNet,vnet,sleepTimeFirstInt);
+			dockerClient = fromNewDockerVM(azure, rgName, region, registryServerUrl, username, acrPd, azureBean,
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPd,subNet,vnet,sleepTimeFirstInt);
 		} else {
 			dockerHostUrl = envDockerHost;
 			log.debug("Using local settings to connect to a Docker service: " + dockerHostUrl);
@@ -178,7 +178,7 @@ public class DockerUtils {
 
 			DockerClientConfig dockerClientConfig;
 			if (envDockerCertPath == null || envDockerCertPath.isEmpty()) {
-				dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
+				dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd);
 			} else {
 				String caPemPath = envDockerCertPath + File.separator + "ca.pem";
 				String keyPemPath = envDockerCertPath + File.separator + "key.pem";
@@ -188,7 +188,7 @@ public class DockerUtils {
 				String certPemContent = new String(Files.readAllBytes(Paths.get(certPemPath)));
 				String caPemContent = new String(Files.readAllBytes(Paths.get(caPemPath)));
 
-				dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password,
+				dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd,
 						caPemContent, keyPemContent, certPemContent);
 			}
 
@@ -209,8 +209,8 @@ public class DockerUtils {
 	 *            - address of the private container registry
 	 * @param username
 	 *            - user name to connect with to the private container registry
-	 * @param password
-	 *            - password to connect with to the private container registry
+	 * @param acrPd
+	 *            - acrPd to connect with to the private container registry
 	 * @param caPemContent
 	 *            - content of the ca.pem certificate file
 	 * @param keyPemContent
@@ -220,10 +220,10 @@ public class DockerUtils {
 	 * @return an instance of DockerClient configuration
 	 */
 	public static DockerClientConfig createDockerClientConfig(String host, String registryServerUrl, String username,
-			String password, String caPemContent, String keyPemContent, String certPemContent) {
+			String acrPd, String caPemContent, String keyPemContent, String certPemContent) {
 		return DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(host).withDockerTlsVerify(true)
 				.withCustomSslConfig(new DockerSSLConfig(caPemContent, keyPemContent, certPemContent))
-				.withRegistryUrl(registryServerUrl).withRegistryUsername(username).withRegistryPassword(password)
+				.withRegistryUrl(registryServerUrl).withRegistryUsername(username).withRegistryPassword(acrPd)
 				.build();
 	}
 
@@ -237,14 +237,14 @@ public class DockerUtils {
 	 *            - address of the private container registry
 	 * @param username
 	 *            - user name to connect with to the private container registry
-	 * @param password
-	 *            - password to connect with to the private container registry
+	 * @param acrPd
+	 *            - acrPd to connect with to the private container registry
 	 * @return an instance of DockerClient configuration
 	 */
 	public static DockerClientConfig createDockerClientConfig(String host, String registryServerUrl, String username,
-			String password) {
+			String acrPd) {
 		return DefaultDockerClientConfig.createDefaultConfigBuilder().withDockerHost(host).withDockerTlsVerify(false)
-				.withRegistryUrl(registryServerUrl).withRegistryUsername(username).withRegistryPassword(password)
+				.withRegistryUrl(registryServerUrl).withRegistryUsername(username).withRegistryPassword(acrPd)
 				.build();
 	}
 
@@ -263,8 +263,8 @@ public class DockerUtils {
 	 *            - address of the private container registry
 	 * @param username
 	 *            - user name to connect with to the private container registry
-	 * @param password
-	 *            - password to connect with to the private container registry
+	 * @param acrPd
+	 *            - acrPd to connect with to the private container registry
 	 * @param azureBean
 	 *            Azure bean
 	 * @param networkSecurityGroup
@@ -274,7 +274,7 @@ public class DockerUtils {
 	 * @param dockerRegistryName
 	 *            docker registry name
 	 *  @param dockerVMUserName  docker vm username
-	 *  @param dockerVMPassword  docker vm password
+	 *  @param dockerVMPd  docker vm pd
 	 *  @param subNet     subnet details
 	 *  @param vnet       vnet details 
 	 *  @param sleepTimeFirstInt   Thread sleep time 
@@ -283,8 +283,8 @@ public class DockerUtils {
 	 *             exception thrown
 	 */
 	public static DockerClient fromNewDockerVM(Azure azure, String rgName, Region region, String registryServerUrl,
-			String username, String password, AzureBean azureBean, String networkSecurityGroup,
-			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPassword,
+			String username, String acrPd, AzureBean azureBean, String networkSecurityGroup,
+			String dockerRegistryPort, String dockerRegistryName,String dockerVMUserName,String dockerVMPd,
 			String subNet,String vnet,int sleepTimeFirstInt) throws Exception {
 		// final String dockerVMName = SdkContext.randomResourceName("dockervm", 15);
 		// final String publicIPDnsLabel = SdkContext.randomResourceName("pip", 10);
@@ -293,7 +293,7 @@ public class DockerUtils {
 		final String networkInterfaceName1 = SdkContext.randomResourceName("nic1", 24);
 		final String publicIPAddressLeafDNS1 = SdkContext.randomResourceName("pip1", 24);
 		final String vmUserName=dockerVMUserName;
-		final String vmPassword=dockerVMPassword;
+		final String vmPd=dockerVMPd;
 
 		
 		// Could not find a Docker environment; presume that there is no local Docker
@@ -332,7 +332,7 @@ public class DockerUtils {
 		VirtualMachine dockerVM = azure.virtualMachines().define(frontEndNSGName).withRegion(region)
 				.withExistingResourceGroup(rgName).withExistingPrimaryNetworkInterface(networkInterface1)
 				.withPopularLinuxImage(KnownLinuxVirtualMachineImage.UBUNTU_SERVER_16_04_LTS)
-				.withRootUsername(vmUserName).withRootPassword(vmPassword)
+				.withRootUsername(vmUserName).withRootPassword(vmPd)
 				.withSize(VirtualMachineSizeTypes.STANDARD_D2_V2).create();
 
 		log.debug(azure.publicIPAddresses().list()
@@ -359,8 +359,8 @@ public class DockerUtils {
 			azureBean.setAzureVMName(dockerVM.computerName());
 		}
 
-		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPassword, registryServerUrl, username,
-				password, dockerRegistryName,sleepTimeFirstInt);
+		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPd, registryServerUrl, username,
+				acrPd, dockerRegistryName,sleepTimeFirstInt);
 		
 		log.debug("dockerHostIP " + dockerHostIP);
 
@@ -374,18 +374,18 @@ public class DockerUtils {
 	 *            - address (IP) of the Docker host machine
 	 * @param vmUserName
 	 *            - vm user name
-	 * @param vmPassword
-	 *            - password to connect with to the Docker host machine
+	 * @param vmPd
+	 *            - vmPd to connect with to the Docker host machine
 	 * @param tbean
 	 *            transport bean
 	 * 
 	 */
-	public static void protoFileVM(String dockerHostIP, String vmUserName, String vmPassword,TransportBean tbean)
+	public static void protoFileVM(String dockerHostIP, String vmUserName, String vmPd,TransportBean tbean)
 			throws Exception{
 		SSHShell sshShell = null;
 		log.debug("protoFileVM Start");
 		try{
-		sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+		sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 		String createFolderScript = sshShell.executeCommand("sudo mkdir -p "+tbean.getNginxMapFolder()+" ", true,true);
 		log.debug("createFolderScript  " + createFolderScript);
 		Iterator protoItr = tbean.getProtoMap().entrySet().iterator();
@@ -418,8 +418,8 @@ public class DockerUtils {
 		}
 		log.debug("protoFileVM End");
 	}
-	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password, String repositoryName,
+	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPd,
+			String registryServerUrl, String username, String acrPd, String repositoryName,
 			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint,int sleepTimeFirstInt,TransportBean tbean) {
 		log.debug("deploymentCompositeImageVM Start");
 		log.debug("dockerHostIP " + dockerHostIP);
@@ -434,22 +434,22 @@ public class DockerUtils {
 		SSHShell sshShell = null;
 		try {
 
-			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + password + " "
+			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + acrPd + " "
 					+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
 			log.debug("start deploymentImageVM PULL_IMAGE  " + PULL_IMAGE);
 
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()), "PULL_IMAGE_" + imageCount + ".sh",
 					".azuredocker", true, "4095");
 			log.debug("start deploymentImageVM  ");
 
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE_" + imageCount + ".sh", true,
 					true);
 			log.debug("start deploymentImageVM output2  " + output2);
 			 Thread.sleep(sleepTimeFirstInt);
 			log.debug(" start deploymentImageVM ");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			String RUN_IMAGE="";
 			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)){
 				log.debug("Probe Condition");
@@ -470,7 +470,7 @@ public class DockerUtils {
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE_" + imageCount + ".sh",
 					".azuredocker", true, "4095");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 
 			String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE_" + imageCount + ".sh",
 					true, true);
@@ -493,8 +493,8 @@ public class DockerUtils {
 		return "success";
 	}
 
-	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password, String repositoryName,
+	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPd,
+			String registryServerUrl, String username, String acrPd, String repositoryName,
 			String portNumberString,int sleepTimeFirstInt) {
 		log.debug("dockerHostIP " + dockerHostIP);
 		log.debug("registryServerUrl " + registryServerUrl);
@@ -505,27 +505,27 @@ public class DockerUtils {
 		SSHShell sshShell = null;
 		try {
 
-			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + password + " "
+			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + acrPd + " "
 					+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
 			log.debug(" start deploymentImageVM PULL_IMAGE " + PULL_IMAGE);
 
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()), "PULL_IMAGE.sh", ".azuredocker", true,
 					"4095");
 			log.debug(" start deploymentImageVM  ");
 
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE.sh", true, true);
 			log.debug("deploymentImageVM output2 " + output2);
 			Thread.sleep(sleepTimeFirstInt);
 			log.debug("start deploymentImageVM ");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:"+portNumberString+" "+ repositoryName + " \n";
 			log.debug("RUN_IMAGE Complete ");
 
 			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE.sh", ".azuredocker", true,
 					"4095");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 
 			String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);
 			log.debug("output3: " + output3);
@@ -546,8 +546,8 @@ public class DockerUtils {
 		return "sucess";
 	}
 
-	public static DockerClient installDocker(String dockerHostIP, String vmUserName, String vmPassword,
-			String registryServerUrl, String username, String password, String dockerRegistryNameVal, int sleepTimeFirstInt) {
+	public static DockerClient installDocker(String dockerHostIP, String vmUserName, String vmPd,
+			String registryServerUrl, String username, String acrPd, String dockerRegistryNameVal, int sleepTimeFirstInt) {
 		String keyPemContent = ""; // it stores the content of the key.pem certificate file
 		String certPemContent = ""; // it stores the content of the cert.pem certificate file
 		String caPemContent = ""; // it stores the content of the ca.pem certificate file
@@ -560,7 +560,7 @@ public class DockerUtils {
 		try {
 			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
 			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 
 			sshShell.upload(new ByteArrayInputStream(INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.getBytes()),
 					"INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", ".azuredocker", true, "4095");
@@ -590,7 +590,7 @@ public class DockerUtils {
 		try {
 			log.debug("Trying to install Docker host at: " + dockerHostIP);
 			log.debug("Trying to install Docker dockerHostIP at: " + dockerHostIP);
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 
 			String output = sshShell
 					.executeCommand("bash -c ~/.azuredocker/INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", true, true);
@@ -612,7 +612,7 @@ public class DockerUtils {
 		try {
 			log.debug("Trying to setup Docker config: " + dockerHostIP);
 			log.debug("Trying to setup Docker config: " + dockerHostIP);
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPassword);
+			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 			log.debug("Enter in ssh shell ");
 			// // Setup Docker daemon to allow connection from any Docker clients
 			String output = sshShell
@@ -642,11 +642,11 @@ public class DockerUtils {
 		DockerClientConfig dockerClientConfig;
 		if (dockerHostTlsEnabled) {
 			log.debug("dockerHostTlsEnabled " + dockerHostTlsEnabled);
-			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password,
+			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd,
 					caPemContent, keyPemContent, certPemContent);
 		} else {
 			log.debug("dockerHostTlsEnabled " + dockerHostTlsEnabled);
-			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, password);
+			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd);
 		}
 		log.debug("dockerClientConfig " + dockerClientConfig);
 		DockerClient dockerClient = DockerClientBuilder.getInstance(dockerClientConfig).build();

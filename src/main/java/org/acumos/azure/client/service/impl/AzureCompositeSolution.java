@@ -87,7 +87,7 @@ public class AzureCompositeSolution implements Runnable {
 	private AzureDeployDataObject deployDataObject;
 	private String dockerContainerPrefix;
 	private String dockerUserName;
-	private String dockerPwd;
+	private String dockerPd;
 	private String localEnvDockerHost;
 	private String localEnvDockerCertPath;
 	private ArrayList<String> list=new ArrayList<String>();
@@ -107,9 +107,9 @@ public class AzureCompositeSolution implements Runnable {
 	private String uidNumStr;
 	private String dataSource;
 	private String dataUserName;
-	private String dataPassword;
+	private String dataPd;
 	private String dockerVMUserName;
-	private String dockerVMPassword;
+	private String dockerVMPd;
 	private String solutionPort;
 	private HashMap<String,DeploymentBean> nodeTypeContainerMap;
     private String bluePrintJsonStr;
@@ -120,7 +120,7 @@ public class AzureCompositeSolution implements Runnable {
     private String sleepTimeFirst;
 	private String sleepTimeSecond;
 	private String nexusRegistyUserName;
-	private String nexusRegistyPwd;
+	private String nexusRegistyPd;
 	private String nexusRegistyName;
 	private String otherRegistyName;
 	private String exposeDataBrokerPort;
@@ -132,18 +132,18 @@ public class AzureCompositeSolution implements Runnable {
     }
 	
     // Constructor of AzureCompositeSolution
-	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPwd,
+	public AzureCompositeSolution(Azure azure,AzureDeployDataObject deployDataObject,String dockerContainerPrefix,String dockerUserName,String dockerPd,
 			String localEnvDockerHost,String localEnvDockerCertPath,ArrayList<String> list,String bluePrintName,String bluePrintUser,String bluePrintPass,String probeInternalPort,String probeName,
 			String probeUser,String probePass,String networkSecurityGroup,HashMap<String,String> imageMap,LinkedList<String> sequenceList,String dockerRegistryName,Blueprint bluePrint,String uidNumStr,
-			String dataSource,String dataUserName,String dataPassword,String dockerVMUserName,String dockerVMPassword,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,
+			String dataSource,String dataUserName,String dataPd,String dockerVMUserName,String dockerVMPd,String solutionPort,HashMap<String,DeploymentBean> nodeTypeContainerMap,
 			String bluePrintJsonStr, String probeNexusEndPoint,String subnet,String vnet,DataBrokerBean dataBrokerBean,
-			String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPwd,String nexusRegistyName,
+			String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPd,String nexusRegistyName,
 			String otherRegistyName,String exposeDataBrokerPort,String internalDataBrokerPort,TransportBean tbean) {
 	    this.azure = azure;
 	    this.deployDataObject = deployDataObject;
 	    this.dockerContainerPrefix = dockerContainerPrefix;
 	    this.dockerUserName = dockerUserName;
-	    this.dockerPwd = dockerPwd;
+	    this.dockerPd = dockerPd;
 	    this.localEnvDockerHost = localEnvDockerHost;
 	    this.localEnvDockerCertPath = localEnvDockerCertPath;
 	    this.list = list;
@@ -160,9 +160,9 @@ public class AzureCompositeSolution implements Runnable {
 	    
 	    this.dataSource=dataSource;
 	    this.dataUserName=dataUserName;
-	    this.dataPassword=dataPassword;
+	    this.dataPd=dataPd;
 	    this.dockerVMUserName=dockerVMUserName;
-	    this.dockerVMPassword=dockerVMPassword;
+	    this.dockerVMPd=dockerVMPd;
 	    this.solutionPort=solutionPort;
 	    this.nodeTypeContainerMap=nodeTypeContainerMap;
 	    this.bluePrintJsonStr=bluePrintJsonStr;
@@ -177,7 +177,7 @@ public class AzureCompositeSolution implements Runnable {
 	    this.sleepTimeFirst = sleepTimeFirst;
 		this.sleepTimeSecond = sleepTimeSecond;
 		this.nexusRegistyUserName = nexusRegistyUserName;
-		this.nexusRegistyPwd = nexusRegistyPwd;
+		this.nexusRegistyPd = nexusRegistyPd;
 		this.nexusRegistyName = nexusRegistyName;
 		this.otherRegistyName = otherRegistyName;
 		this.exposeDataBrokerPort = exposeDataBrokerPort;
@@ -227,8 +227,8 @@ public class AzureCompositeSolution implements Runnable {
 		    if(dockerVMUserName!=null){
 		    	dockerVMUserName=dockerVMUserName.trim();	
 		    }
-		    if(dockerVMPassword!=null){
-		    	dockerVMPassword=dockerVMPassword.trim();	
+		    if(dockerVMPd!=null){
+		    	dockerVMPd=dockerVMPd.trim();	
 		    }
 			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
 			DockerInfoList  dockerList=new DockerInfoList();
@@ -245,7 +245,7 @@ public class AzureCompositeSolution implements Runnable {
 			        	String containerName=(String)protoPair.getKey();
 			        	String protoPath=(String)protoPair.getValue();
 			        	ByteArrayOutputStream byteArrayOutputStream=azureUtil.getNexusUrlFile(tbean.getNexusUrl(), tbean.getNexusUserName(),
-			        			tbean.getNexusPassword(), protoPath);
+			        			tbean.getNexusPd(), protoPath);
 						logger.debug(protoPair.getKey() +"byteArrayOutputStream "+byteArrayOutputStream);
 						protoMap.put(protoPath, byteArrayOutputStream.toString());
 			        }
@@ -319,11 +319,11 @@ public class AzureCompositeSolution implements Runnable {
 		            RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
 		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
-		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword,subnet,vnet,sleepTimeFirstInt);
+		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPd,subnet,vnet,sleepTimeFirstInt);
 		            
 		            AuthConfig authConfig = new AuthConfig()
 		                    .withUsername(dockerUserName)
-		                    .withPassword(dockerPwd);
+		                    .withPassword(dockerPd);
 		            
 		            AuthConfig authConfig2 = new AuthConfig()
 		                    .withUsername(bluePrintUser)
@@ -335,7 +335,7 @@ public class AzureCompositeSolution implements Runnable {
 		            
 		            AuthConfig authConfigNexus = new AuthConfig()
 		                    .withUsername(nexusRegistyUserName)
-		                    .withPassword(nexusRegistyPwd);
+		                    .withPassword(nexusRegistyPd);
 	
 		            //=============================================================
 		            // Pull a temp image from public Docker repo and create a temporary container from that image
@@ -464,7 +464,7 @@ public class AzureCompositeSolution implements Runnable {
 		            logger.debug("Before Docker remoteDockerClient ");
 		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
-		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPassword,subnet,vnet,sleepTimeFirstInt);
+		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPd,subnet,vnet,sleepTimeFirstInt);
 		            logger.debug("After Docker remoteDockerClient ");
 		            //=============================================================
 		            // Push the new Docker image to the Azure Container Registry
@@ -504,7 +504,7 @@ public class AzureCompositeSolution implements Runnable {
 	                  logger.debug("remoteDockerClient with privateRepoUrl ");
 	                  //Nginx mapping folder
 	                  if(containerInstanceprobe!=null && !"".equals(containerInstanceprobe)){
-	                	  DockerUtils.protoFileVM(azureBean.getAzureVMIP(), dockerVMUserName, dockerVMPassword,tbean);
+	                	  DockerUtils.protoFileVM(azureBean.getAzureVMIP(), dockerVMUserName, dockerVMPd,tbean);
 	                  }
 	                  int imageCount=1;
 	                  int remoteCount=1;
@@ -554,8 +554,6 @@ public class AzureCompositeSolution implements Runnable {
 			    		            	}
 			    		            	String azureVMIP=azureBean.getAzureVMIP();
 			    		            	String azureVMName=azureBean.getAzureVMName();
-			    		        		final String vmUserName=dockerVMUserName;
-			    		        		final String vmPassword=dockerVMPassword;
 			    		        		String repositoryName="";
 			    		        		repositoryName=privateRepoUrl+":"+tagImage;
 			    		        		String portNumber="";
@@ -611,7 +609,7 @@ public class AzureCompositeSolution implements Runnable {
 		            		            logger.debug(" portNumberString " + portNumberString);
 		            		            logger.debug(" containerName " + containerName);
 		            		            logger.debug("Start Deploying repositoryName "+repositoryName);
-			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),  acrCredentials.username(),
+			    		        		DockerUtils.deploymentCompositeImageVM(azureVMIP, dockerVMUserName, dockerVMPd, azureRegistry.loginServerUrl(),  acrCredentials.username(),
 			    		        				acrCredentials.passwords().get(0).value(), repositoryName,finalContainerName,imageCount,
 			    		        				portNumberString,probeNexusEndPoint,sleepTimeFirstInt,tbean);
 			    		        		
@@ -732,7 +730,7 @@ public class AzureCompositeSolution implements Runnable {
 		 
 		 if(vmIP!=null && !"".equals(vmIP)){
 			 azureUtil.generateNotification("Composite Solution VM is created, IP is:"+vmIP, deployDataObject.getUserId(),
-						dataSource, dataUserName, dataPassword);
+						dataSource, dataUserName, dataPd);
 		 }
 		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
 		 if (bluePrint.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
@@ -745,7 +743,7 @@ public class AzureCompositeSolution implements Runnable {
 		 if(azureContainerBeanList!=null){
        	  
    			logger.debug("Start saving data in database "); 
-   			createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
+   			createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_PROCESS);
        		  
          }
@@ -753,8 +751,8 @@ public class AzureCompositeSolution implements Runnable {
 			logger.error("AzureCompositeSolution failed", e);
 			try{
 				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
-						dataSource, dataUserName, dataPassword);
-				createDeploymentCompositeData(dataSource,dataUserName,dataPassword,azureContainerBeanList,deployDataObject.getSolutionId(),
+						dataSource, dataUserName, dataPd);
+				createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
 	   					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_FAILED);
 			}catch(Exception ex){
 				logger.error("createDeploymentCompositeData failed", e);
@@ -771,7 +769,7 @@ public class AzureCompositeSolution implements Runnable {
 	 */
 	public void addNotificationUser(String notificationId, String userId) {
         logger.debug("addNotificationUser");
-    	CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+    	CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
     	client.addUserToNotification(notificationId,userId);
      }
 	
@@ -783,7 +781,7 @@ public class AzureCompositeSolution implements Runnable {
 	 */
 	 public org.acumos.azure.client.transport.MLNotification createNotification(MLPNotification mlpNotification) {
 		 logger.debug("createNotification Start");
-         CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+         CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
          MLNotification mlNotification = Utils.convertToMLNotification(client.createNotification(mlpNotification));
          logger.debug("createNotification End");
          return mlNotification;
@@ -803,7 +801,7 @@ public class AzureCompositeSolution implements Runnable {
                      Date endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
                      notification.setStart(startDate);
                      notification.setEnd(endDate);
-                     CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+                     CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
                      notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
                      MLNotification mLNotification = createNotification(notification);
                      logger.debug("mLNotification.getNotificationId() "+mLNotification.getNotificationId());
@@ -849,8 +847,8 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("setuidHashmap End");
 	}	
 	
-	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password,null);
+	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String dataPd) {
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
 		return client;
 	}
 	
@@ -948,7 +946,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("putDataBrokerDetails End");
 	}
 	
-	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPassword,List<AzureContainerBean> azureContainerBeanList,
+	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPd,List<AzureContainerBean> azureContainerBeanList,
 			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
 		logger.debug("createDeploymentCompositeData start");
 		logger.debug("solutionId "+solutionId);
@@ -958,7 +956,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("deploymentStatusCode "+deploymentStatusCode);
 		logger.debug("azureContainerBeanList "+azureContainerBeanList);
 		ObjectMapper mapper = new ObjectMapper();
-		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
+		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
 		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
 			MLPSolutionDeployment mlp=new MLPSolutionDeployment();
 			mlp.setSolutionId(solutionId);
@@ -1041,7 +1039,7 @@ public class AzureCompositeSolution implements Runnable {
 			final String url = apiUrl;
 			if(deployDataObject!=null){
 				dataBrokerBean.setUserName(deployDataObject.getUsername());
-				dataBrokerBean.setPassword(deployDataObject.getPassword());
+				dataBrokerBean.setUserPd(deployDataObject.getUserPd());
 				dataBrokerBean.setHost(deployDataObject.getHost());
 				dataBrokerBean.setPort(deployDataObject.getPort());
 			}

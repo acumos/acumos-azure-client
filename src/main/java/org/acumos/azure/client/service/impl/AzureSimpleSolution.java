@@ -61,7 +61,7 @@ public class AzureSimpleSolution implements Runnable {
 	private AzureDeployDataObject deployDataObject;
 	private String dockerContainerPrefix;
 	private String dockerUserName;
-	private String dockerPwd;
+	private String dockerPd;
 	private String localEnvDockerHost;
 	private String localEnvDockerCertPath;
 	private ArrayList<String> list = new ArrayList<String>();
@@ -75,16 +75,16 @@ public class AzureSimpleSolution implements Runnable {
 
 	private String dataSource;
 	private String dataUserName;
-	private String dataPassword;
+	private String dataPd;
 	private String dockerVMUserName;
-	private String dockerVMPassword;
+	private String dockerVMPd;
 	private String solutionPort;
 	private String subnet;
 	private String vnet;
 	private String sleepTimeFirst;
 	private String sleepTimeSecond;
 	private String nexusRegistyUserName;
-	private String nexusRegistyPwd;
+	private String nexusRegistyPd;
 	private String nexusRegistyName;
 	private String otherRegistyName;
 	
@@ -93,17 +93,17 @@ public class AzureSimpleSolution implements Runnable {
 	}
 
 	public AzureSimpleSolution(Azure azure, AzureDeployDataObject deployDataObject, String dockerContainerPrefix,
-			String dockerUserName, String dockerPwd, String localEnvDockerHost, String localEnvDockerCertPath,
+			String dockerUserName, String dockerPd, String localEnvDockerHost, String localEnvDockerCertPath,
 			ArrayList<String> list, String bluePrintName, String bluePrintUser, String bluePrintPass,
 			String networkSecurityGroup, String dockerRegistryName, String uidNumStr, String dataSource,
-			String dataUserName, String dataPassword, String dockerVMUserName, String dockerVMPassword,String solutionPort,
-			String subnet,String vnet,String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPwd,
+			String dataUserName, String dataPd, String dockerVMUserName, String dockerVMPd,String solutionPort,
+			String subnet,String vnet,String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPd,
 			String nexusRegistyName,String otherRegistyName) {
 		this.azure = azure;
 		this.deployDataObject = deployDataObject;
 		this.dockerContainerPrefix = dockerContainerPrefix;
 		this.dockerUserName = dockerUserName;
-		this.dockerPwd = dockerPwd;
+		this.dockerPd = dockerPd;
 		this.localEnvDockerHost = localEnvDockerHost;
 		this.localEnvDockerCertPath = localEnvDockerCertPath;
 		this.list = list;
@@ -116,16 +116,16 @@ public class AzureSimpleSolution implements Runnable {
 		this.uidNumStr = uidNumStr;
 		this.dataSource = dataSource;
 		this.dataUserName = dataUserName;
-		this.dataPassword = dataPassword;
+		this.dataPd = dataPd;
 		this.dockerVMUserName = dockerVMUserName;
-		this.dockerVMPassword = dockerVMPassword;
+		this.dockerVMPd = dockerVMPd;
 		this.solutionPort = solutionPort;
 		this.subnet = subnet;
 		this.vnet = vnet;
 		this.sleepTimeFirst = sleepTimeFirst;
 		this.sleepTimeSecond = sleepTimeSecond;
 		this.nexusRegistyUserName = nexusRegistyUserName;
-		this.nexusRegistyPwd = nexusRegistyPwd;
+		this.nexusRegistyPd = nexusRegistyPd;
 		this.nexusRegistyName = nexusRegistyName;
 		this.otherRegistyName = otherRegistyName;
 
@@ -158,8 +158,8 @@ public class AzureSimpleSolution implements Runnable {
 			if(dockerVMUserName!=null){
 		    	dockerVMUserName=dockerVMUserName.trim();	
 		    }
-		    if(dockerVMPassword!=null){
-		    	dockerVMPassword=dockerVMPassword.trim();	
+		    if(dockerVMPd!=null){
+		    	dockerVMPd=dockerVMPd.trim();	
 		    }
 			final String saName = SdkContext.randomResourceName("sa", 20);
 			final Region region = Region.US_EAST; // US_EAST is coming from Azure sdk libraries
@@ -216,10 +216,10 @@ public class AzureSimpleSolution implements Runnable {
 			DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 					azureRegistry.loginServerUrl(), acrCredentials.username(),
 					acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPassword,subnet,vnet,sleepTimeFirstInt);
+					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,dockerVMPd,subnet,vnet,sleepTimeFirstInt);
 
-			AuthConfig authConfig = new AuthConfig().withUsername(dockerUserName).withPassword(dockerPwd);
-			AuthConfig authConfigNexus = new AuthConfig().withUsername(nexusRegistyUserName).withPassword(nexusRegistyPwd);
+			AuthConfig authConfig = new AuthConfig().withUsername(dockerUserName).withPassword(dockerPd);
+			AuthConfig authConfigNexus = new AuthConfig().withUsername(nexusRegistyUserName).withPassword(nexusRegistyPd);
 			logger.debug("Start pulling images from nexus::::::::");
 			Iterator itr = list.iterator();
 			while (itr.hasNext()) {
@@ -306,7 +306,7 @@ public class AzureSimpleSolution implements Runnable {
 					region, azureRegistry.loginServerUrl(), acrCredentials.username(),
 					acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath, azureBean,
 					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,
-					dockerVMPassword,subnet,vnet,sleepTimeFirstInt);
+					dockerVMPd,subnet,vnet,sleepTimeFirstInt);
 			logger.debug("After Docker remoteDockerClient");
 			// =============================================================
 			// Push the new Docker image to the Azure Container Registry
@@ -351,31 +351,29 @@ public class AzureSimpleSolution implements Runnable {
 				}
 
 				String azureVMIP = azureBean.getAzureVMIP();
-				final String vmUserName=dockerVMUserName;
-				final String vmPassword=dockerVMPassword;
 				String repositoryName = "";
 				repositoryName = privateRepoUrl + ":" + tagImage;
 			
 				logger.debug("azureBean VM " + azureBean.getAzureVMIP());
 				String portNumberString="8557"+":"+solutionPort;
-				DockerUtils.deploymentImageVM(azureVMIP, vmUserName, vmPassword, azureRegistry.loginServerUrl(),
+				DockerUtils.deploymentImageVM(azureVMIP, dockerVMUserName, dockerVMPd, azureRegistry.loginServerUrl(),
 						acrCredentials.username(), acrCredentials.passwords().get(0).value(), repositoryName,
 						portNumberString,sleepTimeFirstInt);
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
 				containerBean.setContainerName("ContainerOne");
 				azureUtil.generateNotification("Single Solution VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(),
-						dataSource, dataUserName, dataPassword);
+						dataSource, dataUserName, dataPd);
 			}
-			createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
+			createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
 					deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 					deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_PROCESS);
 		} catch (Exception e) {
 			 logger.error("AzureSimpleSolution failed", e);
 			try{
 				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
-						dataSource, dataUserName, dataPassword);
-				createDeploymentData(dataSource, dataUserName, dataPassword, containerBean,
+						dataSource, dataUserName, dataPd);
+				createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
 						deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 						deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_FAILED);
 			}catch(Exception ex){
@@ -386,12 +384,12 @@ public class AzureSimpleSolution implements Runnable {
 	}
 
 	
-	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String password) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password,null);
+	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String dataPd) {
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
 		return client;
 	}
 
-	public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPassword,
+	public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPd,
 			AzureContainerBean containerBean, String solutionId, String solutionRevisionId, String userId,
 			String uidNumber, String deploymentStatusCode) throws Exception {
 			logger.debug(" createDeploymentData Start");
@@ -402,7 +400,7 @@ public class AzureSimpleSolution implements Runnable {
 			logger.debug("deploymentStatusCode " + deploymentStatusCode);
 			MLPSolutionDeployment mlpDeployment=null;
 			ObjectMapper mapper = new ObjectMapper();
-			CommonDataServiceRestClientImpl client = getClient(dataSource, dataUserName, dataPassword);
+			CommonDataServiceRestClientImpl client = getClient(dataSource, dataUserName, dataPd);
 			if (solutionId != null && solutionRevisionId != null && userId != null && uidNumber != null) {
 				MLPSolutionDeployment mlp = new MLPSolutionDeployment();
 				mlp.setSolutionId(solutionId);

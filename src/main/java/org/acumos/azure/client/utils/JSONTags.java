@@ -34,7 +34,7 @@ public class JSONTags {
 	public static final String TAG_REQUEST_UNIQUE_ID = "userId";
 	public static final String TAG_STATUS_FAILURE = "failure";
 	public static final String TAG_REQUEST_UID = "user_id";
-	public static final String TAG_REQUEST_PASSWORD = "password";
+	
 
 	public static final String TAG_RESPONSE_DETAIL = "response_detail";
 	public static final String TAG_RESPONSE_BODY = "response_body";

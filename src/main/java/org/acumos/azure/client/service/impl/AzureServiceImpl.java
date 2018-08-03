@@ -87,19 +87,19 @@ public class AzureServiceImpl implements AzureService {
 	 this.env=envrionment;
 	}
 	
-	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String password) {
+	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String dataPd) {
 		logger.debug("getClient start");
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, password,null);
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
 		logger.debug("getClient End");
 		return client;
 	}
-	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName,String nexusPassword) {
+	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName,String nexusPd) {
 		logger.debug("nexusArtifactClient start");
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
 		repositoryLocation.setUrl(nexusUrl);
 		repositoryLocation.setUsername(nexusUserName);
-		repositoryLocation.setPassword(nexusPassword);
+		repositoryLocation.setPassword(nexusPd);
 		NexusArtifactClient nexusArtifactClient = new NexusArtifactClient(repositoryLocation);
 		logger.debug("nexusArtifactClient End");
 		return nexusArtifactClient;
@@ -138,8 +138,8 @@ public class AzureServiceImpl implements AzureService {
 		logger.debug(" iterateImageMap End ");
 		return list;
 	}
-	public String getBluePrintNexus(String solutionId, String revisionId,String datasource,String userName,String password,
-			String nexusUrl,String nexusUserName,String nexusPassword) throws  Exception{
+	public String getBluePrintNexus(String solutionId, String revisionId,String datasource,String userName,String dataPd,
+			String nexusUrl,String nexusUserName,String nexusPd) throws  Exception{
 		  logger.debug(" getBluePrintNexus Start");
 		  logger.debug("solutionId "+solutionId);
 		  logger.debug("revisionId "+revisionId);
@@ -149,7 +149,7 @@ public class AzureServiceImpl implements AzureService {
 		  String nexusURI = "";
 		  String bluePrintStr="";
 		  ByteArrayOutputStream byteArrayOutputStream = null;
-		  CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,password);
+		  CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,dataPd);
 			if (null != solutionRevisionId) {
 				// 3. Get the list of Artifiact for the SolutionId and SolutionRevisionId.
 				mlpArtifactList = cmnDataService.getSolutionRevisionArtifacts(solutionId, solutionRevisionId);
@@ -159,7 +159,7 @@ public class AzureServiceImpl implements AzureService {
 							.get().getUri();
 					logger.debug(" Nexus URI : " + nexusURI );
 					if (null != nexusURI) {
-						NexusArtifactClient nexusArtifactClient=nexusArtifactClient(nexusUrl,nexusUserName,nexusPassword);
+						NexusArtifactClient nexusArtifactClient=nexusArtifactClient(nexusUrl,nexusUserName,nexusPd);
 						File f = new File(AzureClientConstants.JSON_FILE_NAME);
 						if(f.exists() && !f.isDirectory()) { 
 						    f.delete();
@@ -179,10 +179,10 @@ public class AzureServiceImpl implements AzureService {
 			logger.debug("getBluePrintNexus End");	
 		return bluePrintStr;	
 	  }
-	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String password)throws  Exception{
+	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String dataPd)throws  Exception{
 			logger.debug("getSolutionRevisions Start");
 			List<MLPSolutionRevision> solRevisionsList = null;
-			CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,password);
+			CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,dataPd);
 			solRevisionsList = cmnDataService.getSolutionRevisions(solutionId);
 			logger.debug("getSolutionRevisions End ");
 			return solRevisionsList;

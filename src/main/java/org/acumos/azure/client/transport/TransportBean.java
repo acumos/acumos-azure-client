@@ -25,7 +25,7 @@ public class TransportBean {
 	
 	private String nexusUrl;
 	private String nexusUserName;
-	private String nexusPassword;
+	private String nexusPd;
 	private Map<String,String> protoContainerMap;
 	private Map<String,String> protoMap;
 	private String nginxWebFolder;
@@ -108,13 +108,13 @@ public class TransportBean {
 	public void setNexusUserName(String nexusUserName) {
 		this.nexusUserName = nexusUserName;
 	}
-
-	public String getNexusPassword() {
-		return nexusPassword;
+   
+	public String getNexusPd() {
+		return nexusPd;
 	}
 
-	public void setNexusPassword(String nexusPassword) {
-		this.nexusPassword = nexusPassword;
+	public void setNexusPd(String nexusPd) {
+		this.nexusPd = nexusPd;
 	}
 
 	public Map<String, String> getProtoContainerMap() {

@@ -30,7 +30,6 @@ public class AppProperties {
 	private String host;
 	private String port;
 	private String config;
-	private Registry registry = new Registry();
 	private Api api = new Api();
 
 	public String getHost() {
@@ -57,41 +56,6 @@ public class AppProperties {
 		this.config = config;
 	}
 
-	public static class Registry {
-		private String url;
-		private String username;
-		private String password;
-
-		public String getUrl() {
-			return url;
-		}
-
-		public void setUrl(String url) {
-			this.url = url;
-		}
-
-		public String getUsername() {
-			return username;
-		}
-
-		public void setUsername(String username) {
-			this.username = username;
-		}
-
-		public String getPassword() {
-			return password;
-		}
-
-		public void setPassword(String password) {
-			this.password = password;
-		}
-
-		@Override
-		public String toString() {
-			return "Registry{" + "url='" + url + '\'' + ", username='" + username + '\'' + ", password='" + password
-					+ '\'' + '}';
-		}
-	}
 
 	public static class Api {
 		private String version;
@@ -110,13 +74,7 @@ public class AppProperties {
 		}
 	}
 
-	public Registry getRegistry() {
-		return registry;
-	}
-
-	public void setRegistry(Registry registry) {
-		this.registry = registry;
-	}
+	
 
 	public Api getApi() {
 		return api;
@@ -128,7 +86,7 @@ public class AppProperties {
 
 	@Override
 	public String toString() {
-		return "AppProperties [host=" + host + ", port=" + port + ", config=" + config + ", registry=" + registry
+		return "AppProperties [host=" + host + ", port=" + port + ", config=" + config 
 				+ ", api=" + api + "]";
 	}
 

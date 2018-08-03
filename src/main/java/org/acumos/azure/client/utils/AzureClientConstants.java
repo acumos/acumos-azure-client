@@ -101,14 +101,14 @@ public final class AzureClientConstants {
 	
 	public static final String BLUEPRINT_NAME_PROP="blueprint.name";
 	public static final String REGISTRY_BLUEPRINT_USERNAME_PROP="docker.registry.bluePrint.username";
-	public static final String REGISTRY_BLUEPRINT_PASSWORD_PROP="docker.registry.bluePrint.password";
+	public static final String REGISTRY_BLUEPRINT_PD_PROP="docker.registry.bluePrint.pd";
 	public static final String REGISTRY_NETWORKGROUPNAME_PROP="docker.registry.networkgroupName";
 	public static final String REGISTRY_PORT_PROP="docker.registry.port";
 	public static final String CMNDATASVC_CMNDATASVCENDPOINURL_PROP="cmndatasvc.cmndatasvcendpoinurl";
 	public static final String CMNDATASVC_CMNDATASVCUSER_PROP="cmndatasvc.cmndatasvcuser";
-	public static final String CMNDATASVC_CMNDATASVCPWD_PROP="cmndatasvc.cmndatasvcpwd";
+	public static final String CMNDATASVC_CMNDATASVCPD_PROP="cmndatasvc.cmndatasvcpd";
 	public static final String DOCKERVMUSERNAME_PROP="docker.dockerVMUserName";
-	public static final String DOCKERVMPASSWORD_PROP="docker.dockerVMPassword";
+	public static final String DOCKERVMPD_PROP="docker.dockerVMPd";
 	public static final String REPLACECHAR_PROP="docker.replaceChar";
 	public static final String IGNORE_DOLLER_PROP="docker.ignordoller";
 	public static final String SPECIAL_CHAR_PROP="$";
@@ -120,7 +120,7 @@ public final class AzureClientConstants {
 	public static final String REGISTRY_NAME_PROP="docker.registry.name";
 	public static final String CONTAINERNAMEPREFIX_PROP="docker.containerNamePrefix";
 	public static final String REGISTRY_USERNAME_PROP="docker.registry.username";
-	public static final String REGISTRY_PASSWORD_PROP="docker.registry.password";
+	public static final String REGISTRY_PD_PROP="docker.registry.pd";
 	public static final String HOST_PROP="docker.host";
 	public static final String PORT_PROP="docker.port";
 	public static final String BLUEPRINT_IMAGENAME_PROP="blueprint.ImageName";
@@ -129,12 +129,12 @@ public final class AzureClientConstants {
 	public static final String PROBE_INTERNALPORT_PROP="probe.internalPort";
 	public static final String PROBE_PROBENEXUSENDPOINT_PROP="probe.probeNexusEndPoint";
 	public static final String DOCKER_REGISTRY_PROBE_USERNAME_PROP="docker.registry.probe.username";
-	public static final String DOCKER_REGISTRY_PROBE_PASSWORD_PROP="docker.registry.probe.password";
+	public static final String DOCKER_REGISTRY_PROBE_PD_PROP="docker.registry.probe.pd";
 	public static final String NEXUS_URL_PROP="nexus.url";
 	public static final String NEXUS_USERNAME_PROP="nexus.username";
-	public static final String NEXUS_PASSWORD_PROP="nexus.password";
+	public static final String NEXUS_PD_PROP="nexus.pd";
 	public static final String NEXUS_REGISTY_USERNAME="docker.nexusRegistyUserName";
-	public static final String NEXUS_REGISTY_PWD="docker.nexusRegistyPwd";
+	public static final String NEXUS_REGISTY_PD="docker.nexusRegistyPd";
 	public static final String NEXUS_REGISTY_NAME="docker.nexusRegistyName";
 	public static final String OTHER_REGISTY_NAME="docker.otherRegistyName";
 	public static final String EXPOSE_DATABROKER_PORT="docker.exposeDataBrokerPort";
