@@ -23,6 +23,5 @@ Acumos Azure Client
 .. toctree::
        :maxdepth: 2
 
-       release-notes
-       developer-guide
-       user-guide
+       release-notes.rst
+       developer-guide.rst
