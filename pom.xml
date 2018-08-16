@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.acumos.acumos-azure-client</groupId>
 	<artifactId>acumos-azure-client</artifactId>
-	<version>1.2.14-SNAPSHOT</version>
+	<version>1.2.15-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>acumos-azure-client</name>
@@ -14,7 +15,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.6.RELEASE</version>
+		<version>1.5.14.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
 
@@ -46,12 +47,12 @@
 		<dependency>
 			<groupId>org.acumos.common-dataservice</groupId>
 			<artifactId>cmn-data-svc-client</artifactId>
-			<version>1.16.1</version>
+			<version>1.17.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.acumos.acumos-nexus-client</groupId>
 			<artifactId>acumos-nexus-client</artifactId>
-			<version>2.2.0</version>
+			<version>2.2.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.slf4j</groupId>
@@ -77,7 +78,7 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -89,7 +90,7 @@
 			<groupId>com.microsoft.azure</groupId>
 			<artifactId>azure</artifactId>
 			<version>1.2.1</version>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -99,46 +100,47 @@
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-simple</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>
 		</dependency>
-		
-		<!-- Included this library Explicitly as azure-client-runtime-1.5.4.pom seems to be included in dependencies causing this library not to be loaded -->
+
+		<!-- Included this library Explicitly as azure-client-runtime-1.5.4.pom 
+			seems to be included in dependencies causing this library not to be loaded -->
 		<dependency>
-		    <groupId>com.microsoft.rest</groupId>
-		    <artifactId>client-runtime</artifactId>
-		    <version>1.5.3</version>
+			<groupId>com.microsoft.rest</groupId>
+			<artifactId>client-runtime</artifactId>
+			<version>1.5.3</version>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>com.github.cverges.expect4j</groupId>
 			<artifactId>expect4j</artifactId>
 			<version>1.6</version>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions> 
-			 
+			</exclusions>
+
 		</dependency>
 		<dependency>
 			<groupId>com.github.docker-java</groupId>
 			<artifactId>docker-java</artifactId>
 			<version>3.0.6</version>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>io.fabric8</groupId>
 			<artifactId>kubernetes-client</artifactId>
 			<version>2.2.14</version>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
@@ -162,36 +164,41 @@
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
 			<version>2.6.1</version>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-configuration-processor</artifactId>
 			<optional>true</optional>
-			
+
 			<exclusions>
 				<exclusion>
 					<groupId>org.slf4j</groupId>
 					<artifactId>slf4j-api</artifactId>
 				</exclusion>
-			</exclusions> 
+			</exclusions>
 		</dependency>
 		<dependency>
-		    <groupId>com.googlecode.json-simple</groupId>
-		    <artifactId>json-simple</artifactId>
-		    <version>1.1.1</version>
+			<groupId>com.googlecode.json-simple</groupId>
+			<artifactId>json-simple</artifactId>
+			<version>1.1.1</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<!-- Spring sets the <version>4.11</version> -->
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.vaadin.external.google</groupId>
+			<artifactId>android-json</artifactId>
+			<version>0.0.20131108.vaadin1</version>
 		</dependency>
 	</dependencies>
 
