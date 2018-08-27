@@ -16,19 +16,17 @@
 .. limitations under the License.
 .. ===============LICENSE_END=========================================================
 
-=================================
-Acumos Azure Client Release Notes
-=================================
-Version 1.2.15, August 16 th 2018
------------------------------
-* CDS 1.17.1 Upgrade and  fix the issue, Unable to deploy model and composite solution to azure (ACUMOS-1539)
+==========================
+Azure Client Release Notes
+==========================
 
 Version 1.2.16, 27 August 2018
 ------------------------------
-* Revise Service logging so Azure credentials are not exposed 
+* Revise service logging so Azure credentials are not exposed (ACUMOS-1636)
 
 Version 1.2.15, 16 August 2018
 ------------------------------
+* Unable to deploy model and composite solution to azure (ACUMOS-1539)
 * CDS 1.17.1 Upgrade
 
 Version 1.2.14, 9 August 2018
