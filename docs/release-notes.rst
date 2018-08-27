@@ -19,6 +19,9 @@
 =================================
 Acumos Azure Client Release Notes
 =================================
+Version 1.2.15, August 16 th 2018
+-----------------------------
+* CDS 1.17.1 Upgrade and  fix the issue, Unable to deploy model and composite solution to azure (ACUMOS-1539)
 
 Version 1.2.9, July 7 th 2018
 -----------------------------
