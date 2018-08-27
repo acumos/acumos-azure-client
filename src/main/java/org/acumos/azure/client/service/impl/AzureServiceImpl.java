@@ -23,12 +23,8 @@ package org.acumos.azure.client.service.impl;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -37,63 +33,40 @@ import java.util.Map;
 
 import org.acumos.azure.client.service.AzureService;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
-import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
-import org.acumos.azure.client.utils.Blueprint;
-import org.acumos.azure.client.utils.DockerInfo;
-import org.acumos.azure.client.utils.DockerInfoList;
-import org.acumos.azure.client.utils.DockerUtils;
-import org.acumos.azure.client.utils.SSHShell;
-import org.acumos.azure.client.utils.Utils;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPArtifact;
-import org.acumos.cds.domain.MLPSolutionRevision;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
 
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.command.InspectContainerResponse;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.ExposedPort;
-import com.github.dockerjava.api.model.Image;
-import com.github.dockerjava.api.model.Ports;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.microsoft.azure.AzureEnvironment;
 import com.microsoft.azure.credentials.ApplicationTokenCredentials;
 import com.microsoft.azure.management.Azure;
-import com.microsoft.azure.management.containerregistry.Registry;
-import com.microsoft.azure.management.containerregistry.implementation.RegistryListCredentials;
-import com.microsoft.azure.management.resources.fluentcore.arm.Region;
-import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
 import com.microsoft.rest.LogLevel;
 
 public class AzureServiceImpl implements AzureService {
-	
-	Logger logger =LoggerFactory.getLogger(AzureServiceImpl.class);
-	
-   private Environment env;
-	
-	public void setEnvironment(Environment envrionment){
-	 this.env=envrionment;
-	}
-	
-	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String dataPd) {
+
+	private final Logger logger = LoggerFactory.getLogger(AzureServiceImpl.class);
+
+	// TODO: can this and the setter be removed?
+	private Environment env;
+
+	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String dataPd) {
 		logger.debug("getClient start");
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
+		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,
+				null);
 		logger.debug("getClient End");
 		return client;
 	}
-	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName,String nexusPd) {
+
+	public void setEnvironment(Environment envrionment) {
+		this.env = envrionment;
+	}
+
+	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName, String nexusPd) {
 		logger.debug("nexusArtifactClient start");
 		RepositoryLocation repositoryLocation = new RepositoryLocation();
 		repositoryLocation.setId("1");
@@ -104,110 +77,95 @@ public class AzureServiceImpl implements AzureService {
 		logger.debug("nexusArtifactClient End");
 		return nexusArtifactClient;
 	}
+
 	@Override
 	public Azure authorize(AzureDeployDataObject authObject) {
-		// TODO Auto-generated method stub
 		logger.debug("authorize in AzureServiceImpl start");
-		logger.debug(" authentication parameters:: "+ authObject.toString() );
-		
-		ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(
-				authObject.getClient(), authObject.getTenant(), authObject.getKey(), AzureEnvironment.AZURE);
-
-		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC)
-				.authenticate(credentials)
+		ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(authObject.getClient(),
+				authObject.getTenant(), authObject.getKey(), AzureEnvironment.AZURE);
+		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC).authenticate(credentials)
 				.withSubscription(authObject.getSubscriptionKey());
-		logger.debug("try getting some info " + azure.subscriptionId() + " " + azure.containerRegistries());
-		logger.debug("Azure AD Authorization Successful");
+		logger.debug("authorize: subscription ID {}, container registries {}", azure.subscriptionId(),
+				azure.containerRegistries());
 		logger.debug("authorize in AzureServiceImpl End");
 		return azure;
 	}
-	
-	public ArrayList<String> iterateImageMap(HashMap<String,String> imageMap){
+
+	public ArrayList<String> iterateImageMap(HashMap<String, String> imageMap) {
 		logger.debug("iterateImageMap ");
-		logger.debug("imageMap "+imageMap);
-		ArrayList<String> list=new ArrayList<String>();
-		 Iterator it = imageMap.entrySet().iterator();
-		    while (it.hasNext()) {
-		        Map.Entry pair = (Map.Entry)it.next();
-		        logger.debug(pair.getKey() + " = " + pair.getValue());
-		        if(pair.getKey()!=null){
-		        	list.add((String)pair.getKey());
-		        }
-		    }
-		logger.debug("list "+list);    
-		logger.debug(" iterateImageMap End ");
+		logger.debug("imageMap " + imageMap);
+		ArrayList<String> list = new ArrayList<String>();
+		Iterator<Map.Entry<String, String>> it = imageMap.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<String, String> pair = it.next();
+			logger.debug(pair.getKey() + " = " + pair.getValue());
+			if (pair.getKey() != null) {
+				list.add((String) pair.getKey());
+			}
+		}
+		logger.debug("iterateImageMap: list {}", list);
+		logger.debug("iterateImageMap End ");
 		return list;
 	}
-	public String getBluePrintNexus(String solutionId, String revisionId,String datasource,String userName,String dataPd,
-			String nexusUrl,String nexusUserName,String nexusPd) throws  Exception{
-		  logger.debug(" getBluePrintNexus Start");
-		  logger.debug("solutionId "+solutionId);
-		  logger.debug("revisionId "+revisionId);
-		  List<MLPSolutionRevision> mlpSolutionRevisionList;
-		  String solutionRevisionId = revisionId;
-		  List<MLPArtifact> mlpArtifactList;
-		  String nexusURI = "";
-		  String bluePrintStr="";
-		  ByteArrayOutputStream byteArrayOutputStream = null;
-		  CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,dataPd);
-			if (null != solutionRevisionId) {
-				// 3. Get the list of Artifiact for the SolutionId and SolutionRevisionId.
-				mlpArtifactList = cmnDataService.getSolutionRevisionArtifacts(solutionId, solutionRevisionId);
-				if (null != mlpArtifactList && !mlpArtifactList.isEmpty()) {
-					nexusURI = mlpArtifactList.stream()
-							.filter(mlpArt -> mlpArt.getArtifactTypeCode().equalsIgnoreCase(AzureClientConstants.ARTIFACT_TYPE_BLUEPRINT)).findFirst()
-							.get().getUri();
-					logger.debug(" Nexus URI : " + nexusURI );
-					if (null != nexusURI) {
-						NexusArtifactClient nexusArtifactClient=nexusArtifactClient(nexusUrl,nexusUserName,nexusPd);
-						File f = new File(AzureClientConstants.JSON_FILE_NAME);
-						if(f.exists() && !f.isDirectory()) { 
-						    f.delete();
-						}
-						byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
-						logger.debug(" byteArrayOutputStream "+byteArrayOutputStream.toString());
-						OutputStream outputStream = new FileOutputStream(AzureClientConstants.JSON_FILE_NAME); 
-						byteArrayOutputStream.writeTo(outputStream);
-						bluePrintStr=byteArrayOutputStream.toString();
+
+	public String getBluePrintNexus(String solutionId, String revisionId, String datasource, String userName,
+			String dataPd, String nexusUrl, String nexusUserName, String nexusPd) throws Exception {
+		logger.debug("getBluePrintNexus Start: solutionId {}, revisionId {}", solutionId, revisionId);
+		String solutionRevisionId = revisionId;
+		List<MLPArtifact> mlpArtifactList;
+		String nexusURI = "";
+		String bluePrintStr = "";
+		ByteArrayOutputStream byteArrayOutputStream = null;
+		CommonDataServiceRestClientImpl cmnDataService = getClient(datasource, userName, dataPd);
+		if (null != solutionRevisionId) {
+			// 3. Get the list of Artifiact for the SolutionId and SolutionRevisionId.
+			mlpArtifactList = cmnDataService.getSolutionRevisionArtifacts(solutionId, solutionRevisionId);
+			if (null != mlpArtifactList && !mlpArtifactList.isEmpty()) {
+				nexusURI = mlpArtifactList.stream()
+						.filter(mlpArt -> mlpArt.getArtifactTypeCode()
+								.equalsIgnoreCase(AzureClientConstants.ARTIFACT_TYPE_BLUEPRINT))
+						.findFirst().get().getUri();
+				logger.debug("getBluePrintNexus: Nexus URI : " + nexusURI);
+				if (null != nexusURI) {
+					NexusArtifactClient nexusArtifactClient = nexusArtifactClient(nexusUrl, nexusUserName, nexusPd);
+					File f = new File(AzureClientConstants.JSON_FILE_NAME);
+					if (f.exists() && !f.isDirectory()) {
+						f.delete();
 					}
+					byteArrayOutputStream = nexusArtifactClient.getArtifact(nexusURI);
+					logger.debug("getBluePrintNexus: byteArrayOutputStream length {}", byteArrayOutputStream.size());
+					OutputStream outputStream = new FileOutputStream(AzureClientConstants.JSON_FILE_NAME);
+					byteArrayOutputStream.writeTo(outputStream);
+					bluePrintStr = byteArrayOutputStream.toString();
 				}
-			}	
-			File file = new File(AzureClientConstants.JSON_FILE_NAME);
-			if(!file.exists()){
-				 throw  new Exception(AzureClientConstants.JSON_FILE_NAME+" file is not exist");
 			}
-			logger.debug("getBluePrintNexus End");	
-		return bluePrintStr;	
-	  }
-	  private List<MLPSolutionRevision> getSolutionRevisionsList(String solutionId,String datasource,String userName,String dataPd)throws  Exception{
-			logger.debug("getSolutionRevisions Start");
-			List<MLPSolutionRevision> solRevisionsList = null;
-			CommonDataServiceRestClientImpl cmnDataService=getClient(datasource,userName,dataPd);
-			solRevisionsList = cmnDataService.getSolutionRevisions(solutionId);
-			logger.debug("getSolutionRevisions End ");
-			return solRevisionsList;
 		}
-	  public LinkedList<String> getSequence(HashMap<String,String> hmap){
-			LinkedList<String> sequenceList=new LinkedList<String>();
-			Iterator itrContainer=hmap.entrySet().iterator();
-	        while(itrContainer.hasNext()){
-	        	
-	        	Map.Entry pair = (Map.Entry)itrContainer.next();
-	        	String containerName=(String)pair.getKey();
-	        	sequenceList.add((String)pair.getValue());
-	        }
-	        logger.debug("sequenceList "+sequenceList);
-	        return sequenceList;
+		File file = new File(AzureClientConstants.JSON_FILE_NAME);
+		if (!file.exists()) {
+			throw new Exception(AzureClientConstants.JSON_FILE_NAME + " file is not exist");
 		}
-	  public LinkedList<String> addContainerSequence(LinkedList<String> sequenceList,String containerName){
-		  logger.debug("addContainerSequence Start");
-		  logger.debug("probeContainerName "+containerName+"sequenceList "+sequenceList);
-		  if(sequenceList!=null && sequenceList.size() > 0 && containerName!=null && !"".equals(containerName)){
-			  int length=sequenceList.size();
-			  logger.debug("length "+length);
-			  sequenceList.add((length-1), containerName); 
-			}
-		  logger.debug("addContainerSequence End"+sequenceList);
-		  return sequenceList;
-	  }
+		logger.debug("getBluePrintNexus End");
+		return bluePrintStr;
+	}
+
+	public LinkedList<String> getSequence(HashMap<String, String> hmap) {
+		LinkedList<String> sequenceList = new LinkedList<String>();
+		Iterator<Map.Entry<String, String>> itrContainer = hmap.entrySet().iterator();
+		while (itrContainer.hasNext()) {
+			Map.Entry<String,String> pair = itrContainer.next();
+			sequenceList.add((String) pair.getValue());
+		}
+		logger.debug("getSequence: sequenceList {}", sequenceList);
+		return sequenceList;
+	}
+
+	public LinkedList<String> addContainerSequence(LinkedList<String> sequenceList, String containerName) {
+		logger.debug("addContainerSequence Start: containerName {}, sequenceList {}", containerName, sequenceList);
+		if (sequenceList != null && sequenceList.size() > 0 && containerName != null && !"".equals(containerName)) {
+			int length = sequenceList.size();
+			sequenceList.add((length - 1), containerName);
+		}
+		logger.debug("addContainerSequence End: revised list {}",  sequenceList);
+		return sequenceList;
+	}
 }
