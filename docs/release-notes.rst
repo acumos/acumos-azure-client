@@ -20,6 +20,30 @@
 Acumos Azure Client Release Notes
 =================================
 
+Version 1.2.16, 27 August 2018
+------------------------------
+* Revise Service logging so Azure credentials are not exposed 
+
+Version 1.2.15, 16 August 2018
+------------------------------
+* CDS 1.17.1 Upgrade
+
+Version 1.2.14, 9 August 2018
+-----------------------------
+* CDS 1.16.1 Upgrade
+
+Version 1.2.12, 3 August 2018
+-----------------------------
+* code issues remove for azure client
+
+Version 1.2.11, 30 July 2018
+----------------------------
+* CDS 1.16.0 Upgrade
+
+Version 1.2.10, 20 July 2018
+----------------------------
+* CDS 1.15.4 Upgrade
+
 Version 1.2.9, July 7 th 2018
 -----------------------------
 * CDS 1.15.3 Upgrade and Library fixes (ACUMOS-659)
