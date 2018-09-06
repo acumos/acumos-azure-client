@@ -20,6 +20,10 @@
 Azure Client Release Notes
 ==========================
 
+Version 1.2.17, 6 September 2018
+------------------------------
+* CDS 1.18.0 Upgrade
+
 Version 1.2.16, 27 August 2018
 ------------------------------
 * Revise service logging so Azure credentials are not exposed (ACUMOS-1636)
