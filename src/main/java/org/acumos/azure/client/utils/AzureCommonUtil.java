@@ -130,7 +130,6 @@ public class AzureCommonUtil {
 	   }else{
 		   finalStr=commonStr; 
 	   }
-	   logger.debug("finalStr "+finalStr);
 	   logger.debug("replaceCharStr start");
 	   return finalStr;
    }
