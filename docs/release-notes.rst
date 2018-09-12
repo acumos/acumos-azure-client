@@ -20,8 +20,14 @@
 Azure Client Release Notes
 ==========================
 
+Version 1.2.18, 12 September 2018
+---------------------------------
+* Set path for Log in azure project
+* Upgrade to Spring-Boot 1.5.15
+* Upgrade to CDS 1.18.1
+
 Version 1.2.17, 6 September 2018
-------------------------------
+--------------------------------
 * CDS 1.18.0 Upgrade
 
 Version 1.2.16, 27 August 2018
