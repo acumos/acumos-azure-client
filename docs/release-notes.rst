@@ -20,6 +20,10 @@
 Azure Client Release Notes
 ==========================
 
+Version 1.2.20, 17 September 2018
+---------------------------------
+Azure-client logs not written to location same as others(ACUMOS-1635)
+
 Version 1.2.18, 12 September 2018
 ---------------------------------
 * Set path for Log in azure project
