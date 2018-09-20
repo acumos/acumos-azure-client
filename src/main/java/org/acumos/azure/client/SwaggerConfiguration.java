@@ -24,6 +24,7 @@ import org.acumos.azure.client.controller.AbstractController;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
@@ -49,14 +50,16 @@ public class SwaggerConfiguration {
 
 	private ApiInfo apiInfo() {
 		final String version = AzureClientServiceApplication.class.getPackage().getImplementationVersion();
-		ApiInfo apiInfo = new ApiInfo("Acumos Azure Client REST API", "Operations for Azure Deployment.", // description
-				version == null ? "version not available" : version, // version
-				"Terms of service", // TOS
-				new Contact("Acumos Team", // name
-						"https://acumos.org/to-be-determined", // URL
-						"contact@acumos.org"), // email
-				"Apache 2.0", // License
-				"https://www.apache.org/licenses/LICENSE-2.0"); // License URL
-		return apiInfo;
+		return new ApiInfoBuilder() //
+				.title("Acumos Azure Client REST API") //
+				.description("Operations for Azure Deployment.") //
+				.termsOfServiceUrl("Terms of service") //
+				.contact(new Contact("Acumos Dev Team", //
+						"http://acumos.readthedocs.io/en/latest/submodules/common-dataservice/docs/", //
+						"noreply@acumos.org")) //
+				.license("Apache 2.0 License").licenseUrl("http://www.apache.org/licenses/LICENSE-2.0") //
+				.version(version == null ? "version not available" : version) //
+				.build();
 	}
+
 }
