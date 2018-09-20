@@ -20,9 +20,14 @@
 Azure Client Release Notes
 ==========================
 
+Version 1.2.21, 20 September 2018
+---------------------------------
+* Upgrade Spring-Boot version (`ACUMOS-1754 <https://jira.acumos.org/browse/ACUMOS-1754>`_)
+* Upgrade Springfox version
+
 Version 1.2.20, 17 September 2018
 ---------------------------------
-Azure-client logs not written to location same as others(ACUMOS-1635)
+* Azure-client logs not written to location same as others (`ACUMOS-1635 <https://jira.acumos.org/browse/ACUMOS-1635>`_)
 
 Version 1.2.18, 12 September 2018
 ---------------------------------
@@ -36,11 +41,11 @@ Version 1.2.17, 6 September 2018
 
 Version 1.2.16, 27 August 2018
 ------------------------------
-* Revise service logging so Azure credentials are not exposed (ACUMOS-1636)
+* Revise service logging so Azure credentials are not exposed (`ACUMOS-1636 <https://jira.acumos.org/browse/ACUMOS-1636>`_)
 
 Version 1.2.15, 16 August 2018
 ------------------------------
-* Unable to deploy model and composite solution to azure (ACUMOS-1539)
+* Unable to deploy model and composite solution to azure (`ACUMOS-1539 <https://jira.acumos.org/browse/ACUMOS-1539>`_)
 * CDS 1.17.1 Upgrade
 
 Version 1.2.14, 9 August 2018
@@ -61,18 +66,18 @@ Version 1.2.10, 20 July 2018
 
 Version 1.2.9, July 7 th 2018
 -----------------------------
-* CDS 1.15.3 Upgrade and Library fixes (ACUMOS-659)
+* CDS 1.15.3 Upgrade and Library fixes (`ACUMOS-659 <https://jira.acumos.org/browse/ACUMOS-659>`_)
 
 Version 1.2.8, July 3 rd 2018
-----------------------------
-* Fix the issues with Blueprint and Probe end points required for Model Connector (ACUMOS-659)
+-----------------------------
+* Fix the issues with Blueprint and Probe end points required for Model Connector (`ACUMOS-659 <https://jira.acumos.org/browse/ACUMOS-659>`_)
 
 Version 1.2.4, May 24 th 2018
-----------------------------
-* Enable log level in the azure-client component from Docker (ACUMOS-921)
+-----------------------------
+* Enable log level in the azure-client component from Docker (`ACUMOS-921 <https://jira.acumos.org/browse/ACUMOS-921>`_)
 
 Version 1.96.0, May 2018
-----------------------------
+------------------------
 
-* Success/ Failure message is not displaying on the UI after VM created or timeout (ACUMOS-676)
-* acumos-azure-client contains cognita-specific code (ACUMOS-689)
+* Success/ Failure message is not displaying on the UI after VM created or timeout (`ACUMOS-676 <https://jira.acumos.org/browse/ACUMOS-676>`_)
+* acumos-azure-client contains cognita-specific code (`ACUMOS-689 <https://jira.acumos.org/browse/ACUMOS-689>`_)

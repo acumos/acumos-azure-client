@@ -95,10 +95,7 @@ Steps
 API
 ---
 
-**2.1 Single Solution**
-
-azure/singleImageAzureDeployment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+**2.1 Azure Single Image Deployment**
 
 **- Trigger**
 
@@ -139,10 +136,8 @@ Check with your Cloud Administrator for values to populate the request.
 "UIDNumber": "Unique Transaction Number"
 }
 
-**2.2 Composite Solution**
+**2.2 Azure Composite Solution**
 
-azure/compositeSolutionAzureDeployment
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **- Trigger:**
 
