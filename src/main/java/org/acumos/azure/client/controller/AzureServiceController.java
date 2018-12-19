@@ -31,15 +31,21 @@ import java.util.UUID;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import org.acumos.azure.client.api.APINames;
 import org.acumos.azure.client.service.impl.AzureCompositeSolution;
+import org.acumos.azure.client.service.impl.AzureKubeSolution;
 import org.acumos.azure.client.service.impl.AzureServiceImpl;
 import org.acumos.azure.client.service.impl.AzureSimpleSolution;
+import org.acumos.azure.client.service.impl.AzureSolutionDeployment;
 import org.acumos.azure.client.transport.AzureDeployBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
+import org.acumos.azure.client.transport.AzureKubeBean;
+import org.acumos.azure.client.transport.AzureKubeTransportBean;
 import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.SingletonMapClass;
+import org.acumos.azure.client.transport.SolutionDeployment;
 import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AppProperties;
 import org.acumos.azure.client.utils.AzureBean;
@@ -65,7 +71,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.async.DeferredResult;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectMapper;	
 import com.microsoft.azure.management.Azure;
 @RestController
 public class AzureServiceController extends AbstractController {
@@ -76,7 +82,8 @@ public class AzureServiceController extends AbstractController {
 	public void setApp(AppProperties app) {
 		this.app = app;
 	}
-
+	
+	
 	@Autowired
 	private Environment env;
 
@@ -443,7 +450,182 @@ public class AzureServiceController extends AbstractController {
 		logger.debug("compositeSolutionAzureDeployment End");
 		return jsonOutput.toString();
 	}
+	
+	@RequestMapping(value = {org.acumos.azure.client.api.APINames.AZURE_AUTH_KUBERNETES}, method = RequestMethod.POST, produces = AzureClientConstants.APPLICATION_JSON)
+	@ResponseBody
+	public String kubernetesDeployment(HttpServletRequest request,@RequestBody AzureKubeBean auth,HttpServletResponse response) throws Exception {
+		logger.debug("kubernetesDeployment start");
+		JSONObject  jsonOutput = new JSONObject();
+		String cmnDataUrl="";
+		String cmnDataUser="";
+		String cmnDataPd="";
+		String kubernetesClientUrl="";
+		String subnet="";
+		String vnet="";
+		String networkSecurityGroup="";
+		String dockerVMUserName="";
+		String dockerVMPd="";
+		String sleepTimeFirst="";
+		String uidNumStr="";
+		try{
+			  UUID uidNumber = UUID.randomUUID();
+			  uidNumStr=uidNumber.toString();
+			  AzureCommonUtil cutil=new AzureCommonUtil();
+			  AzureKubeTransportBean kubeTransportBean=new AzureKubeTransportBean();
+			  cmnDataUrl=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCENDPOINURL_PROP);
+			  cmnDataUser=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCUSER_PROP);
+			  cmnDataPd=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCPD_PROP);
+			  subnet=env.getProperty(AzureClientConstants.SUBNET_PROP);
+			  vnet=env.getProperty(AzureClientConstants.VNET_PROP);
+		      networkSecurityGroup=env.getProperty(AzureClientConstants.REGISTRY_NETWORKGROUPNAME_PROP);
+			  dockerVMUserName=env.getProperty(AzureClientConstants.DOCKERVMUSERNAME_PROP);
+			  dockerVMPd=env.getProperty(AzureClientConstants.DOCKERVMPD_PROP);
+			  sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
+			  kubernetesClientUrl=env.getProperty(AzureClientConstants.KUBERNETESCLIENT_URL);
+			  logger.debug("cmnDataUrl "+cmnDataUrl);
+			  logger.debug("cmnDataUser "+cmnDataUser);
+			  logger.debug("cmnDataPd "+cmnDataPd);
+			  logger.debug("subnet "+subnet);
+			  logger.debug("vnet "+vnet);
+			  logger.debug("networkSecurityGroup "+networkSecurityGroup);
+			  logger.debug("dockerVMUserName "+dockerVMUserName);
+			  logger.debug("dockerVMPd "+dockerVMPd);
+			  logger.debug("sleepTimeFirst "+sleepTimeFirst);
+			  logger.debug("kubernetesClientUrl "+kubernetesClientUrl);
+			  AzureDeployDataObject authObject=cutil.convertToAzureDeployDataObject(auth);
+			  AzureServiceImpl azureImpl=new AzureServiceImpl();
+			  Azure azure = azureImpl.authorize(authObject);
+			  logger.debug("Azure Authorization Done");
+			  kubeTransportBean.setDockerVMPd(dockerVMPd);
+			  kubeTransportBean.setDockerVMUserName(dockerVMUserName);
+			  kubeTransportBean.setKubernetesClientUrl(kubernetesClientUrl);
+			  kubeTransportBean.setNetworkSecurityGroup(networkSecurityGroup);
+			  kubeTransportBean.setSleepTimeFirst(sleepTimeFirst);
+			  kubeTransportBean.setSubnet(subnet);
+			  kubeTransportBean.setVnet(vnet);
+			  if(azure!=null) {
+				  AzureKubeSolution kubeSolution=new AzureKubeSolution(auth,kubeTransportBean,azure);
+				  Thread t = new Thread(kubeSolution);
+                  t.start();
+			  }
+			 
+			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);  
+		   	response.setStatus(200);
+		   	}catch(Exception e){
+		   		logger.error("kubernetesDeployment failed", e);
+				response.setStatus(404);
+				jsonOutput.put("status", APINames.FAILED);
+			}
+		logger.debug("kubernetesDeployment end");
+		jsonOutput.put("UIDNumber", uidNumStr);
+		return jsonOutput.toString();
+	}
     
+	@RequestMapping(value = {org.acumos.azure.client.api.APINames.AZURE_AUTH_EXISTINGVM}, method = RequestMethod.POST, produces = AzureClientConstants.APPLICATION_JSON)
+	@ResponseBody
+	public String existingAzureVM(HttpServletRequest request,@RequestBody SolutionDeployment bean,HttpServletResponse response) throws Exception {
+		logger.debug("existingAzureVM start");
+		
+		String bluePrintImage="";
+		String bluePrintName="";
+		String bluePrintUser="";
+		String bluePrintPass="";
+		String probePrintImage="";
+		String probePrintName="";
+		String probeInternalPort="";
+		String probeNexusEndPoint="";
+		String probUser="";
+		String probePass="";
+		String dataSource="";
+		String userName="";
+		String dataPd="";
+		String uidNumStr="";
+		String nexusUrl="";
+		String nexusUserName="";
+		String nexusPd="";
+		String nginxMapFolder="";
+		String nginxWebFolder="";
+		String nginxImageName="";
+		String nginxInternalPort="";
+		String azureDataFiles="";
+		String nexusRegistyName="";
+		AzureSolutionDeployment azureDeployment=new AzureSolutionDeployment();
+		JSONObject  jsonOutput = new JSONObject();
+		AzureCommonUtil azureUtil=new AzureCommonUtil();
+		TransportBean tbean=new TransportBean();
+		boolean singleSolution=false;
+		try {
+			UUID uidNumber = UUID.randomUUID();
+			uidNumStr=uidNumber.toString();
+			bluePrintImage=env.getProperty(AzureClientConstants.BLUEPRINT_IMAGENAME_PROP);
+			bluePrintName=env.getProperty(AzureClientConstants.BLUEPRINT_NAME_PROP);
+			bluePrintUser=env.getProperty(AzureClientConstants.REGISTRY_BLUEPRINT_USERNAME_PROP);
+			bluePrintPass=env.getProperty(AzureClientConstants.REGISTRY_BLUEPRINT_PD_PROP);
+			probePrintImage=env.getProperty(AzureClientConstants.PROBE_IMAGENAME_PROP);
+			probePrintName=env.getProperty(AzureClientConstants.PROBE_NAME_PROP);
+			probeInternalPort=env.getProperty(AzureClientConstants.PROBE_INTERNALPORT_PROP);
+			probeNexusEndPoint=env.getProperty(AzureClientConstants.PROBE_PROBENEXUSENDPOINT_PROP);
+			probUser=env.getProperty(AzureClientConstants.DOCKER_REGISTRY_PROBE_USERNAME_PROP);
+			probePass=env.getProperty(AzureClientConstants.DOCKER_REGISTRY_PROBE_PD_PROP);
+			logger.debug("probePrintImage "+probePrintImage);
+			logger.debug("probePrintName "+probePrintName);
+			logger.debug("probeInternalPort "+probeInternalPort);
+			String networkSecurityGroup=env.getProperty(AzureClientConstants.REGISTRY_NETWORKGROUPNAME_PROP);
+			dataSource=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCENDPOINURL_PROP);
+			userName=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCUSER_PROP);
+			dataPd=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCPD_PROP);
+			nexusUrl=env.getProperty(AzureClientConstants.NEXUS_URL_PROP);
+			nexusUserName=env.getProperty(AzureClientConstants.NEXUS_USERNAME_PROP);
+			nexusPd=env.getProperty(AzureClientConstants.NEXUS_PD_PROP);
+			nginxMapFolder=env.getProperty(AzureClientConstants.NGINX_MAPFOLDER);
+			nginxWebFolder=env.getProperty(AzureClientConstants.NGINX_WEBFOLDER);
+			nginxImageName=env.getProperty(AzureClientConstants.NGINX_IMAGENAME);
+			nginxInternalPort=env.getProperty(AzureClientConstants.NGINX_INTERNALPORT);
+			azureDataFiles=env.getProperty(AzureClientConstants.DATAFILE_FOLDER);
+			nexusRegistyName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_NAME);
+			
+			String solutionToolKitType=azureUtil.getSolutionCode(bean.getSolutionId(), dataSource, userName, dataPd);
+			logger.debug("solutionToolKitType "+solutionToolKitType);
+		   	if(solutionToolKitType!=null && !"".equals(solutionToolKitType) && "CP".equalsIgnoreCase(solutionToolKitType)){
+		   		logger.debug("Composite Solution Details Start");
+		   		singleSolution=false;
+		   	 }else{
+		   		logger.debug("Single Solution Details Start");
+		   		singleSolution=true;
+		   	 }
+		   	logger.debug("singleSolution "+singleSolution);
+			
+			//set velues in bean
+			tbean.setNexusUrl(nexusUrl);
+			tbean.setNexusUserName(nexusUserName);	
+			tbean.setNexusPd(nexusPd);
+			tbean.setNginxMapFolder(nginxMapFolder);
+			tbean.setNginxWebFolder(nginxWebFolder);
+			tbean.setNginxImageName(nginxImageName);
+			tbean.setNginxInternalPort(nginxInternalPort);
+			tbean.setAzureDataFiles(azureDataFiles);
+			tbean.setProbePrintImage(probePrintImage);
+			tbean.setBluePrintImage(bluePrintImage);
+			
+			//put condition to get probe
+			logger.debug("Calling New thread for solution");
+			AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean,singleSolution);
+	        Thread t = new Thread(deployment);
+            t.start();
+			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+			response.setStatus(200);
+			
+			logger.debug("existingAzureVM start");
+		}catch(Exception e){
+			logger.error("existingAzureVM failed", e);
+			response.setStatus(401);
+			jsonOutput.put("status", APINames.FAILED);
+			azureUtil.generateNotification("existingAzureVM Deployment fail", "", dataSource, userName, dataPd);
+			return jsonOutput.toString();
+		}
+		jsonOutput.put("UIDNumber", uidNumStr);
+		return jsonOutput.toString();
+	}
 	
 	private String dockerHosttoUrl(String host, String port, boolean socket) {
 		return ((socket) ? "unix" : "tcp") + "://" + host + ":" + port;

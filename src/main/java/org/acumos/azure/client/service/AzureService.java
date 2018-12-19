@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 import org.acumos.azure.client.transport.AzureDeployDataObject;
+import org.acumos.azure.client.transport.AzureKubeBean;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DockerInfoList;
@@ -39,4 +40,5 @@ public interface AzureService {
 	 * Authorize with microsoft Azure active directory
 	 */
 	Azure authorize(AzureDeployDataObject authObject);
+	
 }

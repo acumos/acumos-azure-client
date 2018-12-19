@@ -19,6 +19,9 @@
  */
 package org.acumos.azure.client.transport;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 public class TransportBean {
@@ -35,8 +38,67 @@ public class TransportBean {
 	private String azureDataFiles;
 	private String nginxPort;
 	private String vmIP;
+	private String bluePrintName;
+	private String probeName;
+	private String nexusRegistyName;
+	private String dataSourceUrl;
+	private String dataSourceUserName;
+	private String dataSourcePd;
+	private String probePrintImage;
+	private String bluePrintImage;
+	private ArrayList<String> imageList;
+	private HashMap<String,String> imageMap;
+	private LinkedList<String> sequenceList;
 	
 	
+	public String getProbePrintImage() {
+		return probePrintImage;
+	}
+
+	public void setProbePrintImage(String probePrintImage) {
+		this.probePrintImage = probePrintImage;
+	}
+
+	public String getBluePrintImage() {
+		return bluePrintImage;
+	}
+
+	public void setBluePrintImage(String bluePrintImage) {
+		this.bluePrintImage = bluePrintImage;
+	}
+
+	public String getDataSourceUrl() {
+		return dataSourceUrl;
+	}
+
+	public void setDataSourceUrl(String dataSourceUrl) {
+		this.dataSourceUrl = dataSourceUrl;
+	}
+
+	public String getDataSourceUserName() {
+		return dataSourceUserName;
+	}
+
+	public void setDataSourceUserName(String dataSourceUserName) {
+		this.dataSourceUserName = dataSourceUserName;
+	}
+
+	public String getDataSourcePd() {
+		return dataSourcePd;
+	}
+
+	public void setDataSourcePd(String dataSourcePd) {
+		this.dataSourcePd = dataSourcePd;
+	}
+
+	public String getNexusRegistyName() {
+		return nexusRegistyName;
+	}
+
+	public void setNexusRegistyName(String nexusRegistyName) {
+		this.nexusRegistyName = nexusRegistyName;
+	}
+
 	public String getVmIP() {
 		return vmIP;
 	}
@@ -131,6 +193,47 @@ public class TransportBean {
 
 	public void setProtoMap(Map<String, String> protoMap) {
 		this.protoMap = protoMap;
+	}
+
+
+	public ArrayList<String> getImageList() {
+		return imageList;
+	}
+
+	public void setImageList(ArrayList<String> imageList) {
+		this.imageList = imageList;
+	}
+
+	public HashMap<String, String> getImageMap() {
+		return imageMap;
+	}
+
+	public void setImageMap(HashMap<String, String> imageMap) {
+		this.imageMap = imageMap;
+	}
+
+	public LinkedList<String> getSequenceList() {
+		return sequenceList;
+	}
+
+	public void setSequenceList(LinkedList<String> sequenceList) {
+		this.sequenceList = sequenceList;
+	}
+
+	public String getBluePrintName() {
+		return bluePrintName;
+	}
+
+	public void setBluePrintName(String bluePrintName) {
+		this.bluePrintName = bluePrintName;
+	}
+
+	public String getProbeName() {
+		return probeName;
+	}
+
+	public void setProbeName(String probeName) {
+		this.probeName = probeName;
 	}
 	
 	

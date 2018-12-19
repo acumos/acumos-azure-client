@@ -39,5 +39,7 @@ public class APINames {
 	public static final String AZURE_AUTH_ASYNC_SINGLE_IMAGE = "/azure/singleImageAsyncDeployment";
 	
 	public static final String AZURE_AUTH_ASYNC_COMPOSITE_SOLUTION = "/azure/compositeSolutionAsyncAzure";
+	public static final String AZURE_AUTH_KUBERNETES="/azure/azureKubernetes";
+	public static final String AZURE_AUTH_EXISTINGVM="/azure/existingAzureVM";
 
 }

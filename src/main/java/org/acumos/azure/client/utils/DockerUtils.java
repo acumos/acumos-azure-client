@@ -23,6 +23,7 @@ package org.acumos.azure.client.utils;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,6 +34,7 @@ import java.util.Map;
 
 import javax.net.ssl.SSLContext;
 
+import org.acumos.azure.client.transport.AzureKubeTransportBean;
 import org.acumos.azure.client.transport.TransportBean;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.glassfish.jersey.SslConfigurator;
@@ -366,6 +368,103 @@ public class DockerUtils {
 
 		return dockerClient;
 	}
+	
+	public static String createNewAzureVM(Azure azure, String rgName, Region region, 
+			  String networkSecurityGroup,String dockerVMUserName,String dockerVMPd,
+			  String subNet,String vnet,AzureKubeTransportBean kubeTransportBean) throws Exception {
+		    log.debug("createNewAzureVM Start");
+			final String vnetName = SdkContext.randomResourceName("vnet", 24);
+			final String frontEndNSGName = SdkContext.randomResourceName("fensg", 24);
+			final String networkInterfaceName1 = SdkContext.randomResourceName("nic1", 24);
+			final String publicIPAddressLeafDNS1 = SdkContext.randomResourceName("pip1", 24);
+			final String vmUserName=dockerVMUserName;
+			final String vmPd=dockerVMPd;
+			String hostIP="";
+			
+			// Could not find a Docker environment; presume that there is no local Docker
+			// engine running and
+			// attempt to configure a Docker engine running inside a new Azure virtual
+			// machine
+			/****************** Start code for resourceGroup *******************/
+			log.debug("Creating a virtual network ...");
+			log.debug("Walking through network security groups");
+			
+			
+			Network network = azure.networks().getByResourceGroup(rgName, vnet);
+			log.debug("Created a virtual network: " + network.id());
+			
+			Utils.print(network);
+			log.debug("Creating a security group for the front end - allows SSH and HTTP");
+			NetworkSecurityGroup frontEndNSG = azure.networkSecurityGroups().getByResourceGroup(rgName,
+					networkSecurityGroup);
+			log.debug("Created NetworkSecurityGroup ");
+	
+			NetworkInterface networkInterface1 = azure.networkInterfaces().define(networkInterfaceName1).withRegion(region)
+					.withExistingResourceGroup(rgName).withExistingPrimaryNetwork(network).withSubnet(subNet)
+					.withPrimaryPrivateIPAddressDynamic().withNewPrimaryPublicIPAddress(publicIPAddressLeafDNS1)
+					.withIPForwarding().withExistingNetworkSecurityGroup(frontEndNSG).create();
+	
+			log.debug("Created network interface for the front end");
+			log.debug(" Created NetworkInterface ");
+			Utils.print(networkInterface1);
+	
+			/****************** End code for resourceGroup ********************/
+			log.debug("Creating an Azure virtual machine running Docker");
+			Date t1 = new Date();
+			
+	
+			VirtualMachine vm = azure.virtualMachines().define(frontEndNSGName).withRegion(region)
+					.withExistingResourceGroup(rgName).withExistingPrimaryNetworkInterface(networkInterface1)
+					.withPopularLinuxImage(KnownLinuxVirtualMachineImage.UBUNTU_SERVER_16_04_LTS)
+					.withRootUsername(vmUserName).withRootPassword(vmPd)
+					.withSize(VirtualMachineSizeTypes.STANDARD_D2_V2).create();
+	
+			log.debug(azure.publicIPAddresses().list()
+					+ " Created VirtualMachine NetworkSecurityGroup "
+					+ vm.getPrimaryNetworkInterface().getNetworkSecurityGroup().id());
+			log.debug(" Created VirtualMachine NetworkSecurityGroup "
+					+ vm.getPrimaryNetworkInterface().getNetworkSecurityGroup().key());
+			log.debug("Walking through network security groups");
+	
+			Date t2 = new Date();
+			log.debug("Created Azure Virtual Machine: (took " + ((t2.getTime() - t1.getTime()) / 1000)
+					+ " seconds) " + vm.id() + " , " + vm.toString());
+	
+			// Get the IP of the Docker host
+			NicIPConfiguration nicIPConfiguration = vm.getPrimaryNetworkInterface().primaryIPConfiguration();
+			PublicIPAddress publicIp = nicIPConfiguration.getPublicIPAddress();
+			hostIP = publicIp.ipAddress();
+			String vmName=publicIp.name();
+			
+			log.debug(vm.computerName()+" HostIP " + hostIP + " vmName " + vmName);
+			if (kubeTransportBean != null && hostIP != null && !"".equals(hostIP)) {
+				log.debug(" Setting hostIP " + hostIP);
+				kubeTransportBean.setAzureVMIP(hostIP);
+				kubeTransportBean.setAzureVMName(vm.computerName());
+			}
+	
+			
+			log.debug("dockerHostIP " + hostIP);
+			log.debug("createNewAzureVM End");
+			return hostIP;
+	}
+	
+	public static void  uploadZipVM(AzureKubeTransportBean kubeTransportBean) throws Exception{
+		log.debug(" uploadZipVM Start");
+		SSHShell sshShell = null;
+		InputStream inputStream=null;
+		try {
+			 inputStream=kubeTransportBean.getSolutionZipStream();	
+			 sshShell = SSHShell.open(kubeTransportBean.getAzureVMIP(), 22, kubeTransportBean.getDockerVMUserName(),
+					 kubeTransportBean.getDockerVMPd());
+			 sshShell.upload(inputStream, "solution.zip", "kubernetesSolution", true,"4095");
+		}catch(Exception exception) {
+			log.error("Error in uploadZipVM", exception);
+			throw exception;
+		}
+		log.debug(" uploadZipVM End");
+		
+	}
 
 	/**
 	 * Install Docker on a given virtual machine and return a DockerClient.
@@ -545,6 +644,8 @@ public class DockerUtils {
 		log.debug(" deploymentImageVM End");
 		return "sucess";
 	}
+	
+	
 
 	public static DockerClient installDocker(String dockerHostIP, String vmUserName, String vmPd,
 			String registryServerUrl, String username, String acrPd, String dockerRegistryNameVal, int sleepTimeFirstInt) {
