@@ -467,6 +467,9 @@ public class AzureServiceController extends AbstractController {
 		String dockerVMPd="";
 		String sleepTimeFirst="";
 		String uidNumStr="";
+		String replaceChar="";
+		String ignorDoller="";
+		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try{
 			  UUID uidNumber = UUID.randomUUID();
 			  uidNumStr=uidNumber.toString();
@@ -482,6 +485,8 @@ public class AzureServiceController extends AbstractController {
 			  dockerVMPd=env.getProperty(AzureClientConstants.DOCKERVMPD_PROP);
 			  sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
 			  kubernetesClientUrl=env.getProperty(AzureClientConstants.KUBERNETESCLIENT_URL);
+			  replaceChar=env.getProperty(AzureClientConstants.REPLACECHAR_PROP);
+			  ignorDoller=env.getProperty(AzureClientConstants.IGNORE_DOLLER_PROP);
 			  logger.debug("cmnDataUrl "+cmnDataUrl);
 			  logger.debug("cmnDataUser "+cmnDataUser);
 			  logger.debug("cmnDataPd "+cmnDataPd);
@@ -489,14 +494,15 @@ public class AzureServiceController extends AbstractController {
 			  logger.debug("vnet "+vnet);
 			  logger.debug("networkSecurityGroup "+networkSecurityGroup);
 			  logger.debug("dockerVMUserName "+dockerVMUserName);
-			  logger.debug("dockerVMPd "+dockerVMPd);
 			  logger.debug("sleepTimeFirst "+sleepTimeFirst);
 			  logger.debug("kubernetesClientUrl "+kubernetesClientUrl);
+			  logger.debug("replaceChar "+replaceChar);
+			  logger.debug("ignorDoller "+ignorDoller);
 			  AzureDeployDataObject authObject=cutil.convertToAzureDeployDataObject(auth);
 			  AzureServiceImpl azureImpl=new AzureServiceImpl();
 			  Azure azure = azureImpl.authorize(authObject);
 			  logger.debug("Azure Authorization Done");
-			  kubeTransportBean.setDockerVMPd(dockerVMPd);
+			  kubeTransportBean.setDockerVMPd(azureUtil.replaceCharStr(dockerVMPd,replaceChar,ignorDoller));
 			  kubeTransportBean.setDockerVMUserName(dockerVMUserName);
 			  kubeTransportBean.setKubernetesClientUrl(kubernetesClientUrl);
 			  kubeTransportBean.setNetworkSecurityGroup(networkSecurityGroup);

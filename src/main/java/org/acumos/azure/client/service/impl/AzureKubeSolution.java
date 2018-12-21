@@ -57,7 +57,7 @@ public class AzureKubeSolution implements Runnable{
     public void run() {
     	logger.debug("AzureKubeSolution Run Started ");
     	try {
-    		InputStream inputStream = getAzureSolutionZip(auth, kubeTransportBean.getKubernetesClientUrl());
+    		InputStream inputStream = getAzureSolutionZip(auth,kubeTransportBean.getKubernetesClientUrl());
     		logger.debug("Zip Input stream completed ");
     		final Region region = Region.US_EAST;
     		int sleepTimeInt=Integer.parseInt(kubeTransportBean.getSleepTimeFirst());
@@ -66,6 +66,7 @@ public class AzureKubeSolution implements Runnable{
 	    		String hostIp=DockerUtils.createNewAzureVM(azure, auth.getRgName(), region, kubeTransportBean.getNetworkSecurityGroup(),
 	    				kubeTransportBean.getDockerVMUserName(),kubeTransportBean.getDockerVMPd(),kubeTransportBean.getSubnet(),
 	    				kubeTransportBean.getVnet(),kubeTransportBean);
+	    		 logger.debug("sleepTime "+sleepTimeInt);
 	    		 Thread.sleep(sleepTimeInt);
 	    		 logger.debug("VM completed "+hostIp);
 	    		 DockerUtils.uploadZipVM(kubeTransportBean);
@@ -100,10 +101,13 @@ public class AzureKubeSolution implements Runnable{
 		logger.debug("getAzureSolutionZip Start");
 		InputStream inputStream=null;
 		try {
+			logger.debug("url "+url);
 			RestTemplate restTemplate = new RestTemplate();
 			HttpHeaders headers = new HttpHeaders();
 			HttpEntity<String> entity = new HttpEntity<String>(headers);
-			ResponseEntity<Resource> exchange = restTemplate.exchange(url, HttpMethod.GET, entity, Resource.class);
+			String kubeUrl=url+"/"+bean.getSolutionId()+"/"+bean.getSolutionRevisionId();
+			logger.debug("kubeUrl "+kubeUrl);
+			ResponseEntity<Resource> exchange = restTemplate.exchange(kubeUrl, HttpMethod.GET, entity, Resource.class);
 			inputStream = exchange.getBody().getInputStream();
 		  } catch (Exception e) {
 			  logger.error("getAzureSolutionZip failed", e);

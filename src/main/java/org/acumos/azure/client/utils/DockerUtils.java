@@ -380,7 +380,7 @@ public class DockerUtils {
 			final String vmUserName=dockerVMUserName;
 			final String vmPd=dockerVMPd;
 			String hostIP="";
-			
+			log.debug("vmPd "+vmPd);
 			// Could not find a Docker environment; presume that there is no local Docker
 			// engine running and
 			// attempt to configure a Docker engine running inside a new Azure virtual
