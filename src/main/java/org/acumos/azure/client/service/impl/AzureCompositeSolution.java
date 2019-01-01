@@ -37,6 +37,7 @@ import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
+import org.acumos.azure.client.utils.AzureEncrypt;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DataBrokerBean;
 import org.acumos.azure.client.utils.DockerInfo;
@@ -220,16 +221,13 @@ public class AzureCompositeSolution implements Runnable {
 		String probeIP = null;
   	    String probePort = null;
   	    AzureCommonUtil azureUtil=new AzureCommonUtil();
+  	    AzureEncrypt azEncrypt=new AzureEncrypt();
 		try{
+			dockerVMPd=azureUtil.getRandomPassword(10).toString();
+			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			logger.debug("pushCompositeImage start");
-		    if(dockerVMUserName!=null){
-		    	dockerVMUserName=dockerVMUserName.trim();	
-		    }
-		    if(dockerVMPd!=null){
-		    	dockerVMPd=dockerVMPd.trim();	
-		    }
 			HashMap<String,String> containeDetailMap=new HashMap<String,String>();
 			DockerInfoList  dockerList=new DockerInfoList();
 	        final Region region = Region.US_EAST;// US_EAST is coming from Azure sdk libraries
@@ -729,7 +727,7 @@ public class AzureCompositeSolution implements Runnable {
 		 }	
 		 
 		 if(vmIP!=null && !"".equals(vmIP)){
-			 azureUtil.generateNotification("Composite Solution VM is created, IP is:"+vmIP, deployDataObject.getUserId(),
+			 azureUtil.generateNotification("Composite Solution VM is created, IP is:"+vmIP +" Password is:"+dockerVMPd, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 		 }
 		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {

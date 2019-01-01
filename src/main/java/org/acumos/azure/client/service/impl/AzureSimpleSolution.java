@@ -34,6 +34,7 @@ import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
+import org.acumos.azure.client.utils.AzureEncrypt;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
@@ -152,15 +153,12 @@ public class AzureSimpleSolution implements Runnable {
 		AzureBean azureBean = new AzureBean();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		AzureContainerBean containerBean = new AzureContainerBean();
+		AzureEncrypt azEncrypt=new AzureEncrypt();
 		try {
+			dockerVMPd=azureUtil.getRandomPassword(10).toString();
+			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
-			if(dockerVMUserName!=null){
-		    	dockerVMUserName=dockerVMUserName.trim();	
-		    }
-		    if(dockerVMPd!=null){
-		    	dockerVMPd=dockerVMPd.trim();	
-		    }
 			final String saName = SdkContext.randomResourceName("sa", 20);
 			final Region region = Region.US_EAST; // US_EAST is coming from Azure sdk libraries
 			final String dockerContainerName = dockerContainerPrefix + System.currentTimeMillis();// "acrsample";
@@ -362,7 +360,7 @@ public class AzureSimpleSolution implements Runnable {
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
 				containerBean.setContainerName("ContainerOne");
-				azureUtil.generateNotification("Single Solution VM is created, IP is:"+azureVMIP, deployDataObject.getUserId(),
+				azureUtil.generateNotification("Single Solution VM is created, IP is:"+azureVMIP+" Password is:"+dockerVMPd, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 			}
 			createDeploymentData(dataSource, dataUserName, dataPd, containerBean,

@@ -21,6 +21,7 @@ package org.acumos.azure.client.utils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.acumos.azure.client.controller.AzureServiceController;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
@@ -228,4 +229,22 @@ public class AzureCommonUtil {
 	  return toolKitTypeCode;
 	 }
    
+	public StringBuffer getRandomPassword(int len) 
+	{ 
+		logger.debug("getRandomPassword Start"); 
+		String Capital_chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"; 
+		String Small_chars = "abcdefghijklmnopqrstuvwxyz"; 
+		String numbers = "0123456789"; 
+		String symbols = "!@#$%^&*_=+-/.?<>)"; 
+        String values = Capital_chars + Small_chars + numbers + symbols; 
+        Random rndm_method = new Random(); 
+        StringBuffer pass = new StringBuffer(); 
+		for (int i = 0; i < len; i++) 
+		{ 
+		   char charVal=values.charAt(rndm_method.nextInt(values.length()));
+		   pass = pass.append(charVal);
+		} 
+		logger.debug("getRandomPassword End"); 
+		return pass; 
+	}
 }

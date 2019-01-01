@@ -14,9 +14,30 @@ public class AzureKubeTransportBean {
 	private String AzureVMIP;
 	private String AzureVMName;
 	private InputStream solutionZipStream;
+	private String cmnDataUrl;
+	private String cmnDataUser;
+	private String cmnDataPd;
 	
 	
 	
+	public String getCmnDataUrl() {
+		return cmnDataUrl;
+	}
+	public void setCmnDataUrl(String cmnDataUrl) {
+		this.cmnDataUrl = cmnDataUrl;
+	}
+	public String getCmnDataUser() {
+		return cmnDataUser;
+	}
+	public void setCmnDataUser(String cmnDataUser) {
+		this.cmnDataUser = cmnDataUser;
+	}
+	public String getCmnDataPd() {
+		return cmnDataPd;
+	}
+	public void setCmnDataPd(String cmnDataPd) {
+		this.cmnDataPd = cmnDataPd;
+	}
 	public InputStream getSolutionZipStream() {
 		return solutionZipStream;
 	}

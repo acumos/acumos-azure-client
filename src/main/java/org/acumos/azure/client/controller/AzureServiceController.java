@@ -509,6 +509,9 @@ public class AzureServiceController extends AbstractController {
 			  kubeTransportBean.setSleepTimeFirst(sleepTimeFirst);
 			  kubeTransportBean.setSubnet(subnet);
 			  kubeTransportBean.setVnet(vnet);
+			  kubeTransportBean.setCmnDataPd(cmnDataPd);
+			  kubeTransportBean.setCmnDataUrl(cmnDataUrl);
+			  kubeTransportBean.setCmnDataUser(cmnDataUser);
 			  if(azure!=null) {
 				  AzureKubeSolution kubeSolution=new AzureKubeSolution(auth,kubeTransportBean,azure);
 				  Thread t = new Thread(kubeSolution);
