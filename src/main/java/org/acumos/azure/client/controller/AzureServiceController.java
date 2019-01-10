@@ -558,6 +558,16 @@ public class AzureServiceController extends AbstractController {
 		String nginxInternalPort="";
 		String azureDataFiles="";
 		String nexusRegistyName="";
+		String networkSecurityGroup="";
+		String exposeDataBrokerPort="";
+		String internalDataBrokerPort="";
+		String nexusRegistyUserName="";
+		String nexusRegistyPd="";
+		String registryUserName="";
+		String registryPd="";
+		String sleepTimeFirst="";
+		String solutionPort="";
+		
 		AzureSolutionDeployment azureDeployment=new AzureSolutionDeployment();
 		JSONObject  jsonOutput = new JSONObject();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
@@ -576,10 +586,7 @@ public class AzureServiceController extends AbstractController {
 			probeNexusEndPoint=env.getProperty(AzureClientConstants.PROBE_PROBENEXUSENDPOINT_PROP);
 			probUser=env.getProperty(AzureClientConstants.DOCKER_REGISTRY_PROBE_USERNAME_PROP);
 			probePass=env.getProperty(AzureClientConstants.DOCKER_REGISTRY_PROBE_PD_PROP);
-			logger.debug("probePrintImage "+probePrintImage);
-			logger.debug("probePrintName "+probePrintName);
-			logger.debug("probeInternalPort "+probeInternalPort);
-			String networkSecurityGroup=env.getProperty(AzureClientConstants.REGISTRY_NETWORKGROUPNAME_PROP);
+			networkSecurityGroup=env.getProperty(AzureClientConstants.REGISTRY_NETWORKGROUPNAME_PROP);
 			dataSource=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCENDPOINURL_PROP);
 			userName=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCUSER_PROP);
 			dataPd=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCPD_PROP);
@@ -592,17 +599,20 @@ public class AzureServiceController extends AbstractController {
 			nginxInternalPort=env.getProperty(AzureClientConstants.NGINX_INTERNALPORT);
 			azureDataFiles=env.getProperty(AzureClientConstants.DATAFILE_FOLDER);
 			nexusRegistyName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_NAME);
+			exposeDataBrokerPort=env.getProperty(AzureClientConstants.EXPOSE_DATABROKER_PORT);
+			internalDataBrokerPort=env.getProperty(AzureClientConstants.INTERNAL_DATABROKER_PORT);
+			nexusRegistyUserName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_USERNAME);
+			nexusRegistyPd=env.getProperty(AzureClientConstants.NEXUS_REGISTY_PD);
+			registryUserName=env.getProperty(AzureClientConstants.REGISTRY_USERNAME_PROP);
+			registryPd=env.getProperty(AzureClientConstants.REGISTRY_PD_PROP);
+			sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
+			solutionPort=env.getProperty(AzureClientConstants.SOLUTIONPORT_PROP);
 			
-			String solutionToolKitType=azureUtil.getSolutionCode(bean.getSolutionId(), dataSource, userName, dataPd);
-			logger.debug("solutionToolKitType "+solutionToolKitType);
-		   	if(solutionToolKitType!=null && !"".equals(solutionToolKitType) && "CP".equalsIgnoreCase(solutionToolKitType)){
-		   		logger.debug("Composite Solution Details Start");
-		   		singleSolution=false;
-		   	 }else{
-		   		logger.debug("Single Solution Details Start");
-		   		singleSolution=true;
-		   	 }
-		   	logger.debug("singleSolution "+singleSolution);
+			logger.debug("probePrintImage "+probePrintImage);
+			logger.debug("probePrintName "+probePrintName);
+			logger.debug("probeInternalPort "+probeInternalPort);
+			
+		
 			
 			//set velues in bean
 			tbean.setNexusUrl(nexusUrl);
@@ -615,10 +625,24 @@ public class AzureServiceController extends AbstractController {
 			tbean.setAzureDataFiles(azureDataFiles);
 			tbean.setProbePrintImage(probePrintImage);
 			tbean.setBluePrintImage(bluePrintImage);
-			
+			tbean.setNginxInternalPort(nginxInternalPort);
+			tbean.setExposeDataBrokerPort(exposeDataBrokerPort);
+			tbean.setInternalDataBrokerPort(internalDataBrokerPort);
+			tbean.setProbeInternalPort(probeInternalPort);
+			tbean.setNexusRegistyName(nexusRegistyName);
+			tbean.setNexusRegistyUserName(nexusRegistyUserName);
+			tbean.setNexusRegistyPd(nexusRegistyPd);
+			tbean.setRegistryUserName(registryUserName);
+			tbean.setRegistryPd(registryPd);
+			tbean.setBluePrintUser(bluePrintUser);
+			tbean.setBluePrintPass(bluePrintPass);
+			tbean.setProbUser(probUser);
+			tbean.setProbePass(probePass);
+			tbean.setUidNumStr(uidNumStr);
+			tbean.setSolutionPort(solutionPort);
 			//put condition to get probe
 			logger.debug("Calling New thread for solution");
-			AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean,singleSolution);
+			AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean);
 	        Thread t = new Thread(deployment);
             t.start();
 			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);

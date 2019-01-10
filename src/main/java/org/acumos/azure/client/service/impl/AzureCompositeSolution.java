@@ -223,8 +223,8 @@ public class AzureCompositeSolution implements Runnable {
   	    AzureCommonUtil azureUtil=new AzureCommonUtil();
   	    AzureEncrypt azEncrypt=new AzureEncrypt();
 		try{
-			dockerVMPd=azureUtil.getRandomPassword(10).toString();
-			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+			//dockerVMPd=azureUtil.getRandomPassword(10).toString();
+			//logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			logger.debug("pushCompositeImage start");
@@ -727,14 +727,14 @@ public class AzureCompositeSolution implements Runnable {
 		 }	
 		 
 		 if(vmIP!=null && !"".equals(vmIP)){
-			 azureUtil.generateNotification("Composite Solution VM is created, IP is:"+vmIP +" Password is:"+dockerVMPd, deployDataObject.getUserId(),
+			 azureUtil.generateNotification("Composite Solution VM is created, IP is: "+vmIP, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 		 }
 		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
 		 if (bluePrint.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation deployDataObject.getUserId() "+deployDataObject.getUserId());
 			 logger.debug(" probeIP "+probeIP+" probePort "+probePort);
-			 generateNotification(probeIP+":"+probePort,deployDataObject.getUserId());
+			 generateNotification("Probe IP and Port: "+probeIP+":"+probePort,deployDataObject.getUserId());
 		 }
 		 
 		

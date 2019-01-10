@@ -46,11 +46,138 @@ public class TransportBean {
 	private String dataSourcePd;
 	private String probePrintImage;
 	private String bluePrintImage;
+	private String probeInternalPort;
+	private String exposeDataBrokerPort;
+	private String internalDataBrokerPort;
+	private String nexusRegistyUserName;
+	private String nexusRegistyPd;
+	private String registryUserName;
+	private String registryPd;
+	private String bluePrintUser;
+	private String bluePrintPass;
+	private String probUser;
+	private String probePass;
+	private String sleepTimeFirst;
+	private String uidNumStr;
+	private String solutionPort;
 	private ArrayList<String> imageList;
 	private HashMap<String,String> imageMap;
 	private LinkedList<String> sequenceList;
 	
 	
+	
+	public String getSolutionPort() {
+		return solutionPort;
+	}
+
+	public void setSolutionPort(String solutionPort) {
+		this.solutionPort = solutionPort;
+	}
+
+	public String getUidNumStr() {
+		return uidNumStr;
+	}
+
+	public void setUidNumStr(String uidNumStr) {
+		this.uidNumStr = uidNumStr;
+	}
+
+	public String getSleepTimeFirst() {
+		return sleepTimeFirst;
+	}
+
+	public void setSleepTimeFirst(String sleepTimeFirst) {
+		this.sleepTimeFirst = sleepTimeFirst;
+	}
+
+	public String getBluePrintUser() {
+		return bluePrintUser;
+	}
+
+	public void setBluePrintUser(String bluePrintUser) {
+		this.bluePrintUser = bluePrintUser;
+	}
+
+	public String getBluePrintPass() {
+		return bluePrintPass;
+	}
+
+	public void setBluePrintPass(String bluePrintPass) {
+		this.bluePrintPass = bluePrintPass;
+	}
+
+	public String getProbUser() {
+		return probUser;
+	}
+
+	public void setProbUser(String probUser) {
+		this.probUser = probUser;
+	}
+
+	public String getProbePass() {
+		return probePass;
+	}
+
+	public void setProbePass(String probePass) {
+		this.probePass = probePass;
+	}
+
+	public String getNexusRegistyUserName() {
+		return nexusRegistyUserName;
+	}
+
+	public void setNexusRegistyUserName(String nexusRegistyUserName) {
+		this.nexusRegistyUserName = nexusRegistyUserName;
+	}
+
+	public String getNexusRegistyPd() {
+		return nexusRegistyPd;
+	}
+
+	public void setNexusRegistyPd(String nexusRegistyPd) {
+		this.nexusRegistyPd = nexusRegistyPd;
+	}
+
+	public String getRegistryUserName() {
+		return registryUserName;
+	}
+
+	public void setRegistryUserName(String registryUserName) {
+		this.registryUserName = registryUserName;
+	}
+
+	public String getRegistryPd() {
+		return registryPd;
+	}
+
+	public void setRegistryPd(String registryPd) {
+		this.registryPd = registryPd;
+	}
+
+	public String getProbeInternalPort() {
+		return probeInternalPort;
+	}
+
+	public void setProbeInternalPort(String probeInternalPort) {
+		this.probeInternalPort = probeInternalPort;
+	}
+
+	public String getExposeDataBrokerPort() {
+		return exposeDataBrokerPort;
+	}
+
+	public void setExposeDataBrokerPort(String exposeDataBrokerPort) {
+		this.exposeDataBrokerPort = exposeDataBrokerPort;
+	}
+
+	public String getInternalDataBrokerPort() {
+		return internalDataBrokerPort;
+	}
+
+	public void setInternalDataBrokerPort(String internalDataBrokerPort) {
+		this.internalDataBrokerPort = internalDataBrokerPort;
+	}
+
 	public String getProbePrintImage() {
 		return probePrintImage;
 	}

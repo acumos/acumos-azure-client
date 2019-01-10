@@ -66,9 +66,9 @@ public class AzureKubeSolution implements Runnable{
     		int sleepTimeInt=Integer.parseInt(kubeTransportBean.getSleepTimeFirst());
     		if(inputStream!=null) {
     			kubeTransportBean.setSolutionZipStream(inputStream);
-    			String dockerVMPd=azureUtil.getRandomPassword(10).toString();
-    			kubeTransportBean.setDockerVMPd(dockerVMPd);
-    			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+    			//String dockerVMPd=azureUtil.getRandomPassword(10).toString();
+    			//kubeTransportBean.setDockerVMPd(dockerVMPd);
+    			//logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 	    		String hostIp=DockerUtils.createNewAzureVM(azure, auth.getRgName(), region, kubeTransportBean.getNetworkSecurityGroup(),
 	    				kubeTransportBean.getDockerVMUserName(),kubeTransportBean.getDockerVMPd(),kubeTransportBean.getSubnet(),
 	    				kubeTransportBean.getVnet(),kubeTransportBean);
@@ -78,7 +78,7 @@ public class AzureKubeSolution implements Runnable{
 	    		 DockerUtils.uploadZipVM(kubeTransportBean);
 	    		 logger.debug("Upload file part completed ");
 	    		 /*Send detail to your through notification*/
-	    		 azureUtil.generateNotification("VM is created, IP is:"+hostIp+" Password is:"+dockerVMPd, auth.getUserId(),
+	    		 azureUtil.generateNotification("VM is created, IP is: "+hostIp, auth.getUserId(),
 	    				 kubeTransportBean.getCmnDataUrl(), kubeTransportBean.getCmnDataUser(), kubeTransportBean.getCmnDataPd());
     		}
     	}catch(Exception e) {

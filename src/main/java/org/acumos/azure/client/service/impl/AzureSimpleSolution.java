@@ -155,8 +155,9 @@ public class AzureSimpleSolution implements Runnable {
 		AzureContainerBean containerBean = new AzureContainerBean();
 		AzureEncrypt azEncrypt=new AzureEncrypt();
 		try {
-			dockerVMPd=azureUtil.getRandomPassword(10).toString();
-			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+			 
+			//dockerVMPd=azureUtil.getRandomPassword(10).toString();
+			//logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			final String saName = SdkContext.randomResourceName("sa", 20);
@@ -360,7 +361,7 @@ public class AzureSimpleSolution implements Runnable {
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
 				containerBean.setContainerName("ContainerOne");
-				azureUtil.generateNotification("Single Solution VM is created, IP is:"+azureVMIP+" Password is:"+dockerVMPd, deployDataObject.getUserId(),
+				azureUtil.generateNotification("Single Solution VM is created, IP is: "+azureVMIP, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 			}
 			createDeploymentData(dataSource, dataUserName, dataPd, containerBean,

@@ -98,6 +98,7 @@ public final class AzureClientConstants {
 	public static final String TYPE_AND_ROLE_HIERARCHY_LIST="type_and_role_hierarchy_list";
 	public static final String ROLE="role";
 	public static final String VM_CREATION_ERROR="role";
+	public static final String SETUP_SCRIPT_NAME="setup-docker.sh";
 	
 	public static final String BLUEPRINT_NAME_PROP="blueprint.name";
 	public static final String REGISTRY_BLUEPRINT_USERNAME_PROP="docker.registry.bluePrint.username";
