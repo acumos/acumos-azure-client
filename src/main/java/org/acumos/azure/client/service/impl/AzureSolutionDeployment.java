@@ -282,6 +282,7 @@ public class AzureSolutionDeployment implements Runnable{
 		    		            		
 		    		            	}
 			            		 if(jsonContainerName.equalsIgnoreCase(AzureClientConstants.BLUEPRINT_CONTAINER_NAME)){
+			            			 logger.debug(" Blueprint Section ");
 			            			 portNumber="8555"; 
 			            			 bluePrintPort=portNumber;
 			            			 portNumberString=portNumber+":"+portNumber;
@@ -290,6 +291,7 @@ public class AzureSolutionDeployment implements Runnable{
 			            			 deployment.setDataBrokerType("");
 			            			 deployment.setNodeType(AzureClientConstants.DEFAULT_NODE_TYPE);
 			            		 }else if(jsonContainerName.equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)) {
+			            			 logger.debug(" Probe Section ");
 			            			 portNumberString=tbean.getProbeInternalPort()+":"+tbean.getProbeInternalPort();
 	    		        			 probeNexusEndPoint="http://"+solutionBean.getVmHostName()+":"+tbean.getNginxPort();
 	    		        			 probePort=tbean.getProbeInternalPort();
@@ -298,6 +300,7 @@ public class AzureSolutionDeployment implements Runnable{
 			            			 deployment.setDataBrokerType("");
 			            			 deployment.setNodeType(AzureClientConstants.PROBE_NODE_TYPE);
 			            		 }else if(jsonContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)) {
+			            			 logger.debug(" NGINX Section ");
 			            			 portNumber=String.valueOf(portNoIncrement);
 			            			 portNoIncrement=portNoIncrement+1;
 			            			 portNumberString=portNumber+":"+tbean.getNginxInternalPort();
@@ -307,6 +310,7 @@ public class AzureSolutionDeployment implements Runnable{
 			            			 deployment.setDataBrokerType("");
 			            			 deployment.setNodeType(AzureClientConstants.DEFAULT_NODE_TYPE);
 			            		 }else{
+			            			 logger.debug(" Other Section ");
 			            			 portNumber=String.valueOf(portNoIncrement);
 			            			 portNoIncrement=portNoIncrement+1;
 			            			 logger.debug(" portNumber "+portNumber);
@@ -336,11 +340,12 @@ public class AzureSolutionDeployment implements Runnable{
 			            		 logger.debug(" portNumberString "+portNumberString);
 			            		 logger.debug(" regUserName "+regUserName+" regPass "+regPass);
 			            		 imageCount=imageCount+1;
+			            		 logger.debug(" Start Deploying solution in vm ");
 			            		 DockerUtils.deploymentCompositeImageVM(solutionBean.getVmHostIP(), solutionBean.getVmUserName(), solutionBean.getVmUserPd(),
 			            				    repositoryName, regUserName,regPass, imageName,jsonContainerName,imageCount,
 		    		        				portNumberString,probeNexusEndPoint,Integer.parseInt(tbean.getSleepTimeFirst()),tbean);
 			            		 
-			            		    
+			            		 logger.debug(" End Deploying solution in vm ");
 			            		    dockerinfo.setIpAddress(solutionBean.getVmHostName());
 	            		            dockerinfo.setPort(portNumber);
 	            		            dockerinfo.setContainer(jsonContainerName);

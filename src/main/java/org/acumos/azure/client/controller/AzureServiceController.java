@@ -546,7 +546,7 @@ public class AzureServiceController extends AbstractController {
 		String probUser="";
 		String probePass="";
 		String dataSource="";
-		String userName="";
+		String dataUserName="";
 		String dataPd="";
 		String uidNumStr="";
 		String nexusUrl="";
@@ -588,7 +588,7 @@ public class AzureServiceController extends AbstractController {
 			probePass=env.getProperty(AzureClientConstants.DOCKER_REGISTRY_PROBE_PD_PROP);
 			networkSecurityGroup=env.getProperty(AzureClientConstants.REGISTRY_NETWORKGROUPNAME_PROP);
 			dataSource=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCENDPOINURL_PROP);
-			userName=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCUSER_PROP);
+			dataUserName=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCUSER_PROP);
 			dataPd=env.getProperty(AzureClientConstants.CMNDATASVC_CMNDATASVCPD_PROP);
 			nexusUrl=env.getProperty(AzureClientConstants.NEXUS_URL_PROP);
 			nexusUserName=env.getProperty(AzureClientConstants.NEXUS_USERNAME_PROP);
@@ -608,9 +608,6 @@ public class AzureServiceController extends AbstractController {
 			sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
 			solutionPort=env.getProperty(AzureClientConstants.SOLUTIONPORT_PROP);
 			
-			logger.debug("probePrintImage "+probePrintImage);
-			logger.debug("probePrintName "+probePrintName);
-			logger.debug("probeInternalPort "+probeInternalPort);
 			
 		
 			
@@ -640,6 +637,23 @@ public class AzureServiceController extends AbstractController {
 			tbean.setProbePass(probePass);
 			tbean.setUidNumStr(uidNumStr);
 			tbean.setSolutionPort(solutionPort);
+			tbean.setDataSourceUrl(dataSource);
+			tbean.setDataSourceUserName(dataUserName);
+			tbean.setDataSourcePd(dataPd);
+			
+			
+			
+			logger.debug("vmHostIP "+bean.getVmHostIP());
+			logger.debug("vmHostName "+bean.getVmHostName());
+			logger.debug("solutionId "+bean.getSolutionId());
+			logger.debug("solutionRevisionId "+bean.getSolutionRevisionId());
+			logger.debug("DataSourceUrl "+dataSource);
+			logger.debug("DataSourceUserName "+dataUserName);
+			logger.debug("DataSourcePd "+dataPd);
+			logger.debug("probePrintImage "+tbean.getProbePrintImage());
+			logger.debug("probePrintName "+tbean.getProbeName());
+			logger.debug("probeInternalPort "+tbean.getProbeInternalPort());
+			
 			//put condition to get probe
 			logger.debug("Calling New thread for solution");
 			AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean);
@@ -653,7 +667,7 @@ public class AzureServiceController extends AbstractController {
 			logger.error("existingAzureVM failed", e);
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
-			azureUtil.generateNotification("existingAzureVM Deployment fail", "", dataSource, userName, dataPd);
+			azureUtil.generateNotification("existingAzureVM Deployment fail", "", dataSource, dataUserName, dataPd);
 			return jsonOutput.toString();
 		}
 		jsonOutput.put("UIDNumber", uidNumStr);
