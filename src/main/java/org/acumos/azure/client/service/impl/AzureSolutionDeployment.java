@@ -336,10 +336,16 @@ public class AzureSolutionDeployment implements Runnable{
 			            			 }
 			            			 
 			            		 }
+			            		 imageCount=imageCount+1;
 			            		 logger.debug(" portNumber "+portNumber);
 			            		 logger.debug(" portNumberString "+portNumberString);
 			            		 logger.debug(" regUserName "+regUserName+" regPass "+regPass);
-			            		 imageCount=imageCount+1;
+			            		 logger.debug(" repositoryName "+repositoryName);
+			            		 logger.debug(" imageName "+imageName);
+			            		 logger.debug(" jsonContainerName "+jsonContainerName);
+			            		 logger.debug(" imageCount "+imageCount);
+			            		 logger.debug(" portNumberString "+portNumberString);
+			            		 logger.debug(" probeNexusEndPoint "+probeNexusEndPoint);
 			            		 logger.debug(" Start Deploying solution in vm ");
 			            		 DockerUtils.deploymentCompositeImageVM(solutionBean.getVmHostIP(), solutionBean.getVmUserName(), solutionBean.getVmUserPd(),
 			            				    repositoryName, regUserName,regPass, imageName,jsonContainerName,imageCount,

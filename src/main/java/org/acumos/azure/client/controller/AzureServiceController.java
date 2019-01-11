@@ -640,6 +640,7 @@ public class AzureServiceController extends AbstractController {
 			tbean.setDataSourceUrl(dataSource);
 			tbean.setDataSourceUserName(dataUserName);
 			tbean.setDataSourcePd(dataPd);
+			tbean.setSleepTimeFirst(sleepTimeFirst);
 			
 			
 			
@@ -653,6 +654,11 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("probePrintImage "+tbean.getProbePrintImage());
 			logger.debug("probePrintName "+tbean.getProbeName());
 			logger.debug("probeInternalPort "+tbean.getProbeInternalPort());
+			logger.debug("sleepTimeFirst "+tbean.getSleepTimeFirst());
+			logger.debug("nexusRegistyUserName "+tbean.getNexusRegistyUserName());
+			logger.debug("nexusRegistyPd "+tbean.getNexusRegistyPd());
+			logger.debug("registryUserName "+tbean.getRegistryUserName());
+			logger.debug("registryPd "+tbean.getRegistryPd());
 			
 			//put condition to get probe
 			logger.debug("Calling New thread for solution");
