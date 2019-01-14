@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6664fa52_b83a90a5",
+        "filename": "src/main/java/org/acumos/azure/client/service/impl/AzureSolutionDeployment.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 176,
+      "author": {
+        "id": 87
+      },
+      "writtenOn": "2019-01-14T17:09:54Z",
+      "side": 1,
+      "message": "Can wer refactor some of this code duplicated in AzureCompositeSolution . This will be easier to manage and help in lesser code coverage effort",
+      "revId": "137264bf057a5c8c712101ce802b096d3b1cf080",
+      "serverId": "655300a2-7a56-4504-9153-881edd907bea",
+      "unresolved": false
+    }
+  ]
+}
