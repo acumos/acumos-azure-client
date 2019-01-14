@@ -567,13 +567,19 @@ public class AzureServiceController extends AbstractController {
 		String registryPd="";
 		String sleepTimeFirst="";
 		String solutionPort="";
-		
+		String localHostEnv="";
 		AzureSolutionDeployment azureDeployment=new AzureSolutionDeployment();
 		JSONObject  jsonOutput = new JSONObject();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		TransportBean tbean=new TransportBean();
+		AzureServiceImpl azureImpl=new AzureServiceImpl();
 		boolean singleSolution=false;
 		try {
+			if (bean == null) {
+				logger.debug("Insufficient data to authneticate with Azure AD");
+				jsonOutput.put("status", APINames.AUTH_FAILED);
+				return jsonOutput.toString();
+			}
 			UUID uidNumber = UUID.randomUUID();
 			uidNumStr=uidNumber.toString();
 			bluePrintImage=env.getProperty(AzureClientConstants.BLUEPRINT_IMAGENAME_PROP);
@@ -607,10 +613,10 @@ public class AzureServiceController extends AbstractController {
 			registryPd=env.getProperty(AzureClientConstants.REGISTRY_PD_PROP);
 			sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
 			solutionPort=env.getProperty(AzureClientConstants.SOLUTIONPORT_PROP);
-			
-			
+			localHostEnv=dockerHosttoUrl(env.getProperty(AzureClientConstants.HOST_PROP),env.getProperty(AzureClientConstants.PORT_PROP), false);
+			// Azure Authenticatiobn 
+			Azure azure = azureImpl.authorizeAzure(bean.getClient(), bean.getTenant(), bean.getKey(), bean.getSubscriptionKey());
 		
-			
 			//set velues in bean
 			tbean.setNexusUrl(nexusUrl);
 			tbean.setNexusUserName(nexusUserName);	
@@ -641,6 +647,7 @@ public class AzureServiceController extends AbstractController {
 			tbean.setDataSourceUserName(dataUserName);
 			tbean.setDataSourcePd(dataPd);
 			tbean.setSleepTimeFirst(sleepTimeFirst);
+			tbean.setLocalHostEnv(localHostEnv);
 			
 			
 			
@@ -659,15 +666,16 @@ public class AzureServiceController extends AbstractController {
 			logger.debug("nexusRegistyPd "+tbean.getNexusRegistyPd());
 			logger.debug("registryUserName "+tbean.getRegistryUserName());
 			logger.debug("registryPd "+tbean.getRegistryPd());
-			
+			logger.debug("localHostEnv "+tbean.getLocalHostEnv());
 			//put condition to get probe
-			logger.debug("Calling New thread for solution");
-			AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean);
-	        Thread t = new Thread(deployment);
-            t.start();
-			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
-			response.setStatus(200);
-			
+			if(azure!=null) {
+				logger.debug("Calling New thread for solution");
+				AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean,azure);
+		        Thread t = new Thread(deployment);
+	            t.start();
+				jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
+				response.setStatus(200);
+			}
 			logger.debug("existingAzureVM start");
 		}catch(Exception e){
 			logger.error("existingAzureVM failed", e);

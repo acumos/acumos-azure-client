@@ -41,9 +41,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+import com.microsoft.azure.management.Azure;
+import com.microsoft.azure.management.containerregistry.Registry;
+import com.microsoft.azure.management.containerregistry.implementation.RegistryListCredentials;
+import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.command.PullImageResultCallback;
+import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.jcraft.jsch.JSchException;
+import com.microsoft.azure.management.Azure;
+
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
@@ -52,12 +63,13 @@ public class AzureSolutionDeployment implements Runnable{
 	
 	private SolutionDeployment solutionBean;
 	private TransportBean tbean;
-	
+	private Azure azure;
 	public AzureSolutionDeployment() {
 			}
-	public AzureSolutionDeployment(SolutionDeployment solutionBean,TransportBean tbean) {
+	public AzureSolutionDeployment(SolutionDeployment solutionBean,TransportBean tbean,Azure azure) {
 		this.solutionBean=solutionBean;
 		this.tbean=tbean;
+		this.azure=azure;
 	}
 	public void run() {
 		logger.debug("AzureSolutionDeployment run start ");
@@ -242,6 +254,96 @@ public class AzureSolutionDeployment implements Runnable{
 				logger.debug("list "+list);
 				logger.debug("imageMap "+imageMap);
 				logger.debug("sequenceList "+sequenceList);
+				String dockerContainerPrefix="acumos-e6e";
+				final String dockerContainerName = dockerContainerPrefix + System.currentTimeMillis();//"acrsample";
+				//Get the existing Azure registry using resourceGroupName and Acr Name
+				Registry azureRegistry = azure.containerRegistries().getByResourceGroup(solutionBean.getRgName(), solutionBean.getAcrName());
+				RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
+				
+				DockerClient dockerClient = DockerUtils.createDockerClient(azure, solutionBean.getRgName(), null,
+	                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), 
+	                    tbean.getLocalHostEnv(), "",null,"","","","","","","",0);
+				logger.debug("Local Docker client object created");
+				AuthConfig authConfig = new AuthConfig()
+	                    .withUsername(tbean.getRegistryUserName())
+	                    .withPassword(tbean.getNexusRegistyPd());
+	            
+	            AuthConfig authConfigBluePrint = new AuthConfig()
+	                    .withUsername(tbean.getBluePrintUser())
+	                    .withPassword(tbean.getBluePrintPass());
+	            
+	            AuthConfig authConfigProb = new AuthConfig()
+	                    .withUsername(tbean.getProbUser())
+	                    .withPassword(tbean.getProbePass());
+	            
+	            AuthConfig authConfigNexus = new AuthConfig()
+	                    .withUsername(tbean.getNexusRegistyUserName())
+	                    .withPassword(tbean.getNexusRegistyPd());
+	            
+	            Iterator imageItr=imageMap.entrySet().iterator();
+	            CreateContainerResponse dockerContainerInstance=null;
+	            String containerCountName="";
+	            String imageTag=AzureClientConstants.IMAGE_TAG_LATEST;
+	            int dockerCount=1;
+	            while(imageItr.hasNext()){
+	            	Map.Entry pair = (Map.Entry)imageItr.next();
+	            	String imageNameVal=(String)pair.getKey();
+	            	String imageContainerNameVal=(String)pair.getValue();
+	            	logger.debug("imageNameVal "+imageNameVal +" imageContainerNameVal "+imageContainerNameVal);
+	            	if(imageContainerNameVal.equalsIgnoreCase(AzureClientConstants.BLUEPRINT_CONTAINER_NAME)){
+	            		logger.debug(" BluePrint Container ");
+	            		dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfigBluePrint)
+	                    .exec(new PullImageResultCallback())
+	                    .awaitSuccess();
+		            }else if(imageContainerNameVal.equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)) {
+		            	logger.debug(" Probe Container ");
+		            	dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfigProb)
+	                    .exec(new PullImageResultCallback())
+	                    .awaitSuccess();
+		            }else if(imageContainerNameVal.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)) {
+		                logger.debug(" NGINX Container ");
+		            	dockerClient.pullImageCmd(imageNameVal)
+	                    .exec(new PullImageResultCallback())
+	                    .awaitSuccess();
+		            }else{
+		            	logger.debug(" Other Registry ");
+		            	if(azureUtil.getRepositryStatus(imageNameVal, tbean.getNexusRegistyName())){
+		            		dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfigNexus)
+    	                    .exec(new PullImageResultCallback())
+    	                    .awaitSuccess();
+           			    }else {
+           			    	dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfig)
+		                    .exec(new PullImageResultCallback())
+		                    .awaitSuccess(); 
+           			    }
+		            	
+		            }
+	            	if(imageNameVal!=null && !"".equals(imageNameVal)){
+	            		String tag=azureUtil.getTagFromImage(imageNameVal);
+	            		if(tag!=null){
+	            			imageTag=tag;
+	            		}
+	            	}
+	            	logger.debug("imageTag "+imageTag);
+	            	Thread.sleep(Integer.parseInt(tbean.getSleepTimeFirst()));
+	            	dockerCount=dockerCount+1;
+	            	containerCountName=dockerContainerName+"_"+dockerCount;
+	            	logger.debug("containerCountName "+containerCountName);
+	            	dockerContainerInstance = dockerClient.createContainerCmd(imageNameVal)
+		                    .withName(containerCountName).exec();
+	            	String privateRepoUrl = azureRegistry.loginServerUrl() + AzureClientConstants.PRIVATE_REPO_PREFIX + containerCountName;
+	            	logger.debug("privateRepoUrl "+privateRepoUrl);
+	            	dockerClient.removeContainerCmd(dockerContainerInstance.getId())
+                    .withForce(true).exec();
+	            	//Thread.sleep(Integer.parseInt(tbean.getSleepTimeFirst()));
+	            	logger.debug("Start pushing image to private repo ");
+	            	dockerClient.pushImageCmd(privateRepoUrl)
+                    .withAuthConfig(dockerClient.authConfig())
+                    .exec(new PushImageResultCallback()).awaitSuccess();
+	            	Thread.sleep(Integer.parseInt(tbean.getSleepTimeFirst()));
+	            }
+	            
+				
 				int portNoIncrement=8557;
 				String portNumberString="";
 				String probeNexusEndPoint="";
@@ -339,17 +441,17 @@ public class AzureSolutionDeployment implements Runnable{
 			            		 imageCount=imageCount+1;
 			            		 logger.debug(" portNumber "+portNumber);
 			            		 logger.debug(" portNumberString "+portNumberString);
-			            		 logger.debug(" regUserName "+regUserName+" regPass "+regPass);
-			            		 logger.debug(" repositoryName "+repositoryName);
+			            		 logger.debug(" regUserName "+azureRegistry.loginServerUrl()+" regPass "+acrCredentials.passwords().get(0).value());
+			            		 logger.debug(" repositoryName "+azureRegistry.loginServerUrl());
 			            		 logger.debug(" imageName "+imageName);
 			            		 logger.debug(" jsonContainerName "+jsonContainerName);
 			            		 logger.debug(" imageCount "+imageCount);
 			            		 logger.debug(" portNumberString "+portNumberString);
 			            		 logger.debug(" probeNexusEndPoint "+probeNexusEndPoint);
 			            		 logger.debug(" Start Deploying solution in vm ");
-			            		 DockerUtils.deploymentCompositeImageVM(solutionBean.getVmHostIP(), solutionBean.getVmUserName(), solutionBean.getVmUserPd(),
-			            				    repositoryName, regUserName,regPass, imageName,jsonContainerName,imageCount,
-		    		        				portNumberString,probeNexusEndPoint,Integer.parseInt(tbean.getSleepTimeFirst()),tbean);
+			            		 DockerUtils.deploymentCompositeImageVM(solutionBean.getVmHostIP(), solutionBean.getVmUserName(),
+			            				 solutionBean.getVmUserPd(),azureRegistry.loginServerUrl(), acrCredentials.username(),acrCredentials.passwords().get(0).value(), 
+			            				 imageName,jsonContainerName,imageCount,portNumberString,probeNexusEndPoint,Integer.parseInt(tbean.getSleepTimeFirst()),tbean);
 			            		 
 			            		 logger.debug(" End Deploying solution in vm ");
 			            		    dockerinfo.setIpAddress(solutionBean.getVmHostName());

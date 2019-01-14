@@ -90,6 +90,19 @@ public class AzureServiceImpl implements AzureService {
 		logger.debug("authorize in AzureServiceImpl End");
 		return azure;
 	}
+	
+	
+	public Azure authorizeAzure(String azureClient,String azureTenant,String azureKey,String azureSubscriptionKey) {
+		logger.debug("authorizeAzure in AzureServiceImpl start");
+		ApplicationTokenCredentials credentials = new ApplicationTokenCredentials(azureClient,
+				azureTenant, azureKey, AzureEnvironment.AZURE);
+		Azure azure = Azure.configure().withLogLevel(LogLevel.BASIC).authenticate(credentials)
+				.withSubscription(azureSubscriptionKey);
+		logger.debug("authorize: subscription ID {}, container registries {}", azure.subscriptionId(),
+				azure.containerRegistries());
+		logger.debug("authorizeAzure in AzureServiceImpl End");
+		return azure;
+	}
 
 	public ArrayList<String> iterateImageMap(HashMap<String, String> imageMap) {
 		logger.debug("iterateImageMap ");
