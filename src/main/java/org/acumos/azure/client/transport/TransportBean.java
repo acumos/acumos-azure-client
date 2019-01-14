@@ -60,12 +60,21 @@ public class TransportBean {
 	private String sleepTimeFirst;
 	private String uidNumStr;
 	private String solutionPort;
+	private String localHostEnv;
 	private ArrayList<String> imageList;
 	private HashMap<String,String> imageMap;
 	private LinkedList<String> sequenceList;
 	
 	
 	
+	public String getLocalHostEnv() {
+		return localHostEnv;
+	}
+
+	public void setLocalHostEnv(String localHostEnv) {
+		this.localHostEnv = localHostEnv;
+	}
+
 	public String getSolutionPort() {
 		return solutionPort;
 	}

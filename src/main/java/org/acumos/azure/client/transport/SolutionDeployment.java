@@ -3,7 +3,13 @@ package org.acumos.azure.client.transport;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class SolutionDeployment {
- 
+    
+	private String client;
+	private String tenant;
+	private String key;
+	private String subscriptionKey;
+	private String rgName;
+	private String acrName;
 	private String solutionId;
 	private String solutionRevisionId;
 	private String vmUserName;
@@ -11,10 +17,8 @@ public class SolutionDeployment {
 	private String vmHostIP;
 	private String vmHostName;
 	private String userId;
-	
 	private String jsonPosition;
 	private String jsonMapping;
-	
 	private String username;
 	@JsonProperty("password")
 	private String userPd;
@@ -23,6 +27,42 @@ public class SolutionDeployment {
 	private String urlAttribute;
 	
 	
+	public String getClient() {
+		return client;
+	}
+	public void setClient(String client) {
+		this.client = client;
+	}
+	public String getTenant() {
+		return tenant;
+	}
+	public void setTenant(String tenant) {
+		this.tenant = tenant;
+	}
+	public String getKey() {
+		return key;
+	}
+	public void setKey(String key) {
+		this.key = key;
+	}
+	public String getSubscriptionKey() {
+		return subscriptionKey;
+	}
+	public void setSubscriptionKey(String subscriptionKey) {
+		this.subscriptionKey = subscriptionKey;
+	}
+	public String getRgName() {
+		return rgName;
+	}
+	public void setRgName(String rgName) {
+		this.rgName = rgName;
+	}
+	public String getAcrName() {
+		return acrName;
+	}
+	public void setAcrName(String acrName) {
+		this.acrName = acrName;
+	}
 	public String getUserId() {
 		return userId;
 	}

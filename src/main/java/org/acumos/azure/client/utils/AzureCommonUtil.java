@@ -279,5 +279,20 @@ public class AzureCommonUtil {
 		content = stringBuilder.toString();
 		return content;
 	}
+	public String getTagFromImage(String imageName){
+		String imageTag=null;
+		final int endColon = imageName.lastIndexOf(':');
+		if (endColon < 0) {
+			imageTag=null;
+		}else{
+		  final String tag = imageName.substring(endColon + 1);
+		  if (tag.indexOf('/') < 0) {
+			  imageTag = tag;
+		  }else{
+			  imageTag = null;
+		   }
+		}
+		return imageTag;
+	}
 	
 }
