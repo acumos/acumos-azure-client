@@ -232,22 +232,11 @@ public class AzureSolutionDeployment implements Runnable{
 	                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), 
 	                    tbean.getLocalHostEnv(), "",null,"","","","","","","",0);
 				logger.debug("Local Docker client object created");
-				AuthConfig authConfig = new AuthConfig()
-	                    .withUsername(tbean.getRegistryUserName())
-	                    .withPassword(tbean.getNexusRegistyPd());
+				if(dockerClient == null) {
+					logger.debug("Docker client null");
+				}
 	            
-	            AuthConfig authConfigBluePrint = new AuthConfig()
-	                    .withUsername(tbean.getBluePrintUser())
-	                    .withPassword(tbean.getBluePrintPass());
-	            
-	            AuthConfig authConfigProb = new AuthConfig()
-	                    .withUsername(tbean.getProbUser())
-	                    .withPassword(tbean.getProbePass());
-	            
-	            AuthConfig authConfigNexus = new AuthConfig()
-	                    .withUsername(tbean.getNexusRegistyUserName())
-	                    .withPassword(tbean.getNexusRegistyPd());
-	            
+	              
 	            Iterator imageItr=imageMap.entrySet().iterator();
 	            CreateContainerResponse dockerContainerInstance=null;
 	            String containerCountName="";
@@ -260,26 +249,57 @@ public class AzureSolutionDeployment implements Runnable{
 	            	logger.debug("imageNameVal "+imageNameVal +" imageContainerNameVal "+imageContainerNameVal);
 	            	if(imageContainerNameVal.equalsIgnoreCase(AzureClientConstants.BLUEPRINT_CONTAINER_NAME)){
 	            		logger.debug(" BluePrint Container ");
+	            		logger.debug(" tbean.getBluePrintUser() "+tbean.getBluePrintUser());
+	            		logger.debug(" tbean.getBluePrintPass() "+tbean.getBluePrintPass());
+	            		logger.debug(" imageNameVal "+imageNameVal);
+	            		AuthConfig authConfigBluePrint = new AuthConfig()
+	    	                    .withUsername(tbean.getBluePrintUser())
+	    	                    .withPassword(tbean.getBluePrintPass());
+	            		
 	            		dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfigBluePrint)
 	                    .exec(new PullImageResultCallback())
 	                    .awaitSuccess();
 		            }else if(imageContainerNameVal.equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)) {
 		            	logger.debug(" Probe Container ");
+		            	logger.debug(" tbean.getProbUser() "+tbean.getProbUser());
+	            		logger.debug(" tbean.getProbUser() "+tbean.getProbUser());
+	            		logger.debug(" imageNameVal "+imageNameVal);
+		            	AuthConfig authConfigProb = new AuthConfig()
+			                    .withUsername(tbean.getProbUser())
+			                    .withPassword(tbean.getProbePass());
+		            	
 		            	dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfigProb)
 	                    .exec(new PullImageResultCallback())
 	                    .awaitSuccess();
 		            }else if(imageContainerNameVal.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)) {
 		                logger.debug(" NGINX Container ");
+		                logger.debug(" imageNameVal "+imageNameVal);
 		            	dockerClient.pullImageCmd(imageNameVal)
 	                    .exec(new PullImageResultCallback())
 	                    .awaitSuccess();
 		            }else{
 		            	logger.debug(" Other Registry ");
+		            	
+		            	
 		            	if(azureUtil.getRepositryStatus(imageNameVal, tbean.getNexusRegistyName())){
+		            		logger.debug(" tbean.getNexusRegistyUserName() "+tbean.getNexusRegistyUserName());
+		            		logger.debug(" tbean.getNexusRegistyPd() "+tbean.getNexusRegistyPd());
+		            		logger.debug(" imageNameVal "+imageNameVal);
+		            		AuthConfig authConfigNexus = new AuthConfig()
+				                    .withUsername(tbean.getNexusRegistyUserName())
+				                    .withPassword(tbean.getNexusRegistyPd());
+		            		
 		            		dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfigNexus)
     	                    .exec(new PullImageResultCallback())
     	                    .awaitSuccess();
            			    }else {
+           			    	logger.debug(" tbean.getRegistryUserName() "+tbean.getRegistryUserName());
+		            		logger.debug(" tbean.getRegistryPd() "+tbean.getRegistryPd());
+		            		logger.debug(" imageNameVal "+imageNameVal);
+           			    	AuthConfig authConfig = new AuthConfig()
+           		                    .withUsername(tbean.getRegistryUserName())
+           		                    .withPassword(tbean.getRegistryPd());
+           			    	
            			    	dockerClient.pullImageCmd(imageNameVal).withAuthConfig(authConfig)
 		                    .exec(new PullImageResultCallback())
 		                    .awaitSuccess(); 
