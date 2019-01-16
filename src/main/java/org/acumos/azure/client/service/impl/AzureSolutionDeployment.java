@@ -158,6 +158,8 @@ public class AzureSolutionDeployment implements Runnable{
 		DockerInfoList  dockerList=new DockerInfoList();
 		ArrayList<DockerInfo> dockerInfoList=new ArrayList<DockerInfo>();
 		Blueprint bluePrintProbe=null;
+		HashMap<String,String> repoUrlContainer=new HashMap<String,String>();
+		HashMap<String,String> tagContainer=new HashMap<String,String>();
 		try {
 			String bluePrintJsonStr=azureImpl.getBluePrintNexus(solutionBean.getSolutionId(), solutionBean.getSolutionRevisionId(),
 					        tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd(),
@@ -241,7 +243,7 @@ public class AzureSolutionDeployment implements Runnable{
 	            CreateContainerResponse dockerContainerInstance=null;
 	            String containerCountName="";
 	            String imageTag=AzureClientConstants.IMAGE_TAG_LATEST;
-	            int dockerCount=1;
+	            int dockerCount=0;
 	            while(imageItr.hasNext()){
 	            	Map.Entry pair = (Map.Entry)imageItr.next();
 	            	String imageNameVal=(String)pair.getKey();
@@ -321,8 +323,15 @@ public class AzureSolutionDeployment implements Runnable{
 		                    .withName(containerCountName).exec();
 	            	String privateRepoUrl = azureRegistry.loginServerUrl() + AzureClientConstants.PRIVATE_REPO_PREFIX + containerCountName;
 	            	logger.debug("privateRepoUrl "+privateRepoUrl);
+	            	String dockerImageId = dockerClient.commitCmd(dockerContainerInstance.getId())
+		                    .withRepository(privateRepoUrl)
+		                    .withTag(imageTag).exec();
+	            	logger.debug("dockerImageId "+dockerImageId);
+	            	repoUrlContainer.put(imageContainerNameVal, privateRepoUrl);
+	            	tagContainer.put(imageContainerNameVal, imageTag);
 	            	dockerClient.removeContainerCmd(dockerContainerInstance.getId())
                     .withForce(true).exec();
+	            	Thread.sleep(Integer.parseInt(tbean.getSleepTimeFirst()));
 	            	//Thread.sleep(Integer.parseInt(tbean.getSleepTimeFirst()));
 	            	logger.debug("Start pushing image to private repo ");
 	            	dockerClient.pushImageCmd(privateRepoUrl)
@@ -358,10 +367,18 @@ public class AzureSolutionDeployment implements Runnable{
 			            		 String regPass="";
 			            		 String nodeTypeContainer="";
 			            		 String nodeTypeName="";
+			            		 String tagImageName=AzureClientConstants.IMAGE_TAG_LATEST;
 			            		 AzureContainerBean containerBean=new AzureContainerBean();
 			            		 DeploymentBean deployment=new DeploymentBean();
 			            		 DockerInfo dockerinfo=new DockerInfo();
-			            		 String repositoryName=azureUtil.getRepositoryName(imageName);
+			            		 //String repositoryName=azureUtil.getRepositoryName(imageName);
+			            		 String repositoryName=repoUrlContainer.get(imageContainerName);
+			            		 String tag=tagContainer.get(imageContainerName);
+			            		 if(tag!=null && !"".equals(tag)) {
+			            			 repositoryName=repositoryName+":"+tag; 
+			            		 }else {
+			            			 repositoryName=repositoryName+":"+tagImageName; 
+			            		 }
 			            		 logger.debug(" imageName "+imageName+" repositoryName "+repositoryName);
 			            		 if(nodeTypeContainerMap!=null && nodeTypeContainerMap.size() > 0 && nodeTypeContainerMap.get(jsonContainerName)!=null){
 		    		            		DeploymentBean dBean=nodeTypeContainerMap.get(jsonContainerName);
@@ -439,7 +456,7 @@ public class AzureSolutionDeployment implements Runnable{
 			            		 logger.debug(" Start Deploying solution in vm ");
 			            		 DockerUtils.deploymentCompositeImageVM(solutionBean.getVmHostIP(), solutionBean.getVmUserName(),
 			            				 solutionBean.getVmUserPd(),azureRegistry.loginServerUrl(), acrCredentials.username(),acrCredentials.passwords().get(0).value(), 
-			            				 imageName,jsonContainerName,imageCount,portNumberString,probeNexusEndPoint,Integer.parseInt(tbean.getSleepTimeFirst()),tbean);
+			            				 repositoryName,jsonContainerName,imageCount,portNumberString,probeNexusEndPoint,Integer.parseInt(tbean.getSleepTimeFirst()),tbean);
 			            		 
 			            		 logger.debug(" End Deploying solution in vm ");
 			            		    dockerinfo.setIpAddress(solutionBean.getVmHostName());
