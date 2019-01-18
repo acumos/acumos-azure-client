@@ -251,8 +251,6 @@ public class AzureCompositeSolution implements Runnable {
 	        }
 	        logger.debug("protoMap "+protoMap);
 	        tbean.setProtoMap(protoMap);
-	        String servicePrincipalClientId = deployDataObject.getClient(); // replace with a real service principal client id
-	        String servicePrincipalSecret = deployDataObject.getKey(); // and corresponding secret
 	        String containerInstanceBluePrint="";
 	        String containerInstanceprobe="";
 	        logger.debug("list "+list);
@@ -261,80 +259,16 @@ public class AzureCompositeSolution implements Runnable {
 	        String portArr[]={"8557","8558","8559","8560","8561","8562","8563","8564","8565","8566"};
             if(list!=null && list.size() > 0){
             	
-     	            //=============================================================
-		            // If service principal client id and secret are not set via the local variables, attempt to read the service
-		            //   principal client id and secret from a secondary ".azureauth" file set through an environment variable.
-		            //
-		            //   If the environment variable was not set then reuse the main service principal set for running this sample.
-	
-		            if (servicePrincipalClientId.isEmpty() || servicePrincipalSecret.isEmpty()) {
-		                String envSecondaryServicePrincipal = System.getenv(AzureClientConstants.AZURE_AUTH_LOCATION_NEXT);
-	
-		                if (envSecondaryServicePrincipal == null || !envSecondaryServicePrincipal.isEmpty() || !Files.exists(Paths.get(envSecondaryServicePrincipal))) {
-		                    envSecondaryServicePrincipal = System.getenv(AzureClientConstants.AZURE_AUTH_LOCATION);
-		                }
-	
-		                servicePrincipalClientId = Utils.getSecondaryServicePrincipalClientID(envSecondaryServicePrincipal);
-		                servicePrincipalSecret = Utils.getSecondaryServicePrincipalSecret(envSecondaryServicePrincipal);
-		            }
-	
-	
-		            //=============================================================
-		            // Create an SSH private/public key pair to be used when creating the container service
-	
-		            logger.debug("Creating an SSH private and public key pair");
-	
-		            SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", AzureClientConstants.SSH_ACS);
-	
-	
-		            //=============================================================
-		            // Create an Azure Container Service with Kubernetes orchestration
-	
-		            logger.debug("Creating an Azure Container Service with Kubernetes ochestration and one agent (virtual machine)");
-	
-		            Date t1 = new Date();        
-	
-	
-		            //=============================================================
-		            // Create an Azure Container Registry to store and manage private Docker container images
-	
-		            logger.debug("Creating an Azure Container Registry");
-		            Date t2 = new Date();
-		            
-		            t1 = new Date();
-	                
 		            //Get the existing Azure registry using resourceGroupName and Acr Name
 		            Registry azureRegistry = azure.containerRegistries().getByResourceGroup(deployDataObject.getRgName(), deployDataObject.getAcrName());
-		            
-		            t2 = new Date();
-		            logger.debug("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000) + " seconds) " + azureRegistry.id());
 		            Utils.print(azureRegistry);
-	
-	
-		            //=============================================================
+	                //=============================================================
 		            // Create a Docker client that will be used to push/pull images to/from the Azure Container Registry
-	
 		            RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
 		            DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
 		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), localEnvDockerHost, localEnvDockerCertPath,azureBean,
 		                    networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPd,subnet,vnet,sleepTimeFirstInt);
 		            
-		            AuthConfig authConfig = new AuthConfig()
-		                    .withUsername(dockerUserName)
-		                    .withPassword(dockerPd);
-		            
-		            AuthConfig authConfig2 = new AuthConfig()
-		                    .withUsername(bluePrintUser)
-		                    .withPassword(bluePrintPass);
-		            
-		            AuthConfig authConfigProb = new AuthConfig()
-		                    .withUsername(probeUser)
-		                    .withPassword(probePass);
-		            
-		            AuthConfig authConfigNexus = new AuthConfig()
-		                    .withUsername(nexusRegistyUserName)
-		                    .withPassword(nexusRegistyPd);
-	
 		            //=============================================================
 		            // Pull a temp image from public Docker repo and create a temporary container from that image
 		            // These steps can be replaced and instead build a custom image using a Dockerfile and the app's JAR
@@ -345,40 +279,23 @@ public class AzureCompositeSolution implements Runnable {
 		            	String imageName=(String)itr.next();
 		            	logger.debug("image name in run "+imageName);
 		            	if(imageName!=null && imageName.contains(bluePrintName)){
-		            		logger.debug("Pulling image start logging in "+imageName);
-		            		dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig2)
-		                    //.withTag(dockerImageTag)
-		                    .exec(new PullImageResultCallback())
-		                    .awaitSuccess();
-		            		
+		            		logger.debug("Inside BluePrint ");
+		            		azureUtil.pullImageFromRepository(bluePrintUser,bluePrintPass,imageName,dockerClient);
 		            	}else if(imageName!=null && imageName.contains(probeName)) {
-		            		logger.debug("Pulling image start logging in and pulling image "+imageName);
-		            		dockerClient.pullImageCmd(imageName).withAuthConfig(authConfigProb)
-		                    //.withTag(dockerImageTag)
-		                    .exec(new PullImageResultCallback())
-		                    .awaitSuccess();
-		            		
+		            		logger.debug("Inside Probe ");
+		            		azureUtil.pullImageFromRepository(probeUser,probePass,imageName,dockerClient);
 		            	}else{
-		            	
-		            	logger.debug("image name in run else "+imageName);
-                        if(azureUtil.getRepositryStatus(imageName, nexusRegistyName)){
-                        	logger.debug("Repository Nexus");
-                        	dockerClient.pullImageCmd(imageName).withAuthConfig(authConfigNexus)
-    	                    //.withTag(dockerImageTag)
-    	                    .exec(new PullImageResultCallback())
-    	                    .awaitSuccess();
-                        }else if(imageName!=null && imageName.contains(AzureClientConstants.NGINX_IMAGE)){
-                        	logger.debug("Nginx images "+imageName);
-                        	 dockerClient.pullImageCmd(imageName)
-			                    .exec(new PullImageResultCallback())
-			                    .awaitSuccess();
-		            	 }else{
-		            		 logger.debug("other Registry");
-		            		 dockerClient.pullImageCmd(imageName).withAuthConfig(authConfig)
-			                    //.withTag(dockerImageTag)
-			                    .exec(new PullImageResultCallback())
-			                    .awaitSuccess();
-		            	  }
+		            	    logger.debug("image name in run else "+imageName);
+	                        if(azureUtil.getRepositryStatus(imageName, nexusRegistyName)){
+	                        	logger.debug("Repository Nexus");
+	                        	azureUtil.pullImageFromRepository(nexusRegistyUserName,nexusRegistyUserName,imageName,dockerClient);
+	                        }else if(imageName!=null && imageName.contains(AzureClientConstants.NGINX_IMAGE)){
+	                        	logger.debug("Nginx images "+imageName);
+	                        	azureUtil.pullImageFromRepository("","",imageName,dockerClient);
+			            	}else{
+			            		 logger.debug("other Registry");
+			            		 azureUtil.pullImageFromRepository(dockerUserName,dockerPd,imageName,dockerClient);
+			            	}
 		            	
 		            	}
 		            	Thread.sleep(sleepTimeSecondInt);
@@ -401,7 +318,7 @@ public class AzureCompositeSolution implements Runnable {
 			                    .exec();
 		            	
 		            	if(imageName!=null && !"".equals(imageName)){
-		            		String tag=getTagFromImage(imageName);
+		            		String tag=azureUtil.getTagFromImage(imageName);
 		            		if(tag!=null){
 		            			imageTagVal=tag;
 		            		}
@@ -596,9 +513,7 @@ public class AzureCompositeSolution implements Runnable {
 				    		        			count++;
 			    		        			}
 			    		        			
-			    		        			
 			    		        		}
-			    		        		
 			    		        		imageCount++;
 			    		        		dockerinfo.setIpAddress(azureVMName);
 		            		            dockerinfo.setPort(portNumber);
@@ -621,9 +536,6 @@ public class AzureCompositeSolution implements Runnable {
 			    		        		deploymentBean.setAzureVMName(azureVMName);
 			    		        		deploymentBean.setContainerName(finalContainerName);
 			    		        		deploymentBean.setContainerPort(portNumber);
-			    		        		
-			    		        		
-			    		        		
 			    		        		
 			    		        		ContainerInfo containerInfo = new ContainerInfo();
 			    		        		containerInfo.setContainerName(finalContainerName);
@@ -737,13 +649,10 @@ public class AzureCompositeSolution implements Runnable {
 			 generateNotification("Probe IP and Port: "+probeIP+":"+probePort,deployDataObject.getUserId());
 		 }
 		 
-		
 		 if(azureContainerBeanList!=null){
-       	  
    			logger.debug("Start saving data in database "); 
    			createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_PROCESS);
-       		  
          }
 		}catch(Exception e){
 			logger.error("AzureCompositeSolution failed", e);
@@ -812,26 +721,7 @@ public class AzureCompositeSolution implements Runnable {
          logger.debug("generateNotification End"); 
 	 }
 
-	 /**
-	  * 
-	  * @param imageName name of full image with repository 
-	  * @return imageTagml tag of image
-	  */
-	public String getTagFromImage(String imageName){
-		String imageTag=null;
-		final int endColon = imageName.lastIndexOf(':');
-		if (endColon < 0) {
-			imageTag=null;
-		}else{
-		  final String tag = imageName.substring(endColon + 1);
-		  if (tag.indexOf('/') < 0) {
-			  imageTag = tag;
-		  }else{
-			  imageTag = null;
-		   }
-		}
-		return imageTag;
-	}
+	 
 	/**
 	  * 
 	  * @param uidNumStr UID String for Map

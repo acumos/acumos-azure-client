@@ -458,6 +458,20 @@ public class DockerUtils {
 			 sshShell = SSHShell.open(kubeTransportBean.getAzureVMIP(), 22, kubeTransportBean.getDockerVMUserName(),
 					 kubeTransportBean.getDockerVMPd());
 			 sshShell.upload(inputStream, "solution.zip", "kubernetesSolution", true,"4095");
+			 log.debug(" solution.zip uploaded in kubernetesSolution folder");
+			 log.debug(" start to install zip unzip in vm "+kubeTransportBean.getAzureVMIP());
+			 String installZipUnZip = ""
+						+ "echo Running: \" Install Zip and Unzip \" \n"
+						+ "sudo apt-get update \n"
+						+ "sudo apt-get install zip -y \n"
+						+ "sudo apt-get install unzip \n"
+						+ "zip -v \n"
+						+ "unzip -v \n";
+			 log.debug(" installZipUnZip "+installZipUnZip);
+			 sshShell.upload(new ByteArrayInputStream(installZipUnZip.getBytes()),
+						"installZipUnZip.sh", "script", true, "4095");
+			 String commandOutput = sshShell.executeCommand("bash -c ~/script/installZipUnZip.sh", true, true);
+			 log.debug(" commandOutput "+commandOutput);
 		}catch(Exception exception) {
 			log.error("Error in uploadZipVM", exception);
 			throw exception;
@@ -485,6 +499,8 @@ public class DockerUtils {
 		log.debug("protoFileVM Start");
 		try{
 		sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
+		String deleteFolderScript = sshShell.executeCommand("sudo rm -rf "+tbean.getNginxMapFolder()+" ", true,true);
+		log.debug("deleteFolderScript  " + deleteFolderScript);
 		String createFolderScript = sshShell.executeCommand("sudo mkdir -p "+tbean.getNginxMapFolder()+" ", true,true);
 		log.debug("createFolderScript  " + createFolderScript);
 		Iterator protoItr = tbean.getProtoMap().entrySet().iterator();

@@ -37,6 +37,10 @@ import org.acumos.nexus.client.RepositoryLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.model.AuthConfig;
+import com.github.dockerjava.core.command.PullImageResultCallback;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
@@ -293,6 +297,18 @@ public class AzureCommonUtil {
 		   }
 		}
 		return imageTag;
+	}
+	public void pullImageFromRepository(String userName,String userPd,String image,DockerClient dockerClient) {
+		logger.debug("Start pullImageFromRepository ");
+		logger.debug("userName "+userName+" userPd "+userPd+" image "+image);
+		if(userName!=null && !"".equals(userName)) {
+			AuthConfig authConfig = new AuthConfig().withUsername(userName).withPassword(userPd);
+			dockerClient.pullImageCmd(image).withAuthConfig(authConfig).exec(new PullImageResultCallback()).awaitSuccess();
+		}else {
+			dockerClient.pullImageCmd(image).exec(new PullImageResultCallback()).awaitSuccess();
+		}
+		
+		logger.debug("End pullImageFromRepository  ");
 	}
 	
 }

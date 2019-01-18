@@ -24,7 +24,7 @@ limitations under the License.
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.acumos-azure-client</groupId>
 	<artifactId>acumos-azure-client</artifactId>
-	<version>1.2.34-SNAPSHOT</version>
+	<version>1.2.35-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>acumos-azure-client</name>
 	<description>Deploys Acumos models and composite solutions to Azure Cloud</description>
