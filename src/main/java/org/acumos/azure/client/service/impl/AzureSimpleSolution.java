@@ -163,52 +163,13 @@ public class AzureSimpleSolution implements Runnable {
 			final String saName = SdkContext.randomResourceName("sa", 20);
 			final Region region = Region.US_EAST; // US_EAST is coming from Azure sdk libraries
 			final String dockerContainerName = dockerContainerPrefix + System.currentTimeMillis();// "acrsample";
-			String servicePrincipalClientId = deployDataObject.getClient(); // replace with a real service principal
-																			// client id
-			String servicePrincipalSecret = deployDataObject.getKey(); // and corresponding secret
-			if (servicePrincipalClientId.isEmpty() || servicePrincipalSecret.isEmpty()) {
-				String envSecondaryServicePrincipal = System.getenv(AzureClientConstants.AZURE_AUTH_LOCATION_NEXT);
-
-				if (envSecondaryServicePrincipal == null || !envSecondaryServicePrincipal.isEmpty()
-						|| !Files.exists(Paths.get(envSecondaryServicePrincipal))) {
-					envSecondaryServicePrincipal = System.getenv(AzureClientConstants.AZURE_AUTH_LOCATION);
-				}
-
-				servicePrincipalClientId = Utils.getSecondaryServicePrincipalClientID(envSecondaryServicePrincipal);
-				servicePrincipalSecret = Utils.getSecondaryServicePrincipalSecret(envSecondaryServicePrincipal);
-			}
-
-			// =============================================================
-			// Create an SSH private/public key pair to be used when creating the container
-			// service
-
-			logger.debug("Creating an SSH private and public key pair");
-
-			SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", AzureClientConstants.SSH_ACS);
-
-			// =============================================================
-			// Create an Azure Container Service with Kubernetes orchestration
-
-			logger.debug(
-					"Creating an Azure Container Service with Kubernetes ochestration and one agent (virtual machine)");
-
-			Date t1 = new Date();
-
-			// =============================================================
-			// Create an Azure Container Registry to store and manage private Docker
-			// container images
-
-			logger.debug("Creating an Azure Container Registry");
-			Date t2 = new Date();
-			t1 = new Date();
+			
+			
 
 			// Get the existing Azure registry using resourceGroupName and Acr Name
 			Registry azureRegistry = azure.containerRegistries().getByResourceGroup(deployDataObject.getRgName(),
 					deployDataObject.getAcrName());
 
-			t2 = new Date();
-			logger.debug("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000)
-					+ " seconds) " + azureRegistry.id());
 			Utils.print(azureRegistry);
 
 			RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
@@ -254,7 +215,7 @@ public class AzureSimpleSolution implements Runnable {
 						.exec();
 
 				if (imageName != null && !"".equals(imageName)) {
-					String tag = getTagFromImage(imageName);
+					String tag = azureUtil.getTagFromImage(imageName);
 					if (tag != null) {
 						imageTagVal = tag;
 					}
@@ -299,16 +260,7 @@ public class AzureSimpleSolution implements Runnable {
 				dockerClient.removeContainerCmd(dockerContainerInstance.getId()).withForce(true).exec();
 				Thread.sleep(sleepTimeFirstInt);
 			}
-			// #####################################################################################
-			logger.debug("Before Docker remoteDockerClient ");
-			DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(),
-					region, azureRegistry.loginServerUrl(), acrCredentials.username(),
-					acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath, azureBean,
-					networkSecurityGroup, dockerRegistryPort, dockerRegistryName,dockerVMUserName,
-					dockerVMPd,subnet,vnet,sleepTimeFirstInt);
-			logger.debug("After Docker remoteDockerClient");
-			// =============================================================
-			// Push the new Docker image to the Azure Container Registry
+			
 			Iterator repoContainer = repoUrlMap.entrySet().iterator();
 			while (repoContainer.hasNext()) {
 				Map.Entry pair = (Map.Entry) repoContainer.next();
@@ -321,23 +273,8 @@ public class AzureSimpleSolution implements Runnable {
 			}
 
 			logger.debug("Pushed Images to privaterepourl and removing imgage from local docker host");
-			// Remove the temp image from the local Docker host
-			// =============================================================
-			// Verify that the image we saved in the Azure Container registry can be pulled
-			// and instantiated locally
-			logger.debug("pull images from Azure registry to locally");
-			repoContainer = repoUrlMap.entrySet().iterator();
-			while (repoContainer.hasNext()) {
-				Map.Entry pair = (Map.Entry) repoContainer.next();
-				String containerName = (String) pair.getKey();
-				String privateRepoUrl = (String) pair.getValue();
-				logger.debug("pull images from Azure registry to locally privateRepoUrl " + privateRepoUrl);
-				dockerClient.pullImageCmd(privateRepoUrl).withAuthConfig(dockerClient.authConfig())
-						.exec(new PullImageResultCallback()).awaitSuccess();
-				Thread.sleep(sleepTimeSecondInt);
-			}
-
-			logger.debug("remoteDockerClient with privateRepoUrl ");
+			
+			logger.debug("Start deployment of Image  ");
 
 			repoContainer = repoUrlMap.entrySet().iterator();
 			while (repoContainer.hasNext()) {
@@ -366,7 +303,7 @@ public class AzureSimpleSolution implements Runnable {
 			}
 			createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
 					deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
-					deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_PROCESS);
+					deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_PROCESS,azureUtil);
 		} catch (Exception e) {
 			 logger.error("AzureSimpleSolution failed", e);
 			try{
@@ -374,23 +311,17 @@ public class AzureSimpleSolution implements Runnable {
 						dataSource, dataUserName, dataPd);
 				createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
 						deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
-						deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_FAILED);
+						deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_FAILED,azureUtil);
 			}catch(Exception ex){
 				logger.error("createDeploymentData failed", e);
 			}
 		}
 		logger.debug("AzureSimpleSolution Run End");
 	}
-
 	
-	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String dataPd) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
-		return client;
-	}
-
-	public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPd,
+    public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPd,
 			AzureContainerBean containerBean, String solutionId, String solutionRevisionId, String userId,
-			String uidNumber, String deploymentStatusCode) throws Exception {
+			String uidNumber, String deploymentStatusCode,AzureCommonUtil azureUtil) throws Exception {
 			logger.debug(" createDeploymentData Start");
 			logger.debug("solutionId " + solutionId);
 			logger.debug("solutionRevisionId " + solutionRevisionId);
@@ -399,7 +330,7 @@ public class AzureSimpleSolution implements Runnable {
 			logger.debug("deploymentStatusCode " + deploymentStatusCode);
 			MLPSolutionDeployment mlpDeployment=null;
 			ObjectMapper mapper = new ObjectMapper();
-			CommonDataServiceRestClientImpl client = getClient(dataSource, dataUserName, dataPd);
+			CommonDataServiceRestClientImpl client = azureUtil.getClient(dataSource, dataUserName, dataPd);
 			if (solutionId != null && solutionRevisionId != null && userId != null && uidNumber != null) {
 				MLPSolutionDeployment mlp = new MLPSolutionDeployment();
 				mlp.setSolutionId(solutionId);
@@ -415,22 +346,6 @@ public class AzureSimpleSolution implements Runnable {
 			}
 			logger.debug("createDeploymentData End");
 			return mlpDeployment;
-	}
-
-	public String getTagFromImage(String imageName) {
-		String imageTag = null;
-		final int endColon = imageName.lastIndexOf(':');
-		if (endColon < 0) {
-			imageTag = null;
-		} else {
-			final String tag = imageName.substring(endColon + 1);
-			if (tag.indexOf('/') < 0) {
-				imageTag = tag;
-			} else {
-				imageTag = null;
-			}
-		}
-		return imageTag;
 	}
 
 }

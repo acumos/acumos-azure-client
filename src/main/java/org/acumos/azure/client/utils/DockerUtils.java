@@ -533,9 +533,9 @@ public class DockerUtils {
 		}
 		log.debug("protoFileVM End");
 	}
-	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPd,
-			String registryServerUrl, String username, String acrPd, String repositoryName,
-			String finalContainerName, int imageCount, String portNumber,String probeNexusEndPoint,int sleepTimeFirstInt,TransportBean tbean) {
+	public static String deploymentCompositeImageVM(String dockerHostIP, String vmUserName, String vmPd,String registryServerUrl, 
+			String username, String acrPd, String repositoryName,String finalContainerName, int imageCount, String portNumber,
+			String probeNexusEndPoint,int sleepTimeFirstInt,TransportBean tbean)throws Exception {
 		log.debug("deploymentCompositeImageVM Start");
 		log.debug("dockerHostIP " + dockerHostIP);
 		log.debug("repositoryName " + repositoryName);
@@ -546,335 +546,85 @@ public class DockerUtils {
 		String portNumberString = portNumber;
 		log.debug("portNumberString " + portNumberString);
 		log.debug("sleepTimeFirstInt " + sleepTimeFirstInt);
-		SSHShell sshShell = null;
-		try {
-
-			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + acrPd + " "
-					+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
-			log.debug("start deploymentImageVM PULL_IMAGE  " + PULL_IMAGE);
-
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()), "PULL_IMAGE_" + imageCount + ".sh",
-					".azuredocker", true, "4095");
-			log.debug("start deploymentImageVM  ");
-
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE_" + imageCount + ".sh", true,
-					true);
-			log.debug("start deploymentImageVM output2  " + output2);
-			 Thread.sleep(sleepTimeFirstInt);
-			log.debug(" start deploymentImageVM ");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			String RUN_IMAGE="";
-			if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)){
-				log.debug("Probe Condition");
-				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
-						+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
-			}else if(finalContainerName!=null && finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
-				log.debug("nginx Condition");
-				RUN_IMAGE = "" + "docker run --name "+finalContainerName+" -v "+tbean.getNginxMapFolder()+":"+tbean.getNginxWebFolder()+":ro  -d -p 0.0.0.0:" + portNumberString
-						+ "  " + repositoryName + " \n";
-			}else{
-				log.debug("Other Condition");
-				RUN_IMAGE = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
-						+ "  " + repositoryName + " \n";
-				
-			}
-		    
-			log.debug("RUN_IMAGE " + RUN_IMAGE);
-
-			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE_" + imageCount + ".sh",
-					".azuredocker", true, "4095");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-
-			String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE_" + imageCount + ".sh",
-					true, true);
-			log.debug("output3" + output3);
-			Thread.sleep(sleepTimeFirstInt);
-		} catch (JSchException jSchException) {
-			log.error("deploymentCompositeImageVM failed", jSchException);
-		} catch (IOException ioException) {
-			log.error("deploymentCompositeImageVM failed", ioException);
-		} catch (Exception exception) {
-			log.error("deploymentCompositeImageVM failed", exception);
-		} finally {
-			if (sshShell != null) {
-				sshShell.close();
-				sshShell = null;
-			}
+		AzureCommonUtil azureUtil =new AzureCommonUtil();
+		String scriptDetail="";
+		String pullImageCommand = "" + "docker login --username=" + username + " --password=" + acrPd + " "
+				+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
+		log.debug(" start deploymentCompositeImageVM pullImageCommand " + pullImageCommand);
+		scriptDetail=azureUtil.executeServerScript(dockerHostIP, vmUserName,vmPd,"pullImage.sh","azuredocker", pullImageCommand);
+		log.debug("pullImage complete : scriptDetail " + scriptDetail);
+		Thread.sleep(sleepTimeFirstInt);
+		log.debug(" start deploymentImageVM ");
+		String runImageCommand="";
+		if(finalContainerName!=null && finalContainerName.trim().equalsIgnoreCase(AzureClientConstants.PROBE_CONTAINER_NAME)){
+			log.debug("Probe Condition");
+			runImageCommand = "" + "docker run --name " + finalContainerName + " -itd -p 0.0.0.0:" + portNumberString
+					+ "  -e NEXUSENDPOINTURL='"+probeNexusEndPoint+"' " + repositoryName + " \n";
+		}else if(finalContainerName!=null && finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
+			log.debug("nginx Condition");
+			runImageCommand = "" + "docker run --name "+finalContainerName+" -v "+tbean.getNginxMapFolder()+":"+tbean.getNginxWebFolder()+":ro  -d -p 0.0.0.0:" + portNumberString
+					+ "  " + repositoryName + " \n";
+		}else{
+			log.debug("Other Condition");
+			runImageCommand = "" + "docker run --name " + finalContainerName + " -d -p 0.0.0.0:" + portNumberString
+					+ "  " + repositoryName + " \n";
 		}
-
+		log.debug("runImageCommand " + runImageCommand);
+		scriptDetail=azureUtil.executeServerScript(dockerHostIP, vmUserName,vmPd,"runImage.sh","azuredocker", runImageCommand);
+		log.debug("Run Image Complete : scriptDetail" + scriptDetail);
+		Thread.sleep(sleepTimeFirstInt);
 		log.debug("deploymentCompositeImageVM End");
 		return "success";
 	}
 
 	public static String deploymentImageVM(String dockerHostIP, String vmUserName, String vmPd,
 			String registryServerUrl, String username, String acrPd, String repositoryName,
-			String portNumberString,int sleepTimeFirstInt) {
+			String portNumberString,int sleepTimeFirstInt) throws Exception{
 		log.debug("dockerHostIP " + dockerHostIP);
 		log.debug("registryServerUrl " + registryServerUrl);
 		log.debug("repositoryName " + repositoryName);
 		log.debug("portNumberString " + portNumberString);
 		log.debug("sleepTimeFirstInt " + sleepTimeFirstInt);
 		log.debug("start deploymentImageVM ");
-		SSHShell sshShell = null;
-		try {
-
-			String PULL_IMAGE = "" + "docker login --username=" + username + " --password=" + acrPd + " "
+		AzureCommonUtil azureUtil =new AzureCommonUtil();
+		String scriptDetail="";
+			String pullImageCommand = "" + "docker login --username=" + username + " --password=" + acrPd + " "
 					+ registryServerUrl + " \n" + "docker pull " + repositoryName + " \n";
-			log.debug(" start deploymentImageVM PULL_IMAGE " + PULL_IMAGE);
-
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			sshShell.upload(new ByteArrayInputStream(PULL_IMAGE.getBytes()), "PULL_IMAGE.sh", ".azuredocker", true,
-					"4095");
-			log.debug(" start deploymentImageVM  ");
-
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			String output2 = sshShell.executeCommand("bash -c ~/.azuredocker/PULL_IMAGE.sh", true, true);
-			log.debug("deploymentImageVM output2 " + output2);
+			log.debug(" start deploymentImageVM pullImageCommand " + pullImageCommand);
+			scriptDetail=azureUtil.executeServerScript(dockerHostIP, vmUserName,vmPd,"pullImage.sh","azuredocker", pullImageCommand);
+			log.debug("pullImage complete : scriptDetail " + scriptDetail);
 			Thread.sleep(sleepTimeFirstInt);
 			log.debug("start deploymentImageVM ");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			String RUN_IMAGE = "" + "docker run -d -p 0.0.0.0:"+portNumberString+" "+ repositoryName + " \n";
-			log.debug("RUN_IMAGE Complete ");
-
-			sshShell.upload(new ByteArrayInputStream(RUN_IMAGE.getBytes()), "RUN_DOCKER_IMAGE.sh", ".azuredocker", true,
-					"4095");
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-
-			String output3 = sshShell.executeCommand("bash -c ~/.azuredocker/RUN_DOCKER_IMAGE.sh", true, true);
-			log.debug("output3: " + output3);
-
-		} catch (JSchException jSchException) {
-			log.error("deploymentImageVM failed", jSchException);
-		} catch (IOException ioException) {
-			log.error("deploymentImageVM failed", ioException);
-		} catch (Exception exception) {
-			log.error("deploymentImageVM failed", exception);
-		} finally {
-			if (sshShell != null) {
-				sshShell.close();
-				sshShell = null;
-			}
-		}
-		log.debug(" deploymentImageVM End");
+			String runImageCommand = "" + "docker run -d -p 0.0.0.0:"+portNumberString+" "+ repositoryName + " \n";
+			log.debug("runImageCommand "+runImageCommand);
+			scriptDetail=azureUtil.executeServerScript(dockerHostIP, vmUserName,vmPd,"runImage.sh","azuredocker", runImageCommand);
+			log.debug("Run Image Complete : scriptDetail" + scriptDetail);
 		return "sucess";
 	}
 	
 	
-
-	public static DockerClient installDocker(String dockerHostIP, String vmUserName, String vmPd,
-			String registryServerUrl, String username, String acrPd, String dockerRegistryNameVal, int sleepTimeFirstInt) {
-		String keyPemContent = ""; // it stores the content of the key.pem certificate file
-		String certPemContent = ""; // it stores the content of the cert.pem certificate file
-		String caPemContent = ""; // it stores the content of the ca.pem certificate file
-		boolean dockerHostTlsEnabled = false;
-		String dockerHostUrl = "tcp://" + dockerHostIP + ":80";
-		SSHShell sshShell = null;
-		String dockerConfig_diabled = "";
-		String dockerRegistryName = dockerRegistryNameVal;
-
-		try {
-			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
-			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-
-			sshShell.upload(new ByteArrayInputStream(INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.getBytes()),
-					"INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", ".azuredocker", true, "4095");
-
-			dockerConfig_diabled = "" + "[Service]\n" + "ExecStart=\n"
-					+ "ExecStart=/usr/bin/dockerd --tls=false -H tcp://0.0.0.0:80 -H unix:///var/run/docker.sock --insecure-registry "
-					+ dockerRegistryName + " \n";
-
-			sshShell.upload(new ByteArrayInputStream(dockerConfig_diabled.getBytes()), "dockerd_notls.config",
-					".azuredocker", true, "4095");
-			log.debug("dockerConfig_diabled " + dockerConfig_diabled);
-			sshShell.upload(new ByteArrayInputStream(CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.getBytes()),
-					"CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", ".azuredocker", true, "4095");
-			log.debug("dockerConfig_diabled " + dockerConfig_diabled);
-		} catch (JSchException jSchException) {
-			log.error("installDocker failed", jSchException);
-		} catch (IOException ioException) {
-			log.error("installDocker failed", ioException);
-		} catch (Exception exception) {
-			log.error("installDocker failed", exception);
-		} finally {
-			if (sshShell != null) {
-				sshShell.close();
-				sshShell = null;
-			}
-		}
-		try {
-			log.debug("Trying to install Docker host at: " + dockerHostIP);
-			log.debug("Trying to install Docker dockerHostIP at: " + dockerHostIP);
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-
-			String output = sshShell
-					.executeCommand("bash -c ~/.azuredocker/INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.sh", true, true);
-			Thread.sleep(sleepTimeFirstInt);
-			log.debug(output);
-			log.debug("output " + output);
-		} catch (JSchException jSchException) {
-			log.error("installDocker failed ", jSchException);
-		} catch (IOException ioException) {
-			log.error("installDocker failed", ioException);
-		} catch (Exception exception) {
-			log.error("installDocker failed", exception);
-		} finally {
-			if (sshShell != null) {
-				sshShell.close();
-			}
-		}
+	public static DockerClient installDocker(String hostip, String hostUserName, String hostPd,String registryServerUrl, 
+			String username, String acrPd, String dockerRegistryNameVal, int sleepTimeFirstInt)throws Exception{
+		log.debug("start installDocker");
+		DockerClient dockerClient =null;
+		DockerClientConfig dockerClientConfig=null;
 		String dockerHostPort = "80";
-		try {
-			log.debug("Trying to setup Docker config: " + dockerHostIP);
-			log.debug("Trying to setup Docker config: " + dockerHostIP);
-			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
-			log.debug("Enter in ssh shell ");
-			// // Setup Docker daemon to allow connection from any Docker clients
-			String output = sshShell
-					.executeCommand("bash -c ~/.azuredocker/CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED.sh", true, true);
-			Thread.sleep(sleepTimeFirstInt);
-			
-			log.debug(output);
-			log.debug("output " + output);
-
-			dockerHostTlsEnabled = false;
-
-			log.debug("dockerHostUrl ");
-		} catch (JSchException jSchException) {
-			log.error("installDocker failed", jSchException);
-		} catch (IOException ioException) {
-			log.error("installDocker failed", ioException);
-		} catch (Exception exception) {
-			log.error("installDocker failed", exception);
-		}  finally {
-			if (sshShell != null) {
-				sshShell.close();
-			}
-		}
-		dockerHostUrl = "tcp://" + dockerHostIP + ":" + dockerHostPort;
-		dockerHostTlsEnabled = false;
-		log.debug(dockerHostUrl + "dockerHostTlsEnabled "+ dockerHostTlsEnabled);
-		DockerClientConfig dockerClientConfig;
-		if (dockerHostTlsEnabled) {
-			log.debug("dockerHostTlsEnabled " + dockerHostTlsEnabled);
-			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd,
-					caPemContent, keyPemContent, certPemContent);
-		} else {
-			log.debug("dockerHostTlsEnabled " + dockerHostTlsEnabled);
-			dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd);
-		}
-		log.debug("dockerClientConfig " + dockerClientConfig);
-		DockerClient dockerClient = DockerClientBuilder.getInstance(dockerClientConfig).build();
-		try {
-			Thread.sleep(sleepTimeFirstInt);
-		} catch (Exception e) {
-			log.error("sleep  failed", e);
-		}
+		String scriptDetail="";
+		String dockerHostUrl="";
+		AzureCommonUtil azureUtil =new AzureCommonUtil();
+		log.debug("hostip "+hostip);
+		String installScript=azureUtil.getFileDetails(AzureClientConstants.SETUP_SCRIPT_NAME);
+		log.debug("installScript "+installScript);
+		scriptDetail=azureUtil.executeServerScript(hostip, hostUserName, hostPd,"setup-dockert.sh", "installscript", installScript);
+		log.debug("checkPrerequisites End returnStr"+scriptDetail);
+		dockerHostUrl = "tcp://" + hostip + ":" + dockerHostPort;
+		log.debug("dockerHostUrl "+dockerHostUrl);
+		dockerClientConfig = createDockerClientConfig(dockerHostUrl, registryServerUrl, username, acrPd);
+		log.debug("dockerClientConfig "+dockerClientConfig);
+		dockerClient = DockerClientBuilder.getInstance(dockerClientConfig).build();
+		Thread.sleep(sleepTimeFirstInt);
+		log.debug("End installDocker");
 		return dockerClient;
 	}
 
-	/**
-	 * Installs Docker Engine and tools and adds current user to the docker group.
-	 */
-	public static final String INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS = ""
-			+ "echo Running: \"if [ ! -d ~/.azuredocker/tls ]; then mkdir -p ~/.azuredocker/tls ; fi\" \n"
-			+ "if [ ! -d ~/.azuredocker/tls ]; then mkdir -p ~/.azuredocker/tls ; fi \n"
-			+ "echo Running: sudo apt-get update \n" + "sudo apt-get update \n"
-			+ "echo Running: sudo apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl software-properties-common \n"
-			+ "sudo apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl software-properties-common \n"
-			+ "echo Running: curl -fsSL https://apt.dockerproject.org/gpg | sudo apt-key add - \n"
-			+ "curl -fsSL https://apt.dockerproject.org/gpg | sudo apt-key add - \n"
-			+ "echo Running: sudo add-apt-repository \"deb https://apt.dockerproject.org/repo/ ubuntu-$(lsb_release -cs) main\" \n"
-			+ "sudo add-apt-repository \"deb https://apt.dockerproject.org/repo/ ubuntu-xenial main\" \n"
-			+ "echo Running: sudo apt-get update \n" + "sudo apt-get update \n"
-			+ "echo Running: sudo apt-get -y install docker-engine \n" + "sudo apt-get -y install docker-engine \n"
-			+ "echo Running: sudo groupadd docker \n" + "sudo groupadd docker \n"
-			+ "echo Running: sudo usermod -aG docker $USER \n" + "sudo usermod -aG docker $USER \n";
-
-	/**
-	 * Linux bash script that creates the TLS certificates for a secured Docker
-	 * connection.
-	 */
-	public static final String CREATE_OPENSSL_TLS_CERTS_FOR_UBUNTU = ""
-			+ "echo Running: \"if [ ! -d ~/.azuredocker/tls ]; then rm -f -r ~/.azuredocker/tls ; fi\" \n"
-			+ "if [ ! -d ~/.azuredocker/tls ]; then rm -f -r ~/.azuredocker/tls ; fi \n"
-			+ "echo Running: mkdir -p ~/.azuredocker/tls \n" + "mkdir -p ~/.azuredocker/tls \n"
-			+ "echo Running: cd ~/.azuredocker/tls \n" + "cd ~/.azuredocker/tls \n"
-			// Generate CA certificate
-			+ "echo Running: openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -aes256 -out ca-key.pem 2048 \n"
-			+ "openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -aes256 -out ca-key.pem 2048 \n"
-			// Generate Server certificates
-			+ "echo Running: openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=Docker Host CA/C=US' -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem \n"
-			+ "openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=Docker Host CA/C=US' -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem \n"
-			+ "echo Running: openssl genrsa -out server-key.pem 2048 \n" + "openssl genrsa -out server-key.pem 2048 \n"
-			+ "echo Running: openssl req -subj '/CN=HOST_IP' -sha256 -new -key server-key.pem -out server.csr \n"
-			+ "openssl req -subj '/CN=HOST_IP' -sha256 -new -key server-key.pem -out server.csr \n"
-			+ "echo Running: \"echo subjectAltName = DNS:HOST_IP IP:127.0.0.1 > extfile.cnf \" \n"
-			+ "echo subjectAltName = DNS:HOST_IP IP:127.0.0.1 > extfile.cnf \n"
-			+ "echo Running: openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server.pem -extfile extfile.cnf \n"
-			+ "openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server.pem -extfile extfile.cnf \n"
-			// Generate Client certificates
-			+ "echo Running: openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -out key.pem \n"
-			+ "openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -out key.pem \n"
-			+ "echo Running: openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=client' -new -key key.pem -out client.csr \n"
-			+ "openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=client' -new -key key.pem -out client.csr \n"
-			+ "echo Running: \"echo extendedKeyUsage = clientAuth,serverAuth > extfile.cnf \" \n"
-			+ "echo extendedKeyUsage = clientAuth,serverAuth > extfile.cnf \n"
-			+ "echo Running: openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf \n"
-			+ "openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf \n"
-			+ "echo Running: cd ~ \n" + "cd ~ \n";
-
-	/**
-	 * Bash script that sets up the TLS certificates to be used in a secured Docker
-	 * configuration file; must be run on the Docker dockerHostUrl after the VM is
-	 * provisioned.
-	 */
-	public static final String INSTALL_DOCKER_TLS_CERTS_FOR_UBUNTU = ""
-			+ "echo \"if [ ! -d /etc/docker/tls ]; then sudo mkdir -p /etc/docker/tls ; fi\" \n"
-			+ "if [ ! -d /etc/docker/tls ]; then sudo mkdir -p /etc/docker/tls ; fi \n"
-			+ "echo sudo cp -f ~/.azuredocker/tls/ca.pem /etc/docker/tls/ca.pem \n"
-			+ "sudo cp -f ~/.azuredocker/tls/ca.pem /etc/docker/tls/ca.pem \n"
-			+ "echo sudo cp -f ~/.azuredocker/tls/server.pem /etc/docker/tls/server.pem \n"
-			+ "sudo cp -f ~/.azuredocker/tls/server.pem /etc/docker/tls/server.pem \n"
-			+ "echo sudo cp -f ~/.azuredocker/tls/server-key.pem /etc/docker/tls/server-key.pem \n"
-			+ "sudo cp -f ~/.azuredocker/tls/server-key.pem /etc/docker/tls/server-key.pem \n"
-			+ "echo sudo chmod -R 755 /etc/docker \n" + "sudo chmod -R 755 /etc/docker \n";
-
-	/**
-	 * Docker daemon config file allowing connections from any Docker client.
-	 */
-	public static final String DEFAULT_DOCKERD_CONFIG_TLS_ENABLED = "" + "[Service]\n" + "ExecStart=\n"
-			+ "ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/etc/docker/tls/ca.pem --tlscert=/etc/docker/tls/server.pem --tlskey=/etc/docker/tls/server-key.pem -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock\n";
-
-	/**
-	 * Bash script that creates a default TLS secured Docker configuration file;
-	 * must be run on the Docker dockerHostUrl after the VM is provisioned.
-	 */
-	public static final String CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED = ""
-			+ "echo Running: sudo service docker stop \n" + "sudo service docker stop \n"
-			+ "echo \"if [ ! -d /etc/systemd/system/docker.service.d ]; then sudo mkdir -p /etc/systemd/system/docker.service.d ; fi\" \n"
-			+ "if [ ! -d /etc/systemd/system/docker.service.d ]; then sudo mkdir -p /etc/systemd/system/docker.service.d ; fi \n"
-			+ "echo sudo cp -f ~/.azuredocker/dockerd_tls.config /etc/systemd/system/docker.service.d/custom.conf \n"
-			+ "sudo cp -f ~/.azuredocker/dockerd_tls.config /etc/systemd/system/docker.service.d/custom.conf \n"
-			+ "echo Running: sudo systemctl daemon-reload \n" + "sudo systemctl daemon-reload \n"
-			+ "echo Running: sudo service docker start \n" + "sudo service docker start \n";
-
-	/**
-	 * Docker daemon config file allowing connections from any Docker client.
-	 */
-	
-	/**
-	 * Bash script that creates a default unsecured Docker configuration file; must
-	 * be run on the Docker dockerHostUrl after the VM is provisioned.
-	 */
-	public static final String CREATE_DEFAULT_DOCKERD_OPTS_TLS_DISABLED = ""
-			+ "echo Running: sudo service docker stop\n" + "sudo service docker stop\n"
-			+ "echo \"if [ ! -d /etc/systemd/system/docker.service.d ]; then sudo mkdir -p /etc/systemd/system/docker.service.d ; fi\" \n"
-			+ "if [ ! -d /etc/systemd/system/docker.service.d ]; then sudo mkdir -p /etc/systemd/system/docker.service.d ; fi \n"
-			+ "echo sudo cp -f ~/.azuredocker/dockerd_notls.config /etc/systemd/system/docker.service.d/custom.conf \n"
-			+ "sudo cp -f ~/.azuredocker/dockerd_notls.config /etc/systemd/system/docker.service.d/custom.conf \n"
-			+ "echo Running: sudo systemctl daemon-reload \n" + "sudo systemctl daemon-reload \n"
-			+ "echo Running: sudo service docker start \n" + "sudo service docker start \n";
 }

@@ -375,14 +375,6 @@ public class AzureCompositeSolution implements Runnable {
 			                    .exec();
 			            Thread.sleep(sleepTimeFirstInt);
 		            }
-		            //#####################################################################################
-		            logger.debug("Before Docker remoteDockerClient ");
-		            DockerClient remoteDockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
-		                    azureRegistry.loginServerUrl(), acrCredentials.username(), acrCredentials.passwords().get(0).value(), null, localEnvDockerCertPath,azureBean
-		                    ,networkSecurityGroup,dockerRegistryPort,dockerRegistryName,dockerVMUserName,dockerVMPd,subnet,vnet,sleepTimeFirstInt);
-		            logger.debug("After Docker remoteDockerClient ");
-		            //=============================================================
-		            // Push the new Docker image to the Azure Container Registry
 		            Iterator repoContainer=repoUrlMap.entrySet().iterator();
 		            while(repoContainer.hasNext()){
 		            	Map.Entry pair = (Map.Entry)repoContainer.next();
@@ -396,21 +388,6 @@ public class AzureCompositeSolution implements Runnable {
 		            }
 		            
 		            logger.debug("Pushed Images to privaterepourl and removing imgage from local docker host ");
-		            // Remove the temp image from the local Docker host
-		            //=============================================================
-		            // Verify that the image we saved in the Azure Container registry can be pulled and instantiated locally
-		            logger.debug(" pull images from Azure registry to locally ");
-		             repoContainer=repoUrlMap.entrySet().iterator();
-		            while(repoContainer.hasNext()){
-		            	Map.Entry pair = (Map.Entry)repoContainer.next();
-		            	String containerName=(String)pair.getKey();
-		            	String privateRepoUrl=(String)pair.getValue();
-		            	 logger.debug(" pull images from Azure registry to locally privateRepoUrl "+privateRepoUrl);
-		            	dockerClient.pullImageCmd(privateRepoUrl)
-	                    .withAuthConfig(dockerClient.authConfig())
-	                    .exec(new PullImageResultCallback()).awaitSuccess();
-		            	Thread.sleep(sleepTimeSecondInt);
-		            }
 		            
 		            logger.debug("List local Docker images after pulling sample image from the Azure Container Registry:");
 		            images = dockerClient.listImagesCmd()
@@ -595,12 +572,12 @@ public class AzureCompositeSolution implements Runnable {
 		  String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/"+AzureClientConstants.PUT_DOCKER_INFO_URL;  
 		  String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/"+AzureClientConstants.PUT_BLUEPRINT_INFO_URL;
 		  logger.debug("urlDockerInfo "+urlDockerInfo+" urlBluePrint "+urlBluePrint);
-		  String dataBrokerPort=getDataBrokerPort(deploymentList,AzureClientConstants.DATABROKER_NAME);
+		  String dataBrokerPort=azureUtil.getDataBrokerPort(deploymentList,AzureClientConstants.DATABROKER_NAME);
 		  String urlDataBroker="http://"+vmIP+":"+dataBrokerPort+"/"+AzureClientConstants.CONFIG_DB_URL;
 		  String csvDataBrokerPort="";
 		  String csvDataBrokerUrl="";
 		  if(dataBrokerBean!=null){
-			  csvDataBrokerPort=getDataBrokerPortCSV(deploymentList,AzureClientConstants.DATABROKER_NAME);
+			  csvDataBrokerPort=azureUtil.getDataBrokerPortCSV(deploymentList,AzureClientConstants.DATABROKER_NAME);
 		  }
 		  if(csvDataBrokerPort!=null && !"".equalsIgnoreCase(csvDataBrokerPort)){
 			  csvDataBrokerUrl="http://"+vmIP+":"+csvDataBrokerPort+"/"+AzureClientConstants.CONFIG_DB_URL;
@@ -617,12 +594,12 @@ public class AzureCompositeSolution implements Runnable {
 			 }
 		// putBlueprint
 		 if(bluePrint!=null){
-			 putBluePrintDetailsJSON(bluePrintJsonStr,urlBluePrint);
+			 azureUtil.putBluePrintDetailsJSON(bluePrintJsonStr,urlBluePrint);
 		  }
 		// putDockerInfo
 		 if(dockerList != null){
 			  logger.debug("Inside probeContainerBeanList ");
-			  putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
+			  azureUtil.putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
 			}
 		 // configDB
 		 if(dataBrokerPort!=null &&  !"".equals(dataBrokerPort)){
@@ -646,12 +623,13 @@ public class AzureCompositeSolution implements Runnable {
 		 if (bluePrint.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation deployDataObject.getUserId() "+deployDataObject.getUserId());
 			 logger.debug(" probeIP "+probeIP+" probePort "+probePort);
-			 generateNotification("Probe IP and Port: "+probeIP+":"+probePort,deployDataObject.getUserId());
+			 azureUtil.generateNotification("Probe IP and Port: "+probeIP+":"+probePort,deployDataObject.getUserId(),
+					 dataSource,dataUserName,dataPd);
 		 }
 		 
 		 if(azureContainerBeanList!=null){
    			logger.debug("Start saving data in database "); 
-   			createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
+   			azureUtil.createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_PROCESS);
          }
 		}catch(Exception e){
@@ -659,7 +637,7 @@ public class AzureCompositeSolution implements Runnable {
 			try{
 				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
-				createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
+				azureUtil.createDeploymentCompositeData(dataSource,dataUserName,dataPd,azureContainerBeanList,deployDataObject.getSolutionId(),
 	   					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_FAILED);
 			}catch(Exception ex){
 				logger.error("createDeploymentCompositeData failed", e);
@@ -669,59 +647,7 @@ public class AzureCompositeSolution implements Runnable {
 		logger.debug("AzureCompositeSolution Run End");
 	}
 	
-	/**
-	 * 
-	 * @param notificationId notificationId for notification track
-	 * @param userId unique Id for User
-	 */
-	public void addNotificationUser(String notificationId, String userId) {
-        logger.debug("addNotificationUser");
-    	CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
-    	client.addUserToNotification(notificationId,userId);
-     }
 	
-	
-	/**
-	 * 
-	 * @param mlpNotification bean for notification
-	 * @return mlNotification bean for notification Details
-	 */
-	 public org.acumos.azure.client.transport.MLNotification createNotification(MLPNotification mlpNotification) {
-		 logger.debug("createNotification Start");
-         CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
-         MLNotification mlNotification = Utils.convertToMLNotification(client.createNotification(mlpNotification));
-         logger.debug("createNotification End");
-         return mlNotification;
-	 }
-	 
-	
-	 void generateNotification(String msg, String userId) throws Exception{
-		 logger.debug("generateNotification Start");
-		 logger.debug("userId "+userId+" msg "+msg);
-         MLPNotification notification = new MLPNotification();
-         try {
-                 if (msg != null) {
-                     notification.setTitle(msg);
-                     // Provide the IP address and port of the probe Instance
-                     notification.setMessage(msg);
-                     Date startDate = new Date();
-                     Date endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
-                     notification.setStart(startDate);
-                     notification.setEnd(endDate);
-                     CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
-                     notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
-                     MLNotification mLNotification = createNotification(notification);
-                     logger.debug("mLNotification.getNotificationId() "+mLNotification.getNotificationId());
-                     client.addUserToNotification(mLNotification.getNotificationId(),userId);
-             }
-         } catch (Exception e) {
-        	 logger.error("generateNotification failed", e);
-        	 throw e;
-         }
-         logger.debug("generateNotification End"); 
-	 }
-
-	 
 	/**
 	  * 
 	  * @param uidNumStr UID String for Map
@@ -734,79 +660,6 @@ public class AzureCompositeSolution implements Runnable {
 		singlatonMap.put(uidNumStr, azureDetails);
 		logger.debug("setuidHashmap End");
 	}	
-	
-	public CommonDataServiceRestClientImpl getClient(String datasource,String userName,String dataPd) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
-		return client;
-	}
-	
-	public void putContainerDetailsJSON(DockerInfoList  dockerList,String apiUrl) throws Exception{
-		logger.debug("putContainerDetailsJSON Start");
-		try {
-			logger.debug("dockerList "+dockerList.toString()+"apiUrl "+apiUrl);
-			final String url = apiUrl;
-			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			ObjectMapper mapper = new ObjectMapper();
-			String dockerJson=mapper.writeValueAsString(dockerList);
-			logger.debug("dockerJson "+dockerJson);
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    	
-		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
-		   
-		  } catch (Exception e) {
-			  logger.error("putContainerDetailsJSON failed", e);
-	          throw e;
-		 }
-		logger.debug("putContainerDetailsJSON End");
-	}
-	
-	
-	public void putContainerDetailsJSONProbe(DockerInfoList dockerList,String apiUrl)throws Exception{
-		logger.debug("putContainerDetailsJSON Start");
-		try {
-			logger.debug("dockerList "+dockerList.toString()+"apiUrl "+apiUrl);
-			final String url = apiUrl;
-			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			ObjectMapper mapper = new ObjectMapper();
-			String dockerJson=mapper.writeValueAsString(dockerList);
-			logger.debug("dockerJson "+dockerJson);
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    	
-		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
-		   
-		  } catch (Exception e) {
-			  logger.error("putContainerDetailsJSONProbe failed", e);
-	          throw e;
-		 }
-		logger.debug("putContainerDetailsJSON  End");
-	}
-	
-	public void putBluePrintDetailsJSON(String  blueprintJson,String apiUrl)throws Exception{
-		logger.debug("putBluePrintDetailsJSON Start");
-		try {
-			logger.debug("apiUrl "+apiUrl);
-			final String url = apiUrl;
-			ObjectMapper mapper = new ObjectMapper();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			logger.debug("blueprintJson "+blueprintJson);
-			RestTemplate restTemplate = new RestTemplate();
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
-		   
-		  } catch (Exception e) {
-			  logger.error("putBluePrintDetailsJSON failed", e);
-			  throw e;
-		 }
-		logger.debug("putBluePrintDetailsJSON End");
-	}
 	
 	public void putDataBrokerDetails(AzureDeployDataObject deployDataObject,String apiUrl)throws Exception{
 		logger.debug("putDataBrokerDetails Start");
@@ -832,92 +685,6 @@ public class AzureCompositeSolution implements Runnable {
 			  throw e;
 		 }
 		logger.debug("putDataBrokerDetails End");
-	}
-	
-	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPd,List<AzureContainerBean> azureContainerBeanList,
-			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
-		logger.debug("createDeploymentCompositeData start");
-		logger.debug("solutionId "+solutionId);
-		logger.debug("solutionRevisionId "+solutionRevisionId);
-		logger.debug("userId "+userId);
-		logger.debug("uidNumber "+uidNumber);
-		logger.debug("deploymentStatusCode "+deploymentStatusCode);
-		logger.debug("azureContainerBeanList "+azureContainerBeanList);
-		ObjectMapper mapper = new ObjectMapper();
-		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
-		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
-			MLPSolutionDeployment mlp=new MLPSolutionDeployment();
-			mlp.setSolutionId(solutionId);
-			mlp.setUserId(userId);
-			mlp.setRevisionId(solutionRevisionId);
-			mlp.setDeploymentId(uidNumber);
-			mlp.setDeploymentStatusCode(deploymentStatusCode);
-			String azureDetails=mapper.writeValueAsString(azureContainerBeanList);
-			mlp.setDetail(azureDetails);
-			logger.debug("azureDetails "+azureDetails);
-			MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
-			logger.debug("mlpDeployment "+mlpDeployment);
-		}
-		logger.debug("createDeploymentCompositeData End");
-	}
-	
-	
-	
-	public String getDataBrokerPort(List<DeploymentBean> deploymentList, String dataBrokerName){
-		logger.debug("getDataBrokerIP Start");
-		String dataBrokerPort="";
-		logger.debug("deploymentList "+deploymentList);
-		logger.debug("dataBrokerName "+dataBrokerName);
-		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
-			for(DeploymentBean bean:deploymentList){
-				logger.debug("bean.NodeType() "+bean.getNodeType());
-				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
-				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
-						&& !bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
-					dataBrokerPort=bean.getContainerPort();
-				}
-			}
-		}
-		logger.debug("dataBrokerPort "+dataBrokerPort);
-		logger.debug("End getDataBrokerIP");
-		return dataBrokerPort;
-	}
-	
-	public String getDataBrokerPortCSV(List<DeploymentBean> deploymentList, String dataBrokerName){
-		logger.debug("getDataBrokerPortCSV Start");
-		String dataBrokerPort="";
-		logger.debug("deploymentList "+deploymentList);
-		logger.debug("dataBrokerName"+dataBrokerName);
-		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
-			for(DeploymentBean bean:deploymentList){
-				logger.debug("bean.NodeType() "+bean.getNodeType());
-				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
-				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
-						&& bean.getDataBrokerType()!=null && bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
-					dataBrokerPort=bean.getContainerPort();
-				}
-			}
-		}
-		logger.debug("dataBrokerPort "+dataBrokerPort);
-		logger.debug("getDataBrokerPortCSV End");
-		return dataBrokerPort;
-	}
-	
-	public String getDataBrokerScript(List<DeploymentBean> deploymentList, String dataBrokerName){
-		logger.debug("getDataBrokerScript Start");
-		String dataBrokerScript="";
-		logger.debug("deploymentList "+deploymentList);
-		logger.debug("dataBrokerName "+dataBrokerName);
-		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
-			for(DeploymentBean bean:deploymentList){
-				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)){
-					dataBrokerScript=bean.getScript();
-				}
-			}
-		}
-		logger.debug("dataBrokerScript "+dataBrokerScript);
-		logger.debug("getDataBrokerScript End");
-		return dataBrokerScript;
 	}
 	
 	public void callCsvConfigDB(AzureDeployDataObject deployDataObject,String apiUrl,DataBrokerBean dataBrokerBean)throws Exception{
@@ -948,5 +715,5 @@ public class AzureCompositeSolution implements Runnable {
 		 }
 		logger.debug("callCsvConfigDB End");
 	}
-
+	
 }
