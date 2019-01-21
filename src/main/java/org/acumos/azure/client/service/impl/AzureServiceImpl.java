@@ -34,6 +34,7 @@ import java.util.Map;
 import org.acumos.azure.client.service.AzureService;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.utils.AzureClientConstants;
+import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.nexus.client.NexusArtifactClient;
@@ -54,29 +55,14 @@ public class AzureServiceImpl implements AzureService {
 	// TODO: can this and the setter be removed?
 	private Environment env;
 
-	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String dataPd) {
-		logger.debug("getClient start");
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,
-				null);
-		logger.debug("getClient End");
-		return client;
-	}
+	
+	
 
 	public void setEnvironment(Environment envrionment) {
 		this.env = envrionment;
 	}
 
-	public NexusArtifactClient nexusArtifactClient(String nexusUrl, String nexusUserName, String nexusPd) {
-		logger.debug("nexusArtifactClient start");
-		RepositoryLocation repositoryLocation = new RepositoryLocation();
-		repositoryLocation.setId("1");
-		repositoryLocation.setUrl(nexusUrl);
-		repositoryLocation.setUsername(nexusUserName);
-		repositoryLocation.setPassword(nexusPd);
-		NexusArtifactClient nexusArtifactClient = new NexusArtifactClient(repositoryLocation);
-		logger.debug("nexusArtifactClient End");
-		return nexusArtifactClient;
-	}
+	
 
 	@Override
 	public Azure authorize(AzureDeployDataObject authObject) {
@@ -129,7 +115,8 @@ public class AzureServiceImpl implements AzureService {
 		String nexusURI = "";
 		String bluePrintStr = "";
 		ByteArrayOutputStream byteArrayOutputStream = null;
-		CommonDataServiceRestClientImpl cmnDataService = getClient(datasource, userName, dataPd);
+		AzureCommonUtil azureUtil=new AzureCommonUtil();
+		CommonDataServiceRestClientImpl cmnDataService = azureUtil.getClient(datasource, userName, dataPd);
 		if (null != solutionRevisionId) {
 			// 3. Get the list of Artifiact for the SolutionId and SolutionRevisionId.
 			mlpArtifactList = cmnDataService.getSolutionRevisionArtifacts(solutionId, solutionRevisionId);
@@ -140,7 +127,7 @@ public class AzureServiceImpl implements AzureService {
 						.findFirst().get().getUri();
 				logger.debug("getBluePrintNexus: Nexus URI : " + nexusURI);
 				if (null != nexusURI) {
-					NexusArtifactClient nexusArtifactClient = nexusArtifactClient(nexusUrl, nexusUserName, nexusPd);
+					NexusArtifactClient nexusArtifactClient = azureUtil.nexusArtifactClientDetails(nexusUrl, nexusUserName, nexusPd);
 					File f = new File(AzureClientConstants.JSON_FILE_NAME);
 					if (f.exists() && !f.isDirectory()) {
 						f.delete();

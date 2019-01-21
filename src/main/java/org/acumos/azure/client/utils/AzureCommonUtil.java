@@ -24,24 +24,36 @@ import java.util.List;
 import java.util.Random;
 
 import org.acumos.azure.client.controller.AzureServiceController;
+import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.AzureKubeBean;
+import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.MLNotification;
+import org.acumos.azure.client.transport.SolutionDeployment;
 import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPSolution;
+import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.acumos.nexus.client.NexusArtifactClient;
 import org.acumos.nexus.client.RepositoryLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.core.command.PullImageResultCallback;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
 
@@ -310,5 +322,193 @@ public class AzureCommonUtil {
 		
 		logger.debug("End pullImageFromRepository  ");
 	}
+	
+	public String executeServerScript(String hostip,String hostUserName,String hostPd,String fileName,
+			         String folderName,String fileContent)throws Exception{
+		 logger.debug("executeServerScript Start");
+		 logger.debug("hostip "+hostip+" hostUserName "+hostUserName+" hostPd "+hostPd);
+		 logger.debug("fileName "+fileName +" fileContent "+fileContent);
+		 SSHShell sshShell = null;
+		 String scriptOutput="";
+		 String folderfileName="";
+		 String returnStr="success";
+		 try {
+			 if(folderName!=null && !"".equals(folderName)) {
+				 folderfileName=folderName+"/"+fileName;
+			 }
+			 logger.debug("folderfileName "+folderfileName);
+			 sshShell = SSHShell.open(hostip,22,hostUserName,hostPd);
+			 sshShell.upload(new ByteArrayInputStream(fileContent.getBytes()),fileName, folderName, true, "4095");
+			 logger.debug("Start executing script ");
+			 scriptOutput = sshShell.executeCommand("bash -c ~/"+folderfileName, true, true);
+			 logger.debug("scriptOutput "+scriptOutput);
+		 }catch (Exception exception) {
+				logger.error("Exception in executeServerScript "+exception);
+				returnStr="fail";
+				throw exception;
+			} finally {
+				if (sshShell != null) {
+					sshShell.close();
+					sshShell = null;
+				}
+			}
+		 logger.debug("executeServerScript");
+		return returnStr;
+	}
+	
+	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPd,List<AzureContainerBean> azureContainerBeanList,
+			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
+		logger.debug("createDeploymentCompositeData start");
+		logger.debug("solutionId "+solutionId);
+		logger.debug("solutionRevisionId "+solutionRevisionId);
+		logger.debug("userId "+userId);
+		logger.debug("uidNumber "+uidNumber);
+		logger.debug("deploymentStatusCode "+deploymentStatusCode);
+		logger.debug("azureContainerBeanList "+azureContainerBeanList);
+		ObjectMapper mapper = new ObjectMapper();
+		CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
+		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
+			MLPSolutionDeployment mlp=new MLPSolutionDeployment();
+			mlp.setSolutionId(solutionId);
+			mlp.setUserId(userId);
+			mlp.setRevisionId(solutionRevisionId);
+			mlp.setDeploymentId(uidNumber);
+			mlp.setDeploymentStatusCode(deploymentStatusCode);
+			String azureDetails=mapper.writeValueAsString(azureContainerBeanList);
+			mlp.setDetail(azureDetails);
+			logger.debug("azureDetails "+azureDetails);
+			MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
+			logger.debug("mlpDeployment "+mlpDeployment);
+		}
+		logger.debug("createDeploymentCompositeData End");
+	}
+	public String getDataBrokerPort(List<DeploymentBean> deploymentList, String dataBrokerName){
+		logger.debug("getDataBrokerIP Start");
+		String dataBrokerPort="";
+		logger.debug("deploymentList "+deploymentList);
+		logger.debug("dataBrokerName "+dataBrokerName);
+		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
+			for(DeploymentBean bean:deploymentList){
+				logger.debug("bean.NodeType() "+bean.getNodeType());
+				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
+				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
+						&& !bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
+					dataBrokerPort=bean.getContainerPort();
+				}
+			}
+		}
+		logger.debug("dataBrokerPort "+dataBrokerPort);
+		logger.debug("End getDataBrokerIP");
+		return dataBrokerPort;
+	}
+	
+	public String getDataBrokerPortCSV(List<DeploymentBean> deploymentList, String dataBrokerName){
+		logger.debug("getDataBrokerPortCSV Start");
+		String dataBrokerPort="";
+		logger.debug("deploymentList "+deploymentList);
+		logger.debug("dataBrokerName"+dataBrokerName);
+		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
+			for(DeploymentBean bean:deploymentList){
+				logger.debug("bean.NodeType() "+bean.getNodeType());
+				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
+				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
+						&& bean.getDataBrokerType()!=null && bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
+					dataBrokerPort=bean.getContainerPort();
+				}
+			}
+		}
+		logger.debug("dataBrokerPort "+dataBrokerPort);
+		logger.debug("getDataBrokerPortCSV End");
+		return dataBrokerPort;
+	}
+	public String getDataBrokerScript(List<DeploymentBean> deploymentList, String dataBrokerName){
+		logger.debug("getDataBrokerScript Start");
+		String dataBrokerScript="";
+		logger.debug("deploymentList "+deploymentList);
+		logger.debug("dataBrokerName "+dataBrokerName);
+		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
+			for(DeploymentBean bean:deploymentList){
+				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)){
+					dataBrokerScript=bean.getScript();
+				}
+			}
+		}
+		logger.debug("dataBrokerScript "+dataBrokerScript);
+		logger.debug("getDataBrokerScript End");
+		return dataBrokerScript;
+	}
+	public void callCsvConfigDB(SolutionDeployment deployDataObject,String apiUrl,DataBrokerBean dataBrokerBean)throws Exception{
+		logger.debug("callCsvConfigDB Start");
+		try {
+			logger.debug("apiUrl "+apiUrl);
+			final String url = apiUrl;
+			if(deployDataObject!=null){
+				dataBrokerBean.setUserName(deployDataObject.getUsername());
+				dataBrokerBean.setUserPd(deployDataObject.getUserPd());
+				dataBrokerBean.setHost(deployDataObject.getHost());
+				dataBrokerBean.setPort(deployDataObject.getPort());
+			}
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			ObjectMapper mapper = new ObjectMapper();
+			String dataBrokerBeanJson=mapper.writeValueAsString(dataBrokerBean);
+			logger.debug("dataBrokerBeanJson "+dataBrokerBeanJson);
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    	
+		    HttpEntity<String> entity = new HttpEntity<String>(dataBrokerBeanJson,headers);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+		   
+		  } catch (Exception e) {
+			  logger.error("callCsvConfigDB failed", e);
+			  throw e;
+		 }
+		logger.debug("callCsvConfigDB End");
+	}
+	
+	public void putContainerDetailsJSONProbe(DockerInfoList dockerList,String apiUrl)throws Exception{
+		logger.debug("putContainerDetailsJSON Start");
+		try {
+			logger.debug("dockerList "+dockerList.toString()+"apiUrl "+apiUrl);
+			final String url = apiUrl;
+			RestTemplate restTemplate = new RestTemplate();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			ObjectMapper mapper = new ObjectMapper();
+			String dockerJson=mapper.writeValueAsString(dockerList);
+			logger.debug("dockerJson "+dockerJson);
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    	
+		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+		   
+		  } catch (Exception e) {
+			  logger.error("putContainerDetailsJSONProbe failed", e);
+	          throw e;
+		 }
+		logger.debug("putContainerDetailsJSON  End");
+	}
+	
+	public void putBluePrintDetailsJSON(String  blueprintJson,String apiUrl)throws Exception{
+		logger.debug("putBluePrintDetailsJSON Start");
+		try {
+			logger.debug("apiUrl "+apiUrl);
+			final String url = apiUrl;
+			ObjectMapper mapper = new ObjectMapper();
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_JSON);
+			logger.debug("blueprintJson "+blueprintJson);
+			RestTemplate restTemplate = new RestTemplate();
+		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson,headers);
+		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
+		   
+		  } catch (Exception e) {
+			  logger.error("putBluePrintDetailsJSON failed", e);
+			  throw e;
+		 }
+		logger.debug("putBluePrintDetailsJSON End");
+	}
+	
 	
 }
