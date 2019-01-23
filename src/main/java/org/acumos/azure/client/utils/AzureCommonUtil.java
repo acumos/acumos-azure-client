@@ -262,7 +262,7 @@ public class AzureCommonUtil {
 		   char charVal=values.charAt(rndm_method.nextInt(values.length()));
 		   pass = pass.append(charVal);
 		} 
-		logger.debug("getRandomPassword End"); 
+		logger.debug("getRandomPassword End pass: "+pass); 
 		return pass; 
 	}
 	public String getFileDetails(String fileDetails) throws Exception{

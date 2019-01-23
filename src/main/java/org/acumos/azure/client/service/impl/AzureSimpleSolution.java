@@ -156,8 +156,8 @@ public class AzureSimpleSolution implements Runnable {
 		AzureEncrypt azEncrypt=new AzureEncrypt();
 		try {
 			 
-			//dockerVMPd=azureUtil.getRandomPassword(10).toString();
-			//logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+			dockerVMPd=azureUtil.getRandomPassword(10).toString();
+			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			final String saName = SdkContext.randomResourceName("sa", 20);

@@ -66,9 +66,9 @@ public class AzureKubeSolution implements Runnable{
     		int sleepTimeInt=Integer.parseInt(kubeTransportBean.getSleepTimeFirst());
     		if(inputStream!=null) {
     			kubeTransportBean.setSolutionZipStream(inputStream);
-    			//String dockerVMPd=azureUtil.getRandomPassword(10).toString();
-    			//kubeTransportBean.setDockerVMPd(dockerVMPd);
-    			//logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+    			String dockerVMPd=azureUtil.getRandomPassword(10).toString();
+    			kubeTransportBean.setDockerVMPd(dockerVMPd);
+    			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 	    		String hostIp=DockerUtils.createNewAzureVM(azure, auth.getRgName(), region, kubeTransportBean.getNetworkSecurityGroup(),
 	    				kubeTransportBean.getDockerVMUserName(),kubeTransportBean.getDockerVMPd(),kubeTransportBean.getSubnet(),
 	    				kubeTransportBean.getVnet(),kubeTransportBean);
