@@ -223,8 +223,8 @@ public class AzureCompositeSolution implements Runnable {
   	    AzureCommonUtil azureUtil=new AzureCommonUtil();
   	    AzureEncrypt azEncrypt=new AzureEncrypt();
 		try{
-			//dockerVMPd=azureUtil.getRandomPassword(10).toString();
-			//logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+			dockerVMPd=azureUtil.getRandomPassword(10).toString();
+			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			logger.debug("pushCompositeImage start");
