@@ -19,6 +19,13 @@
 ==========================
 Azure Client Release Notes
 ==========================
+Version 1.2.40, 24 January 2019
+---------------------------------
+* Model Deployment in existing Vm in (`ACUMOS-2254 <https://jira.acumos.org/browse/ACUMOS-2254>`_)
+* Deploy solution in Azure VM with K8s (`ACUMOS-2257 <https://jira.acumos.org/browse/ACUMOS-2257>`_)
+* Azure deployer must accept user-specified username and password for VM (`ACUMOS-1351 <https://jira.acumos.org/browse/ACUMOS-1351>`_)
+* update CDS 2.0.3 for Azure-client
+
 Version 1.2.22, 4 October 2018
 ---------------------------------
 * update CDS 1.18.2 for Azure-client (`ACUMOS-1820 <https://jira.acumos.org/browse/ACUMOS-1820>`_)
