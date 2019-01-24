@@ -27,7 +27,6 @@ import org.acumos.azure.client.controller.AzureServiceController;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.AzureKubeBean;
 import org.acumos.azure.client.transport.MLNotification;
-import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.cds.domain.MLPNotification;
@@ -44,6 +43,9 @@ import com.github.dockerjava.core.command.PullImageResultCallback;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.FileReader;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.time.Period;	
 
 public class AzureCommonUtil {
 	Logger logger = LoggerFactory.getLogger(AzureCommonUtil.class);
@@ -83,12 +85,13 @@ public class AzureCommonUtil {
                      notification.setTitle(msg);
                      // Provide the IP address and port of the probe Instance
                      notification.setMessage(msg);
-                     Date startDate = new Date();
-                     Date endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
+                     Instant startDate = Instant.now();
+     				 Instant endDate = startDate.plus(Period.ofDays(365));
                      notification.setStart(startDate);
                      notification.setEnd(endDate);
+                     notification.setCreated(startDate);
                      CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
-                     notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
+                     //notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
                      MLNotification mLNotification = createNotification(notification,dataSource,dataUserName,dataPassword);
                      logger.debug("mLNotification.getNotificationId() "+mLNotification.getNotificationId());
                      client.addUserToNotification(mLNotification.getNotificationId(),userId);

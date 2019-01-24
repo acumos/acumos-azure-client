@@ -46,7 +46,6 @@ import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.ProbeIndicator;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
-import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPSolutionDeployment;
@@ -222,9 +221,12 @@ public class AzureCompositeSolution implements Runnable {
   	    String probePort = null;
   	    AzureCommonUtil azureUtil=new AzureCommonUtil();
   	    AzureEncrypt azEncrypt=new AzureEncrypt();
+  	    String azureEncPD="";
+  	    String vmIP="";
 		try{
 			dockerVMPd=azureUtil.getRandomPassword(10).toString();
-			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+			azureEncPD=azEncrypt.encrypt(dockerVMPd);
+			logger.debug("azureEncPD "+azureEncPD);
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			logger.debug("pushCompositeImage start");
@@ -256,7 +258,7 @@ public class AzureCompositeSolution implements Runnable {
 	        logger.debug("list "+list);
 	        logger.debug("sequenceList "+sequenceList);
 	        logger.debug("bluePrintName "+bluePrintName);
-	        String portArr[]={"8557","8558","8559","8560","8561","8562","8563","8564","8565","8566"};
+	        int portIncrement=8557;
             if(list!=null && list.size() > 0){
             	
 		            //Get the existing Azure registry using resourceGroupName and Acr Name
@@ -499,18 +501,20 @@ public class AzureCompositeSolution implements Runnable {
 			    		        				portNumberString=exposeDataBrokerPort+":"+internalDataBrokerPort;
 			    		        				portNumber=exposeDataBrokerPort;
 			    		        			}else if(finalContainerName.equalsIgnoreCase(AzureClientConstants.NGINX_CONTAINER)){
-			    		        				portNumber=portArr[count];
+			    		        				portNumber=String.valueOf(portIncrement);
 			    		        				portNumberString=portNumber+":"+tbean.getNginxInternalPort();
 			    		        				tbean.setNginxPort(portNumber);
 			    		        				count++;
+			    		        				portIncrement++;
 			    		        			}else{
-			    		        				portNumber=portArr[count];
+			    		        				portNumber=String.valueOf(portIncrement);
 				    		        			if(solutionPort!=null && !"".equals(solutionPort)){
 				    		        				portNumberString=portNumber+":"+solutionPort;
 				    		        			}else{
 				    		        				portNumberString=portNumber+":"+portNumber;
 				    		        			}
 				    		        			count++;
+				    		        			portIncrement++;
 			    		        			}
 			    		        			
 			    		        		}
@@ -590,7 +594,7 @@ public class AzureCompositeSolution implements Runnable {
           logger.debug("Dockerinfolist "+mapper.writeValueAsString(azureBean.getDockerinfolist()));
   		  logger.debug("bluePrint "+mapper.writeValueAsString(bluePrint));	
   		  DockerInfoList dockerInfoList=azureBean.getDockerinfolist();
-		  String vmIP=azureBean.getAzureVMIP().trim();
+		  vmIP=azureBean.getAzureVMIP().trim();
 		  String bluePrintPort=azureBean.getBluePrintPort().trim();
 		  String urlDockerInfo="http://"+vmIP+":"+bluePrintPort+"/"+AzureClientConstants.PUT_DOCKER_INFO_URL;  
 		  String urlBluePrint="http://"+vmIP+":"+bluePrintPort+"/"+AzureClientConstants.PUT_BLUEPRINT_INFO_URL;
@@ -639,14 +643,14 @@ public class AzureCompositeSolution implements Runnable {
 		 }	
 		 
 		 if(vmIP!=null && !"".equals(vmIP)){
-			 azureUtil.generateNotification("Composite Solution VM is created, IP is: "+vmIP, deployDataObject.getUserId(),
+			 azureUtil.generateNotification("Composite Solution VM is created, IP is: "+vmIP+" Password: "+dockerVMPd, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 		 }
 		 //if (bluePrint.getProbeIndocator() != null && bluePrint.getProbeIndocator().equalsIgnoreCase("True"))  {
 		 if (bluePrint.getProbeIndicator() != null && prbIndicator != null && prbIndicator.getValue().equalsIgnoreCase("True"))  {
 			 logger.debug("Probe indicator true. Starting generatenotircation deployDataObject.getUserId() "+deployDataObject.getUserId());
 			 logger.debug(" probeIP "+probeIP+" probePort "+probePort);
-			 generateNotification("Probe IP and Port: "+probeIP+":"+probePort,deployDataObject.getUserId());
+			 azureUtil.generateNotification("Probe IP and Port: "+probeIP+":"+probePort,deployDataObject.getUserId(),dataSource, dataUserName, dataPd);
 		 }
 		 
 		 if(azureContainerBeanList!=null){
@@ -656,6 +660,9 @@ public class AzureCompositeSolution implements Runnable {
          }
 		}catch(Exception e){
 			logger.error("AzureCompositeSolution failed", e);
+			if(vmIP!=null && !"".equals(vmIP)) {
+				 logger.error("Azure VM IP is:"+vmIP+" Password: "+azureEncPD);
+			 }
 			try{
 				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
@@ -695,31 +702,7 @@ public class AzureCompositeSolution implements Runnable {
 	 }
 	 
 	
-	 void generateNotification(String msg, String userId) throws Exception{
-		 logger.debug("generateNotification Start");
-		 logger.debug("userId "+userId+" msg "+msg);
-         MLPNotification notification = new MLPNotification();
-         try {
-                 if (msg != null) {
-                     notification.setTitle(msg);
-                     // Provide the IP address and port of the probe Instance
-                     notification.setMessage(msg);
-                     Date startDate = new Date();
-                     Date endDate = new Date(startDate.getTime() + (1000 * 60 * 60 * 24));
-                     notification.setStart(startDate);
-                     notification.setEnd(endDate);
-                     CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPd);
-                     notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
-                     MLNotification mLNotification = createNotification(notification);
-                     logger.debug("mLNotification.getNotificationId() "+mLNotification.getNotificationId());
-                     client.addUserToNotification(mLNotification.getNotificationId(),userId);
-             }
-         } catch (Exception e) {
-        	 logger.error("generateNotification failed", e);
-        	 throw e;
-         }
-         logger.debug("generateNotification End"); 
-	 }
+	
 
 	 
 	/**

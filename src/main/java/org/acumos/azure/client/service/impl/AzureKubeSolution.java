@@ -59,6 +59,8 @@ public class AzureKubeSolution implements Runnable{
     	logger.debug("AzureKubeSolution Run Started ");
     	AzureEncrypt azEncrypt=new AzureEncrypt();
     	AzureCommonUtil azureUtil=new AzureCommonUtil();
+    	String azureEncPD="";
+    	String hostIp="";
     	try {
     		InputStream inputStream = getAzureSolutionZip(auth,kubeTransportBean.getKubernetesClientUrl());
     		logger.debug("Zip Input stream completed ");
@@ -68,8 +70,9 @@ public class AzureKubeSolution implements Runnable{
     			kubeTransportBean.setSolutionZipStream(inputStream);
     			String dockerVMPd=azureUtil.getRandomPassword(10).toString();
     			kubeTransportBean.setDockerVMPd(dockerVMPd);
-    			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
-	    		String hostIp=DockerUtils.createNewAzureVM(azure, auth.getRgName(), region, kubeTransportBean.getNetworkSecurityGroup(),
+    			azureEncPD=azEncrypt.encrypt(dockerVMPd);
+    			logger.debug("azureEncPD "+azureEncPD);
+	    		hostIp=DockerUtils.createNewAzureVM(azure, auth.getRgName(), region, kubeTransportBean.getNetworkSecurityGroup(),
 	    				kubeTransportBean.getDockerVMUserName(),kubeTransportBean.getDockerVMPd(),kubeTransportBean.getSubnet(),
 	    				kubeTransportBean.getVnet(),kubeTransportBean);
 	    		 logger.debug("sleepTime "+sleepTimeInt);
@@ -78,11 +81,14 @@ public class AzureKubeSolution implements Runnable{
 	    		 DockerUtils.uploadZipVM(kubeTransportBean);
 	    		 logger.debug("Upload file part completed ");
 	    		 /*Send detail to your through notification*/
-	    		 azureUtil.generateNotification("VM is created, IP is: "+hostIp, auth.getUserId(),
+	    		 azureUtil.generateNotification("VM is created, IP is: "+hostIp+" Password: "+dockerVMPd, auth.getUserId(),
 	    				 kubeTransportBean.getCmnDataUrl(), kubeTransportBean.getCmnDataUser(), kubeTransportBean.getCmnDataPd());
     		}
     	}catch(Exception e) {
     		logger.error("Exception in AzureKubeSolution failed", e);
+    		if(hostIp!=null && !"".equals(hostIp)) {
+				 logger.error("Azure VM IP is:"+hostIp+" Password: "+azureEncPD);
+			 }
     	}
     	logger.debug("AzureKubeSolution Run End ");
     }

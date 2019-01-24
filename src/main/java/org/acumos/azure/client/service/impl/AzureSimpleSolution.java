@@ -154,10 +154,13 @@ public class AzureSimpleSolution implements Runnable {
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		AzureContainerBean containerBean = new AzureContainerBean();
 		AzureEncrypt azEncrypt=new AzureEncrypt();
+		String azureEncPD="";
+		String azureVMIP="";
 		try {
 			 
 			dockerVMPd=azureUtil.getRandomPassword(10).toString();
-			logger.debug("VM PD "+azEncrypt.encrypt(dockerVMPd));
+			azureEncPD=azEncrypt.encrypt(dockerVMPd);
+			logger.debug("azureEncPD "+azureEncPD);
 			int sleepTimeFirstInt=Integer.parseInt(sleepTimeFirst);
 			int sleepTimeSecondInt=Integer.parseInt(sleepTimeSecond);
 			final String saName = SdkContext.randomResourceName("sa", 20);
@@ -349,7 +352,7 @@ public class AzureSimpleSolution implements Runnable {
 					tagImage = containerTagMap.get(containerName);
 				}
 
-				String azureVMIP = azureBean.getAzureVMIP();
+				azureVMIP = azureBean.getAzureVMIP();
 				String repositoryName = "";
 				repositoryName = privateRepoUrl + ":" + tagImage;
 			
@@ -361,7 +364,7 @@ public class AzureSimpleSolution implements Runnable {
 				containerBean.setContainerIp(azureBean.getAzureVMIP());
 				containerBean.setContainerPort("8557");
 				containerBean.setContainerName("ContainerOne");
-				azureUtil.generateNotification("Single Solution VM is created, IP is: "+azureVMIP, deployDataObject.getUserId(),
+				azureUtil.generateNotification("Single Solution VM is created, IP is: "+azureVMIP+" Password: "+dockerVMPd, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 			}
 			createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
@@ -369,6 +372,9 @@ public class AzureSimpleSolution implements Runnable {
 					deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_PROCESS);
 		} catch (Exception e) {
 			 logger.error("AzureSimpleSolution failed", e);
+			 if(azureVMIP!=null && !"".equals(azureVMIP)) {
+				 logger.error("Azure VM IP is:"+azureVMIP+" Password: "+azureEncPD);
+			 }
 			try{
 				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);

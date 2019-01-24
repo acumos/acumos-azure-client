@@ -29,7 +29,6 @@ import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.ParseJSON;
 import org.acumos.azure.client.utils.ProbeIndicator;
 import org.acumos.azure.client.utils.SSHShell;
-import org.acumos.cds.MessageSeverityCode;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPNotification;
 import org.acumos.cds.domain.MLPSolutionDeployment;
