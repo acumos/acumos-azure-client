@@ -19,7 +19,7 @@
 ==========================
 Azure Client Release Notes
 ==========================
-Version 1.2.41, 25 January 2019
+Version 2.0.0, 28 January 2019
 ---------------------------------
 * Model Deployment in existing Vm in (`ACUMOS-2254 <https://jira.acumos.org/browse/ACUMOS-2254>`_)
 * Deploy solution in Azure VM with K8s (`ACUMOS-2257 <https://jira.acumos.org/browse/ACUMOS-2257>`_)
