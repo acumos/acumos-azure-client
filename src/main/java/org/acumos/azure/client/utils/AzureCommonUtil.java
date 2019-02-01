@@ -91,7 +91,7 @@ public class AzureCommonUtil {
                      notification.setEnd(endDate);
                      notification.setCreated(startDate);
                      CommonDataServiceRestClientImpl client=getClient(dataSource,dataUserName,dataPassword);
-                     //notification.setMsgSeverityCode(MessageSeverityCode.ME.toString());
+                     notification.setMsgSeverityCode(AzureClientConstants.MSG_SEVERITY_ME);
                      MLNotification mLNotification = createNotification(notification,dataSource,dataUserName,dataPassword);
                      logger.debug("mLNotification.getNotificationId() "+mLNotification.getNotificationId());
                      client.addUserToNotification(mLNotification.getNotificationId(),userId);

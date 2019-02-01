@@ -100,6 +100,7 @@ public final class AzureClientConstants {
 	public static final String VM_CREATION_ERROR="role";
 	public static final String SETUP_SCRIPT_NAME="setup-docker.sh";
 	public static final String DOCKER_CONTAINER_PREFIX="acumos-e6e";
+	public static final String MSG_SEVERITY_ME = "ME";
 	
 	public static final String BLUEPRINT_NAME_PROP="blueprint.name";
 	public static final String REGISTRY_BLUEPRINT_USERNAME_PROP="docker.registry.bluePrint.username";
