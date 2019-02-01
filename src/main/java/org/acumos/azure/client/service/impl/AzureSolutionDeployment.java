@@ -112,10 +112,10 @@ public class AzureSolutionDeployment implements Runnable{
 		 try {
 			 final String dockerContainerName = AzureClientConstants.DOCKER_CONTAINER_PREFIX + System.currentTimeMillis();//"acrsample";
 			 logger.debug("dockerContainerName "+dockerContainerName);
-			 String imageName=azureUtil.getSingleImageData(solutionBean.getSolutionId(), solutionBean.getSolutionRevisionId(),
+			 String image=azureUtil.getSingleImageData(solutionBean.getSolutionId(), solutionBean.getSolutionRevisionId(),
 					 tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd());
-	         logger.debug("imageName "+imageName);
-	         list.add(imageName);
+	         logger.debug("imageName "+image);
+	         list.add(image);
 			 //Get the existing Azure registry using resourceGroupName and Acr Name
 			 Registry azureRegistry = azure.containerRegistries().getByResourceGroup(solutionBean.getRgName(), solutionBean.getAcrName());
 			 RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
@@ -126,19 +126,22 @@ public class AzureSolutionDeployment implements Runnable{
 			 if(dockerClient == null) {
 				 logger.debug("Docker client null");
 			  }
+			 logger.debug("list "+list);
 			 Iterator imageItr=list.iterator();
 	         CreateContainerResponse dockerContainerInstance=null;
 	         String containerCountName="";
 	         imageTag=AzureClientConstants.IMAGE_TAG_LATEST;
-	         if(imageName!=null && !"".equals(imageName)){
-         		String tag=azureUtil.getTagFromImage(imageName);
+	         if(image!=null && !"".equals(image)){
+         		String tag=azureUtil.getTagFromImage(image);
          		if(tag!=null){
          			imageTag=tag;
          		}
          	}
          	logger.debug("imageTag "+imageTag);
+         	
 	         int dockerCount=0;
 	         while(imageItr.hasNext()){
+	        	 String imageName = (String) imageItr.next();
 				if(azureUtil.getRepositryStatus(imageName, tbean.getNexusRegistyName())){
             		logger.debug(" Other Nexus Registry ");
             		azureUtil.pullImageFromRepository(tbean.getNexusRegistyUserName(),tbean.getNexusRegistyPd(),imageName,dockerClient);
