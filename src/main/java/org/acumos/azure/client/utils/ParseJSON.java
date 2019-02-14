@@ -126,26 +126,7 @@ public class ParseJSON {
         blueprint.setName(name);
         blueprint.setVersion(version);
         Iterator<Map.Entry> itr1=null;
-        Orchestrator orchestratorBean=new Orchestrator();
-        Map orchestrator = ((Map)jo.get(AzureClientConstants.ORCHESTRATOR));
-        if(orchestrator!=null){
-	        itr1 = orchestrator.entrySet().iterator();
-	        while (itr1.hasNext()) {
-	            Map.Entry pair = itr1.next();
-	            String key=(String)pair.getKey();
-	            String value=(String)pair.getValue();
-	            log.debug("-->"+pair.getKey() + " : " + pair.getValue());
-	            if(key!=null && key.equalsIgnoreCase(AzureClientConstants.NAME)){
-	            	orchestratorBean.setName(value);
-	             }
-	            if(key!=null && key.equalsIgnoreCase(AzureClientConstants.VERSION)){
-	            	orchestratorBean.setVersion(value);
-	             }
-	            if(key!=null && key.equalsIgnoreCase(AzureClientConstants.IMAGE)){
-	            	orchestratorBean.setImage(value);
-	             }
-	           }
-        }
+        
         
         ArrayList<ProbeIndicator> list_of_pb_indicators = new ArrayList<ProbeIndicator>();
 		ProbeIndicator prbIndicator = new ProbeIndicator();
@@ -292,40 +273,7 @@ public class ParseJSON {
 	  return value;	
 	}
 
-	public  ArrayList<Component> jsonArrayParseObject(Object obj){
-		log.debug("jsonArrayParseObject Start");
-		JSONArray jsonArr = (JSONArray) obj;
-		Iterator itr = jsonArr.iterator();
-		ArrayList<Component> listComponent=new ArrayList<Component>();
-		Iterator<Map.Entry> itr1=null;
-		 while (itr.hasNext()) {
-			 itr1 = ((Map) itr.next()).entrySet().iterator();
-			 Component component=new Component();
-	            while (itr1.hasNext()) {
-	                Map.Entry pair = itr1.next();
-	                String key=(String)pair.getKey();
-	                
-	                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.OPERATION_SIGNATURE)){
-	                	JSONObject objVar =(JSONObject)pair.getValue();
-	                	if(objVar!=null){
-	                		String operation=(String)objVar.get(AzureClientConstants.OPERATION);
-	                		OperationSignature opr=new OperationSignature();
-	                		opr.setOperationName(operation);
-	                		log.debug("operation "+operation);
-	                		component.setOperationSignature(opr);
-	                	}
-	                }
-	                if(key!=null && key.equalsIgnoreCase(AzureClientConstants.NAME)){
-	                	component.setName((String)pair.getValue());
-	                }
-	                
-	            }
-	            listComponent.add(component); 
-         }
-	  log.debug("listComponent "+listComponent);	 
-	  log.debug("jsonArrayParseObject End"+listComponent);	 
-	  return listComponent;	 
-	}
+	
 	
 	public ArrayList<OperationSignatureList>  jsonArrayParseObjectProb(Object obj, ArrayList<OperationSignatureList> listComponent) {
 		log.debug("jsonArrayParseObjectProb Start");

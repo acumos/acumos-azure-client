@@ -55,6 +55,7 @@ import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DataBrokerBean;
 import org.acumos.azure.client.utils.DockerInfo;
 import org.acumos.azure.client.utils.DockerInfoList;
+import org.acumos.azure.client.utils.LoggerUtil;
 import org.acumos.azure.client.utils.ParseJSON;
 import org.acumos.azure.client.utils.ProbeIndicator;
 import org.json.JSONObject;
@@ -241,6 +242,7 @@ public class AzureServiceController extends AbstractController {
 		String azureDataFiles="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		TransportBean tbean=new TransportBean();
+		LoggerUtil loggerUtil=new LoggerUtil();
 		try {
 			UUID uidNumber = UUID.randomUUID();
 			uidNumStr=uidNumber.toString();
@@ -288,32 +290,16 @@ public class AzureServiceController extends AbstractController {
 			nginxImageName=env.getProperty(AzureClientConstants.NGINX_IMAGENAME);
 			nginxInternalPort=env.getProperty(AzureClientConstants.NGINX_INTERNALPORT);
 			azureDataFiles=env.getProperty(AzureClientConstants.DATAFILE_FOLDER);
-			logger.debug("azureDataFiles "+azureDataFiles);
-			logger.debug("nginxInternalPort "+nginxInternalPort);
-			logger.debug("nginxImageName "+nginxImageName);
-			logger.debug("exposeDataBrokerPort "+exposeDataBrokerPort);
-			logger.debug("internalDataBrokerPort "+internalDataBrokerPort);
-			logger.debug("nexusRegistyName "+nexusRegistyName);
-			logger.debug("otherRegistyName "+otherRegistyName);
-			logger.debug("subnet "+subnet);
-			logger.debug("vnet "+vnet);
-			logger.debug("sleepTimeFirst "+sleepTimeFirst);
-			logger.debug("sleepTimeSecond "+sleepTimeSecond);
-			logger.debug("nginxMapFolder "+nginxMapFolder);
-			logger.debug("nginxWebFolder "+nginxWebFolder);
+			
 			if (authObject == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
 				jsonOutput.put("status", APINames.AUTH_FAILED);
 				return jsonOutput.toString();
 			}
 			userId=authObject.getUserId();
-			logger.debug("userId "+userId);
-            logger.debug("authObject.UrlAttribute "+authObject.getUrlAttribute());
-            logger.debug("authObject.JsonMapping "+authObject.getJsonMapping());
-            logger.debug("authObject.JsonPosition "+authObject.getJsonPosition());
-            logger.debug("SolutionId "+authObject.getSolutionId());
-			logger.debug("authObject.SolutionRevisionId "+authObject.getSolutionRevisionId());
-			
+			loggerUtil.printCompositeSolutionDetails(userId,azureDataFiles,nginxInternalPort,nginxImageName,exposeDataBrokerPort,
+					internalDataBrokerPort,nexusRegistyName,otherRegistyName,subnet,vnet,sleepTimeFirst,sleepTimeSecond,
+					nginxMapFolder,nginxWebFolder,authObject);
 			Azure azure = azureImpl.authorize(authObject);
 			logger.debug("Azure Authentication Complete");
 			String bluePrintJsonStr=azureImpl.getBluePrintNexus(authObject.getSolutionId(), authObject.getSolutionRevisionId(),dataSource,userName,dataPd,nexusUrl,nexusUserName,nexusPd);
@@ -330,59 +316,30 @@ public class AzureServiceController extends AbstractController {
 			Map<String,String> protoContainerMap=null;
 			logger.debug("probeIndicator "+probeIndicator);
 			if(probeIndicator){
-				
-				imageMap=parseJson.parseJsonFileImageMap(AzureClientConstants.JSON_FILE_NAME);
-				//Node Type and container Name in nodes
-				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);
-				// images list
-				list=azureImpl.iterateImageMap(imageMap);
-				//proto files
 				tbean.setProtoContainerMap(parseJson.getProtoDetails(AzureClientConstants.JSON_FILE_NAME));
-				dataBrokerBean=parseJson.getDataBrokerContainer(AzureClientConstants.JSON_FILE_NAME);
-				if(dataBrokerBean!=null){
-					if(dataBrokerBean!=null){
-						ByteArrayOutputStream byteArrayOutputStream=azureUtil.getNexusUrlFile(nexusUrl, nexusUserName, nexusPd, dataBrokerBean.getProtobufFile());
-						logger.debug("byteArrayOutputStream "+byteArrayOutputStream);
-						if(byteArrayOutputStream!=null){
-							dataBrokerBean.setProtobufFile(byteArrayOutputStream.toString());
-						}else{
-							dataBrokerBean.setProtobufFile("");
-							
-						}
-						
-					 }
-				}
-				//For new blueprint.json
-				 bluePrintProbe =parseJson.jsonFileToObjectProbe(AzureClientConstants.JSON_FILE_NAME,dataBrokerBean);
-				//sequence
-				sequenceList=parseJson.getSequenceListFromJSON(AzureClientConstants.JSON_FILE_NAME);
+				bluePrintProbe =parseJson.jsonFileToObjectProbe(AzureClientConstants.JSON_FILE_NAME,dataBrokerBean);
 			}else{
-				
-				//old code 
-				imageMap=parseJson.parseJsonFileImageMap(AzureClientConstants.JSON_FILE_NAME);
-				//Node Type and container Name in nodes
-				nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);
-				list=azureImpl.iterateImageMap(imageMap);
-				sequenceList=parseJson.getSequenceListFromJSON(AzureClientConstants.JSON_FILE_NAME);
-				//proto files
-				dataBrokerBean=parseJson.getDataBrokerContainer(AzureClientConstants.JSON_FILE_NAME);
-				if(dataBrokerBean!=null){
-					if(dataBrokerBean!=null){
-						ByteArrayOutputStream byteArrayOutputStream=azureUtil.getNexusUrlFile(nexusUrl, nexusUserName, nexusPd, dataBrokerBean.getProtobufFile());
-						logger.debug("byteArrayOutputStream "+byteArrayOutputStream);
-						if(byteArrayOutputStream!=null){
-							dataBrokerBean.setProtobufFile(byteArrayOutputStream.toString());
-						}else{
-							dataBrokerBean.setProtobufFile("");
-							
-						}
-						
-					 }
-				}
 				bluePrintProbe=parseJson.jsonFileToObject(AzureClientConstants.JSON_FILE_NAME,dataBrokerBean);
 			}
 			
-			
+			imageMap=parseJson.parseJsonFileImageMap(AzureClientConstants.JSON_FILE_NAME);
+			nodeTypeContainerMap=parseJson.getNodeTypeContainerMap(AzureClientConstants.JSON_FILE_NAME);
+			list=azureImpl.iterateImageMap(imageMap);
+			dataBrokerBean=parseJson.getDataBrokerContainer(AzureClientConstants.JSON_FILE_NAME);
+			sequenceList=parseJson.getSequenceListFromJSON(AzureClientConstants.JSON_FILE_NAME);
+			if(dataBrokerBean!=null){
+				if(dataBrokerBean!=null){
+					ByteArrayOutputStream byteArrayOutputStream=azureUtil.getNexusUrlFile(nexusUrl, nexusUserName, nexusPd, dataBrokerBean.getProtobufFile());
+					logger.debug("byteArrayOutputStream "+byteArrayOutputStream);
+					if(byteArrayOutputStream!=null){
+						dataBrokerBean.setProtobufFile(byteArrayOutputStream.toString());
+					}else{
+						dataBrokerBean.setProtobufFile("");
+						
+					}
+					
+				 }
+			}
 			//-------------- New Probe Start ------------------- ***
 
 			logger.debug("bluePrintProbe.ProbeIndocator"+bluePrintProbe.getProbeIndicator());
@@ -574,6 +531,7 @@ public class AzureServiceController extends AbstractController {
 		TransportBean tbean=new TransportBean();
 		AzureServiceImpl azureImpl=new AzureServiceImpl();
 		boolean singleSolution=false;
+		LoggerUtil loggerUtil=new LoggerUtil();
 		try {
 			if (bean == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
@@ -616,58 +574,13 @@ public class AzureServiceController extends AbstractController {
 			localHostEnv=dockerHosttoUrl(env.getProperty(AzureClientConstants.HOST_PROP),env.getProperty(AzureClientConstants.PORT_PROP), false);
 			// Azure Authenticatiobn 
 			Azure azure = azureImpl.authorizeAzure(bean.getClient(), bean.getTenant(), bean.getKey(), bean.getSubscriptionKey());
-		
-			//set velues in bean
-			tbean.setNexusUrl(nexusUrl);
-			tbean.setNexusUserName(nexusUserName);	
-			tbean.setNexusPd(nexusPd);
-			tbean.setNginxMapFolder(nginxMapFolder);
-			tbean.setNginxWebFolder(nginxWebFolder);
-			tbean.setNginxImageName(nginxImageName);
-			tbean.setNginxInternalPort(nginxInternalPort);
-			tbean.setAzureDataFiles(azureDataFiles);
-			tbean.setProbePrintImage(probePrintImage);
-			tbean.setBluePrintImage(bluePrintImage);
-			tbean.setNginxInternalPort(nginxInternalPort);
-			tbean.setExposeDataBrokerPort(exposeDataBrokerPort);
-			tbean.setInternalDataBrokerPort(internalDataBrokerPort);
-			tbean.setProbeInternalPort(probeInternalPort);
-			tbean.setNexusRegistyName(nexusRegistyName);
-			tbean.setNexusRegistyUserName(nexusRegistyUserName);
-			tbean.setNexusRegistyPd(nexusRegistyPd);
-			tbean.setRegistryUserName(registryUserName);
-			tbean.setRegistryPd(registryPd);
-			tbean.setBluePrintUser(bluePrintUser);
-			tbean.setBluePrintPass(bluePrintPass);
-			tbean.setProbUser(probUser);
-			tbean.setProbePass(probePass);
-			tbean.setUidNumStr(uidNumStr);
-			tbean.setSolutionPort(solutionPort);
-			tbean.setDataSourceUrl(dataSource);
-			tbean.setDataSourceUserName(dataUserName);
-			tbean.setDataSourcePd(dataPd);
-			tbean.setSleepTimeFirst(sleepTimeFirst);
-			tbean.setLocalHostEnv(localHostEnv);
-			
-			
-			
-			logger.debug("vmHostIP "+bean.getVmHostIP());
-			logger.debug("vmHostName "+bean.getVmHostName());
-			logger.debug("solutionId "+bean.getSolutionId());
-			logger.debug("solutionRevisionId "+bean.getSolutionRevisionId());
-			logger.debug("DataSourceUrl "+dataSource);
-			logger.debug("DataSourceUserName "+dataUserName);
-			logger.debug("DataSourcePd "+dataPd);
-			logger.debug("probePrintImage "+tbean.getProbePrintImage());
-			logger.debug("probePrintName "+tbean.getProbeName());
-			logger.debug("probeInternalPort "+tbean.getProbeInternalPort());
-			logger.debug("sleepTimeFirst "+tbean.getSleepTimeFirst());
-			logger.debug("nexusRegistyUserName "+tbean.getNexusRegistyUserName());
-			logger.debug("nexusRegistyPd "+tbean.getNexusRegistyPd());
-			logger.debug("registryUserName "+tbean.getRegistryUserName());
-			logger.debug("registryPd "+tbean.getRegistryPd());
-			logger.debug("localHostEnv "+tbean.getLocalHostEnv());
-			//put condition to get probe
+		    tbean=azureUtil.setTransportValues(tbean, nexusUrl, nexusUserName, nexusPd, nginxMapFolder, nginxWebFolder, 
+					nginxImageName, nginxInternalPort, azureDataFiles, probePrintImage, bluePrintImage, 
+					exposeDataBrokerPort, internalDataBrokerPort, probeInternalPort, nexusRegistyName, 
+					nexusRegistyUserName, nexusRegistyPd, registryUserName, registryPd, bluePrintUser, 
+					bluePrintPass, probUser, probePass, uidNumStr, solutionPort, dataSource, dataUserName, 
+					dataPd, sleepTimeFirst, localHostEnv);
+			loggerUtil.printExistingVMDetails(bean, tbean);
 			if(azure!=null) {
 				logger.debug("Calling New thread for solution");
 				AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean,azure);

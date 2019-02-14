@@ -172,94 +172,13 @@ public final class Utils {
 
 	private static final Logger log = LoggerFactory.getLogger(Utils.class);
 	
-	/**
-	 * Print virtual machine info.
-	 *
-	 * @param resource
-	 *            a virtual machine
-	 */
-	
-	public static void print(NetworkInterface resource) {
-		StringBuilder info = new StringBuilder();
-		info.append("NetworkInterface: ").append(resource.id()).append("Name: ").append(resource.name())
-				.append("\n\tResource group: ").append(resource.resourceGroupName()).append("\n\tRegion: ")
-				.append(resource.region()).append("\n\tTags: ").append(resource.tags())
-				.append("\n\tInternal DNS name label: ").append(resource.internalDnsNameLabel())
-				.append("\n\tInternal FQDN: ").append(resource.internalFqdn())
-				.append("\n\tInternal domain name suffix: ").append(resource.internalDomainNameSuffix())
-				.append("\n\tNetwork security group: ").append(resource.networkSecurityGroupId())
-				.append("\n\tApplied DNS servers: ").append(resource.appliedDnsServers().toString())
-				.append("\n\tDNS server IPs: ");
-
-		// Output dns servers
-		for (String dnsServerIp : resource.dnsServers()) {
-			info.append("\n\t\t").append(dnsServerIp);
-		}
-
-		info.append("\n\tIP forwarding enabled? ").append(resource.isIPForwardingEnabled())
-				.append("\n\tAccelerated networking enabled? ").append(resource.isAcceleratedNetworkingEnabled())
-				.append("\n\tMAC Address:").append(resource.macAddress()).append("\n\tPrivate IP:")
-				.append(resource.primaryPrivateIP()).append("\n\tPrivate allocation method:")
-				.append(resource.primaryPrivateIPAllocationMethod()).append("\n\tPrimary virtual network ID: ")
-				.append(resource.primaryIPConfiguration().networkId()).append("\n\tPrimary subnet name:")
-				.append(resource.primaryIPConfiguration().subnetName());
-
-		log.debug(info.toString());
-	}
-		
-		public static void print(Network resource) {
-		StringBuilder info = new StringBuilder();
-
-		info.append("Network: ").append(resource.id()).append("Name: ").append(resource.name())
-				.append("\n\tResource group: ").append(resource.resourceGroupName()).append("\n\tRegion: ")
-				.append(resource.region()).append("\n\tTags: ").append(resource.tags()).append("\n\tAddress spaces: ")
-				.append(resource.addressSpaces()).append("\n\tDNS server IPs: ").append(resource.dnsServerIPs());
-
-		// Output subnets
-		for (Subnet subnet : resource.subnets().values()) {
-			info.append("\n\tSubnet: ").append(subnet.name()).append("\n\t\tAddress prefix: ")
-					.append(subnet.addressPrefix());
-			NetworkSecurityGroup subnetNsg = subnet.getNetworkSecurityGroup();
-			if (subnetNsg != null) {
-				info.append("\n\t\tNetwork security group: ").append(subnetNsg.id());
-			}
-		}
-
-		log.debug(info.toString());
-	}
-	
-	public static String getSecondaryServicePrincipalClientID(String envSecondaryServicePrincipal) throws Exception {
-		Properties authSettings = new Properties();
-		FileInputStream credentialsFileStream = new FileInputStream(new File(envSecondaryServicePrincipal));
-		authSettings.load(credentialsFileStream);
-		credentialsFileStream.close();
-
-		return authSettings.getProperty("client");
-	}
-	
-	public static String getSecondaryServicePrincipalSecret(String envSecondaryServicePrincipal) throws Exception {
-		Properties authSettings = new Properties();
-		FileInputStream credentialsFileStream = new FileInputStream(new File(envSecondaryServicePrincipal));
-		authSettings.load(credentialsFileStream);
-		credentialsFileStream.close();
-
-		return authSettings.getProperty("key");
-	}
-	
-	public static void print(Registry azureRegistry) {
-		StringBuilder info = new StringBuilder();
-
-		RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
-		info.append("Azure Container Registry: ").append(azureRegistry.id()).append("\n\tName: ")
-				.append(azureRegistry.name()).append("\n\tServer Url: ").append(azureRegistry.loginServerUrl())
-				.append("\n\tUser: ").append(acrCredentials.username()).append("\n\tFirst Password: ")
-				.append(acrCredentials.passwords().get(0).value()).append("\n\tSecond Password: ")
-				.append(acrCredentials.passwords().get(1).value());
-		log.debug(info.toString());
-	}
 	
 	
-	public static MLNotification convertToMLNotification(MLPNotification mlpNotification) {
+	
+	
+	
+	
+	/*public static MLNotification convertToMLNotification(MLPNotification mlpNotification) {
 		MLNotification mlNotification = new MLNotification();
 		if (!isEmptyOrNullString(mlpNotification.getNotificationId())) {
 			mlNotification.setNotificationId(mlpNotification.getNotificationId());
@@ -290,6 +209,6 @@ public final class Utils {
 		}
 		return isEmpty;
 	}
-	
+	*/
 	
 }

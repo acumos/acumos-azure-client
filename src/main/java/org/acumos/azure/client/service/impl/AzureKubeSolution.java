@@ -92,26 +92,6 @@ public class AzureKubeSolution implements Runnable{
     	}
     	logger.debug("AzureKubeSolution Run End ");
     }
-	
-	public String getSolutionCode(String solutionId,String datasource,String userName,String dataPd){
-		logger.debug("getSolution start");
-		String toolKitTypeCode="";
-		try{
-		AzureCommonUtil	azureUtil =new AzureCommonUtil();
-		CommonDataServiceRestClientImpl cmnDataService=azureUtil.getClient(datasource,userName,dataPd);
-		MLPSolution mlpSolution = cmnDataService.getSolution(solutionId);
-			if (mlpSolution != null) {
-				logger.debug("mlpSolution.getToolkitTypeCode() "+mlpSolution.getToolkitTypeCode());
-				toolKitTypeCode=mlpSolution.getToolkitTypeCode();
-			}
-		}catch(Exception e){
-			logger.error("Error in get solution "+e.getMessage());
-			toolKitTypeCode="";
-		}
-		logger.debug("getSolution End toolKitTypeCode " +toolKitTypeCode);	
-	  return toolKitTypeCode;
-	 }	
-	
 	public InputStream getAzureSolutionZip(AzureKubeBean bean,String url)throws Exception{
 		logger.debug("getAzureSolutionZip Start");
 		InputStream inputStream=null;

@@ -311,7 +311,7 @@ public class DockerUtils {
 		Network network = azure.networks().getByResourceGroup(rgName, vnet);
 		log.debug("Created a virtual network: " + network.id());
 		
-		Utils.print(network);
+		//Utils.print(network);
 		log.debug("Creating a security group for the front end - allows SSH and HTTP");
 		NetworkSecurityGroup frontEndNSG = azure.networkSecurityGroups().getByResourceGroup(rgName,
 				networkSecurityGroup);
@@ -324,7 +324,7 @@ public class DockerUtils {
 
 		log.debug("Created network interface for the front end");
 		log.debug(" Created NetworkInterface ");
-		Utils.print(networkInterface1);
+		//Utils.print(networkInterface1);
 
 		/****************** End code for resourceGroup ********************/
 		log.debug("Creating an Azure virtual machine running Docker");
@@ -393,7 +393,7 @@ public class DockerUtils {
 			Network network = azure.networks().getByResourceGroup(rgName, vnet);
 			log.debug("Created a virtual network: " + network.id());
 			
-			Utils.print(network);
+			//Utils.print(network);
 			log.debug("Creating a security group for the front end - allows SSH and HTTP");
 			NetworkSecurityGroup frontEndNSG = azure.networkSecurityGroups().getByResourceGroup(rgName,
 					networkSecurityGroup);
@@ -406,7 +406,7 @@ public class DockerUtils {
 	
 			log.debug("Created network interface for the front end");
 			log.debug(" Created NetworkInterface ");
-			Utils.print(networkInterface1);
+			//Utils.print(networkInterface1);
 	
 			/****************** End code for resourceGroup ********************/
 			log.debug("Creating an Azure virtual machine running Docker");
@@ -793,77 +793,6 @@ public class DockerUtils {
 			+ "echo Running: sudo groupadd docker \n" + "sudo groupadd docker \n"
 			+ "echo Running: sudo usermod -aG docker $USER \n" + "sudo usermod -aG docker $USER \n";
 
-	/**
-	 * Linux bash script that creates the TLS certificates for a secured Docker
-	 * connection.
-	 */
-	public static final String CREATE_OPENSSL_TLS_CERTS_FOR_UBUNTU = ""
-			+ "echo Running: \"if [ ! -d ~/.azuredocker/tls ]; then rm -f -r ~/.azuredocker/tls ; fi\" \n"
-			+ "if [ ! -d ~/.azuredocker/tls ]; then rm -f -r ~/.azuredocker/tls ; fi \n"
-			+ "echo Running: mkdir -p ~/.azuredocker/tls \n" + "mkdir -p ~/.azuredocker/tls \n"
-			+ "echo Running: cd ~/.azuredocker/tls \n" + "cd ~/.azuredocker/tls \n"
-			// Generate CA certificate
-			+ "echo Running: openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -aes256 -out ca-key.pem 2048 \n"
-			+ "openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -aes256 -out ca-key.pem 2048 \n"
-			// Generate Server certificates
-			+ "echo Running: openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=Docker Host CA/C=US' -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem \n"
-			+ "openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=Docker Host CA/C=US' -new -x509 -days 365 -key ca-key.pem -sha256 -out ca.pem \n"
-			+ "echo Running: openssl genrsa -out server-key.pem 2048 \n" + "openssl genrsa -out server-key.pem 2048 \n"
-			+ "echo Running: openssl req -subj '/CN=HOST_IP' -sha256 -new -key server-key.pem -out server.csr \n"
-			+ "openssl req -subj '/CN=HOST_IP' -sha256 -new -key server-key.pem -out server.csr \n"
-			+ "echo Running: \"echo subjectAltName = DNS:HOST_IP IP:127.0.0.1 > extfile.cnf \" \n"
-			+ "echo subjectAltName = DNS:HOST_IP IP:127.0.0.1 > extfile.cnf \n"
-			+ "echo Running: openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server.pem -extfile extfile.cnf \n"
-			+ "openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in server.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out server.pem -extfile extfile.cnf \n"
-			// Generate Client certificates
-			+ "echo Running: openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -out key.pem \n"
-			+ "openssl genrsa -passout pass:$CERT_CA_PWD_PARAM$ -out key.pem \n"
-			+ "echo Running: openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=client' -new -key key.pem -out client.csr \n"
-			+ "openssl req -passin pass:$CERT_CA_PWD_PARAM$ -subj '/CN=client' -new -key key.pem -out client.csr \n"
-			+ "echo Running: \"echo extendedKeyUsage = clientAuth,serverAuth > extfile.cnf \" \n"
-			+ "echo extendedKeyUsage = clientAuth,serverAuth > extfile.cnf \n"
-			+ "echo Running: openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf \n"
-			+ "openssl x509 -req -passin pass:$CERT_CA_PWD_PARAM$ -days 365 -sha256 -in client.csr -CA ca.pem -CAkey ca-key.pem -CAcreateserial -out cert.pem -extfile extfile.cnf \n"
-			+ "echo Running: cd ~ \n" + "cd ~ \n";
-
-	/**
-	 * Bash script that sets up the TLS certificates to be used in a secured Docker
-	 * configuration file; must be run on the Docker dockerHostUrl after the VM is
-	 * provisioned.
-	 */
-	public static final String INSTALL_DOCKER_TLS_CERTS_FOR_UBUNTU = ""
-			+ "echo \"if [ ! -d /etc/docker/tls ]; then sudo mkdir -p /etc/docker/tls ; fi\" \n"
-			+ "if [ ! -d /etc/docker/tls ]; then sudo mkdir -p /etc/docker/tls ; fi \n"
-			+ "echo sudo cp -f ~/.azuredocker/tls/ca.pem /etc/docker/tls/ca.pem \n"
-			+ "sudo cp -f ~/.azuredocker/tls/ca.pem /etc/docker/tls/ca.pem \n"
-			+ "echo sudo cp -f ~/.azuredocker/tls/server.pem /etc/docker/tls/server.pem \n"
-			+ "sudo cp -f ~/.azuredocker/tls/server.pem /etc/docker/tls/server.pem \n"
-			+ "echo sudo cp -f ~/.azuredocker/tls/server-key.pem /etc/docker/tls/server-key.pem \n"
-			+ "sudo cp -f ~/.azuredocker/tls/server-key.pem /etc/docker/tls/server-key.pem \n"
-			+ "echo sudo chmod -R 755 /etc/docker \n" + "sudo chmod -R 755 /etc/docker \n";
-
-	/**
-	 * Docker daemon config file allowing connections from any Docker client.
-	 */
-	public static final String DEFAULT_DOCKERD_CONFIG_TLS_ENABLED = "" + "[Service]\n" + "ExecStart=\n"
-			+ "ExecStart=/usr/bin/dockerd --tlsverify --tlscacert=/etc/docker/tls/ca.pem --tlscert=/etc/docker/tls/server.pem --tlskey=/etc/docker/tls/server-key.pem -H tcp://0.0.0.0:2376 -H unix:///var/run/docker.sock\n";
-
-	/**
-	 * Bash script that creates a default TLS secured Docker configuration file;
-	 * must be run on the Docker dockerHostUrl after the VM is provisioned.
-	 */
-	public static final String CREATE_DEFAULT_DOCKERD_OPTS_TLS_ENABLED = ""
-			+ "echo Running: sudo service docker stop \n" + "sudo service docker stop \n"
-			+ "echo \"if [ ! -d /etc/systemd/system/docker.service.d ]; then sudo mkdir -p /etc/systemd/system/docker.service.d ; fi\" \n"
-			+ "if [ ! -d /etc/systemd/system/docker.service.d ]; then sudo mkdir -p /etc/systemd/system/docker.service.d ; fi \n"
-			+ "echo sudo cp -f ~/.azuredocker/dockerd_tls.config /etc/systemd/system/docker.service.d/custom.conf \n"
-			+ "sudo cp -f ~/.azuredocker/dockerd_tls.config /etc/systemd/system/docker.service.d/custom.conf \n"
-			+ "echo Running: sudo systemctl daemon-reload \n" + "sudo systemctl daemon-reload \n"
-			+ "echo Running: sudo service docker start \n" + "sudo service docker start \n";
-
-	/**
-	 * Docker daemon config file allowing connections from any Docker client.
-	 */
 	
 	/**
 	 * Bash script that creates a default unsecured Docker configuration file; must

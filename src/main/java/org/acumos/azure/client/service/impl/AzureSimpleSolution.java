@@ -36,6 +36,7 @@ import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.azure.client.utils.AzureEncrypt;
 import org.acumos.azure.client.utils.DockerUtils;
+import org.acumos.azure.client.utils.LoggerUtil;
 import org.acumos.azure.client.utils.SSHShell;
 import org.acumos.azure.client.utils.Utils;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
@@ -133,31 +134,20 @@ public class AzureSimpleSolution implements Runnable {
 	}
 
 	public void run() {
+		
 		logger.debug("AzureSimpleSolution Run Started ");
-		logger.debug("azure" + azure);
-		logger.debug("deployDataObject " + deployDataObject);
-		logger.debug("dockerContainerPrefix " + dockerContainerPrefix);
-		logger.debug("localEnvDockerHost " + localEnvDockerHost);
-		logger.debug("localEnvDockerCertPath " + localEnvDockerCertPath);
-		logger.debug("list " + list);
-		logger.debug("uidNumStr " + uidNumStr);
-		logger.debug("solutionPort " + solutionPort);
-		logger.debug("solutionId " + deployDataObject.getSolutionId());
-		logger.debug("solutionRevisionId " + deployDataObject.getSolutionRevisionId());
-		logger.debug("userId " + deployDataObject.getUserId());
-		logger.debug("sleepTimeFirst " + sleepTimeFirst);
-		logger.debug("sleepTimeSecond " + sleepTimeSecond);
-		logger.debug("nexusRegistyName "+nexusRegistyName);
-		logger.debug("otherRegistyName "+otherRegistyName);
-        
 		AzureBean azureBean = new AzureBean();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		AzureContainerBean containerBean = new AzureContainerBean();
 		AzureEncrypt azEncrypt=new AzureEncrypt();
+		LoggerUtil loggerUtil=new LoggerUtil();
 		String azureEncPD="";
 		String azureVMIP="";
 		try {
-			 
+			loggerUtil.printSingleSolutionImpl(deployDataObject,dockerContainerPrefix,localEnvDockerHost,
+					localEnvDockerCertPath,list,uidNumStr,solutionPort,deployDataObject.getSolutionId(),
+					deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),sleepTimeFirst,
+					sleepTimeSecond,nexusRegistyName,otherRegistyName);
 			dockerVMPd=azureUtil.getRandomPassword(10).toString();
 			azureEncPD=azEncrypt.encrypt(dockerVMPd);
 			logger.debug("azureEncPD "+azureEncPD);
@@ -177,8 +167,8 @@ public class AzureSimpleSolution implements Runnable {
 					envSecondaryServicePrincipal = System.getenv(AzureClientConstants.AZURE_AUTH_LOCATION);
 				}
 
-				servicePrincipalClientId = Utils.getSecondaryServicePrincipalClientID(envSecondaryServicePrincipal);
-				servicePrincipalSecret = Utils.getSecondaryServicePrincipalSecret(envSecondaryServicePrincipal);
+				//servicePrincipalClientId = Utils.getSecondaryServicePrincipalClientID(envSecondaryServicePrincipal);
+				//servicePrincipalSecret = Utils.getSecondaryServicePrincipalSecret(envSecondaryServicePrincipal);
 			}
 
 			// =============================================================
@@ -212,7 +202,7 @@ public class AzureSimpleSolution implements Runnable {
 			t2 = new Date();
 			logger.debug("Created Azure Container Registry: (took " + ((t2.getTime() - t1.getTime()) / 1000)
 					+ " seconds) " + azureRegistry.id());
-			Utils.print(azureRegistry);
+			//Utils.print(azureRegistry);
 
 			RegistryListCredentials acrCredentials = azureRegistry.listCredentials();
 			DockerClient dockerClient = DockerUtils.createDockerClient(azure, deployDataObject.getRgName(), region,
@@ -257,7 +247,7 @@ public class AzureSimpleSolution implements Runnable {
 						.exec();
 
 				if (imageName != null && !"".equals(imageName)) {
-					String tag = getTagFromImage(imageName);
+					String tag = azureUtil.getTagFromImage(imageName);
 					if (tag != null) {
 						imageTagVal = tag;
 					}
@@ -367,7 +357,7 @@ public class AzureSimpleSolution implements Runnable {
 				azureUtil.generateNotification("Single Solution VM is created, IP is: "+azureVMIP+" Password: "+dockerVMPd, deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
 			}
-			createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
+			azureUtil.createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
 					deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 					deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_PROCESS);
 		} catch (Exception e) {
@@ -378,7 +368,7 @@ public class AzureSimpleSolution implements Runnable {
 			try{
 				azureUtil.generateNotification("Error in vm creation", deployDataObject.getUserId(),
 						dataSource, dataUserName, dataPd);
-				createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
+				azureUtil.createDeploymentData(dataSource, dataUserName, dataPd, containerBean,
 						deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 						deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_FAILED);
 			}catch(Exception ex){
@@ -387,56 +377,4 @@ public class AzureSimpleSolution implements Runnable {
 		}
 		logger.debug("AzureSimpleSolution Run End");
 	}
-
-	
-	public CommonDataServiceRestClientImpl getClient(String datasource, String userName, String dataPd) {
-		CommonDataServiceRestClientImpl client = new CommonDataServiceRestClientImpl(datasource, userName, dataPd,null);
-		return client;
-	}
-
-	public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPd,
-			AzureContainerBean containerBean, String solutionId, String solutionRevisionId, String userId,
-			String uidNumber, String deploymentStatusCode) throws Exception {
-			logger.debug(" createDeploymentData Start");
-			logger.debug("solutionId " + solutionId);
-			logger.debug("solutionRevisionId " + solutionRevisionId);
-			logger.debug("userId " + userId);
-			logger.debug("uidNumber " + uidNumber);
-			logger.debug("deploymentStatusCode " + deploymentStatusCode);
-			MLPSolutionDeployment mlpDeployment=null;
-			ObjectMapper mapper = new ObjectMapper();
-			CommonDataServiceRestClientImpl client = getClient(dataSource, dataUserName, dataPd);
-			if (solutionId != null && solutionRevisionId != null && userId != null && uidNumber != null) {
-				MLPSolutionDeployment mlp = new MLPSolutionDeployment();
-				mlp.setSolutionId(solutionId);
-				mlp.setUserId(userId);
-				mlp.setRevisionId(solutionRevisionId);
-				mlp.setDeploymentId(uidNumber);
-				mlp.setDeploymentStatusCode(deploymentStatusCode);
-				String azureDetails = mapper.writeValueAsString(containerBean);
-				mlp.setDetail(azureDetails);
-				logger.debug("azureDetails " + azureDetails);
-				mlpDeployment = client.createSolutionDeployment(mlp);
-				logger.debug("mlpDeployment " + mlpDeployment);
-			}
-			logger.debug("createDeploymentData End");
-			return mlpDeployment;
-	}
-
-	public String getTagFromImage(String imageName) {
-		String imageTag = null;
-		final int endColon = imageName.lastIndexOf(':');
-		if (endColon < 0) {
-			imageTag = null;
-		} else {
-			final String tag = imageName.substring(endColon + 1);
-			if (tag.indexOf('/') < 0) {
-				imageTag = tag;
-			} else {
-				imageTag = null;
-			}
-		}
-		return imageTag;
-	}
-
 }

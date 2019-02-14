@@ -183,7 +183,7 @@ public class AzureSolutionDeployment implements Runnable{
 			 containerBean.setContainerName("ContainerOne");
 			 azureUtil.generateNotification("Single Solution Deployed, IP is: "+solutionBean.getVmHostIP(), solutionBean.getUserId(),
 					 tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd());
-			 createDeploymentData(tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd(), containerBean,
+			 azureUtil.createDeploymentData(tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd(), containerBean,
 					 solutionBean.getSolutionId(), solutionBean.getSolutionRevisionId(),
 					 solutionBean.getUserId(), tbean.getUidNumStr(), AzureClientConstants.DEPLOYMENT_PROCESS);
 		 } catch (Exception e) {
@@ -191,7 +191,7 @@ public class AzureSolutionDeployment implements Runnable{
 			 try{
 					azureUtil.generateNotification("Error in vm creation", solutionBean.getUserId(),
 							tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd());
-					createDeploymentData(tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd(), containerBean,
+					azureUtil.createDeploymentData(tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd(), containerBean,
 							solutionBean.getSolutionId(), solutionBean.getSolutionRevisionId(),
 							solutionBean.getUserId(), tbean.getUidNumStr(), AzureClientConstants.DEPLOYMENT_FAILED);
 				}catch(Exception ex){
@@ -525,12 +525,12 @@ public class AzureSolutionDeployment implements Runnable{
 				String urlDockerInfo="http://"+solutionBean.getVmHostIP()+":"+bluePrintPort+"/"+AzureClientConstants.PUT_DOCKER_INFO_URL;  
 				String urlBluePrint="http://"+solutionBean.getVmHostIP()+":"+bluePrintPort+"/"+AzureClientConstants.PUT_BLUEPRINT_INFO_URL;
 				logger.debug("urlDockerInfo "+urlDockerInfo+" urlBluePrint "+urlBluePrint);
-				String dataBrokerPort=getDataBrokerPort(deploymentList,AzureClientConstants.DATABROKER_NAME);
+				String dataBrokerPort=azureUtil.getDataBrokerPort(deploymentList,AzureClientConstants.DATABROKER_NAME);
 				String urlDataBroker="http://"+solutionBean.getVmHostIP()+":"+dataBrokerPort+"/"+AzureClientConstants.CONFIG_DB_URL;
 				String csvDataBrokerPort="";
 				String csvDataBrokerUrl="";
 				if(dataBrokerBean!=null){
-					  csvDataBrokerPort=getDataBrokerPortCSV(deploymentList,AzureClientConstants.DATABROKER_NAME);
+					  csvDataBrokerPort=azureUtil.getDataBrokerPortCSV(deploymentList,AzureClientConstants.DATABROKER_NAME);
 				 }
 				if(csvDataBrokerPort!=null && !"".equalsIgnoreCase(csvDataBrokerPort)){
 					  csvDataBrokerUrl="http://"+solutionBean.getVmHostIP()+":"+csvDataBrokerPort+"/"+AzureClientConstants.CONFIG_DB_URL;
@@ -542,21 +542,23 @@ public class AzureSolutionDeployment implements Runnable{
 				// Added for probe
 				  if(csvDataBrokerPort!=null && !"".equalsIgnoreCase(csvDataBrokerPort)){
 					  logger.debug("Inside csv Data Broker ConfigDB  "); 
-					  callCsvConfigDB(solutionBean,csvDataBrokerUrl,dataBrokerBean);
+					  azureUtil.callCsvConfigDB(solutionBean.getUsername(),solutionBean.getUserPd(),solutionBean.getHost(),solutionBean.getPort(),
+							  csvDataBrokerUrl,dataBrokerBean);
 					 }
 				// putBlueprint
 				 if(bluePrintProbe!=null){
-					 putBluePrintDetailsJSON(bluePrintJsonStr,urlBluePrint);
+					 azureUtil.putBluePrintDetailsJSON(bluePrintJsonStr,urlBluePrint);
 				  }
 				// putDockerInfo
 				 if(dockerList != null){
 					  logger.debug("Inside probeContainerBeanList ");
-					  putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
+					  azureUtil.putContainerDetailsJSONProbe(dockerList,urlDockerInfo);
 					}
 				 // configDB
 				 if(dataBrokerPort!=null &&  !"".equals(dataBrokerPort)){
 					 logger.debug("Inside putDataBrokerDetails ");
-					  putDataBrokerDetails(solutionBean,urlDataBroker);
+					 azureUtil.putDataBrokerDetails(solutionBean.getUrlAttribute(),solutionBean.getJsonMapping(),
+							 solutionBean.getJsonPosition(),urlDataBroker);
 					}
 				
 				// Added notification for probe code
@@ -579,7 +581,7 @@ public class AzureSolutionDeployment implements Runnable{
 				 }
 				 if(azureContainerBeanList!=null){
 			   			logger.debug("Start saving data in database "); 
-			   			createDeploymentCompositeData(tbean.getDataSourceUrl(), tbean.getDataSourceUserName(), tbean.getDataSourcePd(),azureContainerBeanList,solutionBean.getSolutionId(),
+			   			azureUtil.createDeploymentCompositeData(tbean.getDataSourceUrl(), tbean.getDataSourceUserName(), tbean.getDataSourcePd(),azureContainerBeanList,solutionBean.getSolutionId(),
 			   					solutionBean.getSolutionRevisionId(),solutionBean.getUserId(),tbean.getUidNumStr(),AzureClientConstants.DEPLOYMENT_PROCESS);
 			      }
 		 	
@@ -588,7 +590,7 @@ public class AzureSolutionDeployment implements Runnable{
         	try{
 	        	azureUtil.generateNotification("Error in vm creation", solutionBean.getUserId(),
 	        			tbean.getDataSourceUrl(), tbean.getDataSourceUserName(), tbean.getDataSourcePd());
-				createDeploymentCompositeData(tbean.getDataSourceUrl(), tbean.getDataSourceUserName(), tbean.getDataSourcePd(),azureContainerBeanList,solutionBean.getSolutionId(),
+	        	azureUtil.createDeploymentCompositeData(tbean.getDataSourceUrl(), tbean.getDataSourceUserName(), tbean.getDataSourcePd(),azureContainerBeanList,solutionBean.getSolutionId(),
 						solutionBean.getSolutionRevisionId(),solutionBean.getUserId(),tbean.getUidNumStr(),AzureClientConstants.DEPLOYMENT_FAILED);
         	}catch(Exception ex){
 				logger.error("compositeSolutionDetails for existing failed  in saving data",e.getMessage());
@@ -596,33 +598,7 @@ public class AzureSolutionDeployment implements Runnable{
 		}
 	  logger.debug("compositeSolutionDetails End");
 	}
-	public void createDeploymentCompositeData(String dataSource,String dataUserName,String dataPd,List<AzureContainerBean> azureContainerBeanList,
-			String solutionId,String solutionRevisionId,String userId,String uidNumber,String deploymentStatusCode) throws Exception{
-		logger.debug("createDeploymentCompositeData start");
-		logger.debug("solutionId "+solutionId);
-		logger.debug("solutionRevisionId "+solutionRevisionId);
-		logger.debug("userId "+userId);
-		logger.debug("uidNumber "+uidNumber);
-		logger.debug("deploymentStatusCode "+deploymentStatusCode);
-		logger.debug("azureContainerBeanList "+azureContainerBeanList);
-		ObjectMapper mapper = new ObjectMapper();
-		AzureCommonUtil azureUtil=new AzureCommonUtil();
-		CommonDataServiceRestClientImpl client=azureUtil.getClient(dataSource,dataUserName,dataPd);
-		if(solutionId!=null && solutionRevisionId!=null && userId!=null && uidNumber!=null){
-			MLPSolutionDeployment mlp=new MLPSolutionDeployment();
-			mlp.setSolutionId(solutionId);
-			mlp.setUserId(userId);
-			mlp.setRevisionId(solutionRevisionId);
-			mlp.setDeploymentId(uidNumber);
-			mlp.setDeploymentStatusCode(deploymentStatusCode);
-			String azureDetails=mapper.writeValueAsString(azureContainerBeanList);
-			mlp.setDetail(azureDetails);
-			logger.debug("azureDetails "+azureDetails);
-			MLPSolutionDeployment mlpDeployment=client.createSolutionDeployment(mlp);
-			logger.debug("mlpDeployment "+mlpDeployment);
-		}
-		logger.debug("createDeploymentCompositeData End");
-	}
+	
 	public String checkPrerequisites(SolutionDeployment deploymentBean,AzureCommonUtil azureUtil)throws Exception{
 		 logger.debug("checkPrerequisites Start");
 		 SSHShell sshShell = null;
@@ -684,189 +660,4 @@ public class AzureSolutionDeployment implements Runnable{
 		return returnStr;
 	}
 	
-	public String getDataBrokerPort(List<DeploymentBean> deploymentList, String dataBrokerName){
-		logger.debug("getDataBrokerIP Start");
-		String dataBrokerPort="";
-		logger.debug("deploymentList "+deploymentList);
-		logger.debug("dataBrokerName "+dataBrokerName);
-		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
-			for(DeploymentBean bean:deploymentList){
-				logger.debug("bean.NodeType() "+bean.getNodeType());
-				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
-				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
-						&& !bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
-					dataBrokerPort=bean.getContainerPort();
-				}
-			}
-		}
-		logger.debug("dataBrokerPort "+dataBrokerPort);
-		logger.debug("End getDataBrokerIP");
-		return dataBrokerPort;
-	}
-	
-	public String getDataBrokerPortCSV(List<DeploymentBean> deploymentList, String dataBrokerName){
-		logger.debug("getDataBrokerPortCSV Start");
-		String dataBrokerPort="";
-		logger.debug("deploymentList "+deploymentList);
-		logger.debug("dataBrokerName"+dataBrokerName);
-		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
-			for(DeploymentBean bean:deploymentList){
-				logger.debug("bean.NodeType() "+bean.getNodeType());
-				logger.debug("bean.DataBrokerType() "+bean.getDataBrokerType());
-				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)
-						&& bean.getDataBrokerType()!=null && bean.getDataBrokerType().equalsIgnoreCase(AzureClientConstants.DATA_BROKER_CSV_FILE)){
-					dataBrokerPort=bean.getContainerPort();
-				}
-			}
-		}
-		logger.debug("dataBrokerPort "+dataBrokerPort);
-		logger.debug("getDataBrokerPortCSV End");
-		return dataBrokerPort;
-	}
-	
-	public String getDataBrokerScript(List<DeploymentBean> deploymentList, String dataBrokerName){
-		logger.debug("getDataBrokerScript Start");
-		String dataBrokerScript="";
-		logger.debug("deploymentList "+deploymentList);
-		logger.debug("dataBrokerName "+dataBrokerName);
-		if(deploymentList!=null && deploymentList.size() > 0  && dataBrokerName!=null && !"".equals(dataBrokerName)){
-			for(DeploymentBean bean:deploymentList){
-				if(bean!=null && bean.getNodeType()!=null && bean.getNodeType().equalsIgnoreCase(dataBrokerName)){
-					dataBrokerScript=bean.getScript();
-				}
-			}
-		}
-		logger.debug("dataBrokerScript "+dataBrokerScript);
-		logger.debug("getDataBrokerScript End");
-		return dataBrokerScript;
-	}
-	
-	public void callCsvConfigDB(SolutionDeployment deployDataObject,String apiUrl,DataBrokerBean dataBrokerBean)throws Exception{
-		logger.debug("callCsvConfigDB Start");
-		try {
-			logger.debug("apiUrl "+apiUrl);
-			final String url = apiUrl;
-			if(deployDataObject!=null){
-				dataBrokerBean.setUserName(deployDataObject.getUsername());
-				dataBrokerBean.setUserPd(deployDataObject.getUserPd());
-				dataBrokerBean.setHost(deployDataObject.getHost());
-				dataBrokerBean.setPort(deployDataObject.getPort());
-			}
-			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			ObjectMapper mapper = new ObjectMapper();
-			String dataBrokerBeanJson=mapper.writeValueAsString(dataBrokerBean);
-			logger.debug("dataBrokerBeanJson "+dataBrokerBeanJson);
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    	
-		    HttpEntity<String> entity = new HttpEntity<String>(dataBrokerBeanJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
-		   
-		  } catch (Exception e) {
-			  logger.error("callCsvConfigDB failed", e);
-			  throw e;
-		 }
-		logger.debug("callCsvConfigDB End");
-	}
-  
-	public void putDataBrokerDetails(SolutionDeployment deployDataObject,String apiUrl)throws Exception{
-		logger.debug("putDataBrokerDetails Start");
-		try {
-			logger.debug("apiUrl "+apiUrl);
-			logger.debug("UrlAttribute "+deployDataObject.getUrlAttribute());
-			logger.debug("JsonMapping "+deployDataObject.getJsonMapping());
-			logger.debug("JsonPosition "+deployDataObject.getJsonPosition());
-			//logger.debug("=====dataBrokerScript==="+dataBrokerScript);
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-			RestTemplate restTemplate = new RestTemplate();
-			MultiValueMap<String, String> map= new LinkedMultiValueMap<String, String>();
-			map.add("jsonUrl", deployDataObject.getUrlAttribute());
-			//map.add("jsonScript", dataBrokerScript);
-			map.add("jsonMapping", deployDataObject.getJsonMapping());
-			map.add("jsonPosition", deployDataObject.getJsonPosition());
-			HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(map, headers);
-			restTemplate.exchange(apiUrl, HttpMethod.PUT, request, String.class);
-		    
-		  } catch (Exception e) {
-			  logger.error("generateNotification failed", e);
-			  throw e;
-		 }
-		logger.debug("putDataBrokerDetails End");
-	}
-	
-	public void putBluePrintDetailsJSON(String  blueprintJson,String apiUrl)throws Exception{
-		logger.debug("putBluePrintDetailsJSON Start");
-		try {
-			logger.debug("apiUrl "+apiUrl);
-			final String url = apiUrl;
-			ObjectMapper mapper = new ObjectMapper();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			logger.debug("blueprintJson "+blueprintJson);
-			RestTemplate restTemplate = new RestTemplate();
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    HttpEntity<String> entity = new HttpEntity<String>(blueprintJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
-		   
-		  } catch (Exception e) {
-			  logger.error("putBluePrintDetailsJSON failed", e);
-			  throw e;
-		 }
-		logger.debug("putBluePrintDetailsJSON End");
-	}
-	
-	public void putContainerDetailsJSONProbe(DockerInfoList dockerList,String apiUrl)throws Exception{
-		logger.debug("putContainerDetailsJSON Start");
-		try {
-			logger.debug("dockerList "+dockerList.toString()+"apiUrl "+apiUrl);
-			final String url = apiUrl;
-			RestTemplate restTemplate = new RestTemplate();
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
-			ObjectMapper mapper = new ObjectMapper();
-			String dockerJson=mapper.writeValueAsString(dockerList);
-			logger.debug("dockerJson "+dockerJson);
-		    restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-		    	
-		    HttpEntity<String> entity = new HttpEntity<String>(dockerJson,headers);
-		    restTemplate.exchange(url, HttpMethod.PUT, entity, Void.class);
-		   
-		  } catch (Exception e) {
-			  logger.error("putContainerDetailsJSONProbe failed", e);
-	          throw e;
-		 }
-		logger.debug("putContainerDetailsJSON  End");
-	}
-	public MLPSolutionDeployment createDeploymentData(String dataSource, String dataUserName, String dataPd,
-			AzureContainerBean containerBean, String solutionId, String solutionRevisionId, String userId,
-			String uidNumber, String deploymentStatusCode) throws Exception {
-			logger.debug(" createDeploymentData Start");
-			logger.debug("solutionId " + solutionId);
-			logger.debug("solutionRevisionId " + solutionRevisionId);
-			logger.debug("userId " + userId);
-			logger.debug("uidNumber " + uidNumber);
-			logger.debug("deploymentStatusCode " + deploymentStatusCode);
-			MLPSolutionDeployment mlpDeployment=null;
-			ObjectMapper mapper = new ObjectMapper();
-			AzureCommonUtil azureUtil=new AzureCommonUtil();
-			CommonDataServiceRestClientImpl client = azureUtil.getClient(dataSource, dataUserName, dataPd);
-			if (solutionId != null && solutionRevisionId != null && userId != null && uidNumber != null) {
-				MLPSolutionDeployment mlp = new MLPSolutionDeployment();
-				mlp.setSolutionId(solutionId);
-				mlp.setUserId(userId);
-				mlp.setRevisionId(solutionRevisionId);
-				mlp.setDeploymentId(uidNumber);
-				mlp.setDeploymentStatusCode(deploymentStatusCode);
-				String azureDetails = mapper.writeValueAsString(containerBean);
-				mlp.setDetail(azureDetails);
-				logger.debug("azureDetails " + azureDetails);
-				mlpDeployment = client.createSolutionDeployment(mlp);
-				logger.debug("mlpDeployment " + mlpDeployment);
-			}
-			logger.debug("createDeploymentData End");
-			return mlpDeployment;
-	}	 
-
 }

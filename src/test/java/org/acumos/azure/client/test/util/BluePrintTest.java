@@ -39,7 +39,6 @@ public class BluePrintTest {
 		logger.info("BluePrintTestObjectparameter Start");
 		
         List<OperationSignature> inputs=(List)new ArrayList<OperationSignature>();
-		Orchestrator orchestrator=new Orchestrator();
 		List<Node> nodes=(List)new ArrayList<Node>();
 		
 		Blueprint blueprint=new Blueprint();

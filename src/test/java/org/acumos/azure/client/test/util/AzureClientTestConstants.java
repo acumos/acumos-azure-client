@@ -28,6 +28,7 @@ public class AzureClientTestConstants {
 	public static final String TEST_CLIENT="testclient";
 	public static final String TEST_TENANT="testtenant";
 	public static final String TEST_KEY="testkey";
+	public static final String TEST_OBJ="test";
 	public static final String TEST_SUBSCRIPTION_KEY="testsubscriptionKey";
 	public static final String TEST_RG_NAME="testrg";
 	public static final String TEST_ACR_NAME="testacr";
@@ -45,6 +46,8 @@ public class AzureClientTestConstants {
 	public static final String TEST_BLUEPRINT_NAME = "bluePrint";
 	public static final String TEST_BLUEPRINT_VERSION = "1";
 	public static final String TEST_IMAGE = "newadder1:1";
+	public static final String TEST_NEXUS_IMAGE = "nexus/newadder1:1";
+	public static final String TEST_REPO = "nexus";
 	public static final String TEST_COMPONENT_NAME = "testName";
 	public static final String TEST_VERSION = "1";
 	public static final String TEST_BLUEPRINT_FILE = "blueprint.json";
