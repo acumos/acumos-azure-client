@@ -19,7 +19,11 @@
 ==========================
 Azure Client Release Notes
 ==========================
-Version 2.0.7, 15 February 2018
+Version 2.0.8, 1 March 2019
+---------------------------------
+* update CDS 2.1.1 for Azure-client (`ACUMOS-2589 <https://jira.acumos.org/browse/ACUMOS-2589>`_)
+
+Version 2.0.7, 15 February 2019
 ---------------------------------
 * update CDS 2.0.7 for Azure-client (`ACUMOS-2528 <https://jira.acumos.org/browse/ACUMOS-2528>`_)
 
