@@ -22,7 +22,9 @@ package org.acumos.azure.client.test.util;
 import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Map;
 
 import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.utils.Blueprint;
@@ -138,5 +140,14 @@ public class ParseJsonTest {
 		 probeIdicator=parse.checkProbeIndicator(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
 		assertNotNull(probeIdicator);
 		logger.info("nodeTypeContainerMapTest End");
+	}
+	@Test
+	public void getProtoDetailsTest()throws Exception{
+		logger.info("getProtoDetailsTest Start");
+		HashMap<String, String> hmap=null;
+		ParseJSON parse=new ParseJSON();
+		hmap=parse.getProtoDetails(AzureClientTestConstants.TEST_BLUEPRINT_FILE);
+		assertNotNull(hmap);
+		logger.info("getProtoDetailsTest End");
 	}
 }

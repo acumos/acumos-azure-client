@@ -22,7 +22,6 @@ package org.acumos.azure.client.utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 

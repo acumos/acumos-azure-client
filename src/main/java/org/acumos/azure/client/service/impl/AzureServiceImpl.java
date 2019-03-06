@@ -38,7 +38,6 @@ import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.cds.client.CommonDataServiceRestClientImpl;
 import org.acumos.cds.domain.MLPArtifact;
 import org.acumos.nexus.client.NexusArtifactClient;
-import org.acumos.nexus.client.RepositoryLocation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.env.Environment;

@@ -19,11 +19,13 @@
  */
 package org.acumos.azure.client.utils;
 
-import java.util.Date;
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.FileReader;
+import java.time.Instant;
+import java.time.Period;
 import java.util.List;
 import java.util.Random;
-
-import org.acumos.azure.client.controller.AzureServiceController;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.AzureKubeBean;
@@ -51,14 +53,7 @@ import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
-import java.io.FileReader;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.time.Period;	
+import com.github.dockerjava.core.command.PullImageResultCallback;	
 
 public class AzureCommonUtil {
 	Logger logger = LoggerFactory.getLogger(AzureCommonUtil.class);

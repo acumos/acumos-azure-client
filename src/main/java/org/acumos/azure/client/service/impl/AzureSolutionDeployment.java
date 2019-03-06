@@ -2,25 +2,19 @@ package org.acumos.azure.client.service.impl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
+import org.acumos.azure.client.logging.ONAPLogDetails;
 import org.acumos.azure.client.transport.AzureContainerBean;
-import org.acumos.azure.client.transport.AzureDeployDataObject;
-import org.acumos.azure.client.transport.ContainerInfo;
 import org.acumos.azure.client.transport.DeploymentBean;
-import org.acumos.azure.client.transport.MLNotification;
 import org.acumos.azure.client.transport.SolutionDeployment;
 import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
-import org.acumos.azure.client.utils.AzureEncrypt;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DataBrokerBean;
 import org.acumos.azure.client.utils.DockerInfo;
@@ -29,33 +23,16 @@ import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.ParseJSON;
 import org.acumos.azure.client.utils.ProbeIndicator;
 import org.acumos.azure.client.utils.SSHShell;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
-import org.acumos.cds.domain.MLPNotification;
-import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import org.slf4j.MDC;
+
+import com.github.dockerjava.api.DockerClient;
+import com.github.dockerjava.api.command.CreateContainerResponse;
+import com.github.dockerjava.core.command.PushImageResultCallback;
 import com.microsoft.azure.management.Azure;
 import com.microsoft.azure.management.containerregistry.Registry;
 import com.microsoft.azure.management.containerregistry.implementation.RegistryListCredentials;
-import com.microsoft.azure.management.resources.fluentcore.arm.Region;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dockerjava.api.DockerClient;
-import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.AuthConfig;
-import com.github.dockerjava.core.command.PullImageResultCallback;
-import com.github.dockerjava.core.command.PushImageResultCallback;
-import com.jcraft.jsch.JSchException;
-import com.microsoft.azure.management.Azure;
-
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 
 public class AzureSolutionDeployment implements Runnable{
 	Logger logger = LoggerFactory.getLogger(AzureSolutionDeployment.class);
@@ -74,6 +51,7 @@ public class AzureSolutionDeployment implements Runnable{
 		logger.debug("AzureSolutionDeployment run start ");
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
+			ONAPLogDetails.setMDCDetails(tbean.getRequestId(), tbean.getUserDetail());
 			String solutionToolKitType=azureUtil.getSolutionCode(solutionBean.getSolutionId(), 
 					tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd());
 			logger.debug("solutionToolKitType "+solutionToolKitType);
@@ -96,8 +74,11 @@ public class AzureSolutionDeployment implements Runnable{
 			}
 		   	
 		 }catch(Exception e) {
+			 MDC.put("ClassName", "AzureSolutionDeployment");
 			 logger.error("AzureSolutionDeployment failed", e);
+			 MDC.remove("ClassName");
 		}
+		ONAPLogDetails.clearMDCDetails();
 		logger.debug("AzureSolutionDeployment run End ");
 	}
 	public void singleSolutionDetails(SolutionDeployment solutionBean,TransportBean tbean)throws Exception{

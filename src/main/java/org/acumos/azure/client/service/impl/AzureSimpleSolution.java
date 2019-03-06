@@ -28,9 +28,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.acumos.azure.client.logging.ONAPLogDetails;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
-import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
@@ -38,13 +38,9 @@ import org.acumos.azure.client.utils.AzureEncrypt;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.LoggerUtil;
 import org.acumos.azure.client.utils.SSHShell;
-import org.acumos.azure.client.utils.Utils;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
-import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.MDC;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.AuthConfig;
@@ -89,6 +85,8 @@ public class AzureSimpleSolution implements Runnable {
 	private String nexusRegistyPd;
 	private String nexusRegistyName;
 	private String otherRegistyName;
+	private String userDetail;
+	private String requestId;
 	
 	public AzureSimpleSolution(){
 		
@@ -100,7 +98,7 @@ public class AzureSimpleSolution implements Runnable {
 			String networkSecurityGroup, String dockerRegistryName, String uidNumStr, String dataSource,
 			String dataUserName, String dataPd, String dockerVMUserName, String dockerVMPd,String solutionPort,
 			String subnet,String vnet,String sleepTimeFirst,String sleepTimeSecond,String nexusRegistyUserName,String nexusRegistyPd,
-			String nexusRegistyName,String otherRegistyName) {
+			String nexusRegistyName,String otherRegistyName,String userDetail,String requestId) {
 		this.azure = azure;
 		this.deployDataObject = deployDataObject;
 		this.dockerContainerPrefix = dockerContainerPrefix;
@@ -130,6 +128,8 @@ public class AzureSimpleSolution implements Runnable {
 		this.nexusRegistyPd = nexusRegistyPd;
 		this.nexusRegistyName = nexusRegistyName;
 		this.otherRegistyName = otherRegistyName;
+		this.userDetail=userDetail;
+		this.requestId=requestId;
 
 	}
 
@@ -144,6 +144,7 @@ public class AzureSimpleSolution implements Runnable {
 		String azureEncPD="";
 		String azureVMIP="";
 		try {
+			ONAPLogDetails.setMDCDetails(requestId, userDetail);
 			loggerUtil.printSingleSolutionImpl(deployDataObject,dockerContainerPrefix,localEnvDockerHost,
 					localEnvDockerCertPath,list,uidNumStr,solutionPort,deployDataObject.getSolutionId(),
 					deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),sleepTimeFirst,
@@ -361,7 +362,9 @@ public class AzureSimpleSolution implements Runnable {
 					deployDataObject.getSolutionId(), deployDataObject.getSolutionRevisionId(),
 					deployDataObject.getUserId(), uidNumStr, AzureClientConstants.DEPLOYMENT_PROCESS);
 		} catch (Exception e) {
+			 MDC.put("ClassName", "AzureSimpleSolution");
 			 logger.error("AzureSimpleSolution failed", e);
+			 MDC.remove("ClassName");
 			 if(azureVMIP!=null && !"".equals(azureVMIP)) {
 				 logger.error("Azure VM IP is:"+azureVMIP+" Password: "+azureEncPD);
 			 }
@@ -375,6 +378,7 @@ public class AzureSimpleSolution implements Runnable {
 				logger.error("createDeploymentData failed", e);
 			}
 		}
+		ONAPLogDetails.clearMDCDetails();
 		logger.debug("AzureSimpleSolution Run End");
 	}
 }

@@ -20,18 +20,7 @@
 
 package org.acumos.azure.client.service;
 
-import java.io.IOException;
-import java.util.LinkedList;
-
 import org.acumos.azure.client.transport.AzureDeployDataObject;
-import org.acumos.azure.client.transport.AzureKubeBean;
-import org.acumos.azure.client.utils.AzureBean;
-import org.acumos.azure.client.utils.Blueprint;
-import org.acumos.azure.client.utils.DockerInfoList;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.microsoft.azure.management.Azure;
 
 public interface AzureService {

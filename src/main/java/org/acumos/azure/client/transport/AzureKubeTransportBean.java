@@ -17,9 +17,23 @@ public class AzureKubeTransportBean {
 	private String cmnDataUrl;
 	private String cmnDataUser;
 	private String cmnDataPd;
+	private String userDetail;
+	private String requestId;
 	
 	
 	
+	public String getUserDetail() {
+		return userDetail;
+	}
+	public void setUserDetail(String userDetail) {
+		this.userDetail = userDetail;
+	}
+	public String getRequestId() {
+		return requestId;
+	}
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
 	public String getCmnDataUrl() {
 		return cmnDataUrl;
 	}

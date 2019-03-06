@@ -20,19 +20,18 @@
 package org.acumos.azure.client.service.impl;
 
 import java.io.ByteArrayOutputStream;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import com.github.dockerjava.api.command.InspectContainerResponse;
+
+import org.acumos.azure.client.logging.ONAPLogDetails;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
-import org.acumos.azure.client.transport.SingletonMapClass;
+import org.acumos.azure.client.transport.ContainerInfo;
+import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
@@ -45,26 +44,13 @@ import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.DockerUtils;
 import org.acumos.azure.client.utils.LoggerUtil;
 import org.acumos.azure.client.utils.ProbeIndicator;
-import org.acumos.azure.client.utils.SSHShell;
-import org.acumos.azure.client.utils.Utils;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
-import org.acumos.cds.domain.MLPNotification;
-import org.acumos.cds.domain.MLPSolutionDeployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.slf4j.MDC;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.AuthConfig;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.Image;
 import com.github.dockerjava.core.command.PullImageResultCallback;
@@ -73,10 +59,6 @@ import com.microsoft.azure.management.Azure;
 import com.microsoft.azure.management.containerregistry.Registry;
 import com.microsoft.azure.management.containerregistry.implementation.RegistryListCredentials;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
-import com.microsoft.azure.management.resources.fluentcore.utils.SdkContext;
-import org.acumos.azure.client.transport.ContainerInfo;
-import org.acumos.azure.client.transport.DeploymentBean;
-import org.acumos.azure.client.transport.MLNotification;
 
 //import org.acumos.p
 
@@ -203,6 +185,7 @@ public class AzureCompositeSolution implements Runnable {
   	    String azureEncPD="";
   	    String vmIP="";
 		try{
+			ONAPLogDetails.setMDCDetails(tbean.getRequestId(), tbean.getUserDetail());
 			loggerUtil.printCompositeSolutionImplDetails(deployDataObject,dockerContainerPrefix,list,
 					bluePrintName,uidNumStr,sequenceList,imageMap,solutionPort,nodeTypeContainerMap,
 					bluePrintJsonStr,probeName,probeInternalPort,probeNexusEndPoint,sleepTimeFirst,
@@ -642,7 +625,9 @@ public class AzureCompositeSolution implements Runnable {
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_PROCESS);
          }
 		}catch(Exception e){
+			MDC.put("ClassName", "AzureCompositeSolution");
 			logger.error("AzureCompositeSolution failed", e);
+			MDC.remove("ClassName");
 			if(vmIP!=null && !"".equals(vmIP)) {
 				 logger.error("Azure VM IP is:"+vmIP+" Password: "+azureEncPD);
 			 }
@@ -655,7 +640,7 @@ public class AzureCompositeSolution implements Runnable {
 				logger.error("createDeploymentCompositeData failed", e);
 			}
 		}
-		 
+		ONAPLogDetails.clearMDCDetails();
 		logger.debug("AzureCompositeSolution Run End");
 	}
 	

@@ -21,7 +21,6 @@
 package org.acumos.azure.client.utils;
 
 import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProbeIndicator implements Serializable {

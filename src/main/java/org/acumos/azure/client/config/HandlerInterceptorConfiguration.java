@@ -17,19 +17,24 @@
  * limitations under the License.
  * ===============LICENSE_END=========================================================
  */
+package org.acumos.azure.client.config;
 
-package org.acumos.azure.client.controller;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
+/**
+ * Interceptor Configuration
+ */
+@Configuration
+public class HandlerInterceptorConfiguration extends WebMvcConfigurerAdapter {
 
-
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-public abstract class AbstractController {
-
-	protected final ObjectMapper mapper;
-
-	public AbstractController() {
-		mapper = new ObjectMapper();
+	@Autowired
+	LoggingHandlerInterceptor loggingHandlerInterceptor;
+	
+	@Override
+	public void addInterceptors(InterceptorRegistry registry) {
+		registry.addInterceptor(loggingHandlerInterceptor);
 	}
-
 }

@@ -24,16 +24,16 @@ package org.acumos.azure.client.controller;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
+import org.slf4j.MDC;
 
 import org.acumos.azure.client.api.APINames;
+import org.acumos.azure.client.logging.ONAPLogConstants;
 import org.acumos.azure.client.service.impl.AzureCompositeSolution;
 import org.acumos.azure.client.service.impl.AzureKubeSolution;
 import org.acumos.azure.client.service.impl.AzureServiceImpl;
@@ -44,17 +44,13 @@ import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.AzureKubeBean;
 import org.acumos.azure.client.transport.AzureKubeTransportBean;
 import org.acumos.azure.client.transport.DeploymentBean;
-import org.acumos.azure.client.transport.SingletonMapClass;
 import org.acumos.azure.client.transport.SolutionDeployment;
 import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AppProperties;
-import org.acumos.azure.client.utils.AzureBean;
 import org.acumos.azure.client.utils.AzureClientConstants;
 import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.azure.client.utils.Blueprint;
 import org.acumos.azure.client.utils.DataBrokerBean;
-import org.acumos.azure.client.utils.DockerInfo;
-import org.acumos.azure.client.utils.DockerInfoList;
 import org.acumos.azure.client.utils.LoggerUtil;
 import org.acumos.azure.client.utils.ParseJSON;
 import org.acumos.azure.client.utils.ProbeIndicator;
@@ -63,16 +59,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.context.request.async.DeferredResult;
 
-import com.fasterxml.jackson.databind.ObjectMapper;	
 import com.microsoft.azure.management.Azure;
 @RestController
 public class AzureServiceController extends AbstractController {
@@ -115,6 +107,8 @@ public class AzureServiceController extends AbstractController {
 		String nexusRegistyPd="";
 		String nexusRegistyName="";
 		String otherRegistyName="";
+		String userDetail="";
+		String requestId="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
 			azureImpl.setEnvironment(env);
@@ -141,6 +135,11 @@ public class AzureServiceController extends AbstractController {
 			nexusRegistyPd=env.getProperty(AzureClientConstants.NEXUS_REGISTY_PD);
 			nexusRegistyName=env.getProperty(AzureClientConstants.NEXUS_REGISTY_NAME);
 			otherRegistyName=env.getProperty(AzureClientConstants.OTHER_REGISTY_NAME);
+			userDetail=MDC.get(ONAPLogConstants.MDCs.USER); 
+			requestId=MDC.get(ONAPLogConstants.MDCs.REQUEST_ID); 
+
+			logger.debug("userDetail "+userDetail);
+			logger.debug("requestId "+requestId);
 			logger.debug("nexusRegistyName "+nexusRegistyName);
 			logger.debug("otherRegistyName "+otherRegistyName);
 			logger.debug("solutionPort "+solutionPort);
@@ -192,13 +191,15 @@ public class AzureServiceController extends AbstractController {
             		dockerHosttoUrl(env.getProperty(AzureClientConstants.HOST_PROP), env.getProperty(AzureClientConstants.PORT_PROP),false),
             		null,list,bluePrintName,bluePrintUser,bluePrintPass,networkSecurityGroup,dockerRegistryname,uidNumStr,dataSource,dataUserName,
             		dataPd,dockerVMUserName,dockerVMPd,solutionPort,subnet,vnet,sleepTimeFirst,
-            		sleepTimeSecond,nexusRegistyUserName,nexusRegistyPd,nexusRegistyName,otherRegistyName);
+            		sleepTimeSecond,nexusRegistyUserName,nexusRegistyPd,nexusRegistyName,otherRegistyName,userDetail,requestId);
             
             Thread t = new Thread(myRunnable);
             t.start();
             
 		}catch(Exception e){
+			MDC.put("ClassName", "AzureServiceController");
 			logger.error("singleImageAzureDeployment failed", e);
+			MDC.remove("ClassName");
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
 			azureUtil.generateNotification("Error in vm creation", userId, dataSource, dataUserName, dataPd);
@@ -240,6 +241,8 @@ public class AzureServiceController extends AbstractController {
 		String nginxImageName="";
 		String nginxInternalPort="";
 		String azureDataFiles="";
+		String userDetail="";
+		String requestId="";
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		TransportBean tbean=new TransportBean();
 		LoggerUtil loggerUtil=new LoggerUtil();
@@ -290,6 +293,11 @@ public class AzureServiceController extends AbstractController {
 			nginxImageName=env.getProperty(AzureClientConstants.NGINX_IMAGENAME);
 			nginxInternalPort=env.getProperty(AzureClientConstants.NGINX_INTERNALPORT);
 			azureDataFiles=env.getProperty(AzureClientConstants.DATAFILE_FOLDER);
+			userDetail=MDC.get(ONAPLogConstants.MDCs.USER); 
+			requestId=MDC.get(ONAPLogConstants.MDCs.REQUEST_ID); 
+
+			logger.debug("userDetail "+userDetail);
+			logger.debug("requestId "+requestId);
 			
 			if (authObject == null) {
 				logger.debug("Insufficient data to authneticate with Azure AD");
@@ -373,6 +381,8 @@ public class AzureServiceController extends AbstractController {
 			tbean.setNginxImageName(nginxImageName);
 			tbean.setNginxInternalPort(nginxInternalPort);
 			tbean.setAzureDataFiles(azureDataFiles);
+			tbean.setUserDetail(userDetail);
+			tbean.setRequestId(requestId);
 			//put condition to get probe
 			
 			logger.debug("list "+list);
@@ -396,7 +406,9 @@ public class AzureServiceController extends AbstractController {
 			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
 			response.setStatus(200);	
 		}catch(Exception e){
+			MDC.put("ClassName", "AzureServiceController");
 			logger.error("compositeSolutionAzureDeployment failed", e);
+			MDC.remove("ClassName");
 			response.setStatus(401);
 			jsonOutput.put("status", APINames.FAILED);
 			azureUtil.generateNotification("Error in vm creation", userId, dataSource, userName, dataPd);
@@ -426,6 +438,9 @@ public class AzureServiceController extends AbstractController {
 		String uidNumStr="";
 		String replaceChar="";
 		String ignorDoller="";
+		String userDetail="";
+		String requestId="";
+		
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try{
 			  UUID uidNumber = UUID.randomUUID();
@@ -444,6 +459,11 @@ public class AzureServiceController extends AbstractController {
 			  kubernetesClientUrl=env.getProperty(AzureClientConstants.KUBERNETESCLIENT_URL);
 			  replaceChar=env.getProperty(AzureClientConstants.REPLACECHAR_PROP);
 			  ignorDoller=env.getProperty(AzureClientConstants.IGNORE_DOLLER_PROP);
+			  userDetail=MDC.get(ONAPLogConstants.MDCs.USER); 
+			  requestId=MDC.get(ONAPLogConstants.MDCs.REQUEST_ID); 
+			  
+			  logger.debug("userDetail "+userDetail);
+			  logger.debug("requestId "+requestId);
 			  logger.debug("cmnDataUrl "+cmnDataUrl);
 			  logger.debug("cmnDataUser "+cmnDataUser);
 			  logger.debug("cmnDataPd "+cmnDataPd);
@@ -469,6 +489,8 @@ public class AzureServiceController extends AbstractController {
 			  kubeTransportBean.setCmnDataPd(cmnDataPd);
 			  kubeTransportBean.setCmnDataUrl(cmnDataUrl);
 			  kubeTransportBean.setCmnDataUser(cmnDataUser);
+			  kubeTransportBean.setUserDetail(userDetail);
+			  kubeTransportBean.setRequestId(requestId);
 			  if(azure!=null) {
 				  AzureKubeSolution kubeSolution=new AzureKubeSolution(auth,kubeTransportBean,azure);
 				  Thread t = new Thread(kubeSolution);
@@ -478,7 +500,9 @@ public class AzureServiceController extends AbstractController {
 			jsonOutput.put("status", APINames.SUCCESS_RESPONSE);  
 		   	response.setStatus(200);
 		   	}catch(Exception e){
+		   		MDC.put("ClassName", "AzureServiceController");
 		   		logger.error("kubernetesDeployment failed", e);
+		   		MDC.remove("ClassName");
 				response.setStatus(404);
 				jsonOutput.put("status", APINames.FAILED);
 			}
@@ -525,6 +549,8 @@ public class AzureServiceController extends AbstractController {
 		String sleepTimeFirst="";
 		String solutionPort="";
 		String localHostEnv="";
+		String userDetail="";
+		String requestId="";
 		AzureSolutionDeployment azureDeployment=new AzureSolutionDeployment();
 		JSONObject  jsonOutput = new JSONObject();
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
@@ -572,6 +598,10 @@ public class AzureServiceController extends AbstractController {
 			sleepTimeFirst=env.getProperty(AzureClientConstants.SLEEPTIME_FIRST);
 			solutionPort=env.getProperty(AzureClientConstants.SOLUTIONPORT_PROP);
 			localHostEnv=dockerHosttoUrl(env.getProperty(AzureClientConstants.HOST_PROP),env.getProperty(AzureClientConstants.PORT_PROP), false);
+			userDetail=MDC.get(ONAPLogConstants.MDCs.USER); 
+			requestId=MDC.get(ONAPLogConstants.MDCs.REQUEST_ID); 
+			logger.debug("userDetail "+userDetail);
+			logger.debug("requestId "+requestId);
 			// Azure Authenticatiobn 
 			Azure azure = azureImpl.authorizeAzure(bean.getClient(), bean.getTenant(), bean.getKey(), bean.getSubscriptionKey());
 		    tbean=azureUtil.setTransportValues(tbean, nexusUrl, nexusUserName, nexusPd, nginxMapFolder, nginxWebFolder, 
@@ -580,9 +610,14 @@ public class AzureServiceController extends AbstractController {
 					nexusRegistyUserName, nexusRegistyPd, registryUserName, registryPd, bluePrintUser, 
 					bluePrintPass, probUser, probePass, uidNumStr, solutionPort, dataSource, dataUserName, 
 					dataPd, sleepTimeFirst, localHostEnv);
+		    tbean.setUserDetail(userDetail);
+			tbean.setRequestId(requestId);
 			loggerUtil.printExistingVMDetails(bean, tbean);
 			if(azure!=null) {
+				MDC.put("ClassName", "AzureServiceController");
 				logger.debug("Calling New thread for solution");
+				MDC.remove("ClassName");
+				
 				AzureSolutionDeployment deployment =new AzureSolutionDeployment(bean,tbean,azure);
 		        Thread t = new Thread(deployment);
 	            t.start();

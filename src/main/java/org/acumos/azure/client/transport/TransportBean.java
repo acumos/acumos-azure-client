@@ -61,12 +61,30 @@ public class TransportBean {
 	private String uidNumStr;
 	private String solutionPort;
 	private String localHostEnv;
+	private String userDetail;
+	private String requestId;
 	private ArrayList<String> imageList;
 	private HashMap<String,String> imageMap;
 	private LinkedList<String> sequenceList;
 	
 	
 	
+	public String getUserDetail() {
+		return userDetail;
+	}
+
+	public void setUserDetail(String userDetail) {
+		this.userDetail = userDetail;
+	}
+
+	public String getRequestId() {
+		return requestId;
+	}
+
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
+	}
+
 	public String getLocalHostEnv() {
 		return localHostEnv;
 	}

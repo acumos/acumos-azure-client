@@ -1,32 +1,16 @@
 package org.acumos.azure.client.service.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
 
-
-import org.acumos.azure.client.service.AzureService;
-import org.acumos.azure.client.transport.AzureDeployDataObject;
+import org.acumos.azure.client.logging.ONAPLogDetails;
 import org.acumos.azure.client.transport.AzureKubeBean;
 import org.acumos.azure.client.transport.AzureKubeTransportBean;
-import org.acumos.azure.client.transport.TransportBean;
 import org.acumos.azure.client.utils.AzureCommonUtil;
 import org.acumos.azure.client.utils.AzureEncrypt;
 import org.acumos.azure.client.utils.DockerUtils;
-import org.acumos.azure.client.utils.ParseJSON;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
-import org.acumos.cds.domain.MLPArtifact;
-import org.acumos.cds.domain.MLPSolution;
-import org.acumos.cds.domain.MLPSolutionRevision;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.web.client.RestTemplate;
+import org.slf4j.MDC;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -34,7 +18,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microsoft.azure.management.Azure;
 import com.microsoft.azure.management.resources.fluentcore.arm.Region;
 
@@ -62,6 +45,7 @@ public class AzureKubeSolution implements Runnable{
     	String azureEncPD="";
     	String hostIp="";
     	try {
+    		ONAPLogDetails.setMDCDetails(kubeTransportBean.getRequestId(), kubeTransportBean.getUserDetail());
     		InputStream inputStream = getAzureSolutionZip(auth,kubeTransportBean.getKubernetesClientUrl());
     		logger.debug("Zip Input stream completed ");
     		final Region region = Region.US_EAST;
@@ -85,11 +69,14 @@ public class AzureKubeSolution implements Runnable{
 	    				 kubeTransportBean.getCmnDataUrl(), kubeTransportBean.getCmnDataUser(), kubeTransportBean.getCmnDataPd());
     		}
     	}catch(Exception e) {
+    		MDC.put("ClassName", "AzureKubeSolution");
     		logger.error("Exception in AzureKubeSolution failed", e);
+    		MDC.remove("ClassName");
     		if(hostIp!=null && !"".equals(hostIp)) {
 				 logger.error("Azure VM IP is:"+hostIp+" Password: "+azureEncPD);
 			 }
     	}
+    	ONAPLogDetails.clearMDCDetails();
     	logger.debug("AzureKubeSolution Run End ");
     }
 	public InputStream getAzureSolutionZip(AzureKubeBean bean,String url)throws Exception{

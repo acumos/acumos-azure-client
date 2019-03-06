@@ -29,16 +29,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-
 import org.acumos.azure.client.transport.DeploymentBean;
-import org.acumos.cds.client.CommonDataServiceRestClientImpl;
-import org.acumos.cds.client.ICommonDataServiceRestClient;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ParseJSON {
@@ -1178,22 +1174,6 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		return dataBrokerBean;	
 	}
 	
-	public boolean getSplitterAndCollator(Iterator<Map.Entry> itr4){
-		boolean splitterAndCollator=false;
-		while (itr4.hasNext()) {
-            Map.Entry pair = itr4.next();
-            if(pair!=null && pair.getKey()!=null && pair.getValue()!=null){
-            	String key=(String)pair.getKey();
-                String val=(String)pair.getValue().toString();
-            	if(key != null && key.equalsIgnoreCase(AzureClientConstants.NODE_TYPE)) {
-            		if(val!=null && (val.equalsIgnoreCase("Collator") || val.equalsIgnoreCase("Splitter"))){
-            			splitterAndCollator=true;
-            		}
-            	}
-            }
-		}   
-		return splitterAndCollator;
-	}
 	
 	public HashMap<String, String> getProtoDetails(String jsonFileName) throws Exception {
 		log.debug("getProtoDetails Start");

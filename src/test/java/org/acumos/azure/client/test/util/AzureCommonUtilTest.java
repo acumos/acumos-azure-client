@@ -41,7 +41,7 @@ import org.slf4j.LoggerFactory;
 
 public class AzureCommonUtilTest {
 	
-	private static Logger logger = LoggerFactory.getLogger(BluePrintTest.class);
+	private static Logger logger = LoggerFactory.getLogger(AzureCommonUtilTest.class);
 	@Test	
 	public void getRepositryNameTest()throws Exception{
 		logger.info("getRepositryNameTest Start");
@@ -70,6 +70,15 @@ public class AzureCommonUtilTest {
 		fileOutput=cutil.getTagFromImage(AzureClientTestConstants.TEST_NEXUS_IMAGE);
 		assertNotNull(fileOutput);
 		logger.info("getTagFromImageTest End"+fileOutput);
+	}
+	@Test	
+	public void replaceCharStrTest()throws Exception{
+		logger.info("replaceCharStrTest Start");
+		AzureCommonUtil cutil=new AzureCommonUtil();
+		String replaceStr=null;
+		replaceStr=cutil.replaceCharStr("Test$Test", "$", "TRUE");
+		assertNotNull(replaceStr);
+		logger.info("replaceCharStrTest End"+replaceStr);
 	}
 	@Test	
 	public void getRandomPasswordTest()throws Exception{
