@@ -178,7 +178,7 @@ public class AzureSimpleSolution implements Runnable {
 
 			logger.debug("Creating an SSH private and public key pair");
 
-			SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", AzureClientConstants.SSH_ACS);
+			//SSHShell.SshPublicPrivateKey sshKeys = SSHShell.generateSSHKeys("", AzureClientConstants.SSH_ACS);
 
 			// =============================================================
 			// Create an Azure Container Service with Kubernetes orchestration

@@ -44,19 +44,7 @@ public class OperationSignatureList implements Serializable {
 		super();
 	}
 
-	/**
-	 * Standard POJO constructor initialized with field
-	 * 
-	 * @param operationSignature
-	 *            This is the operation signature
-	 * @param connectedTo
-	 *            This is the connected to for an operation signature.
-	 */
-	public OperationSignatureList(OperationSignature operationSignature, ArrayList<ConnectedTo> connectedTo) {
-		super();
-		this.operationSignature = operationSignature;
-		this.connectedTo = connectedTo;
-	}
+	
 
 	@JsonProperty("operation_signature")
 	public OperationSignature getOperationSignature() {

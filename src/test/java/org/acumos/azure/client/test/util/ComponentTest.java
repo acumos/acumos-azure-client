@@ -38,6 +38,7 @@ public class ComponentTest {
 		OperationSignature operationSignature = new OperationSignature();
 		component.setName(AzureClientTestConstants.TEST_COMPONENT_NAME);
 		component.setOperationSignature(operationSignature);
+		logger.info("component "+component);
 		Assert.assertEquals(AzureClientTestConstants.TEST_COMPONENT_NAME, component.getName());
 		Assert.assertEquals(operationSignature, component.getOperationSignature());
 		logger.info("ComponentTest End");

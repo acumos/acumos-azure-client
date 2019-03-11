@@ -48,50 +48,72 @@ public class AzureDeployDataObject {
 	
 	
 	public String getUrlAttribute() {
+		
 		return urlAttribute;
+		
 	}
 
 	public void setUrlAttribute(String urlAttribute) {
+		
 		this.urlAttribute = urlAttribute;
+		
 	}
 
 	public String getJsonPosition() {
+		
 		return jsonPosition;
+		
 	}
 
 	public void setJsonPosition(String jsonPosition) {
+		
 		this.jsonPosition = jsonPosition;
+		
 	}
 
 	public String getJsonMapping() {
+		
 		return jsonMapping;
+		
 	}
 
 	public void setJsonMapping(String jsonMapping) {
+		
 		this.jsonMapping = jsonMapping;
+		
 	}
 
 	public String getSolutionRevisionId() {
+		
 		return solutionRevisionId;
+		
 	}
 
 	public void setSolutionRevisionId(String solutionRevisionId) {
+		
 		this.solutionRevisionId = solutionRevisionId;
+		
 	}
 
 	public String getUserId() {
+		
 		return userId;
+		
 	}
 
 	public void setUserId(String userId) {
+		
 		this.userId = userId;
+		
 	}
 
 	/**
 	 * @return the client
 	 */
 	public String getClient() {
+		
 		return client;
+		
 	}
 
 	/**
@@ -99,14 +121,18 @@ public class AzureDeployDataObject {
 	 *            the client to set
 	 */
 	public void setClient(String client) {
+		
 		this.client = client;
+		
 	}
 
 	/**
 	 * @return the tenant
 	 */
 	public String getTenant() {
+		
 		return tenant;
+		
 	}
 
 	/**
@@ -114,14 +140,18 @@ public class AzureDeployDataObject {
 	 *            the tenant to set
 	 */
 	public void setTenant(String tenant) {
+		
 		this.tenant = tenant;
+		
 	}
 
 	/**
 	 * @return the key
 	 */
 	public String getKey() {
+		
 		return key;
+		
 	}
 
 	/**
@@ -129,14 +159,18 @@ public class AzureDeployDataObject {
 	 *            the key to set
 	 */
 	public void setKey(String key) {
+		
 		this.key = key;
+		
 	}
 
 	/**
 	 * @return the subscriptionKey
 	 */
 	public String getSubscriptionKey() {
+		
 		return subscriptionKey;
+		
 	}
 
 	/**
@@ -144,14 +178,18 @@ public class AzureDeployDataObject {
 	 *            the subscriptionKey to set
 	 */
 	public void setSubscriptionKey(String subscriptionKey) {
+		
 		this.subscriptionKey = subscriptionKey;
+		
 	}
 
 	/**
 	 * @return the rgName
 	 */
 	public String getRgName() {
+		
 		return rgName;
+		
 	}
 
 	/**
@@ -159,14 +197,18 @@ public class AzureDeployDataObject {
 	 *            the rgName to set
 	 */
 	public void setRgName(String rgName) {
+		
 		this.rgName = rgName;
+		
 	}
 
 	/**
 	 * @return the acrName
 	 */
 	public String getAcrName() {
+		
 		return acrName;
+		
 	}
 
 	/**
@@ -174,22 +216,30 @@ public class AzureDeployDataObject {
 	 *            the acrName to set
 	 */
 	public void setAcrName(String acrName) {
+		
 		this.acrName = acrName;
+		
 	}
 
 	public String getSolutionId() {
+		
 		return solutionId;
+		
 	}
 
 	public void setSolutionId(String solutionId) {
+		
 		this.solutionId = solutionId;
+		
 	}
 
 	/**
 	 * @return the storageAccount
 	 */
 	public String getStorageAccount() {
+		
 		return storageAccount;
+		
 	}
 
 	/**
@@ -197,17 +247,23 @@ public class AzureDeployDataObject {
 	 *            the storageAccount to set
 	 */
 	public void setStorageAccount(String storageAccount) {
+		
 		this.storageAccount = storageAccount;
+		
 	}
     
 	
 
 	public String getUsername() {
+		
 		return username;
+		
 	}
 
 	public void setUsername(String username) {
+		
 		this.username = username;
+		
 	}
 
 	

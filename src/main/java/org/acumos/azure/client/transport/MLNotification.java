@@ -34,65 +34,94 @@ public class MLNotification {
 	private int count;
 
 	public String getNotificationId() {
+		
 		return notificationId;
+		
 	}
 
 	public void setNotificationId(String notificationId) {
+		
 		this.notificationId = notificationId;
+		
 	}
 
 	public String getTitle() {
+		
 		return title;
+		
 	}
 
 	public void setTitle(String title) {
+		
 		this.title = title;
+		
 	}
 
 	public String getMessage() {
+		
 		return message;
+		
 	}
 
 	public void setMessage(String message) {
+		
 		this.message = message;
+		
 	}
 
 	public String getUrl() {
+		
 		return url;
+		
 	}
 
 	public void setUrl(String url) {
+		
 		this.url = url;
+		
 	}
 
 	
 
 	public Instant getStart() {
+		
 		return start;
+		
 	}
 
 	public void setStart(Instant start) {
+		
 		this.start = start;
+		
 	}
 
 	public Instant getEnd() {
+		
 		return end;
+		
 	}
 
 	public void setEnd(Instant end) {
+		
 		this.end = end;
+		
 	}
 
 	public int getCount() {
+		
 		return count;
+		
 	}
 
 	public void setCount(int count) {
+		
 		this.count = count;
+		
 	}
 
 	@Override
 	public String toString() {
+		
 		StringBuilder builder = new StringBuilder();
 		builder.append("MLNotification [notificationId=");
 		builder.append(notificationId);
@@ -109,6 +138,7 @@ public class MLNotification {
 		builder.append(", count=");
 		builder.append(count);
 		builder.append("]");
+		
 		return builder.toString();
 	}
 	

@@ -35,6 +35,7 @@ public class OrchestratorTest {
 		orch.setImage(AzureClientTestConstants.TEST_IMAGE);
 		orch.setName(AzureClientTestConstants.TEST_CONTAINER_NAME_ADDER);
 		orch.setVersion(AzureClientTestConstants.TEST_VERSION);
+		logger.info("orch "+orch);
 		Assert.assertEquals(AzureClientTestConstants.TEST_CONTAINER_NAME_ADDER, orch.getName());
 		Assert.assertEquals(AzureClientTestConstants.TEST_VERSION, orch.getVersion());
 		Assert.assertEquals(AzureClientTestConstants.TEST_IMAGE, orch.getImage());

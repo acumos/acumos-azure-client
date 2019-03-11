@@ -37,11 +37,7 @@ public class TypeAndRoleHierarchyList implements Serializable {
 	@JsonProperty("role")
     private String role = null;
 	
-	public TypeAndRoleHierarchyList(String name, String role) {
-		super();
-		this.name = name;
-		this.role = role;
-	}
+
 	public TypeAndRoleHierarchyList(){
 		super();
 	}

@@ -38,6 +38,7 @@ public class DockerinfoTest {
         dockerInfo.setContainer(AzureClientTestConstants.TEST_COMPONENT_NAME);
         dockerInfo.setIpAddress(AzureClientTestConstants.TEST_IP_ADDER);
         dockerInfo.setPort(AzureClientTestConstants.TEST_PORT);
+        logger.info("dockerInfo "+dockerInfo);
         Assert.assertEquals(AzureClientTestConstants.TEST_COMPONENT_NAME, dockerInfo.getContainer());
         Assert.assertEquals(AzureClientTestConstants.TEST_IP_ADDER, dockerInfo.getIpAddress());
         Assert.assertEquals(AzureClientTestConstants.TEST_PORT, dockerInfo.getPort());

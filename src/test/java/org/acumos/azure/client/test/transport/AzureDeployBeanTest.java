@@ -50,7 +50,7 @@ public class AzureDeployBeanTest {
 		azBean.setSubscriptionKey(AzureClientTestConstants.TEST_SUBSCRIPTION_KEY);
 		azBean.setTenant(AzureClientTestConstants.TEST_TENANT);
 		azBean.setUserId(AzureClientTestConstants.TEST_USER_ID);
-		
+		logger.info("azBean "+azBean);
 		Assert.assertEquals(AzureClientTestConstants.TEST_CLIENT, azBean.getClient());
 		Assert.assertEquals(AzureClientTestConstants.TEST_TENANT, azBean.getTenant());
 		Assert.assertEquals(AzureClientTestConstants.TEST_KEY, azBean.getKey());

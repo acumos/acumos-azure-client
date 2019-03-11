@@ -58,20 +58,7 @@ public class DataBrokerMap implements Serializable {
     @JsonProperty("script")
     private String script = null;
 
-    
-    public DataBrokerMap(ArrayList<MapInputs> mapInputs, String dataBrokerType, String csvFileFieldSeparator,
-			String targetSystemUrl, ArrayList<MapOutputs> mapOutputs, String localSystemDataFilePath, String firstRow,
-			String script) {
-		super();
-		this.mapInputs = mapInputs;
-		this.dataBrokerType = dataBrokerType;
-		this.csvFileFieldSeparator = csvFileFieldSeparator;
-		this.targetSystemUrl = targetSystemUrl;
-		this.mapOutputs = mapOutputs;
-		this.localSystemDataFilePath = localSystemDataFilePath;
-		this.firstRow = firstRow;
-		this.script = script;
-	}
+
 
     public DataBrokerMap(){
     	

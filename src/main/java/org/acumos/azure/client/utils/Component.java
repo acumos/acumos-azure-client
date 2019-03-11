@@ -33,11 +33,7 @@ public class Component implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Component(String name, OperationSignature operationSignature) {
-		super();
-		this.name = name;
-		this.operationSignature = operationSignature;
-	}
+	
 
 	@JsonProperty("name")
 	private String name = null;

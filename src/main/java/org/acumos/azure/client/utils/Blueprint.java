@@ -35,16 +35,7 @@ public class Blueprint implements Serializable {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Blueprint(String name, String version, List<InputPort> inputPorts, List<Node> nodes,
-			ArrayList<ProbeIndicator> probeIndicator) {
-		super();
-		this.name = name;
-		this.version = version;
-		this.inputPorts = inputPorts;
-		this.nodes = nodes;
-		this.probeIndicator = probeIndicator;
-		
-	}
+	
 	
 	
 
@@ -57,42 +48,10 @@ public class Blueprint implements Serializable {
 	@JsonProperty("nodes")
 	private List<Node> nodes = null;
 
-	/*@JsonProperty("input_operation_signatures")
-	private List<OperationSignature> inputs = null;
-
-	@JsonProperty("orchestrator")
-	private Orchestrator orchestrator = null;*/
-	
-	
-	/*@JsonProperty("probeIndocator")
-	private String probeIndocator = null; */
 	
 	@JsonProperty("probeIndicator")
 	private ArrayList<ProbeIndicator> probeIndicator = null;
 	
-	@JsonProperty("input_ports")
-	private List<InputPort> inputPorts = null;
-	
-	
-	
-	
-
-	/*public ArrayList<ProbeIndicator> getProbeIndocator() {
-		return probeIndicator;
-	}
-
-	public void setProbeIndocator(ArrayList<ProbeIndicator> probeIndicatorLst) {
-		this.probeIndicator = probeIndicatorLst;
-	}*/
-
-	public List<InputPort> getInputPorts() {
-		return inputPorts;
-	}
-
-	public void setInputPorts(List<InputPort> inputPorts) {
-		this.inputPorts = inputPorts;
-	}
-
 	public ArrayList<ProbeIndicator> getProbeIndicator() {
 		return probeIndicator;
 	}
@@ -101,22 +60,7 @@ public class Blueprint implements Serializable {
 		this.probeIndicator = probeIndicator;
 	}
 
-	/*public List<OperationSignature> getInputs() {
-		return inputs;
-	}
-
-	public void setInputs(List<OperationSignature> inputs) {
-		this.inputs = inputs;
-	}*/
-
-	/*public Blueprint addInput(OperationSignature os) {
-		if (this.inputs == null) {
-			this.inputs = new ArrayList<OperationSignature>();
-		}
-		this.inputs.add(os);
-		return this;
-	}*/
-
+	
 	public String getName() {
 		return name;
 	}
@@ -133,14 +77,7 @@ public class Blueprint implements Serializable {
 		this.version = version;
 	}
 
-	/*public Orchestrator getOrchestrator() {
-		return orchestrator;
-	}
-
-	public void setOrchestrator(Orchestrator orchestrator) {
-		this.orchestrator = orchestrator;
-	}*/
-
+	
 	public List<Node> getNodes() {
 		return nodes;
 	}

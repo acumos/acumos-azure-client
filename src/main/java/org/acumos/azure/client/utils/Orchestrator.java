@@ -26,17 +26,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Orchestrator implements Serializable {
 
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 964690784032387784L;
 
-	public Orchestrator(String name, String version, String image) {
-		super();
-		this.name = name;
-		this.version = version;
-		this.image = image;
-	}
+	
 
 	public Orchestrator() {
 		super();

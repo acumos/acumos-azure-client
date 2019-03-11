@@ -41,20 +41,7 @@ public class ConnectedTo implements Serializable {
 		super();
 	}
 
-	/**
-	 * ConnectedTo Constructor
-	 * 
-	 * @param containerName
-	 *            Name of the container
-	 * @param operationSignature
-	 *            Operation signature
-	 */
-
-	public ConnectedTo(String containerName, OperationSignature operationSignature) {
-		super();
-		this.containerName = containerName;
-		this.operationSignature = operationSignature;
-	}
+	
 
 	@JsonProperty("container_name")
 	public String getContainerName() {

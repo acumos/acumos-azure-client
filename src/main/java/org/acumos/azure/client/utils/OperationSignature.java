@@ -42,21 +42,7 @@ public class OperationSignature implements Serializable {
 		super();
 	}
 
-	/**
-	 * Standard POJO constructor initialized with field
-	 * @param operationName
-	 *            This is the operation name
-	 * @param inputMessageName
-	 *            This is the input msg name
-	 * @param outputMessageName
-	 *            This is the output msg name
-	 */
-	public OperationSignature(String operationName, String inputMessageName, String outputMessageName) {
-		super();
-		this.operationName = operationName;
-		this.inputMessageName = inputMessageName;
-		this.outputMessageName = outputMessageName;
-	}
+	
 
 	@JsonProperty("operation_name")
 	public String getOperationName() {

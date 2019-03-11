@@ -132,7 +132,7 @@ public class ParseJSON {
        
         JSONArray inputPorts = (JSONArray) jo.get(AzureClientConstants.INPUT_PORTS);
 		ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
-		List<InputPort> inputPortList=null;
+		/*List<InputPort> inputPortList=null;
 		if (inputPorts != null) {
 			inputPortList=new ArrayList<InputPort>();
 			log.debug("input ports");
@@ -160,10 +160,10 @@ public class ParseJSON {
 				inputPortList.add(inputPortObj);
 			}
 			
-		}
-		if(inputPorts!=null && inputPorts.size() > 0){
+		}*/
+		/*if(inputPorts!=null && inputPorts.size() > 0){
 			blueprint.setInputPorts(inputPortList);
-		}
+		}*/
         JSONArray nodes = (JSONArray) jo.get(AzureClientConstants.NODES);
         ArrayList<Node> nodeList=new ArrayList<Node>();
         if (nodes != null) {
@@ -243,6 +243,7 @@ public class ParseJSON {
 		log.debug("jsonFileToObject End");
 		return blueprint;	
 	}
+
 
 	
 	private String getProbeIndicator(JSONObject jo) {
@@ -620,7 +621,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			
 			JSONArray inputPorts = (JSONArray) jo.get(AzureClientConstants.INPUT_PORTS);
 			ArrayList<OperationSignature> operationList = new ArrayList<OperationSignature>();
-			List<InputPort> inputPortList=null;
+			/*List<InputPort> inputPortList=null;
 			if (inputPorts != null) {
 				inputPortList=new ArrayList<InputPort>();
 				log.debug("input ports");
@@ -648,10 +649,10 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 					inputPortList.add(inputPortObj);
 				}
 				
-			}
-			if(inputPorts!=null && inputPorts.size() > 0){
+			}*/
+			/*if(inputPorts!=null && inputPorts.size() > 0){
 				blueprint.setInputPorts(inputPortList);
-			}
+			}*/
 			
 			JSONArray nodes = (JSONArray) jo.get(AzureClientConstants.NODES);
 			ArrayList<Node> nodeList = new ArrayList<Node>();
@@ -1161,7 +1162,9 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 		                    dataBrokerBean.setDataBrokerMap(dataBrokerMap);
 		
 						}
-				 }	
+						log.debug("DataBrokerMap "+dataBrokerMap);
+				 }
+					
 			   }	
 			}
 			
@@ -1169,6 +1172,7 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			log.error("parseJsonFile failed", e);
     	    throw new Exception(e.getMessage());
        }
+		
 		log.debug("dataBrokerBean "+dataBrokerBean);
 		log.debug(" getDataBrokerContainer End");
 		return dataBrokerBean;	

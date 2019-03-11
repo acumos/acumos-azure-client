@@ -37,28 +37,7 @@ public class DockerInfo implements Serializable {
 	@JsonProperty("port")
 	private String port = null;
 	
-	/*@JsonProperty("node_type")
-	private String nodeType = null;*/
-
-	/**
-	 * Constructor class
-	 * 
-	 * @param container
-	 *            Container
-	 * @param ipAddress
-	 *            IP address
-	 * @param port
-	 *            Port number
-	 */
-
-	public DockerInfo(String container, String ipAddress, String port) {
-		super();
-		this.container = container;
-		this.ipAddress = ipAddress;
-		this.port = port;
-		//this.nodeType = nodeType;
-	}
-
+	
 	/**
 	 * Standard POJO no-arg constructor
 	 */

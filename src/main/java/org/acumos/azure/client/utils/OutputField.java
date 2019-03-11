@@ -42,12 +42,7 @@ public class OutputField implements Serializable {
 	@JsonProperty("type_and_role_hierarchy_list")
 	private ArrayList<TypeAndRoleHierarchyList>  typeAndRoleHierarchyList;
 	
-	public OutputField(String tag, String name, ArrayList<TypeAndRoleHierarchyList>  typeAndRoleHierarchyList) {
-		super();
-		this.tag = tag;
-		this.name = name;
-		this.typeAndRoleHierarchyList = typeAndRoleHierarchyList;
-	}
+	
 	public OutputField(){
 		super();
 	}

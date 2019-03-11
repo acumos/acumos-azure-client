@@ -36,10 +36,6 @@ public class MapInputs implements Serializable {
 	private InputField inputField = null;
     
 
-    public MapInputs(InputField inputField) {
-		super();
-		this.inputField = inputField;
-	}
     public MapInputs(){
     	super();
     }
