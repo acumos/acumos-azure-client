@@ -8,7 +8,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import org.acumos.azure.client.logging.ONAPLogDetails;
+
+import org.acumos.azure.client.logging.LogConfig;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.DeploymentBean;
 import org.acumos.azure.client.transport.SolutionDeployment;
@@ -51,7 +52,6 @@ public class AzureSolutionDeployment implements Runnable{
 		logger.debug("AzureSolutionDeployment run start ");
 		AzureCommonUtil azureUtil=new AzureCommonUtil();
 		try {
-			ONAPLogDetails.setMDCDetails(tbean.getRequestId(), tbean.getUserDetail());
 			String solutionToolKitType=azureUtil.getSolutionCode(solutionBean.getSolutionId(), 
 					tbean.getDataSourceUrl(),tbean.getDataSourceUserName(),tbean.getDataSourcePd());
 			logger.debug("solutionToolKitType "+solutionToolKitType);
@@ -74,11 +74,10 @@ public class AzureSolutionDeployment implements Runnable{
 			}
 		   	
 		 }catch(Exception e) {
-			 MDC.put("ClassName", "AzureSolutionDeployment");
 			 logger.error("AzureSolutionDeployment failed", e);
-			 MDC.remove("ClassName");
+			 LogConfig.clearMDCDetails();
 		}
-		ONAPLogDetails.clearMDCDetails();
+		LogConfig.clearMDCDetails();
 		logger.debug("AzureSolutionDeployment run End ");
 	}
 	public void singleSolutionDetails(SolutionDeployment solutionBean,TransportBean tbean)throws Exception{

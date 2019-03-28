@@ -2,7 +2,7 @@ package org.acumos.azure.client.service.impl;
 
 import java.io.InputStream;
 
-import org.acumos.azure.client.logging.ONAPLogDetails;
+import org.acumos.azure.client.logging.LogConfig;
 import org.acumos.azure.client.transport.AzureKubeBean;
 import org.acumos.azure.client.transport.AzureKubeTransportBean;
 import org.acumos.azure.client.utils.AzureCommonUtil;
@@ -45,7 +45,6 @@ public class AzureKubeSolution implements Runnable{
     	String azureEncPD="";
     	String hostIp="";
     	try {
-    		ONAPLogDetails.setMDCDetails(kubeTransportBean.getRequestId(), kubeTransportBean.getUserDetail());
     		InputStream inputStream = getAzureSolutionZip(auth,kubeTransportBean.getKubernetesClientUrl());
     		logger.debug("Zip Input stream completed ");
     		final Region region = Region.US_EAST;
@@ -69,14 +68,13 @@ public class AzureKubeSolution implements Runnable{
 	    				 kubeTransportBean.getCmnDataUrl(), kubeTransportBean.getCmnDataUser(), kubeTransportBean.getCmnDataPd());
     		}
     	}catch(Exception e) {
-    		MDC.put("ClassName", "AzureKubeSolution");
     		logger.error("Exception in AzureKubeSolution failed", e);
-    		MDC.remove("ClassName");
+    		LogConfig.clearMDCDetails();
     		if(hostIp!=null && !"".equals(hostIp)) {
 				 logger.error("Azure VM IP is:"+hostIp+" Password: "+azureEncPD);
 			 }
     	}
-    	ONAPLogDetails.clearMDCDetails();
+    	LogConfig.clearMDCDetails();
     	logger.debug("AzureKubeSolution Run End ");
     }
 	public InputStream getAzureSolutionZip(AzureKubeBean bean,String url)throws Exception{
