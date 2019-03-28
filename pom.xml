@@ -24,7 +24,7 @@ limitations under the License.
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.acumos.acumos-azure-client</groupId>
 	<artifactId>acumos-azure-client</artifactId>
-	<version>2.0.11-SNAPSHOT</version>
+	<version>2.0.12-SNAPSHOT</version>
 	<packaging>jar</packaging>
 	<name>acumos-azure-client</name>
 	<description>Deploys Acumos models and composite solutions to Azure Cloud</description>
@@ -417,14 +417,14 @@ limitations under the License.
 					</images>
 				</configuration>
 				<!-- build Docker images in install phase, push in deploy phase -->
-				<executions>
+				<!-- <executions>
 					<execution>
 						<goals>
 							<goal>build</goal>
 							<goal>push</goal>
 						</goals>
 					</execution>
-				</executions>
+				</executions> -->
 			</plugin>
 		</plugins>
 	</build>

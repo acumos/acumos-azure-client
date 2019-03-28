@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.acumos.azure.client.logging.ONAPLogDetails;
+import org.acumos.azure.client.logging.LogConfig;
 import org.acumos.azure.client.transport.AzureContainerBean;
 import org.acumos.azure.client.transport.AzureDeployDataObject;
 import org.acumos.azure.client.transport.ContainerInfo;
@@ -185,7 +185,6 @@ public class AzureCompositeSolution implements Runnable {
   	    String azureEncPD="";
   	    String vmIP="";
 		try{
-			ONAPLogDetails.setMDCDetails(tbean.getRequestId(), tbean.getUserDetail());
 			loggerUtil.printCompositeSolutionImplDetails(deployDataObject,dockerContainerPrefix,list,
 					bluePrintName,uidNumStr,sequenceList,imageMap,solutionPort,nodeTypeContainerMap,
 					bluePrintJsonStr,probeName,probeInternalPort,probeNexusEndPoint,sleepTimeFirst,
@@ -625,9 +624,8 @@ public class AzureCompositeSolution implements Runnable {
    					  deployDataObject.getSolutionRevisionId(),deployDataObject.getUserId(),uidNumStr,AzureClientConstants.DEPLOYMENT_PROCESS);
          }
 		}catch(Exception e){
-			MDC.put("ClassName", "AzureCompositeSolution");
 			logger.error("AzureCompositeSolution failed", e);
-			MDC.remove("ClassName");
+			LogConfig.clearMDCDetails();
 			if(vmIP!=null && !"".equals(vmIP)) {
 				 logger.error("Azure VM IP is:"+vmIP+" Password: "+azureEncPD);
 			 }
@@ -640,7 +638,7 @@ public class AzureCompositeSolution implements Runnable {
 				logger.error("createDeploymentCompositeData failed", e);
 			}
 		}
-		ONAPLogDetails.clearMDCDetails();
+		LogConfig.clearMDCDetails();
 		logger.debug("AzureCompositeSolution Run End");
 	}
 	
