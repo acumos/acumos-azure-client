@@ -19,6 +19,11 @@
 ==========================
 Azure Client Release Notes
 ==========================
+Version 2.0.13, 18 April 2019
+---------------------------------
+* update CDS 2.2.1 for Azure-client (`ACUMOS-2767 <https://jira.acumos.org/browse/ACUMOS-2767>`_)
+* Azure deployer signals no error when it fails to deploy all requested models(`ACUMOS-1413 <https://jira.acumos.org/browse/ACUMOS-1413>`_)
+
 Version 2.0.12, 28 March 2019
 ---------------------------------
 * Logging Standardization (`ACUMOS-2330 <https://jira.acumos.org/browse/ACUMOS-2330>`_)
