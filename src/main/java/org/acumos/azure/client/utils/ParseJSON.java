@@ -771,8 +771,23 @@ public  NodeTree<String> findDataInTree(NodeTree node, String searchQuery) {
 			                }
 					  }	
 					}
+					
+					if(!nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")) {
+						log.debug("nodeType" + nodeType);
+						log.debug("check imageName" + imageName);
+						log.debug("check containerName" + containerName);
+						if(imageName == null || "".equals(imageName.trim())) {
+							throw new Exception("Image Name is blank");
+						}
+						if(containerName == null || "".equals(containerName.trim())) {
+							throw new Exception("containerName is blank");
+						}
+					}
+					log.debug("Start adding in image map");
 					if(containerName!=null && imageName!=null && !"".equals(containerName) && !"".equals(imageName)
 							&& !nodeType.equalsIgnoreCase("Splitter") && !nodeType.equalsIgnoreCase("Collator")){
+						log.debug("imageName" + imageName);
+						log.debug("containerName" + containerName);
 	                	imageMap.put(imageName, containerName);
 	                }
 			
