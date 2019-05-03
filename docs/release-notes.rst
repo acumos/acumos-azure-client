@@ -19,33 +19,38 @@
 ==========================
 Azure Client Release Notes
 ==========================
+
+Version 2.0.14, 3 May 2019
+--------------------------
+* Use docker base image openjdk:8-jre-slim (`ACUMOS-2542 <https://jira.acumos.org/browse/ACUMOS-2542>`_)
+* Upgrade to CDS 2.2.2
+* Upgrade to Spring-Boot 2.1.4.RELEASE
+
 Version 2.0.13, 18 April 2019
----------------------------------
+-----------------------------
 * update CDS 2.2.1 for Azure-client (`ACUMOS-2767 <https://jira.acumos.org/browse/ACUMOS-2767>`_)
 * Azure deployer signals no error when it fails to deploy all requested models(`ACUMOS-1413 <https://jira.acumos.org/browse/ACUMOS-1413>`_)
 
 Version 2.0.12, 28 March 2019
----------------------------------
+-----------------------------
 * Logging Standardization (`ACUMOS-2330 <https://jira.acumos.org/browse/ACUMOS-2330>`_)
 * Increase Sonar coverage to at least 40% (`ACUMOS-2367 <https://jira.acumos.org/browse/ACUMOS-2367>`_)
 * update CDS 2.1.2 for Azure-client (`ACUMOS-2669 <https://jira.acumos.org/browse/ACUMOS-2669>`_)
 
-
 Version 2.0.8, 1 March 2019
----------------------------------
+---------------------------
 * update CDS 2.1.1 for Azure-client (`ACUMOS-2589 <https://jira.acumos.org/browse/ACUMOS-2589>`_)
 
 Version 2.0.7, 15 February 2019
----------------------------------
+-------------------------------
 * update CDS 2.0.7 for Azure-client (`ACUMOS-2528 <https://jira.acumos.org/browse/ACUMOS-2528>`_)
 
-
 Version 2.0.5, 4 February 2019
----------------------------------
+------------------------------
 * IST2: Deploy to Azure : Message Improvements(`ACUMOS-863 <https://jira.acumos.org/browse/ACUMOS-863>`_)
 
 Version 2.0.0, 28 January 2019
----------------------------------
+------------------------------
 * Model Deployment in existing Vm in (`ACUMOS-2254 <https://jira.acumos.org/browse/ACUMOS-2254>`_)
 * Deploy solution in Azure VM with K8s (`ACUMOS-2257 <https://jira.acumos.org/browse/ACUMOS-2257>`_)
 * Azure deployer must accept user-specified username and password for VM (`ACUMOS-1351 <https://jira.acumos.org/browse/ACUMOS-1351>`_)
@@ -53,7 +58,7 @@ Version 2.0.0, 28 January 2019
 * update CDS 2.0.4 for Azure-client (`ACUMOS-2412 <https://jira.acumos.org/browse/ACUMOS-2412>`_)
 
 Version 1.2.22, 4 October 2018
----------------------------------
+------------------------------
 * update CDS 1.18.2 for Azure-client (`ACUMOS-1820 <https://jira.acumos.org/browse/ACUMOS-1820>`_)
 
 Version 1.2.21, 20 September 2018
