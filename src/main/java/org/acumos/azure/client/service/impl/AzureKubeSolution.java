@@ -58,7 +58,7 @@ public class AzureKubeSolution implements Runnable{
     			logger.debug("azureEncPD "+azureEncPD);
 	    		hostIp=DockerUtils.createNewAzureVM(azure, auth.getRgName(), region, kubeTransportBean.getNetworkSecurityGroup(),
 	    				kubeTransportBean.getDockerVMUserName(),kubeTransportBean.getDockerVMPd(),kubeTransportBean.getSubnet(),
-	    				kubeTransportBean.getVnet(),kubeTransportBean);
+	    				kubeTransportBean.getVnet(),kubeTransportBean,sleepTimeInt);
 	    		 logger.debug("sleepTime "+sleepTimeInt);
 	    		 Thread.sleep(sleepTimeInt);
 	    		 logger.debug("VM completed "+hostIp);

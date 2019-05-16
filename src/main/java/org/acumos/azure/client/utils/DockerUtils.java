@@ -347,6 +347,10 @@ public class DockerUtils {
 		Date t2 = new Date();
 		log.debug("Created Azure Virtual Machine: (took " + ((t2.getTime() - t1.getTime()) / 1000)
 				+ " seconds) " + dockerVM.id() + " , " + dockerVM.toString());
+		
+		log.debug("Sleep Time Start");
+		Thread.sleep(4*sleepTimeFirstInt);
+		log.debug("End Time Start");
 
 		// Get the IP of the Docker host
 		NicIPConfiguration nicIPConfiguration = dockerVM.getPrimaryNetworkInterface().primaryIPConfiguration();
@@ -360,6 +364,7 @@ public class DockerUtils {
 			azureBean.setAzureVMIP(dockerHostIP);
 			azureBean.setAzureVMName(dockerVM.computerName());
 		}
+		
 
 		DockerClient dockerClient = installDocker(dockerHostIP, vmUserName, vmPd, registryServerUrl, username,
 				acrPd, dockerRegistryName,sleepTimeFirstInt);
@@ -371,7 +376,7 @@ public class DockerUtils {
 	
 	public static String createNewAzureVM(Azure azure, String rgName, Region region, 
 			  String networkSecurityGroup,String dockerVMUserName,String dockerVMPd,
-			  String subNet,String vnet,AzureKubeTransportBean kubeTransportBean) throws Exception {
+			  String subNet,String vnet,AzureKubeTransportBean kubeTransportBean,int sleepTimeFirstInt) throws Exception {
 		    log.debug("createNewAzureVM Start");
 			final String vnetName = SdkContext.randomResourceName("vnet", 24);
 			final String frontEndNSGName = SdkContext.randomResourceName("fensg", 24);
@@ -429,7 +434,9 @@ public class DockerUtils {
 			Date t2 = new Date();
 			log.debug("Created Azure Virtual Machine: (took " + ((t2.getTime() - t1.getTime()) / 1000)
 					+ " seconds) " + vm.id() + " , " + vm.toString());
-	
+			log.debug("Sleep Time Start");
+			Thread.sleep(4*sleepTimeFirstInt);
+			log.debug("End Time Start");
 			// Get the IP of the Docker host
 			NicIPConfiguration nicIPConfiguration = vm.getPrimaryNetworkInterface().primaryIPConfiguration();
 			PublicIPAddress publicIp = nicIPConfiguration.getPublicIPAddress();
@@ -677,6 +684,9 @@ public class DockerUtils {
 		try {
 			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
 			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
+			log.debug("vmUserName: " + vmUserName);
+			log.debug("vmPd: " + vmPd);
+			
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 
 			sshShell.upload(new ByteArrayInputStream(INSTALL_DOCKER_FOR_UBUNTU_SERVER_16_04_LTS.getBytes()),
