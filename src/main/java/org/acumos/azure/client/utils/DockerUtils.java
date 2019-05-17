@@ -684,8 +684,7 @@ public class DockerUtils {
 		try {
 			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
 			log.debug("Copy Docker setup scripts to remote host: " + dockerHostIP);
-			log.debug("vmUserName: " + vmUserName);
-			log.debug("vmPd: " + vmPd);
+			
 			
 			sshShell = SSHShell.open(dockerHostIP, 22, vmUserName, vmPd);
 

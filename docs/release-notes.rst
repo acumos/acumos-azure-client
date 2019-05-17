@@ -20,6 +20,10 @@
 Azure Client Release Notes
 ==========================
 
+Version 2.0.15, 17 May 2019
+--------------------------
+* Deploy to Azure on IST showing Error in vm creation (`ACUMOS-2907 <https://jira.acumos.org/browse/ACUMOS-2907>`_)
+
 Version 2.0.14, 3 May 2019
 --------------------------
 * Use docker base image openjdk:8-jre-slim (`ACUMOS-2542 <https://jira.acumos.org/browse/ACUMOS-2542>`_)
