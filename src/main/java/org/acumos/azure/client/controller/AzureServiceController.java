@@ -198,7 +198,7 @@ public class AzureServiceController extends AbstractController {
 		}catch(Exception e){
 			logger.error("singleImageAzureDeployment failed", e);
 			LogConfig.clearMDCDetails();
-			response.setStatus(401);
+			response.setStatus(400);
 			jsonOutput.put("status", APINames.FAILED);
 			azureUtil.generateNotification("Error in vm creation", userId, dataSource, dataUserName, dataPd);
 			return jsonOutput.toString();
@@ -404,7 +404,7 @@ public class AzureServiceController extends AbstractController {
 		}catch(Exception e){
 			logger.error("compositeSolutionAzureDeployment failed", e);
 			LogConfig.clearMDCDetails();
-			response.setStatus(401);
+			response.setStatus(400);
 			jsonOutput.put("status", APINames.FAILED);
 			azureUtil.generateNotification("Error in vm creation", userId, dataSource, userName, dataPd);
 			return jsonOutput.toString();
@@ -495,7 +495,7 @@ public class AzureServiceController extends AbstractController {
 		   	}catch(Exception e){
 		   		logger.error("kubernetesDeployment failed", e);
 		   		LogConfig.clearMDCDetails();
-				response.setStatus(404);
+				response.setStatus(400);
 				jsonOutput.put("status", APINames.FAILED);
 			}
 		logger.debug("kubernetesDeployment end");
@@ -615,7 +615,7 @@ public class AzureServiceController extends AbstractController {
 		}catch(Exception e){
 			logger.error("existingAzureVM failed", e);
 			LogConfig.clearMDCDetails();
-			response.setStatus(401);
+			response.setStatus(400);
 			jsonOutput.put("status", APINames.FAILED);
 			azureUtil.generateNotification("existingAzureVM Deployment fail", "", dataSource, dataUserName, dataPd);
 			return jsonOutput.toString();
