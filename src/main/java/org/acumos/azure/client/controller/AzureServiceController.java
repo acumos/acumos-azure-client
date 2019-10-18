@@ -183,6 +183,7 @@ public class AzureServiceController extends AbstractController {
             }
             logger.debug("userId "+userId);
             Azure azure = azureImpl.authorize(authObject);
+            logger.debug("azure object detail "+azure);
             jsonOutput.put("status", APINames.SUCCESS_RESPONSE);
             response.setStatus(200);
             AzureSimpleSolution myRunnable = new AzureSimpleSolution(azure,authObject,env.getProperty(AzureClientConstants.CONTAINERNAMEPREFIX_PROP),
@@ -198,9 +199,13 @@ public class AzureServiceController extends AbstractController {
 		}catch(Exception e){
 			logger.error("singleImageAzureDeployment failed", e);
 			LogConfig.clearMDCDetails();
+			try {
+			 azureUtil.generateNotification("Error in vm creation", userId, dataSource, dataUserName, dataPd);
+			}catch(Exception ex) {
+			 logger.error("generateNotification Error",e);	
+			}
 			response.setStatus(400);
 			jsonOutput.put("status", APINames.FAILED);
-			azureUtil.generateNotification("Error in vm creation", userId, dataSource, dataUserName, dataPd);
 			return jsonOutput.toString();
 		}
 		jsonOutput.put("UIDNumber", uidNumStr);
@@ -296,12 +301,6 @@ public class AzureServiceController extends AbstractController {
 
 			logger.debug("requestId "+requestId);
 			
-			if (authObject == null) {
-				logger.debug("Insufficient data to authneticate with Azure AD");
-				jsonOutput.put("status", APINames.AUTH_FAILED);
-                                response.setStatus(400);
-				return jsonOutput.toString();
-			}
 			userId=authObject.getUserId();
 			loggerUtil.printCompositeSolutionDetails(userId,azureDataFiles,nginxInternalPort,nginxImageName,exposeDataBrokerPort,
 					internalDataBrokerPort,nexusRegistyName,otherRegistyName,subnet,vnet,sleepTimeFirst,sleepTimeSecond,
@@ -405,9 +404,13 @@ public class AzureServiceController extends AbstractController {
 		}catch(Exception e){
 			logger.error("compositeSolutionAzureDeployment failed", e);
 			LogConfig.clearMDCDetails();
+			try {
+			  azureUtil.generateNotification("Error in vm creation", userId, dataSource, userName, dataPd);
+			}catch(Exception ex) {
+			  logger.error("generateNotification Error",e);	
+			}
 			response.setStatus(400);
 			jsonOutput.put("status", APINames.FAILED);
-			azureUtil.generateNotification("Error in vm creation", userId, dataSource, userName, dataPd);
 			return jsonOutput.toString();
 		}
 		jsonOutput.put("UIDNumber", uidNumStr);
@@ -496,8 +499,13 @@ public class AzureServiceController extends AbstractController {
 		   	}catch(Exception e){
 		   		logger.error("kubernetesDeployment failed", e);
 		   		LogConfig.clearMDCDetails();
-				response.setStatus(400);
-				jsonOutput.put("status", APINames.FAILED);
+		   		try {
+					 azureUtil.generateNotification("Error in vm creation", auth.getUserId(), cmnDataUrl, cmnDataUser, cmnDataPd);
+				  }catch(Exception ex) {
+					 logger.error("generateNotification Error",e);	
+				  }
+				  response.setStatus(400);
+				  jsonOutput.put("status", APINames.FAILED);
 			}
 		logger.debug("kubernetesDeployment end");
 		jsonOutput.put("UIDNumber", uidNumStr);
@@ -553,12 +561,6 @@ public class AzureServiceController extends AbstractController {
 		boolean singleSolution=false;
 		LoggerUtil loggerUtil=new LoggerUtil();
 		try {
-			if (bean == null) {
-				logger.debug("Insufficient data to authneticate with Azure AD");
-				jsonOutput.put("status", APINames.AUTH_FAILED);
-                                response.setStatus(400);
-				return jsonOutput.toString();
-			}
 			UUID uidNumber = UUID.randomUUID();
 			uidNumStr=uidNumber.toString();
 			bluePrintImage=env.getProperty(AzureClientConstants.BLUEPRINT_IMAGENAME_PROP);
@@ -617,9 +619,13 @@ public class AzureServiceController extends AbstractController {
 		}catch(Exception e){
 			logger.error("existingAzureVM failed", e);
 			LogConfig.clearMDCDetails();
+			try {
+			  azureUtil.generateNotification("existingAzureVM Deployment fail", "", dataSource, dataUserName, dataPd);
+			}catch(Exception ex) {
+			  logger.error("generateNotification Error",e);	
+			}
 			response.setStatus(400);
 			jsonOutput.put("status", APINames.FAILED);
-			azureUtil.generateNotification("existingAzureVM Deployment fail", "", dataSource, dataUserName, dataPd);
 			return jsonOutput.toString();
 		}
 		jsonOutput.put("UIDNumber", uidNumStr);
