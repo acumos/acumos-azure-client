@@ -20,6 +20,10 @@
 Azure Client Release Notes
 ==========================
 
+Version 3.0.3, 11 December 2019
+-----------------------------
+* update CDS 3.1.0 for Azure-client (`ACUMOS-3835 <https://jira.acumos.org/browse/ACUMOS-3835>`_)
+
 Version 3.0.2, 18 October 2019
 -----------------------------
 * IST2 | Deploy to Azure | On click Deploy button application taking user out of the application(`ACUMOS-3018 <https://jira.acumos.org/browse/ACUMOS-3018>`_)
