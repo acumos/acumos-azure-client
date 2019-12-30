@@ -20,6 +20,10 @@
 Azure Client Release Notes
 ==========================
 
+Version 3.0.4, 30 December 2019
+-----------------------------
+* update logging-demo-3.0.5 for Azure-client (`ACUMOS-3880 <https://jira.acumos.org/browse/ACUMOS-3880>`_)
+
 Version 3.0.3, 11 December 2019
 -----------------------------
 * update CDS 3.1.0 for Azure-client (`ACUMOS-3835 <https://jira.acumos.org/browse/ACUMOS-3835>`_)
