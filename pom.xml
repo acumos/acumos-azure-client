@@ -385,8 +385,9 @@ limitations under the License.
 					<!-- LF credentials are not supplied here -->
 					<images>
 						<image>
+							<!-- Prefix must be "acumos/" -->
 							<!-- Specify a tag to avoid default tag "latest" -->
-							<name>acumos-azure-client:${project.version}</name>
+							<name>acumos/acumos-azure-client:${project.version}</name>
 							<build>
 								<from>openjdk:8-jre-slim</from>
 								<tags>
