@@ -1,0 +1,10 @@
+---
+distribution_type: container
+container_release_tag: 3.0.4
+container_pull_registry: nexus3.acumos.org:10004
+container_push_registry: nexus3.acumos.org:10002
+project: acumos-azure-client
+ref: c26ad1c3354cc9b67f8656fa58d242b32de2d6a5
+containers:
+        - name: acumos-azure-client
+          version: 3.0.4
