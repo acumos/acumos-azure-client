@@ -20,6 +20,10 @@
 Azure Client Release Notes
 ==========================
 
+Version 3.0.5, 31 January 2020
+---------------------------------
+* update acumos-azure-client, openstack-client,kubernetis-client and deployment-client for cds 3.1.1(`ACUMOS-3957 <https://jira.acumos.org/browse/ACUMOS-3957>`_)
+
 Version 3.0.4, 30 December 2019
 -----------------------------
 * update logging-demo-3.0.5 for Azure-client (`ACUMOS-3880 <https://jira.acumos.org/browse/ACUMOS-3880>`_)
