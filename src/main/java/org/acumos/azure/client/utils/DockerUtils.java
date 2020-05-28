@@ -470,8 +470,8 @@ public class DockerUtils {
 			 String installZipUnZip = ""
 						+ "echo Running: \" Install Zip and Unzip \" \n"
 						+ "sudo apt-get update \n"
-						+ "sudo apt-get install zip -y \n"
-						+ "sudo apt-get install unzip \n"
+						+ "sudo apt-get --no-install-recommends install zip -y \n"
+						+ "sudo apt-get --no-install-recommends install unzip \n"
 						+ "zip -v \n"
 						+ "unzip -v \n";
 			 log.debug(" installZipUnZip "+installZipUnZip);
@@ -791,14 +791,14 @@ public class DockerUtils {
 			+ "echo Running: \"if [ ! -d ~/.azuredocker/tls ]; then mkdir -p ~/.azuredocker/tls ; fi\" \n"
 			+ "if [ ! -d ~/.azuredocker/tls ]; then mkdir -p ~/.azuredocker/tls ; fi \n"
 			+ "echo Running: sudo apt-get update \n" + "sudo apt-get update \n"
-			+ "echo Running: sudo apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl software-properties-common \n"
-			+ "sudo apt-get install -y --no-install-recommends apt-transport-https ca-certificates curl software-properties-common \n"
+			+ "echo Running: sudo apt-get --no-install-recommends install -y apt-transport-https ca-certificates curl software-properties-common \n"
+			+ "sudo apt-get --no-install-recommends install -y apt-transport-https ca-certificates curl software-properties-common \n"
 			+ "echo Running: curl -fsSL https://apt.dockerproject.org/gpg | sudo apt-key add - \n"
 			+ "curl -fsSL https://apt.dockerproject.org/gpg | sudo apt-key add - \n"
 			+ "echo Running: sudo add-apt-repository \"deb https://apt.dockerproject.org/repo/ ubuntu-$(lsb_release -cs) main\" \n"
 			+ "sudo add-apt-repository \"deb https://apt.dockerproject.org/repo/ ubuntu-xenial main\" \n"
 			+ "echo Running: sudo apt-get update \n" + "sudo apt-get update \n"
-			+ "echo Running: sudo apt-get -y install docker-engine \n" + "sudo apt-get -y install docker-engine \n"
+			+ "echo Running: sudo apt-get -y --no-install-recommends install docker-engine \n" + "sudo apt-get -y --no-install-recommends install docker-engine \n"
 			+ "echo Running: sudo groupadd docker \n" + "sudo groupadd docker \n"
 			+ "echo Running: sudo usermod -aG docker $USER \n" + "sudo usermod -aG docker $USER \n";
 

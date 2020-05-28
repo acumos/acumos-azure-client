@@ -55,7 +55,7 @@ setup() {
           # Per https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
           sudo apt-get purge -y docker-ce docker docker-engine docker.io
           sudo apt-get update
-          sudo apt-get install -y \
+          sudo apt-get --no-install-recommends install -y \
             apt-transport-https \
             ca-certificates \
             curl \
@@ -64,7 +64,7 @@ setup() {
           sudo add-apt-repository "deb [arch=amd64] \
             https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
           sudo apt-get update
-          sudo apt-get install -y docker-ce=17.03.3~ce-0~ubuntu-xenial
+          sudo apt-get --no-install-recommends install -y docker-ce=17.03.3~ce-0~ubuntu-xenial
         fi
         ;;
       "18.04")
@@ -73,7 +73,7 @@ setup() {
         if [[ $dio != "installed" ]]; then
           sudo apt-get purge -y docker docker-engine docker-ce docker-ce-cli
           sudo apt-get update
-          sudo apt-get install -y docker.io=17.12.1-0ubuntu1
+          sudo apt-get --no-install-recommends install -y docker.io=17.12.1-0ubuntu1
           sudo systemctl enable docker.service
         fi
         ;;
