@@ -4,11 +4,11 @@ project_creation_date: '2017-11-17'
 project_category: ''
 lifecycle_state: 'Incubation'
 project_lead: &acumos_acumos-azure-client_ptl
-    name: 'Natarajan Subramanian'
-    email: 'Natarajan.subramanian@techmahindra.com'
-    id: 'natarjs'
-    company: 'TechMahindra'
-    timezone: 'America/New_York'
+    name: 'Philippe Dooze'
+    email: 'philippe.dooze@orange.com'
+    id: 'philippdo'
+    company: 'Orange'
+    timezone: 'Paris'
 primary_contact: *acumos_acumos-azure-client_ptl
 issue_tracking:
     type: 'jira'
